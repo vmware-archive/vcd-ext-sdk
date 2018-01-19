@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:include schemaLocation="common.xsd"/>
+    <xs:include schemaLocation="resourceEntity.xsd"/>
+    <xs:include schemaLocation="multiSite.xsd"/>
+
+    <xs:element name="Session" type="SessionType"/>
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for a vCloud Session
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType name="SessionType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.session</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">1.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a vCloud Session.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="AuthorizedLocations" type="AuthorizedLocationsType" minOccurs="1"  maxOccurs="1" >
+                        <xs:annotation>
+                        <xs:documentation source="modifiable">
+                            none
+                        </xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The locations, both local and remote, that can be accessed by this user in this session.
+                        </xs:documentation>
+                        <xs:documentation source="required">
+                            false
+                        </xs:documentation>
+                    </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="user" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The name of the user that owns the session
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="org" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The name of the user's organization
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="userId" type="xs:string">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The URN of the user entity
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="roles" type="xs:string">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Role assigned to this user during this session.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="locationId" type="xs:string">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="JWT_LOGIN_SUPPORT"/></xs:appinfo>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Location id of the logged in org
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

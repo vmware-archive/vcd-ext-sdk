@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+ api-extension-template-vcloud-director
+ Copyright 2018 VMware, Inc.
+ SPDX-License-Identifier: BSD-2-Clause
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.vmware.vcloud</groupId>
+    <artifactId>object-extensibility-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>object-extensibility-vcd</artifactId>
+  <name>${project.artifactId} :: Object Extension vCD client</name>
+  <description>Library for interacting with vCloud Director's REST API</description>
+  <dependencies>
+    <dependency>
+      <groupId>com.vmware.vcloud</groupId>
+      <artifactId>object-extensibility-amqp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vmware.vcloud</groupId>
+      <artifactId>rest-api-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-rs-client</artifactId>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  api-extension-template-vcloud-director
+  Copyright 2017-2018 VMware, Inc.  All rights reserved
+  SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema
+    xmlns="http://www.vmware.com/vcloud/extensibility/v1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:meta="http://www.vmware.com/vcloud/meta"
+    jaxb:extensionBindingPrefixes="meta"
+    elementFormDefault="qualified"
+    targetNamespace="http://www.vmware.com/vcloud/extensibility/v1.0"
+    version="1.0">
+
+    <xs:include schemaLocation="extensibility-core.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for platform extensibility's provisioning extension point.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType name="ProvisioningRequest">
+        <xs:sequence>
+            <xs:element name="Context" type="ContextType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Zero or more context entries that will apply to all entities defined in this
+                        &lt;ProvisioningRequest&gt; element
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TargetResourcePool" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The target resource pool where the entity should be provisioned.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="valRef" type="xs:anyURI" use="required">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                A URL of the form 'moref://{vc-server-uuid}/ResourcePool#{moref}'
+                                that identifies a vSphere resource pool.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="TargetFolder" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The target folder where the entity should be created.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="valRef" type="xs:anyURI" use="required">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                A URL of the form 'moref://{vc-server-uuid}/Folder#{moref}' that
+                                identifies a vSphere folder.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Source" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Specifies the source object if this is a move/copy request.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="valRef" type="xs:anyURI" use="required">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                A URL of the form 'moref://{vc-server-uuid}/{objectType}#{moref}'
+                                that identifies a vSphere folder.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DiskSettings">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Represents the disk settings of a disk of a VM.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:sequence>
+            <xs:element name="Id" type="xs:string" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The VCenter instanceId of the disk.
+                        Required when representing an existing disk.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="BusSubType" type="xs:string" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The bus sub type of the disk. Used in combination with
+                         BusNumber, and UnitNumber when representing a new disk.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="BusNumber" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The bus number of the controller itself. Used in combination with BusSubType,
+                         and UnitNumber when representing a new disk.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="UnitNumber" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The unit number of the disk. Used in combination with BusSubType,
+                         and BusSubType when representing a new disk.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+            <xs:element name="SizeKb" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The size of the disk in KB.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="IsThinProvisioned" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        True if the disk is thin provisioned. Defaults to false if empty or missing.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="StorageContainer" type="StorageContainer" minOccurs="1" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The storage container on which this disk is to be placed.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            <xs:element name="Iops" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The IOPS that should be set on the disk.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="StorageProfile" type ="StorageProfile" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The storage profile to be associated with this disk.
+                        If not specified, disk will inherit VM's storage profile.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="StorageProfile">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                The storage profile to be associated with this object.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    The name of the storage profile to be associated with this object.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="MemorySettings">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Represents the memory settings of a Virtual Machine.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="SizeKb" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        The size of the memory in KB.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="IsHotAddEnabled" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        True if memory can be added or removed while the VM is powered on.
+                        Defaults to false if missing or empty.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CpuSettings">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Represents the memory settings of a Virtual Machine.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="NumCpu" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Number of CPUs in the VM.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="NumCoresPerSocket" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Number of cores per socket.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="IsHotAddEnabled" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        True if cpu can be added or removed while the VM is powered on.
+                        Defaults to false if missing or empty.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="VirtualMachine">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Virtual Machine entity type in platform extensibility object model.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ExtensibleObject">
+                <xs:sequence>
+                    <xs:element name="StorageContainer" type="StorageContainer" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The storage container on which this VM is to be placed.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="MemorySettings" type="MemorySettings" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The memory settings of this VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CpuSettings" type="CpuSettings" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The CPU settings of this VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsNestedHvEnabled" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                Whether nested hypervisor should be enabled on this VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="GuestOs" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The guest operating system of this VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="HardwareVersion" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The hardware version of this VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="StorageProfile" type ="StorageProfile" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                The storage profile to be associated with this VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="DiskSettings" type="DiskSettings" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                A list of DiskSettings for each disk of this VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VmProvisioningRequest">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    A request to provision a virtual machine.
+                </xs:documentation>
+            </xs:annotation>
+
+            <xs:complexContent>
+                <xs:extension base="ProvisioningRequest">
+                    <xs:sequence>
+                        <xs:element name="VM" type="VirtualMachine" minOccurs="1" maxOccurs="1">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    VM to be provisioned.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ProvisioningResponse">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    A response to a provisioning request that details the provisioned entity.
+                </xs:documentation>
+            </xs:annotation>
+
+            <xs:sequence>
+                <xs:element name="ProvisionedEntity" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            The entity that has been provisioned.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attribute name="valRef" type="xs:anyURI" use="required">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    A URL of the form 'moref://{vc-server-uuid}/{objectType}#{moref}'
+                                    that identifies either a vSphere entity that has been provisioned.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

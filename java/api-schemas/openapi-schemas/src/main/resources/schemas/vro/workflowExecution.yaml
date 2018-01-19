@@ -1,0 +1,1095 @@
+# *************************************************************************
+# * api-extension-template-vcloud-director
+# * Copyright 2017-2018 VMware, Inc.  All rights reserved. *
+# * SPDX-License-Identifier: BSD-2-Clause
+# *************************************************************************
+swagger: "2.0"
+info:
+  title: vCloud Director Workflow Execution API
+  description: |
+    The vCloud Director Workflow Execution API allows for executing workflows in VRO.
+    Only workflows that have been imported, and correctly scoped/published may be
+    executed by those users to whom the workflows have been published.
+  version: "1.0"
+
+paths:
+  workflow-executions:
+    get:
+      tags:
+        - vroWorkflowExecution
+      summary: Get all executions
+      description: Retrieves all workflow runs for a given workflow
+      operationId: getAllWorkflowExecutions
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Workflow executions successfully retrieved
+          schema:
+            $ref: '#/definitions/PresentationExecutionsList'
+        '401':
+          description: The user is not authorized to retrieve workflow executions
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+    post:
+      tags:
+        - vroWorkflowExecution
+      summary: Start workflow execution
+      description: |
+        Instantiates a workflow run, by using the passed parameters. The workflow run is asynchronous, so the call returns a pointer to a task that can be used to track the workflow run.
+      operationId: startWorkflowExecution
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - in: body
+          name: executionContext
+          description: executionContext
+          required: true
+          schema:
+            $ref: '#/definitions/ExecutionContext'
+      responses:
+        '201':
+          description: Workflow execution instance has been created
+          schema:
+            $ref: '#/definitions/WsWorkflowExecution'
+        '400':
+          description: The request is invalid(validation error)
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+  workflow-execution:
+    get:
+      tags:
+        - vroWorkflowExecution
+      summary: Get workflow execution
+      description: Retrieves a workflow run for a given workflow.
+      operationId: getWorkflowExecution
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - name: executionId
+          in: path
+          description: executionId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Workflow execution successfully retrived
+          schema:
+            $ref: '#/definitions/WsWorkflowExecution'
+        '400':
+          description: The request is invalid(validation error)
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+    delete:
+      tags:
+        - vroWorkflowExecution
+      summary: Delete workflow run
+      description: Deletes a specific workflow run
+      operationId: deleteWorkflowExecution
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - name: executionId
+          in: path
+          description: executionId
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No content. Workflow run has been deleted
+        '400':
+          description: The request is invalid(validation error)
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Can not find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+  workflow-execution-state:
+    get:
+      tags:
+        - vroWorkflowExecution
+      summary: Get workflow execution state
+      description: Retrieves the current state for a requested workflow run
+      operationId: getWorkflowExecutionState
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - name: executionId
+          in: path
+          description: executionId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/ExecutionState'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+    delete:
+      tags:
+        - vroWorkflowExecution
+      summary: Cancel workflow run
+      description: Cancels a workflow run
+      operationId: cancelWorkflowExecution
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - name: executionId
+          in: path
+          description: executionId
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No content. Workflow execution has been cancelled
+        '400':
+          description: The request is invalid(validation error)
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Can not find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+  parameter-types:
+    get:
+      tags:
+        - vroWorkflowExecution
+      summary: Get a list of supported parameter types
+      description: Retrieves the list of supported parameter types
+      operationId: getParameterTypes
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/ParameterTypes'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+
+  supported-presentation-elements:
+    get:
+      tags:
+        - vroWorkflowExecution
+      summary: Get a list of supported presentation elements
+      description: Retrieves the list of supported presentation elements
+      operationId: getSupportedPresentationElements
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/SupportedPresentationElements'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+
+  supported-decorators:
+    get:
+      tags:
+        - vroWorkflowExecution
+      summary: Get a list of supported decorators
+      description: Retrieves the list of supported decorators
+      operationId: getSupportedDecorators
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/SupportedDecorators'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+
+  supported-constraints:
+    get:
+      tags:
+        - vroWorkflowExecution
+      summary: Get a list of supported constraints
+      description: Retrieves the list of supported constraints
+      operationId: getSupportedconstraints
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/SupportedConstraints'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+
+  workflow-presentation:
+    get:
+      tags:
+        - vroWorkflowPresentation
+      summary: Get presentation
+      description: 'Retrieves the definition of a workflow presentation. To retrieve the workflow presentation definition localized, add Accept-Language header, with the appropriate locale. In advance, localization resource should be present for the workflow, otherwise it defaults to the standard workflow presentation definition.'
+      operationId: getWorkflowPresentation
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/Presentation'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+  workflow-presentation-instances:
+    get:
+      tags:
+        - vroWorkflowPresentation
+      summary: Get all presentations
+      description: 'Retrieves a list of the presentation instances for a workflow that you specify. To retrieve the list of workflow presentations, make an HTTP GET request at the workflow presentations list URL. The returned list contains all of the currently running workflow presentation instances, and all completed instances based on the data from the workflow executions. If the user has admin rights, all presentation instances for all users are returned.'
+      operationId: getAllWorkflowPresentationInstances
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/PresentationExecutionsList'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+    post:
+      tags:
+        - vroWorkflowPresentation
+      summary: Start presentation
+      description: ' Creates a new instance of the presentation of a workflow, by using the passed parameters. To create a new instance of a workflow presentation, make an HTTP GET request at the URL that contains the instances of the workflow presentation. Presentation''s fields are populated with input parameter values and are validated. If there are any validation errors, they are collected and attached to each field. The presentation is marked as invalid. In order the returned workflow presentation to be localized, add Accept-Language header, with the appropriate locale. In advance, localization resource should be present for the workflow, otherwise it defaults to the standard workflow presentation.'
+      operationId: startWorkflowPresentation
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - in: body
+          name: executionContext
+          description: executionContext
+          required: true
+          schema:
+            $ref: '#/definitions/ExecutionContext'
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/PresentationExecution'
+        '201':
+          description: Created
+        '400':
+          description: The request is invalid(validation error)
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow with the specified ID or the user does not have 'read' access rights for that workflow
+
+  workflow-presentation-instance:
+    get:
+      tags:
+        - vroWorkflowPresentation
+      summary: Load Execution
+      description: 'Retrieves a specific workflow presentation instance. Presentation instances are removed after the workflow starts. If the presentation instance under requested <b>executionId</b> does not exists, a new presentation instance is created by using the parameters from the workflow execution with the same ID. To retrieve the workflow presentation localized, add Accept-Language header, with the appropriate locale. In advance, localization resource should be present for the workflow, otherwise it defaults to the standard workflow presentation.'
+      operationId: getWorkflowPresentationInstance
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - name: presentationExecutionId
+          in: path
+          description: presentationExecutionId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/PresentationExecution'
+        '401':
+          description: The user is not authorized
+        '403':
+          description: The user does not have 'read' access rights for that workflow
+        '404':
+          description: Cannot find a workflow with the specified ID
+    put:
+      tags:
+        - vroWorkflowPresentation
+      summary: Update presentation
+      description: 'Update a specific workflow presentation instance. Presentation fields are populated with input parameter values and are validated. If there are any validation errors, they are collected and attached to each field. The presentation is marked as invalid. If the parameter''s ''updated'' flag is set to true, the dependent field values are recalculated.'
+      operationId: updateWorkflowPresentationInstance
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - name: presentationExecutionId
+          in: path
+          description: presentationExecutionId
+          required: true
+          type: string
+        - in: body
+          name: executionContext
+          description: executionContext
+          required: true
+          schema:
+            $ref: '#/definitions/ExecutionContext'
+      responses:
+        '200':
+          description: The request is successful
+          schema:
+            $ref: '#/definitions/PresentationExecution'
+        '400':
+          description: The request is invalid(validation error)
+        '401':
+          description: The user is not authorized
+        '403':
+          description: The user does not have 'read' access rights for that workflow
+        '404':
+          description: Cannot find a workflow or presentation instance with specified ID
+    delete:
+      tags:
+        - vroWorkflowPresentation
+      summary: Delete workflow presentation execution
+      description: 'Cancels the execution of a workflow presentation instance. This API call cancels only the workflow presentation execution. To cancel the workflow execution, use APIs under <b>/cloudapi/workflows/{workflowId}/instances</b>.'
+      operationId: deleteWorkflowPresenationInstance
+      parameters:
+        - name: workflowId
+          in: path
+          description: workflowId
+          required: true
+          type: string
+        - name: presentationExecutionId
+          in: path
+          description: presentationExecutionId
+          required: true
+          type: string
+      responses:
+        '204':
+          description: No content
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Cannot find a workflow or presentation instance with specified ID
+
+definitions:
+  ExecutionState:
+    type: string
+    enum:
+      - canceled
+      - completed
+      - running
+      - suspended
+      - waiting
+      - waitingSignal
+      - failed
+      - initializing
+
+  ExecutionSummary:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      startDate:
+        type: string
+      endDate:
+        type: string
+      startedBy:
+        type: string
+      state:
+        $ref: '#/definitions/ExecutionState'
+
+  ExecutionContext:
+    type: object
+    properties:
+      parameters:
+        type: array
+        items:
+          $ref: '#/definitions/WsParameter'
+
+  WsWorkflowExecution:
+    type: object
+    properties:
+      businessState:
+        type: string
+      contentException:
+        type: string
+      currentItemDisplayName:
+        type: string
+      endDate:
+        type: string
+        format: date-time
+      id:
+        type: string
+      inputParameters:
+        type: array
+        items:
+          $ref: '#/definitions/WsParameter'
+      name:
+        type: string
+      outputParameters:
+        type: array
+        items:
+          $ref: '#/definitions/WsParameter'
+      relations:
+        $ref: './vro-common.yaml#/definitions/Relations'
+      startDate:
+        type: string
+        format: date-time
+      startedBy:
+        type: string
+      state:
+        $ref: '#/definitions/ExecutionState'
+
+  WsParameter:
+    type: object
+    properties:
+      description:
+        type: string
+      encryptValue:
+        type: boolean
+      name:
+        type: string
+      scope:
+        type: string
+        enum:
+          - local
+          - token
+      type:
+        type: string
+      updated:
+        type: boolean
+      value:
+        $ref: '#/definitions/Parameter'
+
+  PresentationExecutionsList:
+    type: object
+    properties:
+      total:
+        type: integer
+        format: int32
+      executions:
+        type: array
+        items:
+          $ref: '#/definitions/ExecutionSummary'
+      start:
+        type: integer
+        format: int32
+
+  Parameter:
+    type: object
+    discriminator: inputType
+    properties:
+      inputType:
+        type: string
+    required:
+      - inputType
+
+  SdkObject:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        type:
+          type: string
+        href:
+          type: string
+        id:
+          type: string
+        displayValue:
+          type: string
+
+  SecureString:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: string
+        isPlainText:
+          type: boolean
+
+  NumberParam:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: number
+
+  MimeAttachment:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        content:
+          type: string
+          format: binary
+        name:
+          type: string
+        mimeType:
+          type: string
+
+  Properties:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        property:
+          type: array
+          items:
+            $ref: '#/definitions/KeyValuePair'
+
+  DateParam:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+
+  BooleanParam:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: boolean
+
+  StringParam:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: string
+
+  Regex:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: string
+
+  EncryptedString:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: string
+
+  ArrayParam:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/definitions/Parameter'
+
+  CompositeType:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        property:
+          type: array
+          items:
+            $ref: '#/definitions/CompositeValue'
+        type:
+          type: string
+
+  CompositeValue:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        id:
+          type: string
+        property:
+          $ref: '#/definitions/Parameter'
+
+  KeyValuePair:
+    allOf:
+    - $ref: '#/definitions/Parameter'
+    - type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/definitions/Parameter'
+
+  ParameterTypes:
+    type: object
+    properties:
+      sdkObject:
+        $ref: '#/definitions/SdkObject'
+      string:
+        $ref: '#/definitions/StringParam'
+      secureString:
+        $ref: '#/definitions/SecureString'
+      number:
+        $ref: '#/definitions/NumberParam'
+      mimeAttachment:
+        $ref: '#/definitions/MimeAttachment'
+      properties:
+        $ref: '#/definitions/Properties'
+      date:
+        $ref: '#/definitions/DateParam'
+      boolean:
+        $ref: '#/definitions/BooleanParam'
+      composite:
+        $ref: '#/definitions/CompositeType'
+      regex:
+        $ref: '#/definitions/Regex'
+      encryptedString:
+        $ref: '#/definitions/EncryptedString'
+      keyValuePair:
+        $ref: '#/definitions/KeyValuePair'
+      compositeValue:
+        $ref: '#/definitions/CompositeValue'
+      array:
+        $ref: '#/definitions/ArrayParam'
+
+  SupportedPresentationElements:
+    type: object
+    properties:
+      presentationElement:
+        $ref: '#/definitions/PresentationElement'
+      stepInfo:
+        $ref: '#/definitions/StepInfo'
+      group:
+        $ref: '#/definitions/Group'
+      field:
+        $ref: '#/definitions/Field'
+      primaryField:
+        $ref: '#/definitions/PrimaryField'
+
+  SupportedDecorators:
+    type: object
+    properties:
+      decorator:
+        $ref: '#/definitions/Decorator'
+      refreshOnChange:
+        $ref: '#/definitions/RefreshOnChange'
+      multiLine:
+        $ref: '#/definitions/MultiLine'
+      chooser:
+        $ref: '#/definitions/Chooser'
+      dropDown:
+        $ref: '#/definitions/DropDown'
+
+  SupportedConstraints:
+    type: object
+    properties:
+      constraint:
+        $ref: '#/definitions/Constraint'
+      mandatory:
+        $ref: '#/definitions/Mandatory'
+      restrictDuplicates:
+        $ref: '#/definitions/RestrictDuplicates'
+      customValidator:
+        $ref: '#/definitions/CustomValidator'
+      numberRange:
+        $ref: '#/definitions/NumberRange'
+      regexp:
+        $ref: '#/definitions/Regexp'
+      numberFormat:
+        $ref: '#/definitions/NumberFormat'
+
+  Presentation:
+    type: object
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      inputParameters:
+        type: array
+        items:
+          $ref: '#/definitions/WsParameter'
+      name:
+        type: string
+      outputParameters:
+        type: array
+        items:
+          $ref: '#/definitions/WsParameter'
+      steps:
+        type: array
+        items:
+          $ref: '#/definitions/StepInfo'
+
+  StepInfo:
+    allOf:
+    - $ref: '#/definitions/PresentationElement'
+    - type: object
+      properties:
+        readOnly:
+          type: boolean
+        elements:
+          type: array
+          items:
+            $ref: '#/definitions/PresentationElement'
+
+  PresentationMessageInfo:
+    type: object
+    properties:
+      code:
+        type: string
+      details:
+        type: string
+      severity:
+        type: string
+        enum:
+          - INFO
+          - WARNING
+          - ERROR
+      summary:
+        type: string
+
+  PresentationElement:
+    type: object
+    discriminator: elementType
+    properties:
+      elementType:
+        type: string
+      description:
+        type: string
+      displayName:
+        type: string
+      hidden:
+        type: boolean
+      id:
+        type: string
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/PresentationMessageInfo'
+    required:
+      - elementType
+
+  PresentationExecution:
+    type: object
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      objectId:
+        type: string
+      parameters:
+        type: array
+        items:
+          $ref: '#/definitions/WsParameter'
+      startDate:
+        type: string
+        format: date-time
+      startedBy:
+        type: string
+      steps:
+        type: array
+        items:
+          $ref: '#/definitions/StepInfo'
+      valid:
+        type: boolean
+
+  Errors:
+    type: object
+    properties:
+      allErrors:
+        type: array
+        items:
+          $ref: '#/definitions/ObjectError'
+      errorCount:
+        type: integer
+        format: int32
+      fieldError:
+        $ref: '#/definitions/FieldError'
+      fieldErrorCount:
+        type: integer
+        format: int32
+      fieldErrors:
+        type: array
+        items:
+          $ref: '#/definitions/FieldError'
+      globalError:
+        $ref: '#/definitions/ObjectError'
+      globalErrorCount:
+        type: integer
+        format: int32
+      globalErrors:
+        type: array
+        items:
+          $ref: '#/definitions/ObjectError'
+      nestedPath:
+        type: string
+      objectName:
+        type: string
+
+  FieldError:
+    type: object
+    properties:
+      arguments:
+        type: array
+        items:
+          type: object
+      bindingFailure:
+        type: boolean
+      code:
+        type: string
+      codes:
+        type: array
+        items:
+          type: string
+      defaultMessage:
+        type: string
+      field:
+        type: string
+      objectName:
+        type: string
+      rejectedValue:
+        type: object
+
+  ObjectError:
+    type: object
+    properties:
+      arguments:
+        type: array
+        items:
+          type: object
+      code:
+        type: string
+      codes:
+        type: array
+        items:
+          type: string
+      defaultMessage:
+        type: string
+      objectName:
+        type: string
+
+  Group:
+    allOf:
+    - $ref: '#/definitions/PresentationElement'
+    - type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/definitions/PrimaryField'
+
+  Field:
+    allOf:
+    - $ref: '#/definitions/PresentationElement'
+    - type: object
+      properties:
+        decorators:
+          type: array
+          items:
+            $ref: '#/definitions/Decorator'
+        constraints:
+          type: array
+          items:
+            $ref: '#/definitions/Constraint'
+        type:
+          type: string
+        affectedFieldsIds:
+          type: array
+          items:
+            type: string
+
+  PrimaryField:
+    allOf:
+    - $ref: '#/definitions/Field'
+    - type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/definitions/Field'
+        value:
+          $ref: '#/definitions/Parameter'
+
+  Decorator:
+    type: object
+    discriminator: decoratorType
+    properties:
+      decoratorType:
+        type: string
+    required:
+      - decoratorType
+
+  Chooser:
+    allOf:
+    - $ref: '#/definitions/Decorator'
+    - type: object
+      properties:
+        sdkObject:
+          $ref: '#/definitions/SdkObject'
+        type:
+          type: string
+
+  RefreshOnChange:
+    allOf:
+    - $ref: '#/definitions/Decorator'
+
+  DropDown:
+    allOf:
+    - $ref: '#/definitions/Decorator'
+    - type: object
+      properties:
+        array:
+          $ref: '#/definitions/ArrayParam'
+
+  MultiLine:
+    allOf:
+    - $ref: '#/definitions/Decorator'
+
+  Constraint:
+    type: object
+    discriminator: constraintType
+    properties:
+      constraintType:
+        type: string
+    required:
+      - constraintType
+
+  Mandatory:
+    allOf:
+    - $ref: '#/definitions/Constraint'
+
+  RestrictDuplicates:
+    allOf:
+    - $ref: '#/definitions/Constraint'
+
+  CustomValidator:
+    allOf:
+    - $ref: '#/definitions/Constraint'
+
+  NumberRange:
+    allOf:
+    - $ref: '#/definitions/Constraint'
+    - type: object
+      properties:
+        min:
+          type: number
+        max:
+          type: number
+
+  NumberFormat:
+    allOf:
+    - $ref: '#/definitions/Constraint'
+    - type: object
+      properties:
+        value:
+          type: string
+
+  Regexp:
+    allOf:
+    - $ref: '#/definitions/Constraint'
+    - type: object
+      properties:
+        expression:
+          type: string

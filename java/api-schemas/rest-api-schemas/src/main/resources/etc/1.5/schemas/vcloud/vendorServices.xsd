@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+           <xs:include schemaLocation="common.xsd"/>
+
+
+    <xs:complexType name="VendorServicesType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.vmwNetworkPool.services</meta:content-type>
+                <meta:version added-in="5.1"/>
+            </xs:appinfo>
+            <xs:documentation source="added-in">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Vendor services available for service insertion on networks or edge gateways.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="NetworkServices" type="NetworkServiceInsertionType" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+                <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                <xs:documentation source="added-in">5.1</xs:documentation>
+                <xs:documentation source="modifiable">always</xs:documentation>
+                <xs:documentation xml:lang="en">
+                    A network service that is inserted and available for networks within an org vDC
+                </xs:documentation>
+                <xs:documentation source="required">false</xs:documentation>
+            </xs:annotation>
+            </xs:element>
+
+            <xs:element name="EdgeGatewayServices" type="NetworkServiceInsertionType" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+                <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                <xs:documentation source="added-in">5.1</xs:documentation>
+                <xs:documentation source="modifiable">always</xs:documentation>
+                <xs:documentation xml:lang="en">
+                    An edge gateway service that is inserted and available for edge gateways within an org vDC
+                </xs:documentation>
+                <xs:documentation source="required">false</xs:documentation>
+            </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="NetworkServiceInsertion" type="NetworkServiceInsertionType"/>
+        <xs:complexType name="NetworkServiceInsertionType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+            </xs:appinfo>
+            <xs:documentation source="added-in">5.1</xs:documentation>
+            <xs:documentation source="modifiable">
+                always
+            </xs:documentation>
+            <xs:documentation xml:lang="en">
+                Information about a network service that has been inserted
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">
+                                none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Name of the network service that has been inserted. This is required.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Id" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">
+                                none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                ID of the network service that has been inserted. This is required.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Category" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">
+                                none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Category of the network service that has been inserted. Allowed values are 'VDS' and 'EDGE'
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CategoryType" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">
+                                none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Category type of the network service. This is optional.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                false
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:sequence>
+                        <xs:element name="VendorTemplates" type="VendorTemplateType" minOccurs = "0" maxOccurs = "unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">
+                                none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Vendor templates associated with this service insertion. This is optional.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                false
+                            </xs:documentation>
+                        </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="VendorTemplateType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+            </xs:appinfo>
+            <xs:documentation source="added-in">5.1</xs:documentation>
+            <xs:documentation source="modifiable">
+                always
+            </xs:documentation>
+            <xs:documentation xml:lang="en">
+                Information about a vendor service template. This is optional.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Name of the vendor template. This is required.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Id" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                ID of the vendor template. This is required.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:sequence>
+                        <xs:element name="VendorTemplateAttributes" type="VendorTemplateAttributesType" minOccurs="0" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:appinfo>
+                                    <meta:version added-in="5.1"/>
+                                </xs:appinfo>
+                                <xs:documentation source="added-in">5.1</xs:documentation>
+                                <xs:documentation source="modifiable">
+                                    always
+                                </xs:documentation>
+                                <xs:documentation xml:lang="en">
+                                    Attributes in a vendor template. These are optional.
+                                </xs:documentation>
+                                <xs:documentation source="required">
+                                    false
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="VendorTemplateAttributesType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+            </xs:appinfo>
+            <xs:documentation source="added-in">5.1</xs:documentation>
+            <xs:documentation source="modifiable">
+                always
+            </xs:documentation>
+            <xs:documentation xml:lang="en">
+                Information about vendor template attributes
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Name of the vendor template attribute. This is required.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Key" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Key of the vendor template attribute. This is required.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="added-in">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Value of the service template attribute. This is optional.
+                            </xs:documentation>
+                            <xs:documentation source="required">
+                                false
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

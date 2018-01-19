@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    api-extension-template-vcloud-director
+    Copyright © 2015-2018 VMware, Inc. All rights reserved.
+    SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/extension/v1.5"
+    xmlns:tns="http://www.vmware.com/vcloud/extension/v1.5"
+    xmlns:vcloud="http://www.vmware.com/vcloud/v1.5" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:meta="http://www.vmware.com/vcloud/meta"
+    jaxb:version="2.0" jaxb:extensionBindingPrefixes="meta"
+    elementFormDefault="qualified" targetNamespace="http://www.vmware.com/vcloud/extension/v1.5"
+    version="1.0">
+
+    <xs:import namespace="http://www.vmware.com/vcloud/v1.5"
+        schemaLocation="../master/master.xsd" />
+
+    <xs:element name="ObjectExtension" type="ObjectExtensionType" />
+    <xs:complexType name="ObjectExtensionType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                <meta:content-type>application/vnd.vmware.admin.extensibility.object</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">OBJECT_EXTENSIBILITY</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a
+                registered object extension.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:IdentifiableResourceType">
+                <xs:sequence>
+                    <xs:element type="xs:string" name="Namespace"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Extension service namespace. Must be
+                                unique among all registered services.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element type="xs:boolean" name="Enabled"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this extension service is
+                                enabled.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element type="xs:string" name="Exchange"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                AMQP exchange that messages for this
+                                extension service are published to.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element type="xs:string" name="ContentType"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation source="required">false
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                AMQP message body content type used. Supported values are:
+                                XML
+                                JSON
+                                Defaults to XML if none is specified.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element type="xs:string" name="Vendor"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Extension service vendor name.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+                    <xs:element name="Selectors" minOccurs="0"
+                        maxOccurs="1" nillable="true">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A list of selector URNs associated with
+                                this
+                                Object Extension. Currently
+                                supported selectors are:
+                                &lt;br&gt;urn:selector:providerVdc
+                                &lt;br&gt;urn:selector:organizationVdc
+                                &lt;br&gt;urn:selector:organization
+                                &lt;br&gt;urn:selector:catalog
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Selector"
+                                    maxOccurs="unbounded" minOccurs="1">
+                                    <xs:complexType>
+                                        <xs:attribute name="name">
+                                            <xs:simpleType>
+                                                <xs:restriction
+                                                    base="xs:anyURI">
+                                                    <xs:pattern
+                                                        value="urn:selector:.+" />
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:attribute>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                        <xs:unique name="uniqueSelector">
+                            <xs:selector xpath="tns:Selector" />
+                            <xs:field xpath="@name" />
+                        </xs:unique>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="ObjectExtensions" type="ObjectExtensionsType" />
+    <xs:complexType name="ObjectExtensionsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                <meta:content-type>application/vnd.vmware.admin.extensibility.objects</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">OBJECT_EXTENSIBILITY</xs:documentation>
+            <xs:documentation xml:lang="en">
+                The collection
+                of registered object extensions.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:ResourceType">
+                <xs:sequence>
+                    <xs:element name="ObjectExtension" type="ObjectExtensionType"
+                        minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents a
+                                registered object extension.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+ api-extension-template-vcloud-director
+ Copyright 2018 VMware, Inc.
+ SPDX-License-Identifier: BSD-2-Clause
+-->
+  <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+ 
+    <system systemId="http://www.w3.org/2001/xml.xsd"
+            uri="xml.xsd"/>
+ 
+    <system systemId="http://schemas.dmtf.org/ovf/envelope/1/dsp8023_1.1.0.xsd"
+            uri="ovf1.1/dsp8023_1.1.0.xsd"/>
+ 
+    <system systemId="http://schemas.dmtf.org/wbem/wscim/1/common.xsd"
+            uri="ovf1.1/common.xsd"/>
+ 
+    <system systemId="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_VirtualSystemSettingData.xsd"
+            uri="ovf1.1/CIM_VirtualSystemSettingData.xsd"/>
+
+    <system systemId="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_ResourceAllocationSettingData.xsd"
+            uri="ovf1.1/CIM_ResourceAllocationSettingData.xsd"/>
+
+    <system systemId="http://schemas.dmtf.org/ovf/environment/1/dsp8027_1.1.0.xsd"
+            uri="ovf1.1/dsp8027_1.1.0.xsd"/>
+            
+    <system systemId="http://www.vmware.com/schema/ovf.xsd"
+            uri="ovf1.1/ovf-vmware.xsd"/>
+
+  </catalog>

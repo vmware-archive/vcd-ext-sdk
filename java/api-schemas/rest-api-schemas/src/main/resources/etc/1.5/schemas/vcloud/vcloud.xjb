@@ -1,0 +1,63 @@
+<jxb:bindings
+  xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+  jxb:version="2.0"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <jxb:bindings schemaLocation="vcloud.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="com.vmware.vcloud.api.rest.schema_v1_5"/>
+        </jxb:schemaBindings>
+
+        <jxb:globalBindings localScoping="toplevel">
+           <!-- TODO: please note that we need this because of an issues with xjc compiler -->
+           <jxb:javaType name="java.lang.String"
+                xmlType="xs:anySimpleType"
+                parseMethod="javax.xml.bind.DatatypeConverter.parseAnySimpleType"
+                printMethod="javax.xml.bind.DatatypeConverter.printAnySimpleType"/>
+        </jxb:globalBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="http://schemas.dmtf.org/ovf/envelope/1/dsp8023_1.1.0.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="com.vmware.vcloud.api.rest.schema.ovf"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_ResourceAllocationSettingData.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="com.vmware.vcloud.api.rest.schema.ovf"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_VirtualSystemSettingData.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="com.vmware.vcloud.api.rest.schema.ovf"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="http://schemas.dmtf.org/wbem/wscim/1/common.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="com.vmware.vcloud.api.rest.schema.ovf"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="http://schemas.dmtf.org/ovf/environment/1/dsp8027_1.1.0.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="com.vmware.vcloud.api.rest.schema.ovf.environment"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="network.xsd">
+        <jxb:bindings
+            node="//xsd:complexType[@name='FirewallRuleType']//xsd:complexContent//xsd:sequence/xsd:element[@name='Protocols']">
+            <jxb:class name="FirewallRuleProtocols" />
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../../../schemas/external/ovf1.1/ovf-vmware.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="com.vmware.vcloud.api.rest.schema.ovf.vmware"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+</jxb:bindings>

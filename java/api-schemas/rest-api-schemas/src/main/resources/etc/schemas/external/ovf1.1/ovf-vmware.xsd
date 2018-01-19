@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    api-extension-template-vcloud-director
+    Copyright 2013-2018 VMware, Inc.  All rights reserved.
+    SPDX-License-Identifier: BSD-2-Clause
+-->
+<!--
+
+    Remark: The OVF Specification 1.0 Annex D defines a set of relaxations on how
+    this XML Schema 1.0 definition is to be interpreted.
+-->
+<xs:schema targetNamespace="http://www.vmware.com/schema/ovf"
+    xmlns:vmw="http://www.vmware.com/schema/ovf"
+    xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1"
+    xmlns:cim="http://schemas.dmtf.org/wbem/wscim/1/common"
+    xmlns:meta="http://www.vmware.com/vcloud/meta"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    jaxb:extensionBindingPrefixes="meta"
+    attributeFormDefault="qualified"
+    elementFormDefault="qualified">
+
+    <!-- Include and import sections -->
+    <xs:import namespace="http://schemas.dmtf.org/ovf/envelope/1"
+        schemaLocation="http://schemas.dmtf.org/ovf/envelope/1/dsp8023_1.1.0.xsd"/>
+    <xs:import namespace="http://schemas.dmtf.org/wbem/wscim/1/common"
+        schemaLocation="http://schemas.dmtf.org/wbem/wscim/1/common.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation>
+            Some OVF sections that are generated from vCenter are ignored by vCD and will not appear when exporting:
+            vmw:StorageGroupSection
+            vmw:StorageSection
+        </xs:documentation>
+    </xs:annotation>
+
+
+    <xs:element name="IpAssignmentSection" type="vmw:IpAssignmentSection_Type"
+        substitutionGroup="ovf:Section">
+        <xs:annotation>
+            <xs:documentation>Element substitutable for Section since
+                IpAssignmentSection_Type is a derivation of Section_Type
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="IpAssignmentSection_Type">
+        <xs:annotation>
+            <xs:documentation>Specifies the IP Assignment policy that is
+            supported</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ovf:Section_Type">
+                <xs:attribute name="schemes" type="xs:string" default="" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>List of supported IP assignment schemes. Valid
+                            values are: dhcp and ovfenv</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="protocols" type="xs:string" default="IPv4"
+                    use="optional">
+                    <xs:annotation>
+                        <xs:documentation>List of supported IP protocols. Valid values
+                            are: IPv4 and IPv6 </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:anyAttribute namespace="##any" processContents="lax"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="CpuCompatibilitySection" type="vmw:CpuCompatibilitySection_Type"
+        substitutionGroup="ovf:Section">
+        <xs:annotation>
+            <xs:documentation>Element substitutable for Section since
+                CpuCompatibilitySection_Type is a derivation of Section_Type
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="CpuCompatibilitySection_Type">
+        <xs:annotation>
+            <xs:documentation>CPU Architecture requirements for guest
+            software</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ovf:Section_Type">
+                <xs:sequence>
+                    <xs:element name="Level" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:attribute name="level" type="vmw:intOrHex" use="required"/>
+                            <xs:attribute name="vendor" type="xs:string" default=""
+                                use="optional"/>
+                            <xs:attribute name="eax" type="xs:string" use="optional"/>
+                            <xs:attribute name="ebx" type="xs:string" use="optional"/>
+                            <xs:attribute name="ecx" type="xs:string" use="optional"/>
+                            <xs:attribute name="edx" type="xs:string" use="optional"/>
+                            <xs:anyAttribute namespace="##any" processContents="lax"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:anyAttribute namespace="##any" processContents="lax"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="StorageGroupSection" type="vmw:StorageGroupSection_Type" substitutionGroup="ovf:Section">
+        <xs:annotation>
+            <xs:documentation>
+                Storage policy for group of disks
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="StorageGroupSection_Type">
+        <xs:complexContent>
+            <xs:extension base="ovf:Section_Type">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element minOccurs="0" name="Description" type="vmw:Description"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Description" mixed="true">
+        <xs:annotation>
+            <xs:documentation>
+                Storage Policy Group for a specific VM
+            </xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <xs:element name="StorageSection" type="vmw:StorageSection_Type" substitutionGroup="ovf:Section">
+        <xs:annotation>
+            <xs:documentation>
+                Storage policy group reference
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="StorageSection_Type">
+        <xs:complexContent>
+            <xs:extension base="ovf:Section_Type">
+                <xs:attribute name="type" type="xs:string" default="">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Storage policy group reference
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:anyAttribute namespace="##any" processContents="lax"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="BootOrderSection" type="vmw:BootOrderSection_Type"
+        substitutionGroup="ovf:Section">
+        <xs:annotation>
+            <xs:documentation>Element substitutable for Section since
+                BootOrderSection_Type is a derivation of Section_Type
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="BootOrderSection_Type">
+        <xs:annotation>
+            <xs:documentation>Specifies the boot device for this VirtualSystem</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ovf:Section_Type">
+                <xs:attribute name="type" type="xs:string" default="">
+                    <xs:annotation>
+                        <xs:documentation>Type of bootable device. Supported values are:
+                        cdrom, floppy, net, or disk</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="instanceId" type="xs:int" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                        Instance ID of ethernet card if boot device type
+                        is net.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:anyAttribute namespace="##any" processContents="lax"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ConfigKeyValue_Type" abstract="true">
+        <xs:attribute name="key" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Config key</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="value" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Config value</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute ref="ovf:required" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="Config" type="vmw:Config_Type">
+        <xs:annotation>
+            <xs:documentation>Config element
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="Config_Type">
+        <xs:annotation>
+            <xs:documentation>Config element</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vmw:ConfigKeyValue_Type" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="ExtraConfig" type="vmw:ExtraConfig_Type">
+        <xs:annotation>
+            <xs:documentation>ExtraConfig element
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="ExtraConfig_Type">
+        <xs:annotation>
+            <xs:documentation>ExtraConfig element</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vmw:ConfigKeyValue_Type" />
+        </xs:complexContent>
+    </xs:complexType>
+
+   <xs:simpleType name="intOrHex">
+      <xs:restriction base="xs:string">
+         <xs:pattern value="(\-?[0-9]+)|(0[xX][0-9a-fA-F]+)"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:element name="CoresPerSocket" type="vmw:CoresPerSocket_Type">
+        <xs:annotation>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+               Virtual hardware element expressing number of cores per socket
+            </xs:documentation>
+        </xs:annotation>
+   </xs:element>
+
+   <xs:complexType name="CoresPerSocket_Type">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">Type for CoresPerSocket element</xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+           <xs:extension base="cim:cimUnsignedInt">
+              <xs:attribute ref="ovf:required" use="optional"/>
+              <xs:anyAttribute namespace="##any" processContents="lax"/>
+           </xs:extension>
+        </xs:simpleContent>
+   </xs:complexType>
+</xs:schema>

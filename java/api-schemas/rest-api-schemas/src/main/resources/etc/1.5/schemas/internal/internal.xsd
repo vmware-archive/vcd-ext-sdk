@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<!--
+
+NOTE: Types defined in this file are for internal use only.
+
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/extension/v1.5"
+           xmlns:vcloud="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/extension/v1.5"
+           version="1.0">
+
+    <xs:import namespace="http://www.vmware.com/vcloud/v1.5" schemaLocation="internalQueryRecordView.xsd"/>
+    <xs:import namespace="http://www.vmware.com/vcloud/v1.5" schemaLocation="internalQueryReferenceView.xsd"/>
+
+    <xs:element name="UberAdminSettings" type="UberAdminSettingsType"></xs:element>
+    <xs:complexType name="UberAdminSettingsType">
+       <xs:annotation>
+          <xs:appinfo>
+               <meta:content-type>application/vnd.vmware.admin.uberAdminSettings</meta:content-type>
+          </xs:appinfo>
+          <xs:documentation source="internal"/>
+          <xs:documentation source="since">1.5</xs:documentation>
+             <xs:documentation xml:lang="en">
+                Internal use only.
+             </xs:documentation>
+          </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:ResourceType">
+                <xs:sequence>
+                    <xs:element name="DebugMode" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                         <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                               Internal use only.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="SerialPortConfigType">
+      <xs:complexType>
+           <xs:annotation>
+               <xs:documentation source="internal"/>
+               <xs:documentation source="since">1.5</xs:documentation>
+               <xs:documentation xml:lang="en">
+                   Internal use only.
+               </xs:documentation>
+           </xs:annotation>
+
+           <xs:complexContent>
+               <xs:extension base="vcloud:VCloudExtensibleType">
+                   <xs:sequence>
+                       <xs:element name="Status" type="xs:string" minOccurs="0" maxOccurs="1">
+                           <xs:annotation>
+                               <xs:documentation source="modifiable">none</xs:documentation>
+                               <xs:documentation xml:lang="en">
+                                   Indicates the current status of the connectable device.
+                                   Valid only while the virtual machine is running.
+                                   The set of possible values:
+                                   ok                 The device is working correctly.
+                                   recoverableError   The device has reported a recoverable error.
+                                                      For example, attempting to connect to network
+                                                      device that is being used by another virtual
+                                                      machine or some other program would result
+                                                      in this status.
+                                   unrecoverableError The device cannot be used. For example,
+                                                      attempting to connect to a network device that
+                                                      does not exist would result in this status.
+                                   untried            The device status is unknown, or it has not
+                                                      been requested to connect when the VM is
+                                                      powered on.
+                               </xs:documentation>
+                           </xs:annotation>
+                       </xs:element>
+
+                       <xs:element name="StartConnected" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                           <xs:annotation>
+                               <xs:documentation source="modifiable">always</xs:documentation>
+                               <xs:documentation xml:lang="en">
+                                   Flag to specify whether or not to connect the device when the
+                                   virtual machine starts.
+                               </xs:documentation>
+                           </xs:annotation>
+                       </xs:element>
+
+                       <xs:element name="AllowGuestControl" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                           <xs:annotation>
+                               <xs:documentation source="modifiable">always</xs:documentation>
+                               <xs:documentation xml:lang="en">
+                                   Flag to allow the guest to control whether the connectable
+                                   device is connected.
+                               </xs:documentation>
+                           </xs:annotation>
+                       </xs:element>
+
+                       <xs:element name="Direction" type="xs:string" minOccurs="1" maxOccurs="1">
+                           <xs:annotation>
+                               <xs:documentation source="modifiable">always</xs:documentation>
+                               <xs:documentation xml:lang="en">
+                                   The direction of the connection.
+                                   Possible values are "client" and "server".  "client" indicates
+                                   that the virtual machine can initiate a connection with a
+                                   system on the network using the specified serviceURI.  "server"
+                                   indicates that the virtual machine can listen for a connection
+                                   on the specified serviceURI.
+                               </xs:documentation>
+                           </xs:annotation>
+                       </xs:element>
+
+                       <xs:element name="ServiceUri" type="xs:string" minOccurs="1" maxOccurs="1">
+                           <xs:annotation>
+                               <xs:documentation source="modifiable">always</xs:documentation>
+                               <xs:documentation xml:lang="en">
+                                   Identifies the local host or a system on the network,
+                                   depending on the value of direction.
+
+                                   If you use the virtual machine as a server, the URI identifies
+                                   the host on which the virtual machine runs. In this case, the
+                                   host name part of the URI should be empty, or it should specify
+                                   the address of the local host.
+                                   If you use the virtual machine as a client, the URI identifies
+                                   the remote system on the network.
+                               </xs:documentation>
+                           </xs:annotation>
+                       </xs:element>
+
+                       <xs:element name="YieldOnPoll" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                           <xs:annotation>
+                               <xs:documentation source="modifiable">always</xs:documentation>
+                               <xs:documentation xml:lang="en">
+                                   Setting yieldOnPoll to true causes the virtual machine to
+                                   provide processor time information only when the virtual
+                                   machine's sole task is polling the virtual serial port.
+                               </xs:documentation>
+                           </xs:annotation>
+                       </xs:element>
+                   </xs:sequence>
+               </xs:extension>
+           </xs:complexContent>
+       </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SystemConfigurationSettings" type="SystemConfigurationSettingsType"/>
+    <xs:complexType name="SystemConfigurationSettingsType">
+        <xs:annotation>
+          <xs:appinfo>
+               <meta:content-type>application/vnd.vmware.admin.systemConfigurationSettings</meta:content-type>
+          </xs:appinfo>
+             <xs:documentation source="internal"/>
+             <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+             <xs:documentation xml:lang="en">
+                 Represents enumeration of system configuration settings.
+             </xs:documentation>
+             <xs:documentation source="since">1.5</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:ResourceType">
+                <xs:sequence>
+                    <xs:element name="Settings" type="SystemConfigurationSettingType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 System configuration settings.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+       </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="SystemConfigurationSetting" type="SystemConfigurationSettingType"/>
+    <xs:complexType name="SystemConfigurationSettingType">
+        <xs:annotation>
+             <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+             <xs:documentation source="internal"/>
+             <xs:documentation xml:lang="en">
+                 Represents a single system configuration setting.
+             </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:ResourceType">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 The name of the setting.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Section" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 The configuration settings section in which this setting appears.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 The current value of the configuration setting.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+       </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="SystemConfigurationSettingValue" type="SystemConfigurationSettingValueType"/>
+    <xs:complexType name="SystemConfigurationSettingValueType">
+        <xs:annotation>
+             <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+             <xs:documentation source="internal"/>
+             <xs:documentation xml:lang="en">
+                 A value to be applied to a system configuration setting.
+             </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 The value to set.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+       </xs:complexContent>
+    </xs:complexType>
+
+   <xs:element name="ComponentManagerSettings" type="ComponentManagerSettingsType" />
+    <xs:complexType name="ComponentManagerSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.componentManagerSettings</meta:content-type>
+                <meta:version added-in="5.5" />
+            </xs:appinfo>
+            <xs:documentation source="internal"/>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents parameters to register vCloud Director
+                with Component Manager.
+            </xs:documentation>
+            <xs:documentation source="required">true</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:ResourceType">
+                <xs:sequence>
+                    <xs:element name="CMUrl" type="xs:anyURI" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Component Manager IP Address. Required to register.
+                            </xs:documentation>
+                            <xs:documentation source="since">5.5</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SSOAdminUsername" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                User name with SSO admin privileges for Component Manager.
+                            </xs:documentation>
+                            <xs:documentation source="since">5.5</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SSOAdminPassword" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Admin password for Component Manager.
+                            </xs:documentation>
+                            <xs:documentation source="since">5.5</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="CbmData" type="CbmDataType"/>
+    <xs:complexType name="CbmDataType">
+        <xs:annotation>
+             <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+             <xs:documentation source="internal"/>
+             <xs:documentation xml:lang="en">
+                 Internal use only.
+             </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="vcloud:VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="VimServer" type="vcloud:ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 A reference to the vCenter.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="BackingRef" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 The backingRef.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="BackingRefType" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation>
+                                 The type of the backingRef. It could be one of pg, dvpg or virtualWire.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+       </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

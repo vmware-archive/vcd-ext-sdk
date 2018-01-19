@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:include schemaLocation="entity.xsd"/>
+    <xs:include schemaLocation="common.xsd"/>
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for the vCloud Task object.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="Task" type="TaskType"/>
+    <xs:complexType name="TaskType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.task</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents an asynchronous operation in vCloud Director.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="EntityType">
+                <xs:sequence>
+                    <xs:element name="Owner" type="ReferenceType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">create</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to the owner of the task. This is
+                                typically the object that the task is
+                                creating or updating.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Error" type="ErrorType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents error information from a failed task.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="User" type="ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.5</xs:documentation>
+                            <xs:documentation source="modifiable">create</xs:documentation>
+                            <xs:documentation>
+                                The user who started the task.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Organization" type="ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.5</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation>
+                                The organization to which the User belongs.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Progress" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.5</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only indicator of task progress as an
+                                approximate percentage between 0 and 100.
+                                Not available for all tasks.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Params" type="xs:anyType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.5</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The parameters with which this task was started.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Details" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="since">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Detailed message about the task. Also contained
+                                by the Owner entity when task status is
+                                preRunning.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Result" type="ResultType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="13.0"/></xs:appinfo>
+                            <xs:documentation source="since">13.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                An optional element that can be used to hold the result
+                                of a task.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="status" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The execution status of the task. One of:&lt;br&gt;
+                            &lt;b&gt;queued&lt;/b&gt; (The task has been queued for execution)&lt;br&gt;
+                            &lt;b&gt;preRunning&lt;/b&gt; (The task is awaiting preprocessing or
+                            administrative action.)&lt;br&gt;
+                            &lt;b&gt;running&lt;/b&gt; (The task is running.)&lt;br&gt;
+                            &lt;b&gt;success&lt;/b&gt; (The task completed with a status of
+                            success.)&lt;br&gt;
+                            &lt;b&gt;error&lt;/b&gt; (The task encountered an error while
+                            running.)&lt;br&gt;
+                            &lt;b&gt;canceled&lt;/b&gt; (The task was canceled by the owner or an
+                            administrator.)&lt;br&gt;
+                            &lt;b&gt;aborted&lt;/b&gt; (The task was aborted by an administrative
+                            action.)
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="operation" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            A message describing the operation that is tracked
+                            by this task.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="operationName" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The short name of the operation that is tracked by
+                            this task.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="serviceNamespace" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="since">5.1</xs:documentation>
+                        <xs:documentation source="modifiable">create</xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Identifier of the service that created the task. It must not start with
+                            com.vmware.vcloud and the length must be between 1 and 128 symbols.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="startTime" type="xs:dateTime" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The date and time the system started executing the task. May
+                            not be present if the task has not been executed yet.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="endTime" type="xs:dateTime" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The date and time that processing of the task was completed.
+                            May not be present if the task is still being executed.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="expiryTime" type="xs:dateTime" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The date and time at which the task resource will be destroyed
+                            and no longer available for retrieval. May not be present if
+                            the task has not been executed or is still being executed.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="cancelRequested" type="xs:boolean" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="since">5.1</xs:documentation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Whether user has requested this processing to be canceled.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="TaskOperationListType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.taskOperationList</meta:content-type>
+            </xs:appinfo>
+             <xs:documentation xml:lang="en">
+                 List of operation names.
+             </xs:documentation>
+             <xs:documentation source="since">1.5</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="Operation" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                       <xs:annotation>
+                          <xs:documentation source="since">1.5</xs:documentation>
+                          <xs:documentation>
+                             An operation that will be enabled as a blocking
+                             task. See the vCloud API Programming Guide for
+                             the operation names.
+                          </xs:documentation>
+                          <xs:documentation source="required">false</xs:documentation>
+                       </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="TaskPrototype" type="TaskPrototypeType" />
+
+    <xs:complexType name="TaskPrototypeType">
+    <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.taskPrototype</meta:content-type>
+            </xs:appinfo>
+            <xs:appinfo><meta:version added-in="6.0"/></xs:appinfo>
+            <xs:documentation source="since">6.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Describes an asynchronous operation to be performed by vCloud Director extension.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="Owner" type="ReferenceType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation source="modifiable">create</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Reference to the owner of the task. This is
+                        typically the object that the task is updating.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="operation" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation source="modifiable">always</xs:documentation>
+                <xs:documentation xml:lang="en">
+                    A message describing the operation that is tracked
+                    by this task.
+                </xs:documentation>
+                <xs:documentation source="required">false</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="operationName" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation source="modifiable">none</xs:documentation>
+                <xs:documentation xml:lang="en">
+                    The short name of the operation that is tracked by
+                    this task.
+                </xs:documentation>
+                <xs:documentation source="required">false</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>
