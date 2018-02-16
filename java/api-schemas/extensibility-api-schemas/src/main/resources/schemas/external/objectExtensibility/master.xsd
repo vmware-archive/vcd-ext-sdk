@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  api-extension-template-vcloud-director
+  Copyright 2017-2018 VMware, Inc.  All rights reserved
+  SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema
+    xmlns="http://www.vmware.com/vcloud/extensibility/v1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:meta="http://www.vmware.com/vcloud/meta"
+    jaxb:extensionBindingPrefixes="meta"
+    elementFormDefault="qualified"
+    targetNamespace="http://www.vmware.com/vcloud/extensibility/v1.0"
+    version="1.0">
+
+    <xs:include schemaLocation="./extensibility-core.xsd"/>
+    <xs:include schemaLocation="./placement.xsd"/>
+    <xs:include schemaLocation="./provisioning.xsd"/>
+    <xs:include schemaLocation="./network.xsd"/>
+
+</xs:schema>

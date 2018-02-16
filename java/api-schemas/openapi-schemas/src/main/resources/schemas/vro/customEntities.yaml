@@ -1,0 +1,348 @@
+# *************************************************************************
+# * api-extension-template-vcloud-director
+# * Copyright 2017-2018 VMware, Inc.  All rights reserved. *
+# * SPDX-License-Identifier: BSD-2-Clause
+# *************************************************************************
+swagger: "2.0"
+info:
+  description: |
+    The vCloud Director custom entities API allows to create and view custom entities.
+  version: "1.0"
+  title: vCloud Director custom entities API
+
+paths:
+  custom-entity-types:
+    get:
+      tags:
+        - customEntities
+      summary: Get list of all custom entity types
+      description: |
+        Get list of custom entity types.
+      operationId: queryCustomEntityTypes
+      parameters:
+        - $ref: "./common/query.yaml#/parameters/queryFilter"
+        - $ref: "./common/query.yaml#/parameters/querySortAsc"
+        - $ref: "./common/query.yaml#/parameters/querySortDesc"
+        - $ref: "./common/query.yaml#/parameters/queryPage"
+        - $ref: "./common/query.yaml#/parameters/queryPageSize"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./common/query.yaml#/definitions/QueryResults"
+
+    post:
+      tags:
+        - customEntities
+      summary: Creates a new custom entity type
+      description: |
+        Creates a new custom entity type
+      operationId: createCustomEntityType
+      consumes:
+        - application/json
+      parameters:
+        - name: newCustomEntityType
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CustomEntityType"
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/CustomEntityType"
+
+  custom-entity-type:
+    parameters:
+      - name: customEntityTypeId
+        in: path
+        required: true
+        type: string
+    get:
+      tags:
+        - customEntities
+      summary: Get specified custom entity type
+      operationId: getCustomEntityType
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/CustomEntityType"
+        404:
+          description: Not Found
+    put:
+      tags:
+        - customEntities
+      summary: Update specified custom entity type
+      operationId: updateCustomEntityType
+      consumes:
+        - application/json
+      parameters:
+        - name: updatedCustomEntityType
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CustomEntityType"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/CustomEntityType"
+    delete:
+      tags:
+        - customEntities
+      summary: Delete specified custom entity type.
+      operationId: deleteCustomEntityType
+      parameters:
+        - name: "recursive"
+          in: "query"
+          description: "if true, will recursively delete both custom entity type, all its instances and associated actions"
+          required: true
+          type: boolean
+      responses:
+        204:
+          description: No Content
+
+  custom-entity-type-actions:
+    parameters:
+      - name: customEntityTypeId
+        in: path
+        required: true
+        type: string
+    get:
+      tags:
+        - customEntities
+      summary: Get all actions associated with this custom entity type
+      operationId: getCustomEntityTypeActions
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: "#/definitions/CustomEntityTypeActions"
+        '404':
+          description: Not Found
+        '401':
+          description: The user is not authorized
+        '403':
+          description: The user does not have 'read' access rights for custom entity types
+
+    post:
+      tags:
+        - customEntities
+      summary: Creates a new custom entity type action.
+      description: |
+        Creates a new custom entity type action
+      operationId: createCustomEntityTypeAction
+      consumes:
+        - application/json
+      parameters:
+        - name: newCustomEntityTypeAction
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateCustomEntityTypeAction"
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: "#/definitions/CustomEntityTypeAction"
+        '400':
+          description: The request is invalid(validation error)
+          schema:
+            $ref: "./common/error.yaml#/definitions/Error"
+        '401':
+          description: The user is not authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          schema:
+            $ref: "./common/error.yaml#/definitions/Error"
+
+  custom-entity-type-action:
+    parameters:
+      - name: customEntityTypeId
+        in: path
+        required: true
+        type: string
+      - name: workflowId
+        in: path
+        required: true
+        type: string
+    delete:
+      tags:
+        - customEntities
+      summary: Delete specified custom entity type action
+      operationId: deleteCustomEntityTypeAction
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not found
+          schema:
+            $ref: "./common/error.yaml#/definitions/Error"
+
+  custom-entities:
+    get:
+      tags:
+        - customEntities
+      summary: Get list of all custom entities
+      description: |
+        Get list of custom entities
+      operationId: queryCustomEntities
+      parameters:
+        - $ref: "./common/query.yaml#/parameters/queryFilter"
+        - $ref: "./common/query.yaml#/parameters/querySortAsc"
+        - $ref: "./common/query.yaml#/parameters/querySortDesc"
+        - $ref: "./common/query.yaml#/parameters/queryPage"
+        - $ref: "./common/query.yaml#/parameters/queryPageSize"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./common/query.yaml#/definitions/QueryResults"
+
+  custom-entity:
+    parameters:
+      - name: customEntityId
+        in: path
+        required: true
+        type: string
+    get:
+      tags:
+        - customEntities
+      summary: Get specified custom entity
+      operationId: getCustomEntity
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/CustomEntity"
+        404:
+          description: Not Found
+
+  custom-entity-sdk-object:
+    parameters:
+      - name: customEntityId
+        in: path
+        required: true
+        type: string
+    get:
+      tags:
+        - customEntities
+      summary: Get specified custom entity represented as on Sdk-Object
+      operationId: getCustomEntityAsSdkObject
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./vro/workflowExecution.yaml#/definitions/SdkObject"
+        404:
+          description: Not Found
+
+definitions:
+  CustomEntity:
+    type: object
+    properties:
+      id:
+        type: string
+        description: |
+          UUID of custom entity
+      name:
+        type: string
+      customEntityTypeId:
+        type: string
+        description: |
+          This refers to UUID of custom entity type
+    required:
+      - name
+
+  CustomEntityType:
+    type: object
+    properties:
+      id:
+        type: string
+        description: |
+          UUID for custom entity type. This is immutable.
+      vroId:
+        type: string
+      vroDynamicType:
+        type: string
+        description: |
+          This refers to VRO's dynamic type.
+      name:
+        type: string
+        description: |
+          Display name.
+      nss:
+        type: string
+        description: |
+          This refers to a unique namespace specific string.
+      description:
+        type: string
+        default: ""
+    required:
+      - vroId
+      - vroDynamicType
+      - name
+      - nss
+
+  CreateCustomEntityTypeAction:
+    type: object
+    properties:
+      workflowId:
+        type: string
+        description: |
+          uuid of workflow.
+      workflowInputParameter:
+        type: string
+        description: |
+          Name of input parameter of given workflow to which this custom entity type should be mapped.
+    required:
+      - workflowId
+      - workflowInputParameter
+
+  CustomEntityTypeAction:
+    type: object
+    properties:
+      name:
+        type: string
+        description: |
+          Name of workflow
+      workflowId:
+        type: string
+        description: |
+          UUID of workflow.
+      workflowInputParameter:
+        type: string
+        description: |
+          Name of input parameter of given workflow to which this custom entity type should be mapped.
+    required:
+      - name
+      - workflowId
+
+  CustomEntityTypeActions:
+    type: object
+    properties:
+      actions:
+        type: array
+        items:
+          $ref: '#/definitions/CustomEntityTypeAction'

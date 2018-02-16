@@ -1,0 +1,53 @@
+# ******************************************************************************
+# * api-extension-template-vcloud-director
+# * Copyright 2017-2018 VMware, Inc.  All rights reserved. *
+# * SPDX-License-Identifier: BSD-2-Clause
+# ******************************************************************************
+swagger: "2.0"
+
+info:
+  title: VRO Common Types
+  description: Some common vro type definitions.
+  version: "1.0"
+
+definitions:
+  Relations:
+    type: object
+    properties:
+      total:
+        type: integer
+        format: int32
+      link:
+        type: array
+        items:
+          $ref: '#/definitions/Link'
+      start:
+        type: integer
+        format: int32
+
+  Link:
+    type: object
+    properties:
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/WsAttribute'
+      href:
+        type: string
+      rel:
+        type: string
+      type:
+        type: string
+      name:
+        type: string
+
+  WsAttribute:
+    type: object
+    properties:
+      displayValue:
+        type: string
+      name:
+        type: string
+      value:
+        type: string
+

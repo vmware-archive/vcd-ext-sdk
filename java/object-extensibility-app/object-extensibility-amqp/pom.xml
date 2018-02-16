@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+ api-extension-template-vcloud-director
+ Copyright 2018 VMware, Inc.
+ SPDX-License-Identifier: BSD-2-Clause
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.vmware.vcloud</groupId>
+    <artifactId>object-extensibility-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>object-extensibility-amqp</artifactId>
+  <name>${project.artifactId} :: Extension AMQP library</name>
+  <description>Library for interacting with RabbitMQ broker</description>
+  <packaging>jar</packaging>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.amqp</groupId>
+      <artifactId>spring-amqp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.amqp</groupId>
+      <artifactId>spring-rabbit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-oxm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+    </dependency>
+  </dependencies>
+</project>

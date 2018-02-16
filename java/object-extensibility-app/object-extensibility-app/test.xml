@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ api-extension-template-vcloud-director
+ Copyright 2018 VMware, Inc.
+ SPDX-License-Identifier: BSD-2-Clause
+-->
+<ns2:SelectorExtension xmlns="http://www.vmware.com/vcloud/versions"
+    xmlns:ns2="http://www.vmware.com/vcloud/v1.5" xmlns:ns3="http://schemas.dmtf.org/ovf/envelope/1"
+    xmlns:ns4="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData"
+    xmlns:ns5="http://schemas.dmtf.org/wbem/wscim/1/common"
+    xmlns:ns6="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData"
+    xmlns:ns7="http://schemas.dmtf.org/ovf/environment/1" xmlns:ns8="http://www.vmware.com/vcloud/extension/v1.5">
+    <ns2:Priority>1</ns2:Priority>
+    <ns2:ObjectExtensionId>d13bd664-ace0-4571-896b-99c02428e28c</ns2:ObjectExtensionId>
+    <ns2:Phases>
+        <ns2:Phase name="urn:extensionPoint:vapp:placement:calculateSolution"
+            type="BLOCKING" />
+    </ns2:Phases>
+</ns2:SelectorExtension>

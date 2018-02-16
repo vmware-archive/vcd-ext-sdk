@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc.  All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+
+<xs:schema
+    xmlns="http://www.vmware.com/vcloud/v1.5"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.vmware.com/vcloud/v1.5"
+    elementFormDefault="qualified"
+    version="1.0">
+
+    <xs:include schemaLocation="../vcloud/vcloud.xsd"/>
+    <xs:include schemaLocation="../admin/admin.xsd"/>
+</xs:schema>

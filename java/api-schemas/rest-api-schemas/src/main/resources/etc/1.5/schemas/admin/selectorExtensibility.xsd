@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    api-extension-template-vcloud-director
+    Copyright © 2015-2018 VMware, Inc. All rights reserved.
+    SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+    xmlns:tns="http://www.vmware.com/vcloud/v1.5" xmlns:ext="http://www.vmware.com/vcloud/extension/v1.5"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:meta="http://www.vmware.com/vcloud/meta" jaxb:version="2.0"
+    jaxb:extensionBindingPrefixes="meta" elementFormDefault="qualified"
+    targetNamespace="http://www.vmware.com/vcloud/v1.5" version="1.0">
+
+    <xs:include schemaLocation="../vcloud/common.xsd" />
+
+    <xs:complexType name="PhasesType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                <meta:content-type>application/vnd.vmware.admin.extensibility.selector</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">OBJECT_EXTENSIBILITY
+            </xs:documentation>
+            <xs:documentation xml:lang="en">
+                An extensibility
+                phase represents a point in a workflow where control can be passed to an
+                extension.
+                Each phase may define its own
+                message format for
+                communicating with the extension.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Phase" maxOccurs="unbounded"
+                minOccurs="1">
+               <xs:annotation>
+                  <xs:documentation>
+                     A point in a workflow where object extensibility is
+                     supported. A phase is identified by a URN of the form
+                     urn:extensionPoint:{entity}:{entity_operation...}. A Phase
+                     can have a cardinality of 1-n selector extensions.
+                     This cardinality is a property of the individual phase.
+                  </xs:documentation>
+                  <xs:documentation source="modifiable">always
+                  </xs:documentation>
+               </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="name" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:pattern value="urn:extensionPoint:.+" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="type" use="required">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Specifies how the system interacts with an
+                                extension point. One of:
+                                &lt;br&gt;blocking
+                                &lt;br&gt;async
+                                &lt;br&gt;needsApproval
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:pattern value=".+" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="optional" use="optional" default="false">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Indicates whether an unsuccessful execution of an extension can still
+                                result in successful phase completion, either through an alternate
+                                extension, or through default phase functionality (default: false)
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:boolean" />
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+                <xs:unique name="uniquePhase">
+                    <xs:selector xpath="tns:Phase" />
+                    <xs:field xpath="@name" />
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="SelectorExtension" type="SelectorExtensionType" />
+    <xs:complexType name="SelectorExtensionType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                <meta:content-type>application/vnd.vmware.admin.extensibility.selector</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">OBJECT_EXTENSIBILITY</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents
+                the
+                association between a registered extension and a
+                selector. At the selector level it defines a default
+                policy of association. At the instance level it defines
+                an overridden policy or a selector instance specific
+                association.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="IdentifiableResourceType">
+                <xs:sequence>
+
+                    <xs:element name="Enabled" type="xs:boolean"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this extension selector
+                                association is enabled.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+                    <xs:element name="Priority" type="xs:integer"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Specifies priority level of a
+                                extension
+                                selector association.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+                    <xs:element name="ObjectExtensionId" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">create
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Opaque string identifying the associated registered object extension.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+                    <xs:element name="Phases" minOccurs="0"
+                        maxOccurs="1" nillable="true" type="PhasesType">
+                        <xs:annotation>
+                           <xs:documentation>One or more Phases implemented by this
+                           extension in the context of this Selector.
+                           </xs:documentation>
+                                 <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                       </xs:annotation>
+                    </xs:element>
+
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="SelectorExtensions" type="SelectorExtensionsType" />
+    <xs:complexType name="SelectorExtensionsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                <meta:content-type>application/vnd.vmware.admin.extensibility.selectors</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">OBJECT_EXTENSIBILITY</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents
+                the
+                collection of selector extensions.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="SelectorExtension" type="SelectorExtensionType"
+                        minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="OBJECT_EXTENSIBILITY" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents
+                                the
+                                association between a
+                                registered extension and a
+                                selector.
+                            </xs:documentation>
+                            <xs:documentation source="required">true
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

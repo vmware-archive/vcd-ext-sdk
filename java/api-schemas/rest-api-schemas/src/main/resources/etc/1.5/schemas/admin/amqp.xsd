@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2014-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:include schemaLocation="../vcloud/common.xsd"/>
+
+    <xs:element name="AmqpConfiguration" type="AmqpConfigurationType">
+        <xs:annotation>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="AmqpConfigurationType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.amqpConfiguration</meta:content-type>
+                <meta:version added-in="5.8" />
+            </xs:appinfo>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a list of AMQP Configuration items
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="AmqpBrokers" type="AmqpBrokersType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.8"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                List of AMQP Broker configurations.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                     <xs:element name="AmqpComponentConfigurations" type="AmqpComponentConfigurationsType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.8"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                List of AMQP Broker configurations.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AmqpComponentConfigurations" type="AmqpComponentConfigurationsType">
+        <xs:annotation>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="AmqpComponentConfigurationsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.amqpComponentConfigList</meta:content-type>
+                <meta:version added-in="5.8" />
+            </xs:appinfo>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents an AMQP Component Configuration list
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="AmqpComponentConfiguration" type="AmqpComponentConfigurationType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.8"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                AMQP Component Configuration.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AmqpComponentConfiguration" type="AmqpComponentConfigurationType">
+        <xs:annotation>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="AmqpComponentConfigurationType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.amqpComponentConfiguration</meta:content-type>
+                <meta:version added-in="5.8" />
+            </xs:appinfo>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents an AMQP Component Configuration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                     <xs:element name="AmqpConfigList" type="AmqpConfigListType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                List of AMQP config entries for a component.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="name" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Name of AMQP configuration component.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AmqpConfigList" type="AmqpConfigListType">
+        <xs:annotation>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="AmqpConfigListType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.amqpConfigList</meta:content-type>
+                <meta:version added-in="5.8" />
+            </xs:appinfo>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents an AMQP Configuration key value pair list
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="ConfigEntry" type="AmqpConfigEntryType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.8"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to an AMQP Configuration item.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AmqpConfigEntry" type="AmqpConfigEntryType">
+        <xs:annotation>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="AmqpConfigEntryType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.amqpConfigEntry</meta:content-type>
+                <meta:version added-in="5.8" />
+            </xs:appinfo>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+            <xs:documentation xml:lang="en">
+                AMQP Component config entry.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="key" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            A key value pair in a config entry. This element contains the value for the named key.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:element name="AmqpBrokers" type="AmqpBrokersType">
+        <xs:annotation>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="AmqpBrokersType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.amqpBrokers</meta:content-type>
+                <meta:version added-in="5.8" />
+            </xs:appinfo>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a list of AMQP broker configurations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="AmqpBrokerConfiguration" type="AmqpBrokerConfigurationType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.8"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to an AMQP Configuration item.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AmqpBrokerConfiguration" type="AmqpBrokerConfigurationType">
+        <xs:annotation>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="AmqpBrokerConfigurationType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.amqpBrokerConfiguration</meta:content-type>
+                <meta:version added-in="5.8" />
+            </xs:appinfo>
+            <xs:documentation source="internal" />
+            <xs:documentation source="since">5.8</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents configuration for an AMQP broker
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="AmqpHost" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Hostname of the AMQP broker.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AmqpPort" type="xs:int" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Port used by the AMQP broker.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AmqpUsername" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Username for the AMQP broker.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AmqpPassword" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Password for the AMQP broker.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AmqpVHost" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Virtual host for the AMQP broker.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AmqpUseSSL" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Use SSL for communication with the AMQP broker.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AmqpSslAcceptAll" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                               Accept all SSL certificates. Must be true if AmqpUseSSL is true.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

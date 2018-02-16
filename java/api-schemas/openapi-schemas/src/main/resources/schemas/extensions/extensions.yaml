@@ -1,0 +1,363 @@
+# *************************************************************************
+# * api-extension-template-vcloud-director
+# * Copyright 2017-2018 VMware, Inc.  All rights reserved. *
+# * SPDX-License-Identifier: BSD-2-Clause
+# *************************************************************************
+swagger: "2.0"
+info:
+  description: |
+    The vCloud Director Tenant Portal can be enhanced with custom plugins.  This API allows a service provider
+    to manage UI plugins.
+    Functionality includes creating a plugin manifest, uploading the plugin bundle, scoping the plugin
+    for service provider or tenant use, and controlling which tenants the plugins are published to.
+  version: "1.0"
+  title: UI Plugin API
+
+paths:
+  extensions-ui:
+    get:
+      tags:
+        - uiPlugins
+      summary: Get a list of all UI Extensions
+      description:
+      operationId: getUiPlugins
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UiPluginMetadataResponse'
+
+    post:
+      tags:
+        - uiPlugins
+      summary: Adds plugin metadata for a new UI Extension
+      description: |
+        Creates a new UI extension and sets the provided plugin metadata for it.
+      operationId: addUiPlugin
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UiPluginMetadata'
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/UiPluginMetadataResponse'
+
+  extensions-ui-id:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+    get:
+      tags:
+        - uiPlugin
+      summary: Retrieves extension specific plugin metadata
+      description: |
+        Retrieve the plugin metadata for this extension
+      operationId: getUiPlugin
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/UiPluginMetadataResponse'
+    put:
+      tags:
+        - uiPlugin
+      summary: Updates extension specific plugin's metadata
+      description: |
+        Update the plugin metadata for this extension clobbering existing information
+        and returns the updated plugin metadata
+      operationId: putUiPlugin
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: pluginMetadataBody
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UiPluginMetadata'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/UiPluginMetadataResponse'
+    delete:
+      tags:
+        - uiPlugin
+      operationId: deleteUiPlugin
+      summary: Delete system level logo
+      description: |
+        Delete the system level logo, forcing the get method to return the
+        vCloud Director default logo.
+      responses:
+        204:
+          description: No Content
+
+  extensions-ui-id-plugin:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+
+    post:
+      tags:
+        - uiPluginResource
+      summary: Upload the plugin for this extension
+      description: |
+        Initiates an upload for the plugin for this extension using the Transfer service
+        A unique transfer service URL is returned where the plugin may be uploaded.
+      operationId: uploadUiPluginResource
+      consumes:
+        - application/json
+      parameters:
+        - name: pluginUploadSpec
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PluginUploadSpec'
+      responses:
+        204:
+          description: No Content
+
+    delete:
+      tags:
+        - uiPluginResource
+      summary: Delete the plugin for this extension
+      description: |
+        Deletes the actual plugin for this extension
+      operationId: deleteUiPluginResource
+      responses:
+        204:
+          description: No Content
+
+  extensions-ui-id-plugin-tenants:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+
+    get:
+      tags:
+        - uiPluginTenants
+      summary: Retrieves list of tenants for whom the plugin is explicitly published
+      description: |
+        Retrieves list of tenants for whom the plugin is explicitly published
+      operationId: getUiPluginTenants
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntityReference'
+
+  extensions-ui-id-plugin-tenants-publish:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+    post:
+      tags:
+        - uiPluginTenants
+      summary: Publishes the UI plugin to the specified tenants
+      description: |
+        Publishes the UI plugin to the specified tenants
+      operationId: postUiPluginPublish
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: publishTenantsBody
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntityReference'
+
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntityReference'
+
+  extensions-ui-id-plugin-tenants-unpublish:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+    post:
+      tags:
+        - uiPluginTenants
+      summary: Revokes publication of the UI plugin to the specified tenants
+      description: |
+        Revokes publication of the UI plugin to the specified tenants
+      operationId: postUiPluginUnpublish
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: unpublishTenantsBody
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntityReference'
+
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntityReference'
+
+  extensions-ui-id-plugin-tenants-publish-all:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+
+    post:
+      tags:
+        - uiPluginTenants
+      summary: Publishes the UI plugin to all tenants
+      description: |
+        Publishes the UI plugin to all tenants
+      operationId: postUiPluginPublishAll
+      produces:
+        - application/json
+
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntityReference'
+
+  extensions-ui-id-plugin-tenants-unpublish-all:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+
+    post:
+      tags:
+        - uiPluginTenants
+      summary: Unpublishes the UI plugin from all tenants
+      description: |
+        Unpublishes the UI plugin from all tenants
+      operationId: postUiPluginUnpublishAll
+      produces:
+        - application/json
+
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntityReference'
+
+definitions:
+  UiPluginMetadata:
+    description: |
+      Meta information about a UI Plugin
+    type: object
+    properties:
+      pluginName:
+        type: string
+      vendor:
+        type: string
+      description:
+        type: string
+      version:
+        type: string
+      license:
+        type: string
+      link:
+        type: string
+      tenant_scoped:
+        type: boolean
+      provider_scoped:
+        type: boolean
+      enabled:
+        type: boolean
+    required:
+    - pluginName
+    - vendor
+    - version
+    - license
+    - link
+
+  UiPluginMetadataResponse:
+    type: object
+
+    allOf:
+      - $ref: '#/definitions/UiPluginMetadata'
+      - type: object
+        properties:
+          id:
+            type: string
+          plugin_status:
+            type: string
+            enum:
+              - unavailable
+              - ready
+          resourcePath:
+            type: string
+
+  PluginUploadSpec:
+    type: object
+    description: |
+      Information about plugin binary
+    properties:
+      fileName:
+        type: string
+      size:
+        type: integer
+        format: int64
+      checksum:
+        type: string
+      checksumAlgo:
+        type: string
+        default: sha1
+        enum:
+        - sha1
+        - sha256
+    required:
+      - fileName
+      - size
+
+  EntityReference:
+    $ref: "./common/entity.yaml#/definitions/EntityReference"

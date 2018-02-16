@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.vmware.com/vcloud/v1.5" version="1.0">
+
+    <xs:include schemaLocation="common.xsd"/>
+    <xs:include schemaLocation="entity.xsd"/>
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for the entities returned by the referenceView query handler.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="OrgReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for organization query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single organization query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgVdcReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for orgVdc query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgVdcReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single orgVdc query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="MediaReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for media, adminMedia query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="MediaReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single media, adminMedia query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppTemplateReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vAppTemplate, adminVAppTemplate query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppTemplateReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vAppTemplate, adminVAppTemplate query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vApp, adminVApp query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vApp, adminVApp query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VMReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vm, adminVM, adminShadowVM, resourcePoolVmList query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VMReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vm, adminVM, adminShadowVM, resourcePoolVmList query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgNetworkReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for orgNetwork, adminOrgNetwork query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgNetworkReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single orgNetwork, adminOrgNetwork query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppNetworkReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vAppNetwork, adminVAppNetwork query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppNetworkReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vAppNetwork, adminVAppNetwork query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="CatalogReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for catalog, adminCatalog query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="CatalogReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single catalog, adminCatalog query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminVdcReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminOrgVdc query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminVdcReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminOrgVdc query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VMWProviderVdcReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for providerVdc query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VMWProviderVdcReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single providerVdc query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="NetworkReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for externalNetwork query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="NetworkReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single externalNetwork query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="GroupReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for group, adminGroup query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="GroupReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single group, adminGroup query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="UserReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for user, strandedUser, adminUser query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="UserReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single user, strandedUser, adminUser query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="RoleReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+               A container for role or adminRole query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="RoleReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single role, adminRole query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="DatastoreReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for datastore query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="DatastoreReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single datastore query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="NetworkPoolReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for networkPool query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="NetworkPoolReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single networkPool query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VirtualCenterReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for virtualCenter query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VirtualCenterReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single virtualCenter query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="HostReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for host query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="HostReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single host query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="RightReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for right query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="RightReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single right query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppOrgNetworkRelationReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vAppOrgNetworkRelation query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppOrgNetworkRelationReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vAppOrgNetworkRelation query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="CatalogItemReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminCatalogItem, catalogItem query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="CatalogItemReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminCatalogItem, catalogItem query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="TaskReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for task, adminTask query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="TaskReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single task, adminTask query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="BlockingTaskReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for blockingTask query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="BlockingTaskReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single blockingTask query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="DiskReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for disk query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="DiskReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single disk query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminDiskReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminDisk query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminDiskReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminDisk query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminEventReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminEvent query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminEventReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminEvent query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="StrandedItemReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for strandedItem query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="StrandedItemReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single strandedItem query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminServiceReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminService query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminServiceReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminService query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ServiceReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for service query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ServiceReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single service query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ServiceLinkReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for serviceLink query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ServiceLinkReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single serviceLink query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgVdcStorageProfileReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for orgVdcStorageProfile query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgVdcStorageProfileReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single orgVdcStorageProfile query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminOrgVdcStorageProfileReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminOrgVdcStorageProfile query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminOrgVdcStorageProfileReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminOrgVdcStorageProfile query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ProviderVdcStorageProfileReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for providerVdcStorageProfile query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ProviderVdcStorageProfileReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single providerVdcStorageProfile query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ApiFilterReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for apiFilter query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ApiFilterReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single apiFilter query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminApiDefinitionReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminApiDefinition query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminApiDefinitionReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminApiDefinition query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ApiDefinitionReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for apiDefinition query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ApiDefinitionReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single apiDefinition query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminFileDescriptorReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for adminFileDescriptor query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AdminFileDescriptorReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single adminFileDescriptor query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ResourceClassActionReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for resourceClassAction query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ResourceClassActionReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single resourceClassAction query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AclRuleReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for aclRule query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="AclRuleReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single aclRule query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ResourceClassReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for resourceClass query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ResourceClassReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single resourceClass query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ServiceResourceResourceReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for serviceResource query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="ServiceResourceResourceReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single serviceResource query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="EdgeGatewayReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for edgeGateway query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="EdgeGatewayReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single edgeGateway query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgVdcNetworkReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for orgVdcNetwork query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="OrgVdcNetworkReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single orgVdcNetwork query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppOrgVdcNetworkRelationReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vAppOrgVdcNetworkRelation query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VAppOrgVdcNetworkRelationReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vAppOrgVdcNetworkRelation query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VmGroupVmsReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vmGroupVms query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VmGroupVmsReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vmGroupVms query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VmGroupsReferences" type="ReferencesType" substitutionGroup="References">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A container for vmGroups query results in references format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="VmGroupsReference" type="ReferenceType" substitutionGroup="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                A single vmGroups query result in reference format.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ api-extension-template-vcloud-director
+ Copyright 2018 VMware, Inc.
+ SPDX-License-Identifier: BSD-2-Clause
+-->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>rest-api-schemas</artifactId>
+  <version>9.1.0</version>
+  <parent>
+    <groupId>com.vmware.vcloud</groupId>
+    <artifactId>api-schemas-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <packaging>jar</packaging>
+  <name>${project.artifactId} :: vCloud Director REST API schemas</name>
+  <description>vCloud Director REST API schemas</description>
+  <dependencies>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <!--
+        Filter JAXB specifics from the schemas, so they can be
+        used w/o our plugins
+      -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>xml-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>transform</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <transformationSets>
+            <transformationSet>
+              <dir>src/main/resources/etc/1.5/schemas</dir>
+              <stylesheet>src/main/assembly/filter-jaxb.xsl</stylesheet>
+              <includes>
+                <include>**/*.xsd</include>
+              </includes>
+              <excludes>
+                <exclude>vcloud/vApp.xsd</exclude>
+                <exclude>extension/vmwextensions.xsd</exclude>
+              </excludes>
+              <outputDir>${project.build.directory}/generated-resources/filtered-schemas</outputDir>
+              <addedToClasspath>false</addedToClasspath>
+            </transformationSet>
+            <transformationSet>
+              <dir>src/main/resources/etc/1.5/schemas</dir>
+              <stylesheet>src/main/assembly/filter-extension-binding.xsl</stylesheet>
+              <includes>
+                <include>**/*.xsd</include>
+              </includes>
+              <excludes>
+                <exclude>extension/vmwextensions.xsd</exclude>
+              </excludes>
+              <outputDir>${project.build.directory}/generated-resources/filtered-schemas</outputDir>
+              <addedToClasspath>false</addedToClasspath>
+            </transformationSet>
+            <transformationSet>
+              <dir>src/main/resources/etc/1.5/schemas</dir>
+              <stylesheet>src/main/assembly/filter-internal.xsl</stylesheet>
+              <includes>
+                <include>extension/vmwextensions.xsd</include>
+              </includes>
+              <outputDir>${project.build.directory}/generated-resources/filtered-schemas</outputDir>
+              <addedToClasspath>false</addedToClasspath>
+            </transformationSet>
+            <transformationSet>
+              <dir>src/main/resources/etc/schemas/external/ovf1.1</dir>
+              <stylesheet>src/main/assembly/filter-jaxb.xsl</stylesheet>
+              <includes>
+                <include>**/*.xsd</include>
+              </includes>
+              <outputDir>${project.build.directory}/generated-resources/filtered-schemas/ovf1.1</outputDir>
+              <addedToClasspath>false</addedToClasspath>
+            </transformationSet>
+          </transformationSets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <excludeResources>true</excludeResources>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/filtered-schemas.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>filtered-schemas-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

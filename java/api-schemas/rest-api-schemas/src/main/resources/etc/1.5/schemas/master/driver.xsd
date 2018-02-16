@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2016-2018 VMware, Inc.  All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+
+<!-- Centralize imports for the admin and extension namespaces. -->
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import namespace="http://www.vmware.com/vcloud/v1.5" schemaLocation="../admin/admin.xsd"/>
+    <xs:import namespace="http://www.vmware.com/vcloud/v1.5" schemaLocation="../vcloud/vcloud.xsd"/>
+    <xs:import namespace="http://www.vmware.com/vcloud/extension/v1.5"
+        schemaLocation="../extension/vmwextensions.xsd"/>
+</xs:schema>

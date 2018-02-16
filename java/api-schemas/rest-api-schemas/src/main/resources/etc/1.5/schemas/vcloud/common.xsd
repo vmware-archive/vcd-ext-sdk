@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:include schemaLocation="task.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Defines types common to most or all of the vCloud
+            request/response schemas.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType name="VCloudExtensionType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                General purpose extension element. Not related to extension
+                services.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+
+        <xs:attribute name="required" type="xs:boolean" default="true" use="optional">
+            <xs:annotation>
+                <xs:documentation source="modifiable">always</xs:documentation>
+                <xs:documentation xml:lang="en">
+                    True if the request should fail when the server does not
+                    understand the extension.
+                </xs:documentation>
+                <xs:documentation source="required">false</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:anyAttribute namespace="##other" processContents="lax"/>
+    </xs:complexType>
+
+    <xs:complexType abstract="true" name="VCloudExtensibleType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A base abstract type for all complex types that support extensions.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="VCloudExtension" type="VCloudExtensionType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        An optional extension element that can contain an
+                        arbitrary number of elements and attributes. Not
+                        related to extension services.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+
+        <xs:anyAttribute namespace="##other" processContents="lax"/>
+    </xs:complexType>
+
+    <xs:attributeGroup name="CommonErrorAttributes">
+        <xs:attribute name="message" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation source="modifiable">
+                    none
+                </xs:documentation>
+                <xs:documentation xml:lang="en">
+                    An one line, human-readable message describing the
+                    error that occurred.
+                </xs:documentation>
+                <xs:documentation source="required">
+                    true
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="majorErrorCode" type="xs:int" use="required">
+            <xs:annotation>
+                <xs:documentation source="modifiable">
+                    none
+                </xs:documentation>
+                <xs:documentation xml:lang="en">
+                    The class of the error. Matches the HTTP status
+                    code.
+                </xs:documentation>
+                <xs:documentation source="required">
+                    true
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="minorErrorCode" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation source="modifiable">
+                    none
+                </xs:documentation>
+                <xs:documentation xml:lang="en">
+                    Resource-specific error code.
+                </xs:documentation>
+                <xs:documentation source="required">
+                    true
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="vendorSpecificErrorCode" type="xs:string"
+            use="optional">
+            <xs:annotation>
+                <xs:documentation source="modifiable">
+                    none
+                </xs:documentation>
+                <xs:documentation xml:lang="en">
+                    A vendor- or implementation-specific error code that
+                    can reference specific modules or source lines for
+                    diagnostic purposes.
+                </xs:documentation>
+                <xs:documentation source="required">
+                    false
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:element name="Error" type="ErrorType"/>
+    <xs:complexType name="ErrorType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.error</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                The standard error message type used in the vCloud REST API.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="TenantError" type="TenantErrorType" maxOccurs="1" minOccurs="0">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                            <xs:documentation xml:lang="en">
+                                The tenant view of the error, when the containing error is an
+                                administrator view of the error.
+                            </xs:documentation>
+                            <xs:documentation source="since">5.7</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>                    
+                    </xs:element>
+                </xs:sequence>
+                <xs:attributeGroup ref="CommonErrorAttributes"/>
+                <xs:attribute name="stackTrace" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="since">1.0</xs:documentation>
+                        <xs:documentation source="modifiable">
+                            none
+                        </xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The stack trace of the exception.
+                        </xs:documentation>
+                        <xs:documentation source="required">
+                            false
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="TenantErrorType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+            <xs:documentation source="since">5.7</xs:documentation>
+            <xs:documentation xml:lang="en">
+                The tenant view of the error, when the containing error is an
+                administrator view of the error.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:attributeGroup ref="CommonErrorAttributes" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ResultType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="13.0"/></xs:appinfo>
+            <xs:documentation source="since">13.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                The result of operations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ResultContent" type="xs:anyType" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="13.0"/></xs:appinfo>
+                    <xs:documentation source="since">13.0</xs:documentation>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        An optional element that can be used to hold the result
+                        of operations.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="Link" type="LinkType"/>
+    <xs:complexType name="LinkType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Extends reference type by adding relation attribute.
+                Defines a hyper-link with a relationship, hyper-link reference,
+                and an optional MIME type.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ReferenceType">
+                <xs:attribute name="rel" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Defines the relationship of the link to the object
+                            that contains it. A relationship can be the name of
+                            an operation on the object, a reference to a
+                            contained or containing object, or a reference to
+                            an alternate representation of the object. The
+                            relationship value implies the HTTP verb to use
+                            when you use the link's href as a request URL. See
+                            the vCloud API Programming Guide for a list of
+                            links and link relations.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ResourceType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                The base type for all objects in the vCloud model.
+                Has an optional list of links and href and type attributes.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Link" type="LinkType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to an entity or operation associated
+                                with this object.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="href" type="xs:anyURI" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The URI of the entity.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="type" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The MIME type of the entity.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="IdentifiableResourceType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                The base type for all resource types which contain an
+                id attribute.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:attribute name="id" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The entity identifier, expressed in URN format.
+                            The value of this attribute uniquely identifies
+                            the entity, persists for the life of the entity,
+                            and is never reused.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="operationKey" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="modifiable">create</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                           Optional unique identifier to support idempotent
+                           semantics for create and delete operations.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ParamsType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A basic type used to specify request parameters.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Description" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Optional description.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="name" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Typically used to name or identify the subject of
+                            the request. For example, the name of the object
+                            being created or modified.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ReferenceType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A reference to a resource. Contains an href attribute and
+                optional name and type attributes.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:attribute name="href" type="xs:anyURI" use="required">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Contains the URI to the entity.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="id" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            The resource identifier, expressed in URN format.
+                            The value of this attribute uniquely identifies
+                            the resource, persists for the life of the resource,
+                            and is never reused.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="type" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Contains the type of the the entity.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="name" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Contains the name of the the entity.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ResourceReferenceType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a reference to a resource. Contains an href
+                attribute, a resource status attribute, and optional name and
+                type attributes.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ReferenceType">
+                <xs:attribute name="status" type="xs:int" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Status of a resource.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ContainerType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+               Container for query result sets.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:attribute name="name" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Query name that generated this result set.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="page" type="xs:int" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Page of the result set that this container holds.
+                            The first page is page number 1.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="pageSize" type="xs:int" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Page size, as a number of records or references.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="total" type="xs:long" use="optional">
+                    <xs:annotation>
+                       <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Total number of records or references in the
+                            container.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="CapacityType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the capacity of a given resource.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Units" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Units in which capacity is allocated. For CPU capacity, one of:&lt;br&gt;
+                                MHz&lt;br&gt;
+                                GHz&lt;br&gt;
+                                For memory capacity, one of:&lt;br&gt;
+                                MB&lt;br&gt;
+                                GB
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Allocated" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Capacity that is committed to be available.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Limit" type="xs:long" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Capacity limit relative to the value specified for Allocation.
+                                It must not be less than that value. If it is greater than that value,
+                                it implies overprovisioning.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="CapacityWithUsageType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a capacity and usage of a given resource.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="CapacityType">
+                <xs:sequence>
+                    <xs:element name="Reserved" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Capacity reserved.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Used" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Capacity used. If the VDC AllocationModel is 
+                                ReservationPool, this number represents the 
+                                percentage of the reservation that is in use.
+                                For all other allocation models, it represents
+                                the percentage of the allocation that is in
+                                use.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Overhead" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:appinfo><meta:version removed-in="REMOVED_VERSION_15_51"/></xs:appinfo>
+                            <xs:documentation xml:lang="en">
+                                Number of Units allocated to system resources
+                                such as vShield Manager virtual machines and
+                                shadow virtual machines provisioned from this
+                                Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="AccessSettingType">
+        <xs:annotation xml:lang="en">
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Controls access to the resource.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:choice minOccurs="1" maxOccurs="1">
+                        <xs:element name="Subject" type="ReferenceType">
+                            <xs:annotation>
+                                <xs:documentation source="modifiable">always</xs:documentation>
+                                <xs:documentation xml:lang="en">
+                                    The user or group to which these settings apply.
+                                </xs:documentation>
+                                <xs:documentation source="required">false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="ExternalSubject" type="ExternalSubjectType">
+                            <xs:annotation>
+                                <xs:appinfo><meta:version added-in="VDC_PERMISSIONS"/></xs:appinfo>
+                                <xs:documentation source="since">VDC_PERMISSIONS</xs:documentation>
+                                <xs:documentation source="modifiable">always</xs:documentation>
+                                <xs:documentation xml:lang="en">
+                                    Subject existing external of VCD, to which these settings apply.
+                                </xs:documentation>
+                                <xs:documentation source="required">false</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+                    <xs:element name="AccessLevel" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The access level for the subject. One of:&lt;br&gt;
+                                FullControl&lt;br&gt;
+                                Change&lt;br&gt;
+                                ReadOnly&lt;br&gt;
+                                Deny (only for a VDC resource)
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ExternalSubjectType">
+        <xs:annotation xml:lang="en">
+            <xs:appinfo><meta:version added-in="VDC_PERMISSIONS"/></xs:appinfo>
+            <xs:documentation source="since">VDC_PERMISSIONS</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A reference to a user or group managed by an identity provider configured
+                for use in this organization.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="SubjectId" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="VDC_PERMISSIONS"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The primary key that your identity provider uses to
+                                uniquely identify the user or group referenced in SubjectId.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsUser" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="VDC_PERMISSIONS"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If true, SubjectID is a reference to a user defined by this organization's
+                                identity provider.
+                                If false or empty, SubjectID is a reference to a group defined by this
+                                organization's identity provider.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IdpType" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="VDC_PERMISSIONS"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The type of identity provider for example: OAUTH, SAML, LDAP etc for
+                                this SubjectID.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="AccessSettingsType">
+        <xs:annotation xml:lang="en">
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A list of access settings for a resource.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="AccessSetting" type="AccessSettingType" minOccurs="1" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Access setting for a resource.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="ControlAccessParams" type="ControlAccessParamsType"/>
+    <xs:complexType name="ControlAccessParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.controlAccess</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Specifies access controls for a resource.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="IsSharedToEveryone" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If true, the resource is shared with everyone
+                                in the organization. Defaults to false.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+                    <xs:element name="EveryoneAccessLevel" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If IsSharedToEveryone is true, this element
+                                must be present to specify the access level.
+                                for all members of the organization.
+                                One of:&lt;br&gt;
+                                FullControl&lt;br&gt;
+                                Change&lt;br&gt;
+                                ReadOnly
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+                    <xs:element name="AccessSettings" type="AccessSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The access settings to be applied if
+                                IsSharedToEveryone is false. Required on create
+                                and modify if IsSharedToEveryone is false.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="Owner" type="OwnerType"/>
+    <xs:complexType name="OwnerType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.owner</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">1.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the owner of this entity.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="User" type="ReferenceType">
+                        <xs:annotation>
+                            <xs:documentation source="since">0.9</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to the user who is the owner of this
+                                entity.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ReferencesType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.query.references</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">
+               Container for query results returned in references format.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ContainerType">
+                <xs:sequence>
+                    <xs:element ref="Reference" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation><xs:documentation source="required">false</xs:documentation></xs:annotation>
+                       </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="References" type="ReferencesType" />
+    <xs:element name="Reference" type="ReferenceType"/>
+
+    <xs:complexType name="QueryListType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+               Container for the list of typed queries available to the
+               requesting user.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ContainerType">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="QueryList" type="QueryListType" />
+
+    <xs:complexType name="MetadataDomainTagType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+            <xs:documentation xml:lang="en">
+                A value of SYSTEM places this MetadataEntry in the SYSTEM 
+                domain. Omit or leave empty to place this MetadataEntry in the
+                GENERAL domain.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="visibility" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                One of:&lt;br&gt;
+                                PRIVATE&lt;br&gt;
+                                READONLY
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataEntryType">
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="Domain" type="MetadataDomainTagType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                               A value of SYSTEM places this MetadataEntry in
+                               the SYSTEM domain. Omit or leave empty to place
+                               this MetadataEntry in the GENERAL domain.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Key" type="xs:string" maxOccurs="1" minOccurs="1" >
+                        <xs:annotation>
+                        <xs:appinfo><meta:version added-in="1.5"/></xs:appinfo>
+                           <xs:documentation source="required">true</xs:documentation>
+                           <xs:documentation>
+                              An arbitrary key name. Length cannot exceed 256
+                              UTF-8 characters.
+                           </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version removed-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="TypedValue" type="MetadataTypedValue" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                               One of:&lt;br&gt;
+                               MetadataStringValue&lt;br&gt;
+                               MetadataNumberValue&lt;br&gt;
+                               MetadataBooleanValue&lt;br&gt;
+                               MetadataDateTimeValue
+                           </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataTypedValue" abstract="true">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+               One of:&lt;br&gt;
+               MetadataStringValue&lt;br&gt;
+               MetadataNumberValue&lt;br&gt;
+               MetadataBooleanValue&lt;br&gt;
+               MetadataDateTimeValue
+            </xs:documentation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence/>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataStringValue">
+        <xs:annotation>
+	        <xs:documentation>
+	            UTF-8 character set. Strings longer than 1000
+	            characters cannot be searched for in a query.
+	        </xs:documentation>
+            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="MetadataTypedValue">
+                <xs:sequence>
+                    <xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataNumberValue">
+        <xs:annotation>
+            <xs:documentation>
+                A signed 8-byte integer.
+            </xs:documentation>
+            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="MetadataTypedValue">
+                <xs:sequence>
+                    <xs:element name="Value" type="xs:long" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataBooleanValue">
+        <xs:annotation>
+            <xs:documentation>
+                One of: 1, 0, true, false
+            </xs:documentation>
+            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="MetadataTypedValue">
+                <xs:sequence>
+                    <xs:element name="Value" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataDateTimeValue">
+        <xs:annotation>
+            <xs:documentation>
+                UTC format. For example 2012-06-18T12:00:00-05:00
+            </xs:documentation>
+            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="MetadataTypedValue">
+                <xs:sequence>
+                    <xs:element name="Value" type="xs:dateTime" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataType">
+        <xs:complexContent>
+            <xs:annotation>
+                <xs:appinfo>
+                    <meta:content-type>application/vnd.vmware.vcloud.metadata</meta:content-type>
+                    <xs:appinfo><meta:version added-in="1.5"/></xs:appinfo>
+                    <xs:documentation>
+                       User-defined metadata associated with with an object.
+                    </xs:documentation>
+                </xs:appinfo>
+            </xs:annotation>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                   <xs:element name="MetadataEntry" type="MetadataEntryType" minOccurs="0" maxOccurs="unbounded">
+                      <xs:annotation>
+                         <xs:appinfo><meta:version added-in="1.5"/></xs:appinfo>
+                         <xs:documentation source="required">false</xs:documentation>
+                         <xs:documentation source="modifiable">always</xs:documentation>
+                         <xs:documentation>
+                            A single metadata entry, including access domain
+                            and visibility controls.
+                         </xs:documentation>
+                     </xs:annotation>
+                   </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="Metadata" type="MetadataType">
+       <xs:annotation>
+          <xs:documentation>
+             User-defined metadata associated with with an
+             object.
+          </xs:documentation>
+       </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="MetadataValueType">
+        <xs:complexContent>
+            <xs:annotation>
+                <xs:appinfo>
+                    <meta:content-type>application/vnd.vmware.vcloud.metadata.value</meta:content-type>
+                </xs:appinfo>
+            </xs:annotation>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="Domain" type="MetadataDomainTagType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="required">false</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                One of:&lt;br&gt;
+                                GENERAL&lt;br&gt;
+                                SYSTEM
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version removed-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="TypedValue" type="MetadataTypedValue" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="MetadataValue" type="MetadataValueType"></xs:element>
+
+    <xs:complexType name="FileUploadParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.fileUploadParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for initializing file upload session.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:attribute name="fileSize" type="xs:long" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="modifiable">create</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                           Size in bytes of the file which will be uploaded.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="FileUploadSocketType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.vcloud.fileUploadSocket</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for initiating file upload.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Task" type="TaskType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A task representing progress of the upload.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="uploadLocation" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                           URL where the file must be uploaded.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="SmtpSecureModeType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="11.0" /></xs:appinfo>
+            <xs:documentation source="since">11.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Security protocol to use when connecting to the SMTP server. One of:&lt;br&gt;
+                startTls -- Use the STARTTLS protocol&lt;br&gt;
+                ssl -- -Use the SSL/TLS protocol&lt;br&gt;
+                none -- Do not use any security protocol
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="none" />
+            <xs:enumeration value="startTls" />
+            <xs:enumeration value="ssl" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

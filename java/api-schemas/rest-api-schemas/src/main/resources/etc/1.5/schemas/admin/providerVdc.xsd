@@ -1,0 +1,1047 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           xmlns:vcloud-ext="http://www.vmware.com/vcloud/extension/v1.5"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:import namespace="http://www.vmware.com/vcloud/extension/v1.5" />
+    <xs:include schemaLocation="../vcloud/vdc.xsd"/>
+    <xs:include schemaLocation="../vcloud/vdcStorageProfile.xsd"/>
+    <xs:include schemaLocation="../vcloud/vendorServices.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for a Provider vDC. Each Provider vDC represents a
+            collection of vCenter resources that are available for use by
+            organization vDCs. Only the system administrator can create
+            a Provider vDC or organization vDC.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="ProviderVdc" type="ProviderVdcType"/>
+    <xs:complexType name="ProviderVdcType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.providervdc</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a Provider vDC.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EntityType">
+                <xs:sequence>
+                    <xs:element name="ComputeCapacity" type="RootComputeCapacityType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only indicator of CPU and memory capacity.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="StorageCapacity" type="ProviderVdcCapacityType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="1.0" removed-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only indicator of datastore capacity.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AvailableNetworks" type="AvailableNetworksType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only list of available networks.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="StorageProfiles" type="ProviderVdcStorageProfilesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to vSphere storage
+                                profiles available to this Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Capabilities" type="CapabilitiesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only list of virtual hardware versions
+                                supported by this Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Vdcs" type="VdcsType" minOccurs="0" maxOccurs="1">
+                       <xs:annotation>
+                          <xs:documentation>
+                             Read-only list of organization vDCs backed by
+                             this Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsEnabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this Provider vDC is enabled and can
+                                provide resources to organization vDCs. A
+                                Provider vDC is always enabled on creation.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="NetworkPoolReferences" type="NetworkPoolReferencesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only list of network pools used by this
+                                Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="status" type="xs:int" use="optional">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Creation status of the provider VDC.
+                            One of:&lt;br&gt;
+                            -1 (creation failed)&lt;br&gt;
+                             0 (not ready)&lt;br&gt;
+                             1 (ready)&lt;br&gt;
+                             2 (unknown)&lt;br&gt;
+                             3 (unrecognized)
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="CreateVdcParams" type="CreateVdcParamsType"/>
+    <xs:complexType name="CreateVdcParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.admin.createVdcParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for creating an organization vDC.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ParamsType">
+                <xs:sequence>
+                    <xs:element name="AllocationModel" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The allocation model used by this vDC.
+                                One of:&lt;br&gt;
+                                &lt;b&gt;AllocationVApp&lt;/b&gt; (Pay as you
+                                go. Resources are committed to a vDC only when
+                                vApps are created in it. When you use this
+                                allocation model, any Limit values you specify
+                                for Memory and CPU are ignored on create and
+                                returned as 0 on retrieve.)&lt;br&gt;
+                                &lt;b&gt;AllocationPool&lt;/b&gt; (Only a
+                                percentage of the resources you allocate are
+                                committed to the organization vDC.)&lt;br&gt;
+                                &lt;b&gt;ReservationPool&lt;/b&gt; (All the
+                                resources you allocate are committed as a pool
+                                to the organization vDC. vApps in vDCs that
+                                support this allocation model can specify
+                                values for resource and limit.)
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ComputeCapacity" type="ComputeCapacityType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The compute capacity allocated to this vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="NicQuota" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of virtual NICs allowed in this vDC. Defaults
+                                to 0, which specifies an unlimited number.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="NetworkQuota" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of network objects that can be deployed in this
+                                vDC. Defaults to 0, which means no networks can be deployed.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VmQuota" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The maximum number of VMs that can be created
+                                in this vDC. Includes deployed and undeployed
+                                VMs in vApps and vApp templates. Defaults to 0,
+                                which specifies an unlimited number.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsEnabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this vDC is enabled for use by the
+                                organization vDCs. A vDC is always enabled on
+                                creation.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VdcStorageProfile" type="VdcStorageProfileParamsType" minOccurs="1" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Storage profiles supported by this vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ResourceGuaranteedMemory" type="xs:double" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Percentage of allocated memory resources guaranteed to
+                                vApps deployed in this vDC. For example, if this value
+                                is 0.75, then 75% of allocated resources are guaranteed.
+                                Required when AllocationModel is AllocationVApp or AllocationPool.
+                                Value defaults to 1.0 if the element is empty.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ResourceGuaranteedCpu" type="xs:double" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Percentage of allocated CPU resources guaranteed to vApps
+                                deployed in this vDC. For example, if this value is
+                                0.75, then 75% of allocated resources are guaranteed.
+                                Required when AllocationModel is AllocationVApp or AllocationPool.
+                                Value defaults to 1.0 if the element is empty.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VCpuInMhz" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Specifies the clock frequency, in Megahertz,
+                                for any virtual CPU that is allocated to a VM.
+                                A VM with 2 vCPUs will consume twice as much of this value.
+                                Ignored for ReservationPool. Required when AllocationModel
+                                is AllocationVApp or AllocationPool, and may not be less than 256 MHz.
+                                Defaults to 1000 MHz if the element is empty or missing.
+                                As of API version 5.7 this element became redundant with the "VCpuInMhz2"
+                                element in VdcType. Both elements are set to the same value in responses.
+                                However, on requests this element's value is the one that's used.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsThinProvision" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                               Boolean to request thin provisioning.
+                               Request will be honored only if the underlying
+                               datastore supports it. Thin provisioning saves
+                               storage space by committing it on demand. This
+                               allows over-allocation of storage.
+                           </xs:documentation>
+                           <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="NetworkPoolReference" type="ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to a network pool in the Provider vDC.
+                                Required if this vDC will contain routed or
+                                isolated networks.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ProviderVdcReference" type="ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to the Provider vDC from which this
+                                organization vDC is provisioned.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ResourcePoolRefs" type="vcloud-ext:VimObjectRefsType"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="VDC_ADOPT_RP"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Optional list of additional resource pools to back this Organization
+                                vDC. Specified resource pools must be backed by different clusters,
+                                and must not back an existing Organization vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UsesFastProvisioning" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                               Boolean to request fast provisioning.
+                               Request will be honored only if the underlying
+                               datastore supports it. Fast provisioning can
+                               reduce the time it takes to create virtual
+                               machines by using vSphere linked clones. If you
+                               disable fast provisioning, all provisioning
+                               operations will result in full clones.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OverCommitAllowed" type="xs:boolean" default="true" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Set to false to disallow creation of the VDC if
+                                the AllocationModel is AllocationPool or
+                                ReservationPool and the ComputeCapacity you
+                                specified is greater than what the backing
+                                Provider VDC can supply. Defaults to true if
+                                empty or missing.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VmDiscoveryEnabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="AUTO_DISCOVER_VM_SETTINGS"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if discovery of vCenter VMs is enabled for resource pools backing this vDC.
+                                If left unspecified, the actual behaviour depends on enablement at the
+                                organization level and at the system level.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AdminVdc" type="AdminVdcType"/>
+    <xs:complexType name="AdminVdcType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.vdc</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the admin view of an organization vDC.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VdcType">
+                <xs:sequence>
+                    <xs:element name="ResourceGuaranteedMemory" type="xs:double" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Percentage of allocated memory resources guaranteed to
+                                vApps deployed in this vDC. For example, if this value
+                                is 0.75, then 75% of allocated resources are guaranteed.
+                                Required when AllocationModel is AllocationVApp or AllocationPool.
+                                Value defaults to 1.0 if the element is empty.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ResourceGuaranteedCpu" type="xs:double" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Percentage of allocated CPU resources guaranteed to vApps
+                                deployed in this vDC. For example, if this value is
+                                0.75, then 75% of allocated resources are guaranteed.
+                                Required when AllocationModel is AllocationVApp or AllocationPool.
+                                Value defaults to 1.0 if the element is empty.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VCpuInMhz" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Specifies the clock frequency, in Megahertz,
+                                for any virtual CPU that is allocated to a VM.
+                                A VM with 2 vCPUs will consume twice as much of this value.
+                                Ignored for ReservationPool. Required when AllocationModel
+                                is AllocationVApp or AllocationPool, and may not be less than 256 MHz.
+                                Defaults to 1000 MHz if the element is empty or missing.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsThinProvision" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                               Boolean to request thin provisioning.
+                               Request will be honored only if the underlying
+                               datastore supports it. Thin provisioning saves
+                               storage space by committing it on demand. This
+                               allows over-allocation of storage.
+                           </xs:documentation>
+                           <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="NetworkPoolReference" type="ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to a network pool in the Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VendorServices" type="VendorServicesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="since">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Vendor services defined for this org vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ProviderVdcReference" type="ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to the ProviderVdc from which this vDC is provisioned.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ResourcePoolRefs" type="vcloud-ext:VimObjectRefsType"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="VDC_ADOPT_RP"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A set of references to the vCenter Resource Pools backing this VDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UsesFastProvisioning" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                               Boolean to request fast provisioning.
+                               Request will be honored only if the underlying
+                               datastore supports it. Fast provisioning can
+                               reduce the time it takes to create virtual
+                               machines by using vSphere linked clones. If you
+                               disable fast provisioning, all provisioning
+                               operations will result in full clones.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OverCommitAllowed" type="xs:boolean" default="true" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Always null in the response to a GET request.
+                                On update, set to false to disallow the update
+                                if the AllocationModel is AllocationPool or
+                                ReservationPool and the ComputeCapacity you
+                                specified is greater than what the backing
+                                Provider VDC can supply. Defaults to true if
+                                empty or missing.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VmDiscoveryEnabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="AUTO_DISCOVER_VM_SETTINGS"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if discovery of vCenter VMs is enabled for resource pools backing this vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UniversalNetworkPoolReference" type="ReferenceType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to a universal network pool.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+  <xs:element name="VdcReferences" type="VdcReferencesType"/>
+  <xs:complexType name="VdcReferencesType">
+    <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.vdcReferences</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">1.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                List of organization vDCs backed by this Provider vDC.
+            </xs:documentation>
+        </xs:annotation>
+
+         <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                  <xs:element name="VdcReference" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to an organization vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+            </xs:sequence>
+        </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ProviderVdcCapacityType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents resource capacity in a Provider vDC.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Units" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Units in which the capacity is measured. For CPU devices,
+                                this is always Megahertz, represented by the string MHz.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Allocation" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Number of Units that have been allocated to consumers.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Reserved" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Number of Units that have been reserved.
+                            </xs:documentation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Total" type="xs:long" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Total number of Units that can be allocated to all consumers.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Used" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Percentage of the allocation in use.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Overhead" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Number of Units allocated to system resources
+                                such as vShield Manager virtual machines and
+                                shadow virtual machines provisioned from this
+                                Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="RootComputeCapacityType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents compute capacity with units.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Cpu" type="ProviderVdcCapacityType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only indicator of CPU capacity available
+                                in the Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Memory" type="ProviderVdcCapacityType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only indicator of memory capacity
+                                available in the Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsElastic" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if compute capacity can grow or shrink
+                                based on demand.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsHA" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if compute capacity is highly available.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="NetworkPoolReferencesType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for references to network pools in this vDC.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="NetworkPoolReference" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a network pool.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="NetworkPoolType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a network pool.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ResourceEntityType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="ProviderVdcStorageProfiles" type="ProviderVdcStorageProfilesType"/>
+
+    <xs:complexType name="ProviderVdcStorageProfilesType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for references to storage profiles associated with a
+                Provider vDC.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="ProviderVdcStorageProfile" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a Provider vDC storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="ProviderVdcStorageProfile" type="ProviderVdcStorageProfileType"/>
+
+    <!-- full definition of a pvDC storage profile -->
+    <xs:complexType name="ProviderVdcStorageProfileType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.admin.pvdcStorageProfile</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a Provider vDC storage profile.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EntityType">
+                <xs:sequence>
+                    <xs:element name="Enabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this storage profile is enabled for use
+                                in this vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Units" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Units of capacity.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CapacityTotal" type="xs:double" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Total capacity of this storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CapacityUsed" type="xs:double" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Used capacity in this storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IopsCapacity" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="26.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                IOPS capacity in this storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IopsAllocated" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="26.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Allocated IOPS in this storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+   <xs:element name="VdcStorageProfileParams" type="VdcStorageProfileParamsType"/>
+
+    <xs:complexType name="VdcStorageProfileParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.vcloud.vdcStorageProfileParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                 Represents the parameters to create a storage profile in an organization vDC
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Enabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this storage profile is enabled for use
+                                in the vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Units" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Units used to define Limit.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Limit" type="xs:long" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of Units allocated for this storage profile.
+                                A value of 0 specifies unlimited Units.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Default" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this is default storage profile for
+                                this vDC. The default storage profile
+                                is used when an object that can specify a
+                                storage profile is created with no storage
+                                profile specified.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IopsSettings" type="VdcStorageProfileIopsSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                When NOT provided, disk storage placement ignores IOPs considerations; otherwise, this element
+                                holds all the disk IOPs related settings, including a subordinate Enabled flag.
+                                When that flag is false, disk provisioning using this profile will behave identically as
+                                if this element was not provided in the first place.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ProviderVdcStorageProfile" type="ReferenceType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to a Provider vDC storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AdminVdcStorageProfile" type="AdminVdcStorageProfileType"/>
+
+    <xs:complexType name="AdminVdcStorageProfileType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.admin.vdcStorageProfile</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a storage profile in an organization vDC.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VdcStorageProfileType">
+                <xs:sequence>
+                    <xs:element name="ProviderVdcStorageProfile" type="ReferenceType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to a Provider vDC storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="UpdateVdcStorageProfiles" type="UpdateVdcStorageProfilesType"/>
+
+    <xs:complexType name="UpdateVdcStorageProfilesType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.admin.updateVdcStorageProfiles</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for updating storage profiles in an organization vDC.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ParamsType">
+                <xs:sequence>
+                    <xs:element name="AddStorageProfile"
+                        type="VdcStorageProfileParamsType" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Storage profile to add to the organization vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="RemoveStorageProfile"
+                        type="ReferenceType" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Storage profile to remove from the organization
+                                vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

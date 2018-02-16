@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:include schemaLocation="../vcloud/common.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Defines common types for keystore, keytab, and certificate upload
+            and related operations.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="CertificateUpdateParams" type="CertificateUpdateParamsType"/>
+    <xs:complexType name="CertificateUpdateParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.certificateUpdateParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for certificate update.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadParamsType">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="CertificateUploadSocket" type="CertificateUploadSocketType"/>
+    <xs:complexType name="CertificateUploadSocketType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.certificateUploadSocketType</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Upload socket for certificate.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadSocketType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="KeystoreUpdateParams" type="KeystoreUpdateParamsType"/>
+    <xs:complexType name="KeystoreUpdateParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.keystoreUpdateParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for keystore update.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadParamsType">
+                <xs:attribute name="password" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="modifiable">create</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                           Password for the keystore.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="KeystoreUploadSocket" type="KeystoreUploadSocketType"/>
+    <xs:complexType name="KeystoreUploadSocketType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.keystoreUploadSocketType</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Upload socket for keystore.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadSocketType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="SspiKeytabUpdateParams" type="SspiKeytabUpdateParamsType"/>
+    <xs:complexType name="SspiKeytabUpdateParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.sspiKeytabUpdateParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for SSPI keytab update.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadParamsType">
+                <xs:attribute name="SspiServiceProviderName" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="modifiable">create</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                           Service provider name for SSPI.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="SspiKeytabUploadSocket" type="SspiKeytabUploadSocketType"/>
+    <xs:complexType name="SspiKeytabUploadSocketType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.sspiKeytabUploadSocketType</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Upload socket for SSPI keytab.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadSocketType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="TrustStoreUpdateParams" type="TrustStoreUpdateParamsType"/>
+    <xs:complexType name="TrustStoreUpdateParamsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.trustStoreUpdateParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Parameters for updating the truststore.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadParamsType">
+                <xs:attribute name="password" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                        <xs:documentation source="modifiable">create</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                           Password for the truststore.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="TrustStoreUploadSocket" type="TrustStoreUploadSocketType"/>
+    <xs:complexType name="TrustStoreUploadSocketType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1" />
+                <meta:content-type>application/vnd.vmware.admin.trustStoreUploadSocketType</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Upload socket for the truststore.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileUploadSocketType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

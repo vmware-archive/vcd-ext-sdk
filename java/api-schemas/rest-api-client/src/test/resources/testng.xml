@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+ api-extension-template-vcloud-director
+ Copyright 2018 VMware, Inc.
+ SPDX-License-Identifier: BSD-2-Clause
+-->
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="REST API Client Test Suite" verbose="1">
+    <test name="UnitTest">
+        <groups>
+            <run>
+                <include name="Minimum"/>
+                <exclude name="Broken"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="com.vmware.vcloud.api.rest.client.test.*" />
+        </packages>
+    </test>
+</suite>

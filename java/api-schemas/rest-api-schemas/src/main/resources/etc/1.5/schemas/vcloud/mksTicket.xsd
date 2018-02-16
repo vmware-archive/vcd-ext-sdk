@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for the vCloud MKS ticket.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="MksTicket" type="MksTicketType"/>
+    <xs:complexType name="MksTicketType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.5" />
+                <meta:content-type>application/vnd.vmware.vcloud.mksTicket</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A ticket and connection information for accessing the console of a VM.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Host" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                host (or proxy) through which the console connection is made
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Vmx" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                a reference to the VMX file of the VM for which this ticket was issued
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Ticket" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                screen ticket to use to authenticate the client
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Port" type="xs:int" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                host port to be used for console access
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

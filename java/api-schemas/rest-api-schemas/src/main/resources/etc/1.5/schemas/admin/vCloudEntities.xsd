@@ -1,0 +1,2703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:include schemaLocation="../vcloud/organization.xsd"/>
+    <xs:include schemaLocation="../vcloud/vdc.xsd"/>
+    <xs:include schemaLocation="../vcloud/catalog.xsd"/>
+    <xs:include schemaLocation="../vcloud/common.xsd"/>
+    <xs:include schemaLocation="../vcloud/multiSite.xsd"/>
+    <xs:include schemaLocation="user.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for the entry point into the vCloud Admin API.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType name="OrganizationReferenceType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a reference to an organization.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ReferenceType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VCloud" type="VCloudType"/>
+    <xs:complexType name="OrganizationReferencesType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the admin view of this cloud.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="OrganizationReference" type="OrganizationReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to an AdminOrgType object.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="ProviderVdcReferencesType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for references to Provider vDCs.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="ProviderVdcReference" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a Provider vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="VCloudType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.vcloud</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the admin view of a cloud.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="EntityType">
+                <xs:sequence>
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            References to all organizations in this cloud
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:element name="OrganizationReferences" type="OrganizationReferencesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to AdminOrg objects in the system.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ProviderVdcReferences" type="ProviderVdcReferencesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A container for references to ProviderVdc objects in the system.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="RightReferences" type="RightReferencesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A container for references to Right objects in the system.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                     <xs:element name="RoleReferences" type="RoleReferencesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A container for references to Role objects in the system.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                     <xs:element name="Networks" type="NetworksType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A container for references to ExternalNetwork objects in the system.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AdminOrg" type="AdminOrgType"/>
+    <xs:complexType name="AdminOrgType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.organization</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the admin view of an organization.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="OrgType">
+                <xs:sequence>
+                    <xs:element name="Settings" type="OrgSettingsType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Settings for this organization.
+                                Establishes quotas, limits, and policies.
+                                Specifies how the organization
+                                connects to LDAP and email services.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Users" type="UsersListType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to users in this
+                                organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Groups" type="GroupsListType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to groups in this
+                                organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Catalogs" type="CatalogsListType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to catalogs in this
+                                organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Vdcs" type="VdcsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to vDCs in this
+                                organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VdcTemplates" type="VdcTemplatesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to VDC templates in
+                                this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Networks" type="NetworksType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for references to organization vDC
+                                networks in this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OrgAssociations" type="OrgAssociationsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">MULTI_SITE</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for the references to other
+                                organizations whose content will be listed with
+                                this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="RightReferences" type="OrganizationRightsType"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">ORG_RIGHTS_ROLES
+                            </xs:documentation>
+                            <xs:documentation source="modifiable">none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A container for references to Right objects in the organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="RoleReferences" type="OrganizationRolesType"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">ORG_RIGHTS_ROLES
+                            </xs:documentation>
+                            <xs:documentation source="modifiable">none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A container for references to Role objects in the organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="RoleTemplateReferences" type="RoleReferencesType"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">ORG_RIGHTS_ROLES
+                            </xs:documentation>
+                            <xs:documentation source="modifiable">none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A container for references to Role objects in the organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OrgVAppTemplateLeaseSettings" type="OrgVAppTemplateLeaseSettingsType" />
+    <xs:complexType name="OrgVAppTemplateLeaseSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.vAppTemplateLeaseSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">1.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents default vAppTemplate lease policies for this
+                organization.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="DeleteOnStorageLeaseExpiration" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                         <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Delete on storage lease expiration. Default is
+                                false. If true, storage for a vAppTemplate is
+                                deleted when the vAppTemplate lease expires.
+                                If false, the storage is flagged for deletion,
+                                but not deleted.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="StorageLeaseSeconds" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Storage lease in seconds
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VdcTemplates" type="VdcTemplatesType">
+        <xs:annotation>
+            <xs:documentation source="since">5.7</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="VdcTemplatesType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.7"/>
+                <meta:content-type>application/vnd.vmware.admin.vdcTemplates</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.7</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for VdcTemplateType
+             </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="VdcTemplate" type="VdcTemplateType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a VDC template object.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VdcTemplate" type="VdcTemplateType">
+        <xs:annotation>
+            <xs:documentation source="since">5.7</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="VdcTemplateType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.7" />
+                <meta:content-type>application/vnd.vmware.admin.vdcTemplate</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.7</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A reference to a VDC template.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EntityType">
+                <xs:sequence>
+                <xs:element name="VdcTemplateSpecification" type="VdcTemplateSpecificationType">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <meta:version added-in="5.7" />
+                        </xs:appinfo>
+                        <xs:documentation source="modifiable">none</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            A reference to the specification for a VDC template object.
+                        </xs:documentation>
+                        <xs:documentation source="required">true</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VdcTemplateList" type="VdcTemplateListType">
+        <xs:annotation>
+            <xs:documentation source="since">5.7</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="VdcTemplateListType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.vdcTemplateList</meta:content-type>
+                <meta:version added-in="5.7" />
+            </xs:appinfo>
+            <xs:documentation source="since">5.7</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a list of VDC templates.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="VdcTemplate" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to a VDC template.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:group name="VdcSpecificationGroup">
+        <xs:sequence>
+            <xs:element name="NicQuota" type="xs:int" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Maximum number of virtual NICs allowed in this vDC. Defaults
+                        to 0, which specifies an unlimited number.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="VmQuota" type="xs:int" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        The quota of VMs that can be created in this vDC. Includes VMs
+                        in both vApps and vApp templates, deployed, or otherwise. Defaults
+                        to 0, which specifies an unlimited number.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ProvisionedNetworkQuota" type="xs:int" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Maximum number of network objects that can be deployed in this
+                        VDC. Defaults to 0, which means no networks can be deployed.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="GatewayConfiguration" type="VdcTemplateSpecificationGatewayConfigurationType" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Defines a gateway and NAT Routed organization VDC network to be created.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="StorageProfile" type="VdcStorageProfileType" minOccurs="1" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        A set of name of Storage Profiles, with corresponding limit value, that all Provider VDCs must have, and that are selected at the time
+                        of VDC Template instantiation.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:group name="AllocationPoolVdcSpecificationGroup">
+        <xs:sequence>
+            <xs:element name="CpuAllocationMhz" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7" /></xs:appinfo>
+                    <xs:documentation source="added-in">5.7</xs:documentation>
+                    <xs:documentation source="modifiable">none</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        CPU allocation in Mhz
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MemoryAllocationMB" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="added-in">5.7</xs:documentation>
+                    <xs:documentation source="modifiable">none</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Memory allocation in MB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CpuGuaranteedPercentage" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Percentage of allocated CPU resources guaranteed to vApps
+                        deployed in this vDC. For example, if this value is
+                        75, then 75% of allocated resources are guaranteed.
+                        Required when AllocationModel is AllocationVApp or AllocationPool.
+                        Value defaults to 100 if the element is empty.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="VCpuInMhz" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Specifies the clock frequency, in Megahertz,
+                        for any virtual CPU that is allocated to a VM.
+                        A VM with 2 vCPUs will consume twice as much of this value.
+                        Ignored for ReservationPool. Required when AllocationModel
+                        is AllocationVApp or AllocationPool, and may not be less than 256 MHz.
+                        Defaults to 1000 MHz if the element is empty or missing.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MemoryGuaranteedPercentage" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Percentage of allocated memory resources guaranteed to vApps
+                        deployed in this vDC. For example, if this value is
+                        75, then 75% of allocated resources are guaranteed.
+                        Required when AllocationModel is AllocationVApp or AllocationPool.
+                        Value defaults to 100 if the element is empty.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:group name="AllocationVAppVdcSpecificationGroup">
+        <xs:sequence>
+            <xs:element name="CpuAllocationMhz" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="added-in">5.7</xs:documentation>
+                    <xs:documentation source="modifiable">none</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        CPU allocation in Mhz
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CpuLimitMhzPerVcpu" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="added-in">5.7</xs:documentation>
+                    <xs:documentation source="modifiable">none</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        CPU allocation in Mhz
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MemoryAllocationMB" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="added-in">5.7</xs:documentation>
+                    <xs:documentation source="modifiable">none</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Memory allocation in MB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CpuGuaranteedPercentage" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Percentage of allocated CPU resources guaranteed to vApps
+                        deployed in this vDC. For example, if this value is
+                        75, then 75% of allocated resources are guaranteed.
+                        Required when AllocationModel is AllocationVApp or AllocationPool.
+                        Value defaults to 100 if the element is empty.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MemoryGuaranteedPercentage" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Percentage of allocated memory resources guaranteed to vApps
+                        deployed in this vDC. For example, if this value is
+                        75, then 75% of allocated resources are guaranteed.
+                        Required when AllocationModel is AllocationVApp or AllocationPool.
+                        Value defaults to 100 if the element is empty.
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:group name="ReservationPoolVdcSpecificationGroup">
+        <xs:sequence>
+            <xs:element name="CpuAllocationMhz" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="added-in">5.7</xs:documentation>
+                    <xs:documentation source="modifiable">none</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        CPU allocation in Mhz
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MemoryAllocationMB" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation source="added-in">5.7</xs:documentation>
+                    <xs:documentation source="modifiable">none</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Memory allocation in MB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:complexType name="VdcTemplateSpecificationType" abstract="true" >
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.7" />
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:group ref="VdcSpecificationGroup" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AllocationPoolVdcTemplateSpecificationType" abstract="false" >
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.7" />
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">
+                Specification for a VDC template using the AllocationPool allocation model.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VdcTemplateSpecificationType">
+
+                <xs:sequence>
+                    <xs:group ref="AllocationPoolVdcSpecificationGroup" />
+                </xs:sequence>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="AllocationVappVdcTemplateSpecificationType" abstract="false" >
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.7" />
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">
+                Specification for a VDC template using the AllocationVApp allocation model.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VdcTemplateSpecificationType" >
+                <xs:sequence>
+                    <xs:group ref="AllocationVAppVdcSpecificationGroup" />
+                </xs:sequence>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ReservationPoolVdcTemplateSpecificationType" abstract="false" >
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.7" />
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">
+                Specification for a VDC template using the ReservationPool allocation model.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VdcTemplateSpecificationType">
+                <xs:sequence>
+                    <xs:group ref="ReservationPoolVdcSpecificationGroup" />
+                </xs:sequence>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="VdcTemplateSpecificationGatewayConfigurationType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+            <xs:documentation source="since">5.7</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Defines a gateway and NAT Routed organization VDC network to be created.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Gateway" type="GatewayType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                EdgeGateway configuration for the VDC created by this
+                                template. The following restrictions apply:
+                                &lt;ul&gt;
+                                &lt;li&gt;
+                                You may not specify a BackwardCompatibilityMode
+                                or an EdgeGatewayServiceConfiguration.
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                The GatewayInterfaces element must contain exactly one
+                                GatewayInterface. That GatewayInterface must
+                                have an InterfaceType of uplink and must not contain a
+                                SubnetParticipation element.
+                                &lt;/li&gt;
+                                &lt;/ul&gt;
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Network" type="OrgVdcNetworkType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.7"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Org VDC network configuration created by this
+                                template. The following restrictions apply:
+                                &lt;ul&gt;
+                                &lt;li&gt;
+                                You may not specify a BackwardCompatibilityMode,
+                                EdgeGatewayServiceConfiguration, or NetworkFeatures.
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                The NetworkConfiguration must specify a FenceMode of
+                                natRouted.
+                                &lt;/li&gt;
+                                &lt;/ul&gt;
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="InstantiateVdcTemplateParams" type="InstantiateVdcTemplateParamsType">
+        <xs:annotation>
+            <xs:documentation source="since">5.7</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="InstantiateVdcTemplateParamsType">
+        <xs:annotation>
+          <xs:appinfo>
+                <meta:version added-in="5.7"/>
+                <meta:content-type>application/vnd.vmware.vcloud.instantiateVdcTemplateParams</meta:content-type>
+            </xs:appinfo>
+                <xs:documentation source="since">5.7</xs:documentation>
+            <xs:documentation xml:lang="en">
+                A basic type used to pass arguments to the instantiate VDC template operation,
+                this provides a name and optional description for a VDC instantiated from a template.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Source" type="ReferenceType">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a source object, which must be a VDC template.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Description" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Optional description.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="name" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation source="modifiable">always</xs:documentation>
+                        <xs:documentation xml:lang="en">
+                            Typically used to name or identify the subject of
+                            the request. For example, the name of the object
+                            being created or modified.
+                        </xs:documentation>
+                        <xs:documentation source="required">false</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="NetworksType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for references to ExternalNetwork objects.
+             </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="Network" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to an ExternalNetwork object.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="CatalogsListType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for references to catalogs.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="CatalogReference" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a catalog.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="ExternalNetwork" type="ExternalNetworkType" />
+    <xs:complexType name="ExternalNetworkType">
+        <xs:annotation>
+            <xs:documentation source="since">1.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the admin view of an external network.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="NetworkType">
+                <xs:sequence>
+                    <xs:element name="ProviderInfo" type="xs:string"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Shows vCenter server and port group moref used
+                                for external network.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="NetworkBackingInfo" type="NetworkBackingInfoType"
+                        minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                List of network backings (vCenter server and port group moref)
+                                for this network.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="NetworkBackingInfoType">
+        <xs:list itemType="xs:string"/>
+    </xs:simpleType>
+
+    <xs:element name="OrgNetwork" type="OrgNetworkType"/>
+
+    <xs:element name="OrgSettings" type="OrgSettingsType">
+        <xs:annotation>
+            <xs:documentation source="since">1.5</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="OrgSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.orgSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for this organization's settings.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="OrgGeneralSettings" type="OrgGeneralSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents general settings for this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VAppLeaseSettings" type="OrgLeaseSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents default lease durations and related
+                                policies for this organization. Runtime lease default
+                                is 7 days. Storage lease default is 30 days.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VAppTemplateLeaseSettings" type="OrgVAppTemplateLeaseSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation source="since">1.5</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents default vAppTemplate lease policies for
+                                this organization. Storage lease default is 30 days.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OrgLdapSettings" type="OrgLdapSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents the hostname and connection details for
+                                this organization's primary LDAP service.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OrgEmailSettings" type="OrgEmailSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents the email settings for this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OrgPasswordPolicySettings" type="OrgPasswordPolicySettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents the password policy settings for this
+                                organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OrgOperationLimitsSettings" type="OrgOperationLimitsSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation xml:lang="en">
+                                Represents operation limits settings for this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OrgFederationSettings" type="OrgFederationSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="5.1"/>
+                            </xs:appinfo>
+                            <xs:documentation source="since">5.1</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Represents federated identity settings for this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OrgOAuthSettings" type="OrgOAuthSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="9.0"/>
+                            </xs:appinfo>
+                            <xs:documentation source="since">9.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Contains OAuth identity provider settings for this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+             </xs:extension>
+         </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="GeneralOrgSettings" type="OrgGeneralSettingsType" />
+    <xs:complexType name="OrgGeneralSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.organizationGeneralSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">1.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents general settings for an organization.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="CanPublishCatalogs" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this organization is allowed to share catalogs.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CanPublishExternally" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this organization allows creation of catalog feeds for consumption by external organizations.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CanSubscribe" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this organization allows subscription to external catalog feeds.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="DeployedVMQuota" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of virtual machines that can be deployed
+                                simultaneously by a member of this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="StoredVmQuota" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of virtual machines in vApps or
+                                vApp templates that can be stored in an undeployed
+                                state by a member of this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UseServerBootSequence" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                This value is ignored.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="DelayAfterPowerOnSeconds" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Specifies this organization's default for
+                                virtual machine boot delay after power on.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VdcQuota" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="6.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of VDCs allowed in this organization. A value of -1 means there is no maximum. A value of 0 means this organization cannot create any VDCs.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VmDiscoveryEnabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="AUTO_DISCOVER_VM_SETTINGS"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if discovery of vCenter VMs is enabled for resource pools backing this vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VAppLeaseSettings" type="OrgLeaseSettingsType"/>
+    <xs:complexType name="OrgLeaseSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.vAppLeaseSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents default lease durations and policies for this
+                organization.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="DeleteOnStorageLeaseExpiration" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If true, storage for a vApp is deleted when the
+                                vApp's lease expires. If false, the storage is
+                                flagged for deletion, but not deleted.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="DeploymentLeaseSeconds" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Default duration of a vApp deployment lease, in seconds.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="StorageLeaseSeconds" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Default duration of a storage lease, in seconds.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="PowerOffOnRuntimeLeaseExpiration" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="ORG_LEASE_EXPIRE" /></xs:appinfo>
+                            <xs:documentation source="since">25.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                            When true, vApps are powered off when the runtime lease expires. When
+                            false or missing, vApps are suspended when the runtime lease expires.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OrgFederationSettings" type="OrgFederationSettingsType">
+        <xs:annotation>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents federation settings for identity federation.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="OrgFederationSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.admin.organizationFederationSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents federation settings for identity federation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="SAMLMetadata" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                XML-encoded SAML 2.0 metadata from this
+                                organization's identity provider. If empty,
+                                this organization does not support SAML.
+                                Download this content over a secure connection
+                                from a trusted source (typically your identity
+                                provider's SAML metadata URL).
+                           </xs:documentation>
+                           <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Enabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:appinfo>
+                                <meta:version added-in="5.1" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                This boolean value indicates whether the Identity Provider
+                                for the organization is enabled or disabled.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CertificateExpiration" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:appinfo>
+                                <meta:version added-in="5.6" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">
+                                none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The expiration time of this org's certificate.
+                            </xs:documentation>
+                            <xs:documentation source="since">5.6</xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SamlSPEntityId" type="xs:anyURI" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:appinfo>
+                                <meta:version added-in="5.6" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Service Provider Entity ID to be used when generating SP Metadata
+                            </xs:documentation>
+                            <xs:documentation source="since">5.7</xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="RoleAttributeName" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:appinfo>
+                                <meta:version added-in="7.0" />
+                            </xs:appinfo>
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                The name of the SAML attribute that returns the identifiers of all the
+                                groups of which the user is a member.
+                            </xs:documentation>
+                            <xs:documentation source="since">7.0</xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SamlSPKeyAndCertificateChain" type="SamlSPKeyAndCertificateChainType"
+                    minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <meta:version added-in="24.0" />
+                            </xs:appinfo>
+                            <xs:documentation source="since">24.0</xs:documentation>
+                            <xs:documentation source="modifiable">update</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for an organization's PEM-encoded private key and certificate chain.
+                                The private key and the public key from the leaf certificate are used
+                                during SAML message processing. Not returned on GET
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SamlSPKeyAndCertificateChainType">
+         <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="24.0" />
+                <meta:content-type>application/vnd.vmware.admin.samlSPKeyAndCertificate
+                </meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">24.0</xs:documentation>
+            <xs:documentation source="modifiable">update</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for an organization's PEM-encoded private key and public
+                key certificate chain used during SAML-token processing.
+            </xs:documentation>
+            <xs:documentation source="required">false</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="Key" type="xs:string"
+                        minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">update</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                PEM-encoded private key body in PKCS#8 format. Key is used during SAML
+                                operations for this Org.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CertificateChain"
+                        type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">update</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                PEM-formatted X509 certificate chain. The public key from the leaf
+                                certificate is used during SAML operations for this Org.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+   </xs:complexType>
+   <xs:element name="OrgOAuthSettings" type="OrgOAuthSettingsType">
+        <xs:annotation>
+            <xs:documentation source="since">9.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Contains OAuth identity provider settings for an organization.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="OrgOAuthSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="9.0"/>
+                <meta:content-type>application/vnd.vmware.admin.organizationOAuthSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">9.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Contains OAuth identity provider settings for an organization.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="IssuerId" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Issuer Id for the OAuth Identity Provider.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OAuthKeyConfigurations" type="OAuthKeyConfigurationsListType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:documentation source="modifiable">
+                                none
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A list of OAuth Key configurations.
+                            </xs:documentation>
+                            <xs:documentation source="since">9.0</xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Enabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:documentation source="modifiable">
+                                always
+                            </xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if the OAuth Identity Provider for this organization is enabled. Unset or empty defaults to true.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OAuthKeyConfigurations" type="OAuthKeyConfigurationsListType">
+        <xs:annotation>
+            <xs:documentation source="since">5.11</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="OAuthKeyConfigurationsListType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.oauthKeyConfigurationsList</meta:content-type>
+                <meta:version added-in="9.0" />
+            </xs:appinfo>
+            <xs:documentation source="since">9.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Contains a list of OAuth Key configurations.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="OAuthKeyConfiguration" type="OAuthKeyConfigurationType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                OAuth key configuration.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+   <xs:element name="OAuthKeyConfiguration" type="OAuthKeyConfigurationType">
+        <xs:annotation>
+            <xs:documentation source="since">9.0</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="OAuthKeyConfigurationType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.vcloud.admin.oauthKeyConfiguration</meta:content-type>
+                <meta:version added-in="9.0" />
+            </xs:appinfo>
+            <xs:documentation source="since">9.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                OAuth Key Configuration
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="KeyId" type="xs:string" minOccurs="1" maxOccurs="1">
+                            <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Identifier for the key used by the Identity Provider. This key id is expected to be present in the header portion of OAuth tokens issued by by the Identity provider.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Algorithm" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Identifies the cryptographic algorithm family of the key. Supported values are RSA and EC for asymmetric keys.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Key" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                PEM formatted key body. Key is used during validation of OAuth tokens for this Org.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ExpirationDate" type="xs:dateTime" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Expiration date for this key. If specified, tokens signed with this key should be considered invalid after this time.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OrgLdapSettings" type="OrgLdapSettingsType">
+        <xs:annotation>
+            <xs:documentation source="since">1.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents LDAP connection settings for this organization.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="OrgLdapSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.organizationLdapSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">1.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents LDAP connection settings for an organization.
+            </xs:documentation>
+        </xs:annotation>
+         <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="OrgLdapMode" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Defines whether this organization is connected to an
+                                LDAP service, and whether it uses the system default
+                                LDAP service or a custom LDAP service. One of:&lt;br&gt;
+                                &lt;b&gt;NONE&lt;/b&gt; (This organization has no LDAP
+                                connection.)&lt;br&gt;
+                                &lt;b&gt;SYSTEM&lt;/b&gt; (This organization uses the system default
+                                LDAP service.)&lt;br&gt;
+                                &lt;b&gt;CUSTOM&lt;/b&gt; (This organization uses the LDAP
+                                service specified in CustomOrgLdapSettings.)
+                           </xs:documentation>
+                           <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CustomUsersOu" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If OrgLdapMode is SYSTEM, specifies an LDAP attribute=value
+                                pair to use for OU (organizational unit).
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="CustomOrgLdapSettings" type="CustomOrgLdapSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="since">1.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If OrgLdapMode is CUSTOM, this element defines
+                                the hostname and connection details for the
+                                organization's LDAP service.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="CustomOrgLdapSettingsType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents connection details for an organization's LDAP
+                service.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="HostName" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Hostname of the LDAP server.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Port" type="xs:int" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Port at which to connect to the LDAP service.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsSsl" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if the LDAP service requires an SSL connection.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsSslAcceptAll" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if the LDAP service accepts all SSL certificates.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Realm" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP realm to use when looking up users.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SearchBase" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP search base.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UserName" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Username to use when logging in to LDAP, specified using
+                                LDAP attribute=value pairs (for example: cn="ldap-admin",
+                                c="example", dc="com").
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Password" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Password for the user identified by UserName. This value
+                                is never returned by GET. It is inspected on create
+                                and modify. On modify, the absence of this element indicates
+                                that the password should not be changed.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AuthenticationMechanism" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                One of:&lt;br&gt;
+                                &lt;b&gt;SIMPLE&lt;/b&gt; (Simple
+                                authentication as specified in RFC 2251 and RFC
+                                2829.)&lt;br&gt;
+                                &lt;b&gt;KERBEROS&lt;/b&gt; (Kerberos
+                                authentication)&lt;br&gt;
+                                &lt;b&gt;MD5DIGEST&lt;/b&gt; (Digest MD5
+                                authentication as specified in RFC 2831.)
+                                &lt;br&gt;
+                                &lt;b&gt;NTLM&lt;/b&gt; (Windows NTLM
+                                authentication.)
+                           </xs:documentation>
+                           <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="GroupSearchBase" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP group search base.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsGroupSearchBaseEnabled" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if the group search base is enabled.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ConnectorType" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Defines LDAP service implementation type.
+                                One of:&lt;br&gt;
+                                &lt;b&gt;ACTIVE_DIRECTORY&lt;/b&gt; (LDAP service provided by
+                                Microsoft Active Directory.)&lt;br&gt;
+                                &lt;b&gt;OPEN_LDAP&lt;/b&gt; (LDAP service provided by Open LDAP).
+                           </xs:documentation>
+                           <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UserAttributes" type="OrgLdapUserAttributesType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Defines how LDAP attributes are used when importing a user.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="GroupAttributes" type="OrgLdapGroupAttributesType" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Defines how LDAP attributes are used when importing a group.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UseExternalKerberos" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Set to true to use an external Kerberos service.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+             </xs:extension>
+         </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="OrgLdapGroupAttributesType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Defines how a group is imported from LDAP.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="ObjectClass" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP objectClass of which imported groups are members.
+                                For example, group.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ObjectIdentifier" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use as the unique identifier for a
+                                group. For example, objectGuid.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="GroupName" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use for the group name. For example, cn.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Membership" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use when getting the members of a
+                                group. For example, member.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="MembershipIdentifier" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute that identifies a group as a member of
+                                another group. For example, dn.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="BackLinkIdentifier" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP group attribute used to identify a group member.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="OrgLdapUserAttributesType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Defines how LDAP attributes are used when importing a user.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="ObjectClass" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP objectClass of which imported users are members.
+                                For example, user or person
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ObjectIdentifier" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use as the unique identifier for a
+                                user. For example, objectGuid.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="UserName" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use when looking up a user name to
+                                import. For example, userPrincipalName or samAccountName.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Email" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use for the user's email address.
+                                For example, mail.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="FullName" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use for the user's full name. For
+                                example, displayName.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="GivenName" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use for the user's given name. For
+                                example, givenName.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Surname" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use for the user's surname. For example, sn.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Telephone" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute to use for the user's telephone number.
+                                For example, telephoneNumber.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="GroupMembershipIdentifier" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute that identifies a user as a member of
+                                a group. For example, dn.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="GroupBackLinkIdentifier" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                LDAP attribute that returns the identifiers of all the
+                                groups of which the user is a member.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OrgEmailSettings" type="OrgEmailSettingsType" />
+    <xs:complexType name="OrgEmailSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.organizationEmailSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the email settings for an organization.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="IsDefaultSmtpServer" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this organization uses the system default SMTP server.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsDefaultOrgEmail" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this organization uses the system default email properties.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="FromEmailAddress" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If IsDefaultOrgEmail is false, specifies the sender's
+                                email address that appears in email notifications.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="DefaultSubjectPrefix" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If IsDefaultOrgEmail is false, specifies a prefix for
+                                system email notifications.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IsAlertEmailToAllAdmins" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if system email notifications should be sent to
+                                all users who have the Administrator role.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AlertEmailTo" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If IsAlertEmailToAllAdmins is false, specifies a list
+                                of users to receive system email notifications.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SmtpServerSettings" type="SmtpServerSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation xml:lang="en">
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                If IsDefaultSmtpServer is false, specifies
+                                connection details for an SMTP server to use.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+              </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SmtpServerSettingsType">
+        <xs:annotation>
+            <xs:documentation source="since">0.9</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Defines connection details for the organization s SMTP server.
+                If IsDefaultSmtpServer (in OrgEmailSettings) is false, the SmtpServerSettings
+                element is taken into account.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="IsUseAuthentication" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if the SMTP server requires authentication.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Host" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Hostname of the SMTP server.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Port" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Port number of the SMTP server.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Username" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Username to use when logging in to the SMTP service.
+                                (Required if IsUseAuthentication is True).
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Password" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Password for the user identified by Username. This value
+                                is never returned by GET. It is inspected on create and modify.
+                                On modify, the absence of this element indicates that
+                                the password should not be changed.
+                                Required if IsUseAuthentication is true.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SmtpSecureMode" type="SmtpSecureModeType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="11.0" /></xs:appinfo>
+                            <xs:documentation source="since">11.0</xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Security protocol to use when connecting to the SMTP server. One of:&lt;br&gt;
+                                startTls -- Use the STARTTLS protocol&lt;br&gt;
+                                ssl -- -Use the SSL/TLS protocol&lt;br&gt;
+                                none -- Do not use any security protocol
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SslTrustStore" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="11.0" /></xs:appinfo>
+                            <xs:documentation source="since">11.0</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                 Custom truststore to use to trust peer certificates when establishing a secure connection using SSL/STARTTLS (when enabled).
+                            </xs:documentation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OrgPasswordPolicySettings" type="OrgPasswordPolicySettingsType" />
+    <xs:complexType name="OrgPasswordPolicySettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.organizationPasswordPolicySettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">
+                Represents password policy settings for this organization.
+            </xs:documentation>
+            <xs:documentation source="since">1.5</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="AccountLockoutEnabled" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Set to true to enable account lockout for
+                                logins to this organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                   <xs:element name="InvalidLoginsBeforeLockout" type="xs:int" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Number of invalid login attempts that will trigger account lockout.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AccountLockoutIntervalMinutes" type="xs:int" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Number of minutes an account that is locked out will remain locked.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="AdminCatalog" type="AdminCatalogType"/>
+    <xs:complexType name="AdminCatalogType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.catalog</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">1.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents the admin view of a catalog.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="CatalogType">
+                <xs:sequence>
+                    <xs:element name="CatalogStorageProfiles" type="CatalogStorageProfilesType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Container for VdcStorageProfile elements that
+                                reference storage profiles used by this
+                                catalog.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ExternalCatalogSubscriptionParams" type="ExternalCatalogSubscriptionParamsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Configuration parameters for a catalog that has
+                                an external subscription.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="PublishExternalCatalogParams" type="PublishExternalCatalogParamsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Configuration parameters for a catalog that is
+                                published externally.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="Orgs" type="OrgsType"/>
+    <xs:complexType name="OrgsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.5"/>
+                <meta:content-type>application/vnd.vmware.vcloud.orgs</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a list of organizations.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="Org" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Reference to an organization.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="CatalogStorageProfilesType">
+         <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.5"/>
+                <meta:content-type>application/vnd.vmware.vcloud.catalogStorageProfiles</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                 Container for VdcStorageProfile elements that reference
+                 storage profiles used by a catalog.
+            </xs:documentation>
+        </xs:annotation>
+
+         <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="VdcStorageProfile" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a VDC storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="ExternalCatalogSubscriptionParams" type="ExternalCatalogSubscriptionParamsType"/>
+    <xs:complexType name="ExternalCatalogSubscriptionParamsType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.externalCatalogSubscriptionParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Configuration parameters for a catalog that has an external
+                subscription.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="SubscribeToExternalFeeds" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                         <xs:annotation>
+                             <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                             <xs:documentation source="modifiable">always</xs:documentation>
+                             <xs:documentation xml:lang="en">
+                                  True enables the external subscription
+                                  configured by these parameters.
+                              </xs:documentation>
+                              <xs:documentation source="required">false</xs:documentation>
+                          </xs:annotation>
+                      </xs:element>
+                    <xs:element name="Location" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Endpoint URL to subscribe to.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                         </xs:annotation>
+                     </xs:element>
+                     <xs:element name="Password" type="xs:string" minOccurs="0" maxOccurs="1">
+                         <xs:annotation>
+                             <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                             <xs:documentation source="modifiable">always</xs:documentation>
+                             <xs:documentation xml:lang="en">
+                                 Password required by the endpoint.
+                             </xs:documentation>
+                             <xs:documentation source="required">false</xs:documentation>
+                         </xs:annotation>
+                     </xs:element>
+                    <xs:element name="ExpectedSslThumbprint" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Expected SSL thumbprint of the endpoint.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                         </xs:annotation>
+                     </xs:element>
+                     <xs:element name="LocalCopy" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                         <xs:annotation>
+                             <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                             <xs:documentation source="modifiable">always</xs:documentation>
+                             <xs:documentation xml:lang="en">
+                                  If true, synchronization creates a local copy
+                                  of all items. Defaults to false, which
+                                  defers creation of the local copy until the
+                                  item is required by an operation such as
+                                  instantiation.
+                              </xs:documentation>
+                              <xs:documentation source="required">false</xs:documentation>
+                          </xs:annotation>
+                      </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="PublishExternalCatalogParams" type="PublishExternalCatalogParamsType"/>
+    <xs:complexType name="PublishExternalCatalogParamsType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+            <xs:appinfo>
+                <meta:content-type>application/vnd.vmware.admin.publishExternalCatalogParams</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.5</xs:documentation>
+            <xs:documentation xml:lang="en">
+                 Configuration parameters for a catalog that is published
+                 externally.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="IsPublishedExternally" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True enables external publication as configured
+                                by these parameters.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="catalogPublishedUrl" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Read-only endpoint URL supplied by the server.
+                                External subscribers can connect to the catalog
+                                at this URL.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                         </xs:annotation>
+                     </xs:element>
+                     <xs:element name="Password" type="xs:string" minOccurs="0">
+                         <xs:annotation>
+                             <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                             <xs:documentation source="modifiable">always</xs:documentation>
+                             <xs:documentation xml:lang="en">
+                                 Password required when connecting to the
+                                 endpoint.
+                             </xs:documentation>
+                             <xs:documentation source="required">false</xs:documentation>
+                         </xs:annotation>
+                     </xs:element>
+                    <xs:element name="IsCacheEnabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True enables content caching for this catalog.
+                                All items in the catalog are created and stored
+                                in transfer storage. If false, items are not
+                                placed in transfer storage until they are
+                                requested by a subscriber.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="PreserveIdentityInfoFlag" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.5"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True includes BIOS UUIDs and MAC addresses in the
+                                downloaded OVF package. If false, those information
+                                will be excluded.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OrgGuestPersonalizationSettings" type="OrgGuestPersonalizationSettingsType"/>
+    <xs:complexType name="OrgGuestPersonalizationSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.admin.guestPersonalizationSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">
+                Represents default guest personalization settings for an
+                organization. These values are applied during guest
+                customization of virtual machines in this organization
+                if their GuestCustomizationSection specifies UseOrgSettings.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="DomainUsername" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Username of an administrator for the Windows
+                                domain specified in DomainName.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="DomainPassword" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Password for the user identified by
+                                DomainUsername.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="DomainName" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Name of the domain for which DomainUsername has
+                                join rights
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AllowDomainSettings" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if virtual machines in this organization
+                                can join a Windows domain.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                     <xs:element name="AccountOrganizationalUnit" type="xs:string" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Value of the organizational unit (OU) LDAP
+                                attribute for DomainUsername.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                 </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="OrgOperationLimitsSettings" type="OrgOperationLimitsSettingsType"/>
+    <xs:complexType name="OrgOperationLimitsSettingsType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.admin.operationLimitsSettings</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">
+                Represents operation limits settings for an organization. An
+                operation is defined as resource-intensive if it returns a Task
+                object. The default value for all operation limits settings is
+                0, which specifies no limit.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="ConsolesPerVmLimit" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of remote consoles that can be open for a single VM.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OperationsPerUser" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of resource-intensive operations
+                                requested by a user in this organization that
+                                can be simultaneously eligible to run. When a
+                                user makes a request that would cause this
+                                limit to be exceeded, the requested operation
+                                is queued but remains ineligible to run until
+                                enough of the user's eligible requests have
+                                been run to allow an ineligible request to
+                                become eligible.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="OperationsPerOrg" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of resource-intensive operations
+                                owned by this organization that can be
+                                simultaneously eligible to run. When an
+                                organization member makes a request that would
+                                cause this limit to be exceeded, the requested
+                                operation is queued but remains ineligible to
+                                run until enough of the organization's eligible
+                                requests have been run to allow an ineligible
+                                request to become eligible.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="QueuedOperationsPerUser" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.11"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of resource-intensive operations
+                                that a user in this organization can queue.
+                                When a user makes a request that would cause
+                                this limit to be exceeded, the request fails
+                                and returns HTTP status 400.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="QueuedOperationsPerOrg" type="xs:int" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.11"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of queued resource-intensive operations
+                                allowed for all users in this organization.
+                                When an organization member makes a request
+                                that would cause this limit to be exceeded, the
+                                request fails and returns HTTP status 400.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                 </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+	<xs:element name="OrgRights" type="OrganizationRightsType" />
+	<xs:complexType name="OrganizationRightsType">
+		<xs:annotation>
+			<xs:appinfo>
+				<meta:version added-in="ORG_RIGHTS_ROLES" />
+				<meta:content-type>application/vnd.vmware.admin.org.rights</meta:content-type>
+			</xs:appinfo>
+			<xs:documentation source="since">ORG_RIGHTS_ROLES</xs:documentation>
+			<xs:documentation xml:lang="en">
+				Represents all the rights that have been granted to an organization.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="ResourceType">
+                 <xs:sequence>
+                    <xs:element name="RightReference" type="ReferenceType" minOccurs="0"
+                    maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a role.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+    <xs:element name="OrgRoles" type="OrganizationRolesType" />
+    <xs:complexType name="OrganizationRolesType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="ORG_RIGHTS_ROLES" />
+                <meta:content-type>application/vnd.vmware.admin.org.rights</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">ORG_RIGHTS_ROLES</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents all the roles available in an organization.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="RoleReference" type="ReferenceType" minOccurs="0"
+                    maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a role.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

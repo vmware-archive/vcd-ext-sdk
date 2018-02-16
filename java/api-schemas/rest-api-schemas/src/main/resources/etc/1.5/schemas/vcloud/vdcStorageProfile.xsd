@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+api-extension-template-vcloud-director
+Copyright © 2013-2018 VMware, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-2-Clause
+-->
+<xs:schema xmlns="http://www.vmware.com/vcloud/v1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:meta="http://www.vmware.com/vcloud/meta"
+           jaxb:version="2.0"
+           jaxb:extensionBindingPrefixes="meta"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.vmware.com/vcloud/v1.5"
+           version="1.0">
+
+    <xs:include schemaLocation="common.xsd"/>
+    <xs:include schemaLocation="entity.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Schema for the vCloud vDC storage profile type.
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="VdcStorageProfiles" type="VdcStorageProfilesType"/>
+
+    <xs:complexType name="VdcStorageProfilesType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Container for references to storage profiles associated with a vDC.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="VCloudExtensibleType">
+                <xs:sequence>
+                    <xs:element name="VdcStorageProfile" type="ReferenceType" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                A reference to a vDC storage profile.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="VdcStorageProfile" type="VdcStorageProfileType"/>
+
+    <xs:complexType name="VdcStorageProfileIopsSettingsType">
+        <xs:annotation>
+            <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+            <xs:documentation source="since">9.0</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Grouping of IOPs related settings associated with a particular VdcStorageProfile, i.e. a particular
+                Vdc + StorageProfile pairing.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Enabled" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        True if this storage profile is IOPs-based placement enabled.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DiskIopsMax" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        The maximum IOPS value that this storage profile is permitted to deliver.
+                        Value must be in the range 0-Integer.MAX_VALUE, and if greater than 0,
+                        cannot be less than the value of DiskIopsDefault. Value of 0 means this
+                        max setting is is disabled and there is no max disk IOPS restriction.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DiskIopsDefault" type="xs:long" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        This value is applied when provisioning a disk that does not specify vcloud:iops.
+                        Value must be in the range 0-Integer.MAX_VALUE. If DiskIopsPerGbMax is greater
+                        than 0 and if (diskSize * DiskIopsPerGbMax) less than DiskIopsDefault, then the
+                        default iops for the disk will be set as (diskSize * DiskIopsPerGbMax).
+                        Value of 0 for disk iops means that no iops would be reserved or provisioned for
+                        that virtual disk.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="StorageProfileIopsLimit" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        Maximum number of IOPs that can be allocated for this profile.
+                        A value of 0 is understood to mean "maximum possible."
+                    </xs:documentation>
+                    <xs:documentation source="required">false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="DiskIopsPerGbMax" type="xs:long" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:appinfo><meta:version added-in="17.0"/></xs:appinfo>
+                    <xs:documentation source="modifiable">always</xs:documentation>
+                    <xs:documentation xml:lang="en">
+                        The maximum disk IOPs per GB value that this storage profile is
+                        permitted to deliver.
+                        A value of 0 means there is no perGB IOPS restriction.
+                    </xs:documentation>
+                    <xs:documentation source="required">true</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="VdcStorageProfileType">
+        <xs:annotation>
+            <xs:appinfo>
+                <meta:version added-in="5.1"/>
+                <meta:content-type>application/vnd.vmware.vcloud.vdcStorageProfile</meta:content-type>
+            </xs:appinfo>
+            <xs:documentation source="since">5.1</xs:documentation>
+            <xs:documentation xml:lang="en">
+                Represents a storage profile in an organization vDC.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EntityType">
+                <xs:sequence>
+                    <xs:element name="Enabled" type="xs:boolean" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this storage profile is enabled for use
+                                in the vDC.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Units" type="xs:string" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Scale used to define Limit. NOTE: currently, only "MB" is allowed.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Limit" type="xs:long" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Maximum number of storage bytes (scaled by Units) allocated for this profile.
+                                A value of 0 is understood to mean "maximum possible."
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Default" type="xs:boolean" minOccurs="1" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="5.1"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                True if this is default storage profile for
+                                this vDC. The default storage profile
+                                is used when an object that can specify a
+                                storage profile is created with no storage
+                                profile specified.
+                            </xs:documentation>
+                            <xs:documentation source="required">true</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IopsSettings" type="VdcStorageProfileIopsSettingsType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">always</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                When NOT provided, disk storage placement ignores IOPs considerations; otherwise, this element
+                                holds all the disk IOPs related settings, including a subordinate Enabled flag.
+                                When that flag is false, disk provisioning using this profile will behave identically as
+                                if this element was not provided in the first place.
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="StorageUsedMB" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Storage used, in Megabytes, by the storage profile
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="IopsAllocated" type="xs:long" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:appinfo><meta:version added-in="9.0"/></xs:appinfo>
+                            <xs:documentation source="modifiable">none</xs:documentation>
+                            <xs:documentation xml:lang="en">
+                                Total IOPS currently allocated to this storage profile
+                            </xs:documentation>
+                            <xs:documentation source="required">false</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>
