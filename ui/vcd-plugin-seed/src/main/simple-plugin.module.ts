@@ -1,36 +1,36 @@
-/*
- * Copyright 2017 VMware, Inc. All rights reserved. VMware Confidential
- */
 import {CommonModule} from "@angular/common";
 import {Inject, NgModule} from "@angular/core";
-import {RouterModule} from "@angular/router";
+import {Routes, RouterModule} from "@angular/router";
+import {ClarityModule} from "clarity-angular";
 import {Store} from "@ngrx/store";
 import {EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule} from "@vcd-ui/common";
-import {StubComponent} from "./stub.component";
-import {ROUTES} from "./stub.routes";
+import {SimpleComponent} from "./simple/simple.component";
+
+const ROUTES: Routes = [
+    { path: "", component: SimpleComponent }
+];
 
 @NgModule({
     imports: [
+        ClarityModule,
         CommonModule,
-        RouterModule.forChild(ROUTES),
-        I18nModule
+        I18nModule,
+        RouterModule.forChild(ROUTES)
     ],
     declarations: [
-        StubComponent
+        SimpleComponent
     ],
-    entryComponents: [
-        StubComponent
-    ],
+    bootstrap: [SimpleComponent],
     exports: [],
     providers: []
 })
-export class StubModule {
+export class SimplePluginModule {
     constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
         const registration: ExtensionNavRegistration = {
             path: extensionRoute,
             icon: "page",
-            nameCode: "nav.stub",
-            descriptionCode: "nav.stub.description"
+            nameCode: "nav.label",
+            descriptionCode: "nav.description"
         };
         appStore.dispatch(new ExtensionNavRegistrationAction(registration));
     }
