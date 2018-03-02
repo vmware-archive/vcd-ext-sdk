@@ -1,14 +1,14 @@
 {
-    "urn": "vmware:vcloud:stub",
-    "name": "Stub plugin",
+    "urn": "vmware:vcloud:plugin:seed",
+    "name": "Simple plugin",
     "containerVersion": "9.1.0",
     "version": "1.0.0",
-    "scope": ["service-provider"],
+    "scope": ["service-provider", "tenant"],
     "permissions": [],
-    "description": "An example extension.",
+    "description": "An example plugin.",
     "vendor": "VMware",
     "license": "Copyright (C) VMware 2017-2018.  All rights reserved.",
     "link": "http://www.vmware.com/support",
-    "module": "StubModule",
-    "route": "stub"
+    "module": "SubnavPluginModule",
+    "route": "plugin"
 }
