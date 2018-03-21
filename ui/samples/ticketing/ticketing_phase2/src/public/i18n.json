@@ -1,0 +1,12 @@
+{
+    "en": {
+        "nav.ticketing": "Ticketing",
+        "nav.ticketing.description": "Ticketing module",
+        "tickcomp.ticketing": "Ticketing",
+        "tickcomp.ticket_id": "Ticket ID",
+        "tickcomp.description": "Description",
+        "tickcomp.status": "Status",
+        "tickcomp.pagination.of": "of",
+        "tickcomp.pagination.tickets": "tickets"
+    }
+}

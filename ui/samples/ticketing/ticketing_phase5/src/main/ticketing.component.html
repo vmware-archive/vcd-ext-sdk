@@ -1,0 +1,71 @@
+<!--* vcloud-director-ui-extension-sample-ticketing-phase5
+    *  SPDX-License-Identifier: BSD-2-Clause
+    *  Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
+    *-->
+<div class="content-area">
+  <h2 class="dashboard-header">{{'tickcomp.ticketing'|translate}}</h2>
+  <div>
+    <clr-datagrid [(clrDgSingleSelected)]="selectedTicket">
+      <clr-dg-column [clrDgField]="'ticket_id'">{{'tickcomp.ticket_id'|translate}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'ticket_msg'">{{'tickcomp.description'|translate}}</clr-dg-column>
+      <clr-dg-column [clrDgField]="'status'">{{'tickcomp.status'|translate}}</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let ticket of tickets" [clrDgItem]="ticket">
+        <clr-dg-cell>{{ticket.ticket_id}}</clr-dg-cell>
+        <clr-dg-cell>{{ticket.ticket_msg}}</clr-dg-cell>
+        <clr-dg-cell>{{ticket.status}}</clr-dg-cell>
+      </clr-dg-row>
+      <clr-dg-footer>
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} {{'tickcomp.pagination.of'|translate}} {{pagination.totalItems}} {{'tickcomp.pagination.tickets'|translate}}
+        <clr-dg-pagination #pagination [clrDgPageSize]="10"></clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
+    <button class="btn btn-sm btn-secondary" (click)="ticketaddmodal = true">{{'tickcomp.btn.create_ticket'|translate}}</button>
+    <button class="btn btn-sm btn-secondary" (click)="ticketdetailsmodal = true" [disabled]="!selectedTicket">{{'tickcomp.btn.ticket_details'|translate}}</button>
+    <button class="btn btn-sm btn-secondary" (click)="deleteTicket()" [disabled]="!selectedTicket">{{'tickcomp.btn.delete_ticket'|translate}}</button>
+
+    <form #ticketaddform="ngForm" (ngSubmit)="createTicketSubmit(ticketaddform)" [hidden]="submitted" novalidate>
+      <clr-modal [(clrModalOpen)]="ticketaddmodal" [clrModalSize]="'xl'">
+        <h3 class="modal-title">{{'tickcomp.modaladd.title'|translate}}</h3>
+        <div class="modal-body">
+          <section class="form-block">
+            <div class="form-group">
+              <label for="ticketadddesc" class="required">{{'tickcomp.modaladd.description'|translate}}</label>
+              <textarea id="ticketadddesc" name="ticketadddesc" ngModel></textarea>
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="createTicketCancel(ticketaddform)">{{'tickcomp.btn.cancel'|translate}}</button>
+          <button type="submit" class="btn btn-primary">{{'tickcomp.btn.create'|translate}}</button>
+        </div>
+      </clr-modal>
+    </form>
+
+    <form #ticketdetailsform="ngForm" (ngSubmit)="ticketDetailsSubmit(ticketdetailsform)" [hidden]="submitted" novalidate *ngIf="selectedTicket">
+      <clr-modal [(clrModalOpen)]="ticketdetailsmodal" [clrModalSize]="'xl'">
+        <h3 class="modal-title">{{'tickcomp.modaldetails.title'|translate}}</h3>
+        <div class="modal-body">
+          <section class="form-block">
+            <div class="form-group">
+              <label for="ticketdetailsid">{{'tickcomp.modaldetails.id'|translate}}</label>
+              <input id="ticketdetailsid" name="ticketdetailsid" [ngModel]="selectedTicket.ticket_id" [disabled]="true">
+            </div>
+            <div class="form-group">
+              <label for="ticketdetailsstatus">{{'tickcomp.modaldetails.status'|translate}}</label>
+              <input id="ticketdetailsstatus" name="ticketdetailsstatus" [ngModel]="selectedTicket.status" [disabled]="true">
+            </div>
+            <div class="form-group">
+              <label for="ticketdetailsdesc" class="required">{{'tickcomp.modaldetails.description'|translate}}</label>
+              <textarea id="ticketdetailsdesc" name="ticketdetailsdesc" [ngModel]="selectedTicket.ticket_msg"></textarea>
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="ticketDetailsCancel(ticketdetailsform)">{{'tickcomp.btn.cancel'|translate}}</button>
+          <button type="submit" class="btn btn-primary">{{'tickcomp.btn.update'|translate}}</button>
+        </div>
+      </clr-modal>
+    </form>
+  </div>
+</div>
