@@ -1,0 +1,9 @@
+/** vcloud-director-ui-extension-sample-ticketing-phase3
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *  Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
+ */
+form {
+  display:inline;
+  margin:0px;
+  padding:0px;
+}
