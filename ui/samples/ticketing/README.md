@@ -1,8 +1,8 @@
-# Sample vCD Portal Extension - About Page
-This is a vCD Portal Extension displaying a sample About Page.
+# Sample vCD Portal Extension - Ticketing
+This includes six vCD Portal Extensions with each displaying various phases a sample ticketing application.
 
 ## Overview ##
-This sample code was created as part of the following whitepaper: [Extending VMware vCloud Director User Interface Using Portal Extensibility](https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/vcat/vmware-extending-vcloud-director-user-interface-using-portal-extensibility.pdf).
+This sample code was created as part of the following whitepaper: [Extending VMware vCloud Director User Interface Using Portal Extensibility - Ticketing Example](https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/vcat/vmware-extending-vcloud-director-user-interface-using-portal-extensibility-ticketing-example.pdf).
 
 ## Getting Started ##
 
