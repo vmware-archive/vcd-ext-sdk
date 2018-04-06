@@ -6,7 +6,10 @@
     "clean": "rimraf dist",
     "lint-fix": "tslint --fix \"src/**/*.ts\" || exit 0",
     "build": "rollup -c && ncp src/public dist && cd dist && bestzip plugin.zip bundle.js manifest.json i18n.json assets/ && cd ..",
-    "deploy": "python ui_ext_api.py deploy"
+    "deploy": "python ui_ext_api.py deploy",
+    "remove": "python ui_ext_api.py remove",
+    "removeAllExtensions": "python ui_ext_api.py removeAllExtensions",
+    "listUiExtensions": "python ui_ext_api.py listUiExtensions"
   },
   "license": "BSD-3-Clause",
   "dependencies": {

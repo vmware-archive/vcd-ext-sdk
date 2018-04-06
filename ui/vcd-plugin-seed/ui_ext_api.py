@@ -168,18 +168,19 @@ class UiPlugin:
         eid = None
         for ext in self.walkUiExtensions():
             if manifest['pluginName'] == ext['pluginName'] and manifest['version'] == ext['version']:
-                eid = ext['id']
-                break
+                return self.removeExtension(ext['id'])
 
-        if eid:
-            self.removeExtension(eid)
-        else:
-            print "Extension not found"
+        raise Exception("Extension not found")
+
+        
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('ui_ext_api.ini')
     cfg = config['DEFAULT']
+    if not cfg:
+        raise ValueError('Failed to open ui_ext_api.ini file.')
+
     ui = UiPlugin(cfg['vcduri'], cfg['username'], cfg['organization'], cfg['password'])
 
     parser = argparse.ArgumentParser('UI Extension Helper')
@@ -195,5 +196,5 @@ if __name__ == '__main__':
     elif args.command == 'listUiExtensions':
         pprint(ui.getUiExtensions().json())
     else:
-        print 'Command not found'
+        raise ValueError('Command (%s) not found' % args.command)
         sys.exit(0)
