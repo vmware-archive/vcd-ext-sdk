@@ -1,3 +1,4 @@
 dist/
 node_modules/
-ui/vcd-plugin-seed/ui_ext_api.ini
+ui_ext_api.ini
+yarn-error.log
