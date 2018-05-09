@@ -1,0 +1,17 @@
+{
+  "name": "vcd-theme-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "BSD-2-Clause",
+  "scripts": {
+    "build": "node build-theme"
+  },
+  "devDependencies": {
+    "bootstrap": "4.0.0-alpha.5",
+    "clarity-icons": "0.10.17",
+    "clarity-ui": "0.10.17",
+    "clean-css-cli": "4.1.11",
+    "node-sass": "4.8.3",
+    "yargs": "^11.0.0"
+  }
+}

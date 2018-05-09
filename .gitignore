@@ -1,3 +1,4 @@
+target/
 dist/
 node_modules/
 ui_ext_api.ini
