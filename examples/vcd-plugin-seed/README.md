@@ -45,7 +45,10 @@ yarn run build
 At this point, there will be a `plugin.zip` in the `dist/` folder.
 
 ### Install ###
-A service provider admin account is necessary to install the plugin into vCloud Director.  There is currently no UI to manage plugins, so the vCD API will be used for the install. `SERVER` in the following example refers to the server endpoint of the vCD installation, and `TOKEN` is the `x-vcloud-authorization` header value returned by the initial session creation request.
+A service provider admin account is necessary to install the plugin into vCloud Director.  There is currently no UI to manage plugins, so the vCD API will be used for the install.
+
+#### Manual Method ####
+`SERVER` in the following example refers to the server endpoint of the vCD installation, and `TOKEN` is the `x-vcloud-authorization` header value returned by the initial session creation request.
 ```bash
 # create a session for sys admin user
 SERVER="vcloud.example.com" curl --header 'Accept: application/*+xml;version=30.0' --insecure --basic --data '' --user 'administrator@System:pa$$w0rd' --verbose https://$SERVER/api/sessions
@@ -59,11 +62,23 @@ SERVER="vcloud.example.com" TOKEN="c2f4258224ce4489b4e4474e4e34db15" PLUGIN="urn
 
 # Upload plugin.zip to vCloud Director
 # upload path is in the Link response header of the previous call
-SERVER="vcloud.example.com" TOKEN="c2f4258224ce4489b4e4474e4e34db15" curl --header 'Content-Type: application/zip' --header "x-vcloud-authorization: $TOKEN" --insecure --verbose https://$SERVER/transfer/19d7fafd-6670-4c2a-983f-0b3a49725d2e/plugin.zip --data-binary @dist/plugin.zip
+SERVER="vcloud.example.com" TOKEN="c2f4258224ce4489b4e4474e4e34db15" curl --request PUT --header 'Content-Type: application/zip' --header "x-vcloud-authorization: $TOKEN" --insecure --verbose https://$SERVER/transfer/19d7fafd-6670-4c2a-983f-0b3a49725d2e/plugin.zip --data-binary @dist/plugin.zip
 
 ```
 
 After completing the above sequence of calls, the sample plugin will be available from the primary navigation menu of vCloud Director's Provider Portal.
+
+#### Automated Deploy Method ####
+We have included a script that will automatically deploy a plugin to the associated vCD environment.  It uses various settings from the manifest.json file to define the plugin.  
+
+The first time it is run, it creates the extension definition, defines the plugin, uploads the plugin and publishes the plugin for all organizations.  The second time it is run, it first removes the existing plugin, and then defines and uploads the new plugin.
+
+To use the automated deploy method, you first need to copy the ui_ext_api.ini.template to ui_ext_api.ini and update the configuration settings to match your environment.
+
+To run:
+```bash
+yarn run deploy
+```
 
 ## Anatomy of a Plugin ##
 ### package.json ###
@@ -83,7 +98,7 @@ This manifest describes your plugin to the vCD UI.  Here are the fields and thei
 | module | the name of the main exported Angular module to be loaded dynamically by vCD |
 | route | a top level URL route that the module can use to register child routes under |
 | containerVersion | the version of vCD required for this plugin (leave at `9.1.0`) |
-| scope* | indicator to the vCD UI of which portals should display this plugin (values: `["tenant" | "service-provider"]`) |
+| scope* | indicator to the vCD UI of which portals should display this plugin (values: `["tenant" \| "service-provider"]`) |
 | permissions** | leave as `[]` |
 \* deprecated  
 \** not in use
@@ -177,7 +192,7 @@ This stylesheet provides some simple Sass-based constructs and style definitions
     @include tos-padding;
     color: #0000ff;
     font-style: italic;
-    
+
 }
 
 .tos-text {

@@ -28,7 +28,7 @@ class UiPlugin:
         r = requests.request(method, uri, headers=headers, data=data, verify=False)
         if 200 <= r.status_code <= 299:
             return r
-        raise Exception ("Unsupported HTTP status code (%d) encountered" % sc)
+        raise Exception ("Unsupported HTTP status code (%d) encountered" % r.status_code)
 
     def getToken(self, username, org, password):
         r = self.__request('POST',
@@ -131,7 +131,7 @@ class UiPlugin:
         if publishAll:
             self.postUiExtensionTenantsPublishAll(eid)
 
-    def removeAllExtensions(self):
+    def removeAllUiExtensions(self):
         for ext in self.walkUiExtensions():
             self.removeExtension(ext['id'])
 
@@ -168,32 +168,33 @@ class UiPlugin:
         eid = None
         for ext in self.walkUiExtensions():
             if manifest['pluginName'] == ext['pluginName'] and manifest['version'] == ext['version']:
-                eid = ext['id']
-                break
+                return self.removeExtension(ext['id'])
 
-        if eid:
-            self.removeExtension(eid)
-        else:
-            print "Extension not found"
+        raise Exception("Extension not found")
+
+
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('ui_ext_api.ini')
     cfg = config['DEFAULT']
+    if not cfg:
+        raise ValueError('Failed to open ui_ext_api.ini file.')
+
     ui = UiPlugin(cfg['vcduri'], cfg['username'], cfg['organization'], cfg['password'])
 
     parser = argparse.ArgumentParser('UI Extension Helper')
-    parser.add_argument('command', help='Valid Commands: deploy, remove, removeAllExtensions, listUiExtensions')
+    parser.add_argument('command', help='Valid Commands: deploy, remove, removeAllUiExtensions, listUiExtensions')
     args = parser.parse_args()
 
     if args.command == 'deploy':
         ui.deploy(os.getcwd())
     elif args.command == 'remove':
         ui.remove(os.getcwd())
-    elif args.command == 'removeAllExtensions':
-        ui.removeAllExtensions()
+    elif args.command == 'removeAllUiExtensions':
+        ui.removeAllUiExtensions()
     elif args.command == 'listUiExtensions':
         pprint(ui.getUiExtensions().json())
     else:
-        print 'Command not found'
+        raise ValueError('Command (%s) not found' % args.command)
         sys.exit(0)
