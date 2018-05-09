@@ -1,2 +1,4 @@
 dist/
 node_modules/
+ui_ext_api.ini
+yarn-error.log
