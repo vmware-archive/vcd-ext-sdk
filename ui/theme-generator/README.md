@@ -10,8 +10,6 @@ The goal of this utility is to provide an easy way for providers to brand their 
 By leveraging a tool (this tool) that can process the Sass Clarity definitions alongside variable overrides and selector overrides in a specific way, providers can quickly and easily create a drop in replacement for the default vCD style sheet.
 
 ## Getting Started ##
-This seed project works with version 9.1.0 of vCloud Director.
-
 ### Install ###
 ```bash
 git clone https://github.com/vmware/vcd-ext-sdk.git
