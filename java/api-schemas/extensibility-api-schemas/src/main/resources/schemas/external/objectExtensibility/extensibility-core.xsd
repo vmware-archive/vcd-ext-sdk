@@ -8,8 +8,8 @@
     xmlns="http://www.vmware.com/vcloud/extensibility/v1.0"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-    xmlns:meta="http://www.vmware.com/vcloud/meta"
-    jaxb:extensionBindingPrefixes="meta"
+    xmlns:json="http://www.vmware.com/vcloud/plugin/json"
+    jaxb:extensionBindingPrefixes="json"
     elementFormDefault="qualified"
     targetNamespace="http://www.vmware.com/vcloud/extensibility/v1.0"
     version="1.0">
@@ -176,7 +176,7 @@
     <xs:complexType name="DataType" abstract="true">
         <xs:annotation>
             <xs:appinfo>
-                <meta:jsonTypeInfo propertyName="type" />
+                <json:jsonTypeInfo propertyName="type" />
             </xs:appinfo>
         </xs:annotation>
         <xs:attribute name="name" type="xs:string" use="required">
@@ -191,7 +191,7 @@
     <xs:complexType name="LongDataType">
         <xs:annotation>
             <xs:appinfo>
-                <meta:jsonSubTypeInfo name="long" />
+                <json:jsonSubTypeInfo name="long" />
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -210,7 +210,7 @@
     <xs:complexType name="BooleanDataType">
         <xs:annotation>
             <xs:appinfo>
-                <meta:jsonSubTypeInfo name="boolean" />
+                <json:jsonSubTypeInfo name="boolean" />
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -223,7 +223,7 @@
     <xs:complexType name="StringDataType">
         <xs:annotation>
             <xs:appinfo>
-                <meta:jsonSubTypeInfo name="string" />
+                <json:jsonSubTypeInfo name="string" />
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -236,7 +236,7 @@
     <xs:complexType name="StringArrayDataType">
         <xs:annotation>
             <xs:appinfo>
-                <meta:jsonSubTypeInfo name="list" />
+                <json:jsonSubTypeInfo name="list" />
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>

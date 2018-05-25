@@ -68,7 +68,7 @@ public class JsonMappingInfoPlugin extends Plugin {
 
     private static final String X_ANNOTATION_JSON_TYPE_PROPERTY_NAME = "propertyName";
     private static final String X_ANNOTATION_JSON_SUBTYPE_NAME = "name";
-    private static final String NAMESPACE_URI = "http://www.vmware.com/vcloud/meta";
+    private static final String NAMESPACE_URI = "http://www.vmware.com/vcloud/plugin/json";
     private static final String ELEMENT_JSON_TYPE = "jsonTypeInfo";
     private static final String ELEMENT_JSON_SUBTYPE_TYPE = "jsonSubTypeInfo";
     private static final String PLUGIN_OPTION = "Xjson-api";

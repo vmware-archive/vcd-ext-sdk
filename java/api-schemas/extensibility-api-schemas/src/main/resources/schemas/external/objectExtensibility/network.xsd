@@ -6,8 +6,7 @@
 -->
 <xs:schema xmlns="http://www.vmware.com/vcloud/extensibility/v1.0"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-    xmlns:meta="http://www.vmware.com/vcloud/meta"
-    jaxb:extensionBindingPrefixes="meta" elementFormDefault="qualified"
+    elementFormDefault="qualified"
     targetNamespace="http://www.vmware.com/vcloud/extensibility/v1.0"
     version="1.0">
 

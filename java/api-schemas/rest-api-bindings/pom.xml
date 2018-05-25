@@ -23,6 +23,10 @@
   <dependencies>
     <dependency>
       <groupId>com.vmware.vcloud</groupId>
+      <artifactId>vcd-xjc-plugins</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vmware.vcloud</groupId>
       <artifactId>extensibility-api-schemas</artifactId>
     </dependency>
     <dependency>
@@ -147,11 +151,10 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>1.2</version>
         <executions>
           <execution>
             <id>common</id>
-            <phase>compile</phase>
+            <phase>generate-sources</phase>
             <goals>
               <goal>xjc</goal>
             </goals>
@@ -171,7 +174,7 @@
             <goals>
               <goal>xjc</goal>
             </goals>
-            <phase>compile</phase>
+            <phase>generate-sources</phase>
             <configuration>
               <catalog>${unpacked.schema.dir}/etc/schemas/external/catalog.xml</catalog>
               <schemaDirectory>${unpacked.schema.dir}/etc/1.5/schemas</schemaDirectory>
@@ -183,29 +186,6 @@
               <extension>true</extension>
               <arguments>-Xrest-api</arguments>
             </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.vmware.vcloud</groupId>
-            <artifactId>rest-api-bindings</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-          </execution>
-          <execution>
-            <!-- Used to build all of the JAXB generated code because it is generated during compilation due to the embedded XJC plugin -->
-            <id>build-generated-code</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
