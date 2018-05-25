@@ -117,6 +117,10 @@ public class RestApiVersionsPlugin extends Plugin {
 
     @Override
     public int parseArgument(Options opt, String[] args, int i) throws BadCommandLineException, IOException {
+        if (!args[i].equals("-Xrest-api")) {
+            return super.parseArgument(opt, args, i);
+        }
+
         final String rxVersion = "\\w+(\\.\\d+)*";
 
         final int j = i + 1;
