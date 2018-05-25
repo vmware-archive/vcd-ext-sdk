@@ -89,7 +89,7 @@
         <executions>
           <execution>
             <id>amqp</id>
-            <phase>compile</phase>
+            <phase>generate-sources</phase>
             <goals>
               <goal>xjc</goal>
             </goals>
@@ -109,8 +109,8 @@
         <dependencies>
           <dependency>
             <groupId>com.vmware.vcloud</groupId>
-            <artifactId>extensibility-api-bindings</artifactId>
-            <version>${project.version}</version>
+            <artifactId>vcd-xjc-plugins</artifactId>
+            <version>1.0.0</version>
           </dependency>
           <dependency>
             <groupId>com.sun.xml.bind</groupId>
@@ -123,22 +123,6 @@
             <version>0.11.1</version>
           </dependency>
         </dependencies>
-      </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-          </execution>
-          <execution>
-            <!-- Used to build all of the JAXB generated code because it is generated during compilation due to the embedded XJC plugin -->
-            <id>build-generated-code</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
