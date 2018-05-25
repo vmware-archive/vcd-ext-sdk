@@ -17,6 +17,3 @@
 target/
 test-output/
 build/
-
-# Auto-generated OSGI manifests
-META-INF/
