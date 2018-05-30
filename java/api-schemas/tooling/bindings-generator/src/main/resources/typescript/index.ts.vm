@@ -1,0 +1,13 @@
+/*
+ * Copyright (c) ${year} VMware, Inc. All rights reserved.
+ */
+#foreach(${import} in ${imports})
+#if(${import.endsWith("/")})
+import * as ${_formatter.chop(${import})} from './${import}';
+export {
+    ${_formatter.chop(${import})}
+}
+#else
+export * from './${import}';
+#end
+#end

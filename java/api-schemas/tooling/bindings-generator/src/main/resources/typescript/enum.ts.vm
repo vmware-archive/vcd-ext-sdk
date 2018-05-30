@@ -1,0 +1,8 @@
+/*
+ * Copyright (c) ${year} VMware, Inc. All rights reserved.
+ */
+export enum ${class.name} {
+#foreach(${field} in ${class.fields})
+    ${field.name},
+#end
+}
