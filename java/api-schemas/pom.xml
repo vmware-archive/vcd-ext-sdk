@@ -25,6 +25,8 @@
     <module>rest-api-schemas</module>
     <module>rest-api-bindings</module>
     <module>vcd-xjc-plugins</module>
+    <module>tooling/bindings-generator</module>
+    <module>tooling/vcd-bindings-maven-plugin</module>
   </modules>
   <properties>
     <cxf.version>3.1.11</cxf.version>
