@@ -44,11 +44,18 @@ import org.springframework.util.ClassUtils;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.converters.EnumConverter;
 import com.vmware.vcloud.bindings.generator.typescript.TypescriptEnum;
 import com.vmware.vcloud.bindings.generator.typescript.TypescriptFile;
 
 public class BindingsGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BindingsGenerator.class);
+
+    public static class OutputTypeConverter extends EnumConverter<OutputType> {
+        public OutputTypeConverter(final String optionName, final Class<OutputType> clazz) {
+            super(optionName, clazz);
+        }
+    }
 
     private static final Set<AnnotationTypeFilter> FILTERS = new HashSet<>();
     static {
@@ -81,6 +88,9 @@ public class BindingsGenerator {
             + "the content of outputDir and force the generator to continue")
     private boolean overwrite;
 
+    @Parameter(names = {"-t", "--outputType"}, description = "Indicates whether to generate classes or interfaces for bindings", converter = OutputTypeConverter.class)
+    private OutputType outputType = OutputType.Class;
+
     private ClassPathScanningCandidateComponentProvider provider;
 
     private Template classTemplate;
@@ -99,15 +109,6 @@ public class BindingsGenerator {
         LOGGER.trace("Scanning for classes with annotations {}", FILTERS);
         FILTERS.forEach(provider::addIncludeFilter);
         provider.setResourcePattern("*.class");
-
-        VelocityEngine engine = new VelocityEngine();
-        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-        engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-        engine.init();
-
-        this.classTemplate = engine.getTemplate("/typescript/class.ts.vm");
-        this.enumTemplate = engine.getTemplate("/typescript/enum.ts.vm");
-        this.indexTemplate = engine.getTemplate("/typescript/index.ts.vm");
     }
 
     public BindingsGenerator(final List<String> packages) {
@@ -120,12 +121,26 @@ public class BindingsGenerator {
         return this;
     }
 
+    public BindingsGenerator outputType(final OutputType outputType) {
+        this.outputType = outputType;
+        return this;
+    }
+
     public BindingsGenerator overwrite(boolean overwrite) {
         this.overwrite = overwrite;
         return this;
     }
 
     public void generate() {
+        VelocityEngine engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        engine.init();
+
+        this.classTemplate = this.outputType == OutputType.Interface ? engine.getTemplate("/typescript/interface.ts.vm") : engine.getTemplate("/typescript/class.ts.vm");
+        this.enumTemplate = engine.getTemplate("/typescript/enum.ts.vm");
+        this.indexTemplate = engine.getTemplate("/typescript/index.ts.vm");
+
         long start = System.currentTimeMillis();
         validateOutputState();
         this.packages.forEach(this::createBindingsForPackage);
@@ -191,6 +206,11 @@ public class BindingsGenerator {
     }
 
     private void createBarrels() {
+        if (outputDir == null) {
+            LOGGER.debug("No output directory specified.  Skipping barrel creation.");
+            return;
+        }
+
         Map<Path, List<String>> barrels = new HashMap<>();
         try (Stream<Path> files = Files.walk(outputDir.toPath())) {
             files.forEach(f -> {

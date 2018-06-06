@@ -14,6 +14,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import com.vmware.vcloud.bindings.generator.BindingsGenerator;
+import com.vmware.vcloud.bindings.generator.OutputType;
 
 @Mojo(name = "generate-typescript")
 public class TypescriptBindingsGeneratorMojo extends AbstractMojo {
@@ -26,10 +27,14 @@ public class TypescriptBindingsGeneratorMojo extends AbstractMojo {
     @Parameter(defaultValue = "true")
     private boolean overwrite;
 
+    @Parameter(defaultValue = "Class")
+    private OutputType outputType;
+
     public void execute() throws MojoExecutionException {
         getLog().info("Generating bindings into " + outputDirectory.getAbsolutePath());
         new BindingsGenerator(packages)
             .outputDir(outputDirectory)
+            .outputType(outputType)
             .overwrite(overwrite)
             .generate();
     }

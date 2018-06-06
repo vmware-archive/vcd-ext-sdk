@@ -7,11 +7,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.vmware.vcloud</groupId>
     <artifactId>bindings-generator</artifactId>
+    <parent>
+        <groupId>com.vmware.vcloud</groupId>
+        <artifactId>api-schemas-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
     <name>${project.artifactId} :: vCloud Director bindings generator</name>
     <description>Provides custom API bindings generation beyond what can be accomplished with xjc and OpenAPI</description>
-    <version>1.0.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
