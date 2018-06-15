@@ -1,0 +1,13 @@
+{
+  "name": "@vcd/bindings",
+  "version": "9.1.0",
+  "description": "Typescript bindings for the vCloud Director API",
+  "main": "./index.js",
+  "typings": "./index.d.ts",
+  "author": "VMware",
+  "license": "BSD-2-Clause",
+  "private": true,
+  "devDependencies": {
+    "typescript": "2.4.2"
+  }
+}
