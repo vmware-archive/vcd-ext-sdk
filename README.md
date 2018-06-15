@@ -1,5 +1,7 @@
 
 
+[![Build Status](https://travis-ci.org/vmware/vcd-ext-sdk.svg?branch=master)](https://travis-ci.org/vmware/vcd-ext-sdk)
+
 # vcd-ext-sdk
 
 ## Overview
