@@ -2,6 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 before_install:
+  - nvm use v8.9.1
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.7.0
   - "export PATH=$HOME/.yarn/bin:$PATH"
 install: true
@@ -9,9 +10,8 @@ script:
   - cd java
   - mvn install -B -V
   - cd ../ui/api-client
-  - mvn install -B -V
+  - mvn generate-sources -B -V
   - yarn
-  - "yarn run build:bindings"
-  - "yarn run package:bindings"
+  - yarn bootstrap
   
   
