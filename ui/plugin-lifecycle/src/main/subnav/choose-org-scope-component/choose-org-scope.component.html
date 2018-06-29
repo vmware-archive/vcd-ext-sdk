@@ -1,0 +1,56 @@
+<div class="choose-org-scope">
+    <form #form="ngForm" novalidate>
+        <section class="form-block">
+            <div class="relative">
+                <div class="radio">
+                    <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="true" name="activate" id="forAllOrgs">
+                    <label for="forAllOrgs">For all organisations</label>
+                </div>
+
+                <div class="form-group">
+                    <label>Publish the plugins for all tenants.</label>
+
+                    <div class="checkbox">
+                        <input type="checkbox" name="publishForAllTenants" id="publishForAllTenants" [(ngModel)]="feedback.publishForAllTenants"
+                            (change)="onChange()" [attr.disabled]="feedback.unpublishForAllTenants || !feedback.forAllOrgs ? 'disabled' : null">
+                        <label for="publishForAllTenants"></label>
+                    </div>
+                </div>
+
+                <div *ngIf="canUnpublish" class="form-group">
+                    <label>Unpublish the plugins for all tenants.</label>
+
+                    <div class="checkbox">
+                        <input type="checkbox" name="unpublishForAllTenants" id="unpublishForAllTenants" [(ngModel)]="feedback.unpublishForAllTenants"
+                            (change)="onChange()" [attr.disabled]="feedback.publishForAllTenants || !feedback.forAllOrgs ? 'disabled' : null">
+                        <label for="unpublishForAllTenants"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="listOfOrgsPerPlugin">
+                <div class="radio">
+                    <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="false" name="activate" id="forSpecOrgs">
+                    <label for="forSpecOrgs">For specific organisations</label>
+                </div>
+
+                <div class="relative list">
+                    <div class="overlay" *ngIf="feedback.forAllOrgs"></div>
+                    <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
+                        <!-- PLACEHOLDER -->
+                        <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
+                        <!-- END PLACEHOLDER -->
+
+                        <clr-dg-column>Organisation Name</clr-dg-column>
+                        <clr-dg-column>Plugin Name</clr-dg-column>
+
+                        <clr-dg-row *clrDgItems="let item of listOfOrgsPerPlugin" [clrDgItem]="item">
+                            <clr-dg-cell>{{ item.orgName }}</clr-dg-cell>
+                            <clr-dg-cell>{{ item.plugin }}</clr-dg-cell>
+                        </clr-dg-row>
+                    </clr-datagrid>
+                </div>
+            </div>
+        </section>
+    </form>
+</div>

@@ -6,3 +6,6 @@ yarn-error.log
 
 # Eclipse
 .metadata/
+
+# VSCode
+.vscode/
