@@ -27,6 +27,7 @@
           </execution>
         </executions>
         <configuration>
+          <outputDirectory>${basedir}/packages/bindings/target/generated-typescript-bindings</outputDirectory>
           <packages>
             <package>com.vmware.vcloud.api.rest.schema.ovf</package>
             <package>com.vmware.vcloud.api.rest.schema.ovf.environment</package>
