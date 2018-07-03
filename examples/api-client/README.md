@@ -14,13 +14,13 @@ An Angular module that provides a REST API client with consistent handling of pa
 ### Prerequisites ###
 Before the `api-client` packages can be built, the `java/api-schemas` projects must be built.  Generation of the Java API bindings is a prerequisite to generating the Typescript bindings because it is these Java classes that drive the binding generation.  From the `vcd-ext-sdk` project root directory:
 ```bash
-cd java/api-schemas
+cd java
 mvn install
 ```
 
 Next navigate to the `api-client` folder and generate the bindings.  **Note: these steps only need to be performed when the bindings change.**
 ```bash
-cd ../../ui/api-client
+cd ../ui/api-client
 mvn generate-sources
 ```
 

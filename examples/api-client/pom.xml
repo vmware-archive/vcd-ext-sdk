@@ -15,6 +15,29 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-codegen-maven-plugin</artifactId>
+        <version>2.3.1</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <output>${basedir}/packages/bindings/target/generated-typescript-bindings</output>
+          <inputSpec>${project.basedir}/../../java/api-schemas/openapi-schemas/src/main/resources/schemas/vcloud-openapi-schemas.yaml</inputSpec>
+          <language>typescript-angular</language>
+          <generateApis>false</generateApis>
+          <generateModelTests>false</generateModelTests>
+          <generateModelDocumentation>false</generateModelDocumentation>
+          <generateSupportingFiles>false</generateSupportingFiles>
+          <modelPackage>vcloud.rest.openapi.model</modelPackage>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>com.vmware.vcloud</groupId>
         <artifactId>vcd-bindings-maven-plugin</artifactId>
         <version>1.0.0</version>
@@ -27,6 +50,7 @@
           </execution>
         </executions>
         <configuration>
+          <overwrite>Merge</overwrite>
           <outputDirectory>${basedir}/packages/bindings/target/generated-typescript-bindings</outputDirectory>
           <packages>
             <package>com.vmware.vcloud.api.rest.schema.ovf</package>
