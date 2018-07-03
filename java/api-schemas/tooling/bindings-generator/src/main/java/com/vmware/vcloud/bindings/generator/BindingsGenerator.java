@@ -57,6 +57,12 @@ public class BindingsGenerator {
         }
     }
 
+    public static class OverwriteTypeConverter extends EnumConverter<OverwriteType> {
+        public OverwriteTypeConverter(final String optionName, final Class<OverwriteType> clazz) {
+            super(optionName, clazz);
+        }
+    }
+
     private static final Set<AnnotationTypeFilter> FILTERS = new HashSet<>();
     static {
         FILTERS.add(new AnnotationTypeFilter(XmlType.class));
@@ -84,9 +90,9 @@ public class BindingsGenerator {
     @Parameter(names = {"-o", "--outputDir"}, description = "A directory to output custom files to.  If none is specified, the output is streamed to standard out.")
     private File outputDir;
 
-    @Parameter(names = {"-x", "--overwrite"}, arity = 0, description = "If the specified outputDir is not empty the generator will halt.  Adding this flag will DELETE "
-            + "the content of outputDir and force the generator to continue")
-    private boolean overwrite;
+    @Parameter(names = {"-x", "--overwrite"}, description = "Determines what to do if the outputDir is not empty.  None halts generation.  Full deletes the content "
+        + "of the outputDir.  Merge attempts to create new files that coexists with the state of outputDir", converter = OverwriteTypeConverter.class)
+    private OverwriteType overwrite = OverwriteType.None;
 
     @Parameter(names = {"-t", "--outputType"}, description = "Indicates whether to generate classes or interfaces for bindings", converter = OutputTypeConverter.class)
     private OutputType outputType = OutputType.Class;
@@ -126,7 +132,7 @@ public class BindingsGenerator {
         return this;
     }
 
-    public BindingsGenerator overwrite(boolean overwrite) {
+    public BindingsGenerator overwrite(OverwriteType overwrite) {
         this.overwrite = overwrite;
         return this;
     }
@@ -165,19 +171,19 @@ public class BindingsGenerator {
             return;
         }
 
-        if (!empty && !overwrite) {
+        if (!empty && overwrite == OverwriteType.None) {
             LOGGER.error("Directory {} is not empty.  Aborting code generation.  To overwrite the directory, specify --overwrite option.", outputDir.getAbsolutePath());
             throw new IllegalStateException("outputDir not empty and overwrite flag not specified.");
-        }
-
-        LOGGER.info("--overwrite flag specified.  Deleting current content of {}", outputDir.getAbsolutePath());
-        try {
-            Files.walk(outputDir.toPath())
-                .sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .forEach(File::delete);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+        } else if (!empty && overwrite == OverwriteType.Full) {
+            LOGGER.info("--overwrite flag specified.  Deleting current content of {}", outputDir.getAbsolutePath());
+            try {
+                Files.walk(outputDir.toPath())
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
         }
     }
 

@@ -15,6 +15,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import com.vmware.vcloud.bindings.generator.BindingsGenerator;
 import com.vmware.vcloud.bindings.generator.OutputType;
+import com.vmware.vcloud.bindings.generator.OverwriteType;
 
 @Mojo(name = "generate-typescript")
 public class TypescriptBindingsGeneratorMojo extends AbstractMojo {
@@ -24,8 +25,8 @@ public class TypescriptBindingsGeneratorMojo extends AbstractMojo {
     @Parameter(required = true)
     private List<String> packages;
 
-    @Parameter(defaultValue = "true")
-    private boolean overwrite;
+    @Parameter(defaultValue = "None")
+    private OverwriteType overwrite;
 
     @Parameter(defaultValue = "Class")
     private OutputType outputType;
