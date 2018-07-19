@@ -79,14 +79,26 @@ export class PluginManager {
             .all(deleteProcesses);
     }
 
-    public updatePluginScope(plugins: Plugin[], data: ChangeScopeFeedback): Promise<Response[]> {
-        const options: PluginUpdateOptions = {
-            tenant_scoped: data.forTenant,
-            provider_scoped: data.forTenant,
-            enabled: null
+    public setPluginScopeFor(plugins: Plugin[], data: ChangeScopeFeedback): Promise<Response[]> {
+        const setScopeProcesses: Promise<Response>[] = []; 
+        if (data.forAllTenants) {
+            plugins.forEach((pluginToUpdate) => {
+                setScopeProcesses.push(
+                    this.enablePluginForAllTenants(pluginToUpdate)
+                );
+            });
+            return Promise.all(setScopeProcesses);
         }
-    
-        return this.updatePluginData(plugins, options);
+    }
+
+    private enablePluginForAllTenants(plugin: Plugin): Promise<Response> {
+        const headers = new Headers();
+        headers.append("Accept", "application/json");
+        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+        const opts = new RequestOptions();
+        opts.headers = headers;
+        
+        return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/publishAll`, null, opts).toPromise();
     }
 
     public refresh(): Promise<void> {

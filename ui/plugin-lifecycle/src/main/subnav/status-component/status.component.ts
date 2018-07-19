@@ -167,8 +167,18 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     public onChangeScope(data: ChangeScopeFeedback): void {
-        console.log(data);
-        this.changeScopeState = false;
+        this.pluginManager
+            .setPluginScopeFor(this.selected, data)
+            .then(() => {
+                return this.pluginManager.refresh();
+            })
+            .then(() => {
+                this.changeScopeState = false;
+            })
+            .catch((err) => {
+                // Handle Error
+                console.warn(err);
+            })
     }
 
     public setWantToUpload(val: boolean): void {

@@ -14,6 +14,10 @@ export class ChangeScope implements OnInit {
     public feedback: ChangeScopeFeedback = new ChangeScopeFeedback();
     @Input()
     set state (val: boolean) {
+        if (val === false) {
+            this.clearData();
+        }
+
         this._state = val;
     }
     @Output() public changeState = new EventEmitter<boolean>();
@@ -31,5 +35,10 @@ export class ChangeScope implements OnInit {
 
     public onUpdate(): void {
         this.changeScope.emit(this.feedback);
+    }
+
+    public clearData(): void {
+        this.feedback.forTenant = false;
+        this.feedback.forAllTenants = false;
     }
 }

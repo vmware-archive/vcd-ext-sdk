@@ -11,19 +11,6 @@ export interface Plugin {
     id: string;
     plugin_status: string;
     resourcePath: string;
-
-    // getPluginName(): string;
-    // getVendor(): string;
-    // getDescription(): string;
-    // getVersion(): string;
-    // getLicense(): string;
-    // getLink(): string;
-    // getTenantScoped(): boolean;
-    // getProviderScoped(): boolean;
-    // getEnabled(): boolean;
-    // getId(): string;
-    // getPluginStatus(): string;
-    // getResourcePath(): string;
 }
 
 export interface UploadPayload {
