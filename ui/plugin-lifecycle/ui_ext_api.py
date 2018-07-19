@@ -65,9 +65,11 @@ class UiPlugin:
     def getUiExtensionTenants(self, eid):
         return self.__request('GET', '/cloudapi/extensions/ui/%s/tenants'%eid)
 
+    ## Enable plugin for all tenants
     def postUiExtensionTenantsPublishAll(self, eid):
         return self.__request('POST', '/cloudapi/extensions/ui/%s/tenants/publishAll'%eid)
 
+    ## Enable plugin for tenant
     def postUiExtensionTenantsPublish(self, eid, data):
         return self.__request('POST', '/cloudapi/extensions/ui/%s/tenants/publish'%eid, data)
 

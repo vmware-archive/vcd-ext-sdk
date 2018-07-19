@@ -8,6 +8,8 @@ import { PluginManager } from "../../services/plugin-manager.service";
 import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
+import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
+import { ChangeScopeRequestTo } from "../../interfaces/ChangeScopeRequestTo";
 
 interface SubjectModalData {
     accept: boolean;
@@ -18,22 +20,26 @@ interface SubjectModalData {
     templateUrl: "./status.component.html"
 })
 export class StatusComponent implements OnInit, OnDestroy {
-    public selected: Plugin[];
+    public _selected: Plugin[];
     public plugins: Plugin[];
     public modal: ModalData;
     public changeScopeState: boolean = false;
     public wantToUpload: boolean;
-
     public isLoading: boolean;
-
+    public action: string;
+    public showTracker: boolean = false;
+    public openChangeScope: boolean = false;
+    public errorMessage: string;
+    public openErrorNotifyer: boolean;
     public watchPluginListSub: Subscription;
 
     public modalSubject = new Subject<SubjectModalData>();
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
-        public pluginManager: PluginManager
-    ) {}
+        private pluginManager: PluginManager,
+        private changeScopeService: ChangeOrgScopeService
+    ) { }
 
     public ngOnInit() {
         this.selected = [];
@@ -45,6 +51,15 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.watchPluginListSub.unsubscribe();
+    }
+
+    get selected(): Plugin[] {
+        return this._selected;
+    }
+
+    set selected(plugins: Plugin[]) {
+        this._selected = plugins;
+        this.pluginManager.selectedPlugins = this._selected;
     }
 
     public getOpened(): boolean {
@@ -85,6 +100,8 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     public onDisable(): void {
+        this.errorMessage = null;
+
         this.validateAction(false)
             .then(() => {
                 this.loading();
@@ -98,12 +115,14 @@ export class StatusComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.endLoading();
             })
-            .catch((err) => {
-                // Handle error
+            .catch((error: Error) => {
+                this.errorMessage = error.message;
             });
     }
 
     public onEnable(): void {
+        this.errorMessage = null;
+
         this.validateAction(true)
             .then(() => {
                 this.loading();
@@ -116,8 +135,8 @@ export class StatusComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.endLoading();
             })
-            .catch((err) => {
-                // Handle Error
+            .catch((error) => {
+                this.errorMessage = error.message;
             });
     }
 
@@ -125,6 +144,7 @@ export class StatusComponent implements OnInit, OnDestroy {
         if (this.selected.length < 1) {
             return;
         }
+        this.errorMessage = null;
         let onDeleteSub: Subscription;
         onDeleteSub = this.openModal({
             title: "Delete",
@@ -144,38 +164,60 @@ export class StatusComponent implements OnInit, OnDestroy {
                 onDeleteSub.unsubscribe();
                 this.loading();
 
-            this.setOpened(false);
-            onDeleteSub.unsubscribe();
-            this.loading();
-
-            this.pluginManager
-                .deletePlugins(this.selected)
-                .then(() => {
-                    this.pluginManager.refresh();
-                    this.endLoading();
-                })
-                .catch((err) => {
-                    // Handle err
-                    this.endLoading();
-                });
-        });
+                this.pluginManager
+                    .deletePlugins(this.selected)
+                    .then(() => {
+                        this.pluginManager.refresh();
+                        this.endLoading();
+                    })
+                    .catch((error) => {
+                        this.endLoading();
+                        this.errorMessage = error.message;
+                    });
+            });
     }
 
     public onUpload(): void {
         this.wantToUpload = true;
     }
 
-    public openChangeScope(): void {
+    public openChangeOrgScope(action: string): void {
         this.changeScopeState = true;
+        this.action = action;
     }
 
-    public onChangeScope(data: any): void {
-        console.log(data);
-        this.changeScopeState = false;
+    public changeScope() {
+        this.openChangeScope = true;
     }
 
-    public setWantToUpload(val: boolean): void {
-        this.wantToUpload = val;
+    public publishForAllTenants(): void {
+        this.errorMessage = null;
+        this.showTracker = true;
+        this.pluginManager
+            .publishPluginForAllTenants(this.selected, true)
+            .forEach(this.handleScopeChanging.bind(this));
+    }
+
+    public unpublishForAllTenants(): void {
+        this.errorMessage = null;
+        this.showTracker = true;
+        this.pluginManager
+            .unpublishPluginForAllTenants(this.selected, true)
+            .forEach(this.handleScopeChanging.bind(this));
+    }
+
+    public handleScopeChanging(reqData: ChangeScopeRequestTo): void {
+        const subscription = reqData.req.subscribe(
+            (res) => {
+                this.changeScopeService.changeReqStatusTo(res.url, true);
+                subscription.unsubscribe();
+            },
+            (error) => {
+                this.errorMessage = error.message;
+                this.changeScopeService.changeReqStatusTo(reqData.url, false);
+                subscription.unsubscribe();
+            }
+        )
     }
 
     public loading(): void {

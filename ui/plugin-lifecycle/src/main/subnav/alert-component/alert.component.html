@@ -1,5 +1,5 @@
 <div class="alert-container" *ngIf="getAlertMessage()">
-    <div class="alert alert-danger">
+    <div class="alert" [ngClass]="alertClasses">
         <div class="alert-items">
             <div class="alert-item static">
                 <div class="alert-icon-wrapper">

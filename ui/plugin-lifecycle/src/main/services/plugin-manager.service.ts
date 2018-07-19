@@ -1,51 +1,53 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable, Subject } from "rxjs";
-import { Plugin, PluginManifest, PluginDesc, PluginFileDetails, UploadPayload } from "../interfaces/Plugin";
+import { Plugin, UploadPayload, ChangeScopePlugin } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
-
-interface PluginUpdateOptions {
-    tenant_scoped: boolean,
-    provider_scoped: boolean,
-    enabled: boolean
-}
-
-interface ChangeRequest {
-    reqUrl: string;
-    pluginName: string;
-    orgs: { name: string }[];
-    status: boolean;
-}
-
-class ChangeScopeRequest {
-    reqUrl: string = "";
-    pluginName: string = "";
-    orgs: { name: string }[] = [];
-    status: boolean = false;
-
-    constructor(options: ChangeRequest) {
-        this.reqUrl = options.reqUrl;
-        this.pluginName = options.pluginName;
-        this.orgs = options.orgs;
-        this.status = options.status;
-    }
-
-    public updateChangeReqStatus(val: boolean): void {
-        this.status = val;
-    }
-}
+import { ScopeFeedback } from "../classes/ScopeFeedback";
+import { DisableEnablePluginService } from "./disable-enable-plugin.service";
+import { PluginUploaderService } from "./plugin-uploader.service";
+import { DeletePluginService } from "./delete-plugin.service";
+import { PluginPublisher } from "./plugin-publisher.service";
+import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
 
 @Injectable()
 export class PluginManager {
     private _baseUrl = "https://bos1-vcd-sp-static-200-117.eng.vmware.com";
     private _plugins: Plugin[];
     private _pluginsSubject = new Subject<Plugin[]>();
+    
+    private _selectedPlugins: Plugin[] = [];
+    private _selectedPluginsSubj = new Subject<Plugin[]>();
 
-    constructor(private http: Http, private authService: AuthService) {
+    constructor(
+        private http: Http,
+        private authService: AuthService,
+        private disableEnablePlugin: DisableEnablePluginService,
+        private pluginUploaderService: PluginUploaderService,
+        private deletePluginService: DeletePluginService,
+        private pluginPublisher: PluginPublisher
+    ) {
         this.authService.auth().then(() => {
             this.getPluginsList();
         });
+    }
+
+    get baseUrl(): string {
+        return this._baseUrl;
+    }
+
+    set selectedPlugins(plugins: Plugin[]) {
+        this._selectedPlugins = plugins;
+        this._selectedPluginsSubj.next(this.selectedPlugins);
+    }
+
+    get selectedPlugins(): Plugin[] {
+        return this._selectedPlugins;
+    }
+
+    public watchSelectedPlugins(): Observable<Plugin[]> {
+        return this._selectedPluginsSubj.asObservable();
     }
 
     public getPlugins(): Plugin[] {
@@ -67,40 +69,27 @@ export class PluginManager {
     }
 
     public disablePlugins(plugins: Plugin[]): Promise<Response[]> {
-        const options: PluginUpdateOptions = {
-            tenant_scoped: null,
-            provider_scoped: null,
-            enabled: false
-        }
-
-        return this.updatePluginData(plugins, options);
+        return this.disableEnablePlugin.disablePlugins(plugins, this._baseUrl);
     }
 
     public enablePlugins(plugins: Plugin[]): Promise<Response[]> {
-        const options: PluginUpdateOptions = {
-            tenant_scoped: null,
-            provider_scoped: null,
-            enabled: true
-        }
-    
-        return this.updatePluginData(plugins, options);
+        return this.disableEnablePlugin.enablePlugins(plugins, this._baseUrl);
     }
 
     public deletePlugins(plugins: Plugin[]): Promise<Response[]> {
-        const headers = new Headers();
-        headers.append("Accept", "application/json");
-        headers.append("Content-Type", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-        const opts = new RequestOptions();
-        opts.headers = headers;
+        return this.deletePluginService.deletePlugins(plugins, this._baseUrl);
+    }
 
-        const deleteProcesses: Promise<Response>[] = [];
-        plugins.forEach((pluginToDelete: Plugin) => {
-            deleteProcesses.push(this.http.delete(`${this._baseUrl}/cloudapi/extensions/ui/${pluginToDelete.id}`, opts).toPromise());
-        });
+    public publishPluginForAllTenants(plugins: Plugin[], trackScopeChange: boolean): ChangeScopeRequestTo[] {
+        return this.pluginPublisher.publishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl, trackScopeChange);
+    }
 
-        return Promise
-            .all(deleteProcesses);
+    public unpublishPluginForAllTenants(plugins: Plugin[], trackScopeChange: boolean): ChangeScopeRequestTo[] {
+        return this.pluginPublisher.unpublishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl, trackScopeChange);
+    }
+
+    public handleMixedScope(plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean): { url: string, req: Observable<Response> }[] {
+        return this.pluginPublisher.handleMixedScope(plugins, scopeFeedback, trackScopeChange, this._baseUrl);
     }
 
     public refresh(): Promise<void> {
@@ -109,39 +98,6 @@ export class PluginManager {
 
     public checkForDuplications(pluginName: string): Promise<boolean> {
         return PluginValidator.checkForDuplications(pluginName, this._plugins);
-    }
-
-    private updatePluginData(plugins: Plugin[], options: PluginUpdateOptions): Promise<Response[]> {
-        const headers = new Headers();
-        headers.append("Accept", "application/json");
-        headers.append("Content-Type", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-        const opts = new RequestOptions();
-        opts.headers = headers;
-
-        const updateProcesses: Promise<Response>[] = [];
-
-        plugins.forEach((pluginToUpdate: Plugin) => {
-            const newPluginData: PluginDesc = {
-                pluginName: pluginToUpdate.pluginName,
-                vendor: pluginToUpdate.vendor,
-                description: pluginToUpdate.description,
-                version: pluginToUpdate.version,
-                license: pluginToUpdate.license,
-                link: pluginToUpdate.link,
-                tenant_scoped: options.tenant_scoped !== null ? options.tenant_scoped : pluginToUpdate.tenant_scoped,
-                provider_scoped: options.provider_scoped !== null ? options.provider_scoped : pluginToUpdate.provider_scoped,
-                enabled: options.enabled !== null ? options.enabled : pluginToUpdate.enabled
-            };
-
-            updateProcesses.push(this.http
-                .put(`${this._baseUrl}/cloudapi/extensions/ui/${pluginToUpdate.id}`, JSON.stringify(newPluginData), opts)
-                .toPromise()
-            );
-        });
-
-        return Promise
-            .all(updateProcesses);
     }
 
     private getPluginsList(): Promise<void> {
@@ -153,90 +109,16 @@ export class PluginManager {
                     resolve();
                 })
                 .catch((err) => {
-                    // Handle error.
                     reject(err);
                 });
         });
         return promise;
     }
 
-    private proccessManifest(manifest: PluginManifest): Promise<string> {
-        const promise = new Promise<string>((resolve, reject) => {
-            const isValidManifest = PluginValidator.validateManifestFields(manifest);
-            if (!isValidManifest.success) {
-                const reason = isValidManifest.errors[Object.keys(isValidManifest.errors)[0]];
-                const error = new Error(`${isValidManifest.message} ${reason}`);
-                reject(error);
-                return;
-            }
-
-            const pluginDesc: string = JSON.stringify({
-                "pluginName": manifest.name,
-                "vendor": manifest.vendor,
-                "description": manifest.description,
-                "version": manifest.version,
-                "license": manifest.license,
-                "link": manifest.link,
-                "tenant_scoped": manifest.scope.indexOf("tenant") !== -1,
-                "provider_scoped": manifest.scope.indexOf("provider") !== -1,
-                "enabled": true
-            });
-            resolve(pluginDesc);
-        });
-        return promise;
-    }
-
-    private registerPlugin(payload: UploadPayload): Promise<string> {
-        const promise = new Promise<string>((resolve, reject) => {
-            this.proccessManifest(payload.manifest)
-                .then((pluginDesc) => {
-                    const headers = new Headers();
-                    headers.append("Accept", "application/json");
-                    headers.append("Content-Type", "application/json");
-                    headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-                    // headers.append("Content-Type", "multipart/form-data");
-                    const opts = new RequestOptions();
-                    opts.headers = headers;
-
-                    return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui`, pluginDesc, opts).toPromise();
-                })
-                .then((registerPluginResponse: Response) => {
-                    // Validate and Handle success
-                    const RES = registerPluginResponse.json();
-                    const PLUGIN = {
-                        id: RES.id,
-                        file: payload.file
-                    };
-                    return this.enablePluginUpload(PLUGIN);
-                })
-                .then((enableResponse: Response) => {
-                    // Send transfer link in the reslove where the plugin will be uploaded.
-                    const linkHeader: string = enableResponse.headers.get("Link");
-                    const url: string = linkHeader.split(">;")[0];
-                    const transferLink = url.slice(1, url.length);
-                    resolve(transferLink);
-                })
-                .catch((err) => {
-                    // Handle error
-                    reject(err);
-                });
-        });
-
-        return promise;
-    }
-
-    private enablePluginUpload(plugin: { id: string, file: File }): Promise<Response> {
-        const headers = new Headers();
-        headers.append("Accept", "application/json");
-        headers.append("Content-Type", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-        const opts = new RequestOptions();
-        opts.headers = headers;
-
-        // File size has to be in bytes
-        const body: PluginFileDetails = {
-            fileName: plugin.file.name,
-            size: plugin.file.size
+    public uploadPlugin(payload: UploadPayload, scopeFeedback: ScopeFeedback): Observable<ChangeScopeRequestTo[]> {
+        const PLUGIN: any = {
+            id: null,
+            file: null
         };
 
         const observable = new Observable<ChangeScopeRequestTo[]>((observer) => {
@@ -294,12 +176,7 @@ export class PluginManager {
                 observer.error(err);
             });
         });
-    }
 
-    public uploadPlugin(payload: UploadPayload): Promise<void> {
-        return this.registerPlugin(payload)
-            .then((transferLink: string) => {
-                return this.sendZip(transferLink, payload.file);
-            })
+        return observable;
     }
 }

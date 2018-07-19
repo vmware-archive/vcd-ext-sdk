@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { Observable, Subject } from "rxjs";
-import { Plugin, PluginManifest, PluginDesc, PluginFileDetails, UploadPayload } from "../interfaces/Plugin";
-import { PluginValidator } from "../classes/plugin-validator";
+import { Observable } from "rxjs";
 
 
 interface PluginUpdateOptions {
@@ -30,9 +28,7 @@ export class AuthService {
      */
     public auth(): Promise<string> {
         const promise = new Promise<string>((resolve, reject) => {
-            // Get the auth token from LS
             const authToken = window.localStorage.getItem('authtoken');
-            // If any token
             if (authToken || authToken.length === 0) {
                 this.setAuthToken(authToken);
                 resolve(authToken)

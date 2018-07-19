@@ -1,28 +1,19 @@
-<div class="change-scope-modal">
-    <clr-modal [clrModalOpen]="state" [clrModalClosable]="false">
-        <h3 class="modal-title">Change Scope</h3>
+<div class="choose-scope">
+    <clr-modal [clrModalOpen]="open" [clrModalClosable]="false" [clrModalSize]="'lg'">
+        <h3 class="modal-title">Change plugin scope</h3>
         <div class="modal-body">
-            <form #form="ngForm" novalidate>
-                <section class="form-block">
-                    <div class="form-group">
-                        <label for="forTenant">Enable this plugins for tenants.</label>
-                        <clr-checkbox name="forTenant" id="forTenant" [(ngModel)]="feedback.forTenant"></clr-checkbox>
-                    </div>
+            <!-- Alert -->
+            <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alertClasses"></vcd-alert>
 
-                    <div class="form-group">
-                        <label for="forProvider">Enable this plugins for providers.</label>
-                        <clr-checkbox name="forProvider" id="forProvider" [(ngModel)]="feedback.forProvider"></clr-checkbox>
-                    </div>
-                </section>
-            </form>
+            <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true"></vcd-loading-indicator>
+            <vcd-choose-scope *ngIf="open" [(feedback)]="feedback"></vcd-choose-scope>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onClose()">
                 Close
             </button>
-
-            <button type="button" class="btn btn-primary" (click)="onUpdate()">
-                Update
+            <button type="button" class="btn btn-primary" (click)="changeScope()">
+                Change Scope
             </button>
         </div>
     </clr-modal>

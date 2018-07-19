@@ -9,13 +9,22 @@ import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
     templateUrl: "./alert.component.html"
 })
 export class VcdAlert implements OnInit {
+    private _alertClasses: string = "alert-danger";
     @Input() alertMessage: string;
+    @Input()
+    set alertClasses(val: string) {
+        this._alertClasses = val;
+    }
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string
     ) { }
 
     ngOnInit() {}
+
+    get alertClasses(): string {
+        return this._alertClasses;
+    }
 
     public setAlertMessage(message: string): void {
         this.alertMessage = message;

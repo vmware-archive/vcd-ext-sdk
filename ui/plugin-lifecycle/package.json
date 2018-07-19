@@ -37,14 +37,7 @@
     "web-animations-js": "2.3.1",
     "zone.js": "0.8.18",
     "es6-shim": "0.35.3",
-<<<<<<< HEAD
-    "@vcd-ui/common": "file:vcd-ui/common",
-    "@vcd/http-transfer-service": "file:D:/http-transfer-service/dist",
-    "@vcd/bindings": "file:D:/git-repos/vcd-ext-sdk/ui/api-client/packages/bindings/dist",
-    "@vcd/sdk": "file:D:/git-repos/vcd-ext-sdk/ui/api-client/packages/sdk/dist"
-=======
     "@vcd-ui/common": "file:vcd-ui/common"
->>>>>>> 1e17f7b... Remove @vcd/sdk package
   },
   "devDependencies": {
     "@types/jasmine": "2.5.47",

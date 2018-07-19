@@ -1,36 +1,46 @@
 /*
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
-import { Component, Inject, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
-import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
-import { ChangeScopeFeedback } from "../../classes/ChangeScopeFeedback";
+import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
+import { ScopeFeedback } from "../../classes/ScopeFeedback";
+import { ChangeScopeService } from "../../services/change-scope.service";
+import { PluginManager } from "../../services/plugin-manager.service";
+import { Plugin } from "../../interfaces/Plugin";
 
 @Component({
     selector: "vcd-change-scope",
     templateUrl: "./change-scope.component.html"
 })
 export class ChangeScope implements OnInit {
-    private _state: boolean;
-    public feedback: ChangeScopeFeedback = new ChangeScopeFeedback();
-    @Input()
-    set state (val: boolean) {
-        this._state = val;
+    public feedback = new ScopeFeedback();
+    public loading: boolean = false;
+    public alertMessage: string;
+    public hasToRefresh: boolean = false;
+    public alertClasses: string;
+    private _open: boolean = false;
+
+    @Input() 
+    set open(val: boolean) {
+        this._open = val;
     }
-    @Output() public changeState = new EventEmitter<boolean>();
-    @Output() public changeScope = new EventEmitter<ChangeScopeFeedback>();
+    @Output() openChange = new EventEmitter<boolean>();
 
     constructor(
-        @Inject(EXTENSION_ASSET_URL) public assetUrl: string
-    ) {}
+        private changeScopeService: ChangeScopeService,
+        private pluginManager: PluginManager
+    ) { }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.alertClasses = "alert-info";
+    }
 
-    get state (): boolean {
-        return this._state;
+    get open(): boolean {
+        return this._open;
     }
 
     public changeScope(): void {
         this.alertMessage = null;
+        this.alertClasses = "alert-info";
         // Validate change scope action
         const pluginsToBeUpdated: Plugin[] = [];
         this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
@@ -55,13 +65,13 @@ export class ChangeScope implements OnInit {
         }
 
         this.loading = true;
-        const subs = this.changeScopeService.changeScope(this.pluginManager.selectedPlugins, this.feedback.scope, this.pluginManager.baseUrl)
+        const subs = this.changeScopeService.changeScope(pluginsToBeUpdated, this.feedback.scope, this.pluginManager.baseUrl)
             .subscribe((res) => {
                 this.hasToRefresh = true;
                 console.log(res);
-            }, (err) => {
-                // Handle error
-                console.warn(err);
+            }, (error: Error) => {
+                this.alertMessage = error.message;
+                this.alertClasses = "alert-danger";
             }, () => {
                 this.loading = false;
                 subs.unsubscribe();
@@ -70,7 +80,6 @@ export class ChangeScope implements OnInit {
 
     public onClose(): void {
         this.open = false;
-        this.alertMessage = null;
         this.feedback.reset();
         this.openChange.emit(false);
 

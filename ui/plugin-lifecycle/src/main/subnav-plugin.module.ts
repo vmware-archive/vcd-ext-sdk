@@ -17,7 +17,26 @@ import { UploadZipField } from "./subnav/upload-zip-field-component/upload-zip-f
 import { VcdAlert } from "./subnav/alert-component/alert.component";
 import { VcdManifestStackView } from "./subnav/manifest-stack-view-component/manifest-stack-view.component";
 import { AuthService } from "./services/auth.service";
+import { ChangeOrgScope } from "./subnav/change-org-scope-component/change-org-scope.component";
+import { ChooseOrgScope } from "./subnav/choose-org-scope-component/choose-org-scope.component";
+import { OrganisationService } from "./services/organisation.service";
+import { ChangeOrgScopeTracker } from "./subnav/change-org-scope-tracker-component/change-org-scope-tracker.component";
+import { ChangeOrgScopeService } from "./services/change-org-scope.service";
+import { DeletePluginService } from "./services/delete-plugin.service";
+import { PluginUploaderService } from "./services/plugin-uploader.service";
+import { DisableEnablePluginService } from "./services/disable-enable-plugin.service";
+import { PluginPublisher } from "./services/plugin-publisher.service";
+import { CapitalizeFirstPipe } from "./pipes/capitalizefirst/capitalizefirst.pipe";
 import { ChangeScope } from "./subnav/change-scope-component/change-scope.component";
+import { ChangeScopeService } from "./services/change-scope.service";
+import { ChooseScope } from "./subnav/choose-scope-component/choose-scope.component";
+import { HttpTransferService, CHUNK_SIZE, PARALLEL_REQUESTS } from "./services/http-transfer.service";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { ErrorNotifyerComponent } from "./subnav/error-notifyer-component/error-notifyer.component";
+
+export function transferServiceFactory(httpClient: HttpClient) {
+    return new HttpTransferService(httpClient, CHUNK_SIZE, PARALLEL_REQUESTS);
+}
 
 const ROUTES: Routes = [
     { path: "", component: SubnavComponent, children: [
@@ -45,7 +64,12 @@ const ROUTES: Routes = [
         VcdAlert,
         VcdManifestStackView,
         ChangeScope,
-        LoadingIndicatorComponent
+        ChooseScope,
+        ChangeOrgScope,
+        ChooseOrgScope,
+        ChangeOrgScopeTracker,
+        LoadingIndicatorComponent,
+        ErrorNotifyerComponent
     ],
     bootstrap: [SubnavComponent],
     exports: [],

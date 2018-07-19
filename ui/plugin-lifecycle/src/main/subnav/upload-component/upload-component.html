@@ -1,12 +1,10 @@
 <div class="upload">
     <!-- Wizard -->
-    <clr-wizard #wizardlg [clrWizardOpen]="wantToUpload" (clrWizardOpen)="setWantToUpload($event)" (clrWizardOnCancel)="onCancel()"
+    <clr-wizard #wizardlg [(clrWizardOpen)]="open" (clrWizardOnCancel)="onCancel()"
         clrWizardSize="lg">
         <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true" [loadingTextKey]="'Uploading...'"></vcd-loading-indicator>
 
         <clr-wizard-title>Upload plugin</clr-wizard-title>
-
-        <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
             <ng-template clrPageTitle>Upload plugin</ng-template>
@@ -17,7 +15,7 @@
             </ng-template>
 
             <!-- Form -->
-            <vcd-upload-zip-field (change)="onChange($event)"></vcd-upload-zip-field>
+            <vcd-upload-zip-field *ngIf="open" (change)="onFileSelection($event)"></vcd-upload-zip-field>
 
             <!-- Alert -->
             <vcd-alert [alertMessage]="alertMessage"></vcd-alert>
@@ -31,8 +29,23 @@
 
             <ng-template clrPageButtons>
                 <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
-                <clr-wizard-button *ngIf="canUpload" [type]="'custom-finish'">Finish</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-next'">Next</clr-wizard-button>
             </ng-template>
+
+            <vcd-choose-scope *ngIf="uploadPayload.manifest" [(feedback)]="scopeFeedback"></vcd-choose-scope>
+        </clr-wizard-page>
+
+        <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
+            <ng-template clrPageTitle>Select Organisation Scope</ng-template>
+
+            <ng-template clrPageButtons>
+                <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-finish'">Finish</clr-wizard-button>
+            </ng-template>
+
+            <vcd-choose-org-scope [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin" [canUnpublish]="false"></vcd-choose-org-scope>
         </clr-wizard-page>
     </clr-wizard>
 </div>

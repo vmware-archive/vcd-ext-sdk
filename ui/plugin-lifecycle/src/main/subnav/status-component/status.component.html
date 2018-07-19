@@ -15,7 +15,23 @@
                 <button type="button" class="btn btn-sm btn-link" (click)="onDisable()">Disable</button>
                 <button type="button" class="btn btn-sm btn-link" (click)="onEnable()">Enable</button>
                 <button type="button" class="btn btn-sm btn-link" (click)="onDelete()">Delete</button>
-                <button type="button" class="btn btn-sm btn-link" (click)="openChangeScope()">Change Scope</button>
+
+                <clr-dropdown>
+                    <button type="button" class="btn btn-sm btn-link" clrDropdownTrigger>
+                        Scope Actions
+                        <clr-icon shape="caret down"></clr-icon>
+                    </button>
+                    <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+                        <label class="dropdown-header">Change Scope</label>
+                        <button clrDropdownItem type="button" (click)="publishForAllTenants()">Publish For All Tenants</button>
+                        <button clrDropdownItem type="button" (click)="unpublishForAllTenants()">Unpublish For All Tenants</button>
+                        <div class="dropdown-divider"></div>
+                        <button clrDropdownItem type="button" (click)="openChangeOrgScope('publish')">Publish</button>
+                        <button clrDropdownItem type="button" (click)="openChangeOrgScope('unpublish')">Unpublish</button>
+                        <div class="dropdown-divider"></div>
+                        <button clrDropdownItem type="button" (click)="changeScope()">Change Scope</button>
+                    </clr-dropdown-menu>
+                </clr-dropdown>
             </div>
         </clr-dg-action-bar>
 
@@ -46,7 +62,7 @@
 <div class="plugins-modal">
     <clr-modal [(clrModalOpen)]="modal.opened" [clrModalClosable]="false">
         <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alert-info"></vcd-alert>
-        
+
         <h3 class="modal-title">{{ modal.title }}</h3>
         <div class="modal-body">
             <p *ngIf="modal.body">{{ modal.body }}</p>
@@ -62,6 +78,15 @@
     </clr-modal>
 </div>
 
-<vcd-change-scope [(state)]="changeScopeState" (changeScope)="onChangeScope($event)"></vcd-change-scope>
-
-<vcd-plugin-upload [wantToUpload]="wantToUpload" (change)="setWantToUpload($event)"></vcd-plugin-upload>
+<!-- Change org scope -->
+<vcd-change-org-scope [(state)]="changeScopeState" [action]="action"></vcd-change-org-scope>
+<!-- Upload new plugin -->
+<vcd-plugin-upload [(open)]="wantToUpload"></vcd-plugin-upload>
+<!-- Trakc org scope change request -->
+<vcd-change-org-scope-tracker [(open)]="showTracker"></vcd-change-org-scope-tracker>
+<!-- Change scope -->
+<vcd-change-scope [(open)]="openChangeScope"></vcd-change-scope>
+<!--  Show error messages -->
+<vcd-error-notifyer [(opened)]="openErrorNotifyer">
+    <p>{{ errorMessage }}</p>
+</vcd-error-notifyer>

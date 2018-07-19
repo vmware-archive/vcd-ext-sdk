@@ -3,12 +3,12 @@
     "name": "plugin-lifecycle",
     "containerVersion": "9.1.0",
     "version": "1.0.0",
-    "scope": ["tenant"],
+    "scope": ["service-provider"],
     "permissions": [],
     "description": "",
     "vendor": "VMware",
     "license": "MIT",
-    "link": "",
+    "link": "http://someurl.com",
     "module": "SubnavPluginModule",
     "route": "plugin-lifecycle"
 }
