@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable, Subject } from "rxjs";
 import { Plugin, PluginManifest, PluginDesc, PluginFileDetails, UploadPayload } from "../interfaces/Plugin";
-import { PluginValidator } from "./plugin-validator";
+import { PluginValidator } from "../classes/plugin-validator";
 
 
 interface PluginUpdateOptions {
