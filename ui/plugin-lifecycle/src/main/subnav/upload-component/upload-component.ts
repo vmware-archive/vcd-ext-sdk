@@ -113,6 +113,7 @@ export class UploadComponent implements OnInit {
                 this.pluginManager.refresh();
                 this.setWantToUpload(false);
                 this.canUpload = false;
+                this.wizardLarge.reset();
             })
             .catch((err) => {
                 // Handle error
