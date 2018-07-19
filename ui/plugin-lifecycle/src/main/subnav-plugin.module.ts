@@ -19,6 +19,7 @@ import { VcdAlert } from "./subnav/alert-component/alert.component";
 import { VcdManifestStackView } from "./subnav/manifest-stack-view-component/manifest-stack-view.component";
 import { AuthService } from "./services/auth.service";
 import { ChangeScope } from "./subnav/change-scope-component/change-scope.component";
+import { ChooseScope } from "./subnav/choose-scope-component/choose-scope.component";
 
 const ROUTES: Routes = [
     { path: "", component: SubnavComponent, children: [
@@ -46,6 +47,7 @@ const ROUTES: Routes = [
         VcdAlert,
         VcdManifestStackView,
         ChangeScope,
+        ChooseScope,
         LoadingIndicatorComponent
     ],
     bootstrap: [SubnavComponent],

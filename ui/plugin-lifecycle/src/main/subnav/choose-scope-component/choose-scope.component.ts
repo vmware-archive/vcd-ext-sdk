@@ -5,8 +5,8 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
 
 @Component({
-    selector: "vcd-change-scope",
-    templateUrl: "./change-scope.component.html"
+    selector: "vcd-choose-scope",
+    templateUrl: "./choose-scope.component.html"
 })
 export class ChooseScope implements OnInit {
     constructor(
