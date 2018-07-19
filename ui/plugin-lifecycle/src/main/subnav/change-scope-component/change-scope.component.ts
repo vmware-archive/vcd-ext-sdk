@@ -41,4 +41,8 @@ export class ChangeScope implements OnInit {
         this.feedback.forTenant = false;
         this.feedback.forAllTenants = false;
     }
+
+    public onClose(): void {
+        this.state = false;
+    }
 }
