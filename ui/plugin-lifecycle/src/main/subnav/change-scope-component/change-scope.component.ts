@@ -3,21 +3,7 @@
  */
 import { Component, Inject, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
-
-interface ChangeScopeFeedback {
-    forTenant: boolean;
-    forProvider: boolean;
-}
-
-class ChangeScopeFeedback implements ChangeScopeFeedback {
-    public opened = false;
-    public data = {
-        forTenant: false,
-        forProvider: false
-    }
-
-    constructor() {}
-}
+import { ChangeScopeFeedback } from "../../classes/ChangeScopeFeedback";
 
 @Component({
     selector: "vcd-change-scope",
