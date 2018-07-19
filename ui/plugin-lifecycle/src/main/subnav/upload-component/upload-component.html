@@ -1,0 +1,38 @@
+<div class="upload">
+    <!-- Wizard -->
+    <clr-wizard #wizardlg [clrWizardOpen]="wantToUpload" (clrWizardOpen)="setWantToUpload($event)" (clrWizardOnCancel)="onCancel()"
+        clrWizardSize="lg">
+        <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true"></vcd-loading-indicator>
+
+        <clr-wizard-title>Upload plugin</clr-wizard-title>
+
+        <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+
+        <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
+            <ng-template clrPageTitle>Upload plugin</ng-template>
+
+            <ng-template clrPageButtons>
+                <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
+                <clr-wizard-button *ngIf="canGoNext" [type]="'custom-next'">Next</clr-wizard-button>
+            </ng-template>
+
+            <!-- Form -->
+            <vcd-upload-zip-field (change)="onChange($event)"></vcd-upload-zip-field>
+
+            <!-- Alert -->
+            <vcd-alert [alertMessage]="alertMessage"></vcd-alert>
+
+            <!-- Manifest -->
+            <vcd-manifest-stack-view [parsing]="parsing" [uploadPayload]="uploadPayload"></vcd-manifest-stack-view>
+        </clr-wizard-page>
+
+        <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
+            <ng-template clrPageTitle>Select scope</ng-template>
+
+            <ng-template clrPageButtons>
+                <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
+                <clr-wizard-button *ngIf="canUpload" [type]="'custom-finish'">Finish</clr-wizard-button>
+            </ng-template>
+        </clr-wizard-page>
+    </clr-wizard>
+</div>

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "lib": ["es2015", "dom"],
+    "declaration": true,
+    "outDir": "./build",
+    "strict": true
+  },
+  "include": [
+    "./target/generated-typescript-bindings/**/*"
+  ],
+  "exclude": []
+}

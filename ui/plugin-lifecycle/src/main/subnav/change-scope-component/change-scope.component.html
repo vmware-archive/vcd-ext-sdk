@@ -1,0 +1,29 @@
+<div class="change-scope-modal">
+    <clr-modal [clrModalOpen]="state" [clrModalClosable]="false">
+        <h3 class="modal-title">Change Scope</h3>
+        <div class="modal-body">
+            <form #form="ngForm" novalidate>
+                <section class="form-block">
+                    <div class="form-group">
+                        <label for="forTenant">Enable this plugins for tenants.</label>
+                        <clr-checkbox name="forTenant" id="forTenant" [(ngModel)]="feedback.forTenant"></clr-checkbox>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="forProvider">Enable this plugins for providers.</label>
+                        <clr-checkbox name="forProvider" id="forProvider" [(ngModel)]="feedback.forProvider"></clr-checkbox>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="onClose()">
+                Close
+            </button>
+
+            <button type="button" class="btn btn-primary" (click)="onUpdate()">
+                Update
+            </button>
+        </div>
+    </clr-modal>
+</div>

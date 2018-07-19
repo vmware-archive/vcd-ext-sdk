@@ -1,0 +1,14 @@
+{
+    "urn": "vmware:vcloud:plugin:seed",
+    "name": "plugin-lifecycle",
+    "containerVersion": "9.1.0",
+    "version": "1.0.0",
+    "scope": ["tenant"],
+    "permissions": [],
+    "description": "",
+    "vendor": "VMware",
+    "license": "MIT",
+    "link": "",
+    "module": "SubnavPluginModule",
+    "route": "plugin"
+}
