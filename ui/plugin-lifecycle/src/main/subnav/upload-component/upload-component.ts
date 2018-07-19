@@ -25,7 +25,7 @@ export class UploadComponent implements OnInit {
     public uploadPayload: UploadPayload;
     public loading: boolean = false;
     public canGoNext: boolean = false;
-    public canUpload: boolean = true;
+    public canUpload: boolean = false;
     public parsing: boolean = false;
     public alertMessage: string;
 
