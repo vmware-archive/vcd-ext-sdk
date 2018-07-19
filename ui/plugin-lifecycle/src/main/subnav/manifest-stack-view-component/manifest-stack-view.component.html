@@ -1,0 +1,78 @@
+<div class="manifest">
+    <div *ngIf="parsing" class="spinner-container">
+        <span class="spinner spinner-md">
+            Loading...
+        </span>
+    </div>
+
+    <clr-stack-view>
+        <clr-stack-header>Angular stack view</clr-stack-header>
+
+        <clr-stack-block [clrSbExpandable]="false">
+            <clr-stack-label>File:</clr-stack-label>
+            <clr-stack-content>{{ uploadPayload.fileName }}</clr-stack-content>
+
+            <clr-stack-block>
+                <clr-stack-label>Urn</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.urn : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Name</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.name : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>ContainerVersion</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.containerVersion : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Version</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.version : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Scope</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.scope : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Permissions</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.permissions.length === 0 ? "[]" : uploadPayload.manifest.permissions
+                    : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Description</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.description ? uploadPayload.manifest.description : "--/--"
+                    : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Vendor</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.vendor : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>License</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.license : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Link</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.link : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Module</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.module : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>Route</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.route : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+        </clr-stack-block>
+    </clr-stack-view>
+</div>

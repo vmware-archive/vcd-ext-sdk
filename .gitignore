@@ -9,3 +9,9 @@ yarn-error.log
 .project
 .classpath
 .settings/
+
+# VSCode
+.vscode/
+
+# IntelliJ
+.idea

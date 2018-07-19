@@ -1,0 +1,67 @@
+<vcd-loading-indicator [isLoading]="isLoading" [showSpinner]="isLoading" [fixed]="true"></vcd-loading-indicator>
+
+<div class="list-all-plugins">
+    <h1>Plugins</h1>
+    <clr-datagrid [(clrDgSelected)]="selected">
+        <clr-dg-action-bar>
+            <div class="btn-group last">
+                <button type="button" class="btn btn-sm btn-outline" (click)="onUpload()">
+                    <clr-icon shape="upload-cloud"></clr-icon>
+                    Upload
+                </button>
+            </div>
+
+            <div class="btn-group" *ngIf="selected.length > 0">
+                <button type="button" class="btn btn-sm btn-link" (click)="onDisable()">Disable</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="onEnable()">Enable</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="onDelete()">Delete</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="openChangeScope()">Change Scope</button>
+            </div>
+        </clr-dg-action-bar>
+
+        <!-- PLACEHOLDER -->
+        <clr-dg-placeholder>We couldn't find any plugins...</clr-dg-placeholder>
+        <!-- END PLACEHOLDER -->
+
+        <clr-dg-column>Name</clr-dg-column>
+        <clr-dg-column>Vendor</clr-dg-column>
+        <clr-dg-column>Version</clr-dg-column>
+        <clr-dg-column>Description</clr-dg-column>
+        <clr-dg-column>Tenant Scoped</clr-dg-column>
+        <clr-dg-column>Provider Scoped</clr-dg-column>
+        <clr-dg-column>Available</clr-dg-column>
+
+        <clr-dg-row *clrDgItems="let plugin of plugins" [clrDgItem]="plugin">
+            <clr-dg-cell>{{ plugin.pluginName }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.vendor }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.version }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.description }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.tenant_scoped }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.provider_scoped }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.enabled }}</clr-dg-cell>
+        </clr-dg-row>
+    </clr-datagrid>
+</div>
+
+<div class="plugins-modal">
+    <clr-modal [(clrModalOpen)]="modal.opened" [clrModalClosable]="false">
+        <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alert-info"></vcd-alert>
+        
+        <h3 class="modal-title">{{ modal.title }}</h3>
+        <div class="modal-body">
+            <p *ngIf="modal.body">{{ modal.body }}</p>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="modal.decline" type="button" class="btn btn-primary" (click)="emitAndClose(false)">
+                {{ modal.decline }}
+            </button>
+            <button *ngIf="modal.accept" type="button" class="btn btn-primary" (click)="emitAndClose(true)">
+                {{ modal.accept }}
+            </button>
+        </div>
+    </clr-modal>
+</div>
+
+<vcd-change-scope [(state)]="changeScopeState" (changeScope)="onChangeScope($event)"></vcd-change-scope>
+
+<vcd-plugin-upload [wantToUpload]="wantToUpload" (change)="setWantToUpload($event)"></vcd-plugin-upload>
