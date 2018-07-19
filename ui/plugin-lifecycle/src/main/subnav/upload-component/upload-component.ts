@@ -8,6 +8,7 @@ import { UploadPayload } from "../../interfaces/Plugin";
 import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
 import { PluginValidator } from "../../classes/plugin-validator";
+import { ChangeScopeFeedback } from "../../classes/ChangeScopeFeedback";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;
@@ -22,6 +23,7 @@ export class UploadComponent implements OnInit {
     @Input() wantToUpload: boolean = false;
     @Output() change = new EventEmitter<boolean>();
     @ViewChild("wizardlg") wizardLarge: Wizard;
+    public scopeFeedback: ChangeScopeFeedback = new ChangeScopeFeedback();
     public uploadPayload: UploadPayload;
     public loading: boolean = false;
     public canGoNext: boolean = false;

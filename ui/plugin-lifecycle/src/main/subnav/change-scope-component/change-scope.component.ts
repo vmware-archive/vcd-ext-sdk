@@ -20,8 +20,8 @@ export class ChangeScope implements OnInit {
 
         this._state = val;
     }
-    @Output() public changeState = new EventEmitter<boolean>();
-    @Output() public changeScope = new EventEmitter<ChangeScopeFeedback>();
+    @Output() public stateChange = new EventEmitter<boolean>();
+    @Output() public scopeChange = new EventEmitter<ChangeScopeFeedback>();
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string
@@ -34,7 +34,7 @@ export class ChangeScope implements OnInit {
     }
 
     public onUpdate(): void {
-        this.changeScope.emit(this.feedback);
+        this.scopeChange.emit(this.feedback);
     }
 
     public clearData(): void {
@@ -43,6 +43,6 @@ export class ChangeScope implements OnInit {
     }
 
     public onClose(): void {
-        this.state = false;
+        this.stateChange.emit(false);
     }
 }
