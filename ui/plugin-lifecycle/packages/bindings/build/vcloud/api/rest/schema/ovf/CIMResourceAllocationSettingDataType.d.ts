@@ -1,0 +1,71 @@
+import { ResourceAllocationChangeableTypeType } from "./ResourceAllocationChangeableTypeType";
+import { CimBoolean } from "./CimBoolean";
+import { CimString } from "./CimString";
+import { CimUnsignedLong } from "./CimUnsignedLong";
+import { MappingBehavior } from "./MappingBehavior";
+import { ResourceAllocationCaptionType } from "./ResourceAllocationCaptionType";
+import { ResourceType } from "./ResourceType";
+import { CimUnsignedInt } from "./CimUnsignedInt";
+import { ConsumerVisibility } from "./ConsumerVisibility";
+export declare class CIMResourceAllocationSettingDataType {
+    address?: CimString;
+    addressOnParent?: CimString;
+    allocationUnits?: CimString;
+    automaticAllocation?: CimBoolean;
+    automaticDeallocation?: CimBoolean;
+    caption?: ResourceAllocationCaptionType;
+    changeableType?: ResourceAllocationChangeableTypeType;
+    configurationName?: CimString;
+    connection?: CimString[];
+    consumerVisibility?: ConsumerVisibility;
+    description?: CimString;
+    elementName?: CimString;
+    generation?: CimUnsignedLong;
+    hostResource?: CimString[];
+    instanceID?: CimString;
+    limit?: CimUnsignedLong;
+    mappingBehavior?: MappingBehavior;
+    otherResourceType?: CimString;
+    parent?: CimString;
+    poolID?: CimString;
+    reservation?: CimUnsignedLong;
+    resourceSubType?: CimString;
+    resourceType?: ResourceType;
+    virtualQuantity?: CimUnsignedLong;
+    virtualQuantityUnits?: CimString;
+    weight?: CimUnsignedInt;
+    any?: object[];
+    otherAttributes?: object;
+}
+export declare namespace CIMResourceAllocationSettingDataType {
+    class Fields {
+        static readonly ADDRESS: "address";
+        static readonly ADDRESS_ON_PARENT: "addressOnParent";
+        static readonly ALLOCATION_UNITS: "allocationUnits";
+        static readonly AUTOMATIC_ALLOCATION: "automaticAllocation";
+        static readonly AUTOMATIC_DEALLOCATION: "automaticDeallocation";
+        static readonly CAPTION: "caption";
+        static readonly CHANGEABLE_TYPE: "changeableType";
+        static readonly CONFIGURATION_NAME: "configurationName";
+        static readonly CONNECTION: "connection";
+        static readonly CONSUMER_VISIBILITY: "consumerVisibility";
+        static readonly DESCRIPTION: "description";
+        static readonly ELEMENT_NAME: "elementName";
+        static readonly GENERATION: "generation";
+        static readonly HOST_RESOURCE: "hostResource";
+        static readonly INSTANCE_ID: "instanceID";
+        static readonly LIMIT: "limit";
+        static readonly MAPPING_BEHAVIOR: "mappingBehavior";
+        static readonly OTHER_RESOURCE_TYPE: "otherResourceType";
+        static readonly PARENT: "parent";
+        static readonly POOL_ID: "poolID";
+        static readonly RESERVATION: "reservation";
+        static readonly RESOURCE_SUB_TYPE: "resourceSubType";
+        static readonly RESOURCE_TYPE: "resourceType";
+        static readonly VIRTUAL_QUANTITY: "virtualQuantity";
+        static readonly VIRTUAL_QUANTITY_UNITS: "virtualQuantityUnits";
+        static readonly WEIGHT: "weight";
+        static readonly ANY: "any";
+        static readonly OTHER_ATTRIBUTES: "otherAttributes";
+    }
+}
