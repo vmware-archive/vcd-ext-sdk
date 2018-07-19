@@ -7,7 +7,7 @@ import { PluginManager } from "../../services/plugin-manager.service";
 import { UploadPayload } from "../../interfaces/Plugin";
 import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
-import { PluginValidator } from "../../services/plugin-validator";
+import { PluginValidator } from "../../classes/plugin-validator";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;

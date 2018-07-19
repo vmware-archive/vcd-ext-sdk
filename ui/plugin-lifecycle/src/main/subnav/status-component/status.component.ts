@@ -7,7 +7,7 @@ import {Plugin} from "../../interfaces/Plugin";
 import {PluginManager} from "../../services/plugin-manager.service";
 import {Subscription, Observable, Subject} from "rxjs";
 import {ModalData, ModalWindow} from "../../interfaces/Modal";
-import { PluginValidator } from "../../services/plugin-validator";
+import { PluginValidator } from "../../classes/plugin-validator";
 
 interface SubjectModalData {
     accept: boolean;
