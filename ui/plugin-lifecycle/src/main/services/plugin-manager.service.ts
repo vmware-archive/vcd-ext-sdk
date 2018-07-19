@@ -4,6 +4,7 @@ import { Observable, Subject } from "rxjs";
 import { Plugin, PluginManifest, PluginDesc, PluginFileDetails, UploadPayload } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
+import { ChangeScopeFeedback } from "../classes/ChangeScopeFeedback";
 
 interface PluginUpdateOptions {
     tenant_scoped: boolean,
@@ -76,6 +77,16 @@ export class PluginManager {
 
         return Promise
             .all(deleteProcesses);
+    }
+
+    public updatePluginScope(plugins: Plugin[], data: ChangeScopeFeedback): Promise<Response[]> {
+        const options: PluginUpdateOptions = {
+            tenant_scoped: data.forTenant,
+            provider_scoped: data.forTenant,
+            enabled: null
+        }
+    
+        return this.updatePluginData(plugins, options);
     }
 
     public refresh(): Promise<void> {
