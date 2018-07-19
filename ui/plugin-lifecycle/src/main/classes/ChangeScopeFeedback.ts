@@ -1,6 +1,6 @@
 export class ChangeScopeFeedback {
     private _forTenant: boolean = false;
-    private _forProvider: boolean = false;
+    private _forAllTenants: boolean = false;
 
     constructor() {}
 
@@ -12,11 +12,11 @@ export class ChangeScopeFeedback {
         this._forTenant = val;
     }
 
-    get forProvider(): boolean {
-        return this._forProvider;
+    get forAllTenants(): boolean {
+        return this._forAllTenants;
     }
 
-    set forProvider(val: boolean) {
-        this._forProvider = val;
+    set forAllTenants(val: boolean) {
+        this._forAllTenants = val;
     }
 }
