@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { Observable, Subject } from "rxjs";
-import { Plugin, PluginManifest, PluginDesc, PluginFileDetails, UploadPayload } from "../interfaces/Plugin";
-import { PluginValidator } from "../classes/plugin-validator";
+import { Observable } from "rxjs";
 
 
 interface PluginUpdateOptions {
@@ -38,9 +36,15 @@ export class AuthService {
 
     public auth(): Promise<string> {
         const promise = new Promise<string>((resolve, reject) => {
+            const authToken = window.localStorage.getItem('authtoken');
+            if (authToken || authToken.length === 0) {
+                this.setAuthToken(authToken);
+                resolve(authToken)
+                return;
+            }
+
             return this.authRequst("administrator", "System", "ca$hc0w").toPromise()
                 .then((res: Response) => {
-                    // Set auth token here...
                     const authToken = res.headers.get("x-vcloud-authorization")
                     this.setAuthToken(authToken);
                     resolve(authToken);

@@ -37,6 +37,7 @@ export class ChooseScope implements OnInit {
             { id: '2', name: "My-Very-Frist-Org2" },
             { id: '3', name: "My-Very-Frist-Org3" }
         ]
+        this.getOrgs();
     }
 
     get feedback(): ScopeFeedback {
