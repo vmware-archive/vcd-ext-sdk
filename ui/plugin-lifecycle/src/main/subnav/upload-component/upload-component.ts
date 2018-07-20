@@ -25,7 +25,7 @@ export class UploadComponent implements OnInit {
     @ViewChild("wizardlg") wizardLarge: Wizard;
     public scopeFeedback: ScopeFeedback = new ScopeFeedback();
     public uploadPayload: UploadPayload;
-    public loading: boolean = true;
+    public loading: boolean = false;
     public canGoNext: boolean = false;
     public parsing: boolean = false;
     public alertMessage: string;

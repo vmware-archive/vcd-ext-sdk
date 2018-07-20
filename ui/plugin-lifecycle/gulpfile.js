@@ -13,6 +13,9 @@ gulp.task('build', function () {
     entry: './src/main/index.ts',
     external: [
       'rxjs',
+      // 'rxjs/operators',
+      // 'rxjs/observable/empty',
+      // '@angular/common/http',
       '@angular/animations',
       '@angular/animations/browser',
       '@angular/common',
@@ -41,8 +44,11 @@ gulp.task('build', function () {
         }
       }),
       typescript({ typescript: tsc }),
-      resolve(),
+      resolve({
+        // only: [ /^@vcd\/.*$/ ]
+      }),
       commonjs({
+        // include: 'node_modules/@vcd/**'
         include: 'node_modules/**'
       })
     ]
