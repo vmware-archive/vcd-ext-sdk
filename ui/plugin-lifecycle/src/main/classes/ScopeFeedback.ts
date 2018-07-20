@@ -35,4 +35,9 @@ export class ScopeFeedback {
         if (!org) { return; }
         this._orgs.push(org);
     }
+
+    public reset(): void {
+        this.forAllTenants = false;
+        this.forTenant = false;
+    }
 }

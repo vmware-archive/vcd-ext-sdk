@@ -25,7 +25,7 @@ export class UploadComponent implements OnInit {
     @ViewChild("wizardlg") wizardLarge: Wizard;
     public scopeFeedback: ScopeFeedback = new ScopeFeedback();
     public uploadPayload: UploadPayload;
-    public loading: boolean = false;
+    public loading: boolean = true;
     public canGoNext: boolean = false;
     public parsing: boolean = false;
     public alertMessage: string;
@@ -111,6 +111,8 @@ export class UploadComponent implements OnInit {
                 this.pluginManager.refresh();
                 this.setWantToUpload(false);
                 this.wizardLarge.reset();
+                this.scopeFeedback.reset();
+                this.canGoNext = false;
             })
             .catch((err) => {
                 // Handle error

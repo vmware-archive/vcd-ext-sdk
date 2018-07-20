@@ -2,7 +2,7 @@
     <!-- Wizard -->
     <clr-wizard #wizardlg [clrWizardOpen]="wantToUpload" (clrWizardOpen)="setWantToUpload($event)" (clrWizardOnCancel)="onCancel()"
         clrWizardSize="lg">
-        <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true"></vcd-loading-indicator>
+        <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true" loadingTextKey="Uploading..."></vcd-loading-indicator>
 
         <clr-wizard-title>Upload plugin</clr-wizard-title>
 
@@ -15,7 +15,7 @@
             </ng-template>
 
             <!-- Form -->
-            <vcd-upload-zip-field (change)="onChange($event)"></vcd-upload-zip-field>
+            <vcd-upload-zip-field *ngIf="wantToUpload" (change)="onChange($event)"></vcd-upload-zip-field>
 
             <!-- Alert -->
             <vcd-alert [alertMessage]="alertMessage"></vcd-alert>

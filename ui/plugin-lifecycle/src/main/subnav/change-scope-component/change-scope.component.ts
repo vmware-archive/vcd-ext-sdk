@@ -15,7 +15,7 @@ export class ChangeScope implements OnInit {
     @Input()
     set state (val: boolean) {
         if (val === false) {
-            this.clearData();
+            this.feedback.reset();
         }
 
         this._state = val;
@@ -35,11 +35,6 @@ export class ChangeScope implements OnInit {
 
     public onUpdate(): void {
         this.scopeChange.emit(this.feedback);
-    }
-
-    public clearData(): void {
-        this.feedback.forTenant = false;
-        this.feedback.forAllTenants = false;
     }
 
     public onClose(): void {
