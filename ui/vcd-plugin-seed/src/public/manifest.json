@@ -9,6 +9,6 @@
     "vendor": "VMware",
     "license": "Copyright (C) VMware 2017-2018.  All rights reserved.",
     "link": "http://www.vmware.com/support",
-    "module": "SubnavPluginModule",
+    "module": "SimplePluginModule",
     "route": "plugin"
 }
