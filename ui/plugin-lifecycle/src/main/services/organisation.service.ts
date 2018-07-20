@@ -28,6 +28,14 @@ export class OrganisationService {
     }
 
     private addOrg(org: Organisation) {
+        Object.keys(org).forEach((key) => {
+            try {
+                org[key] = JSON.parse(org[key])
+            } catch (error) {
+                org[key] = org[key]
+            }
+        });
+
         this.orgs.push(org);
         this._orgsSubject.next(this.orgs);
     }

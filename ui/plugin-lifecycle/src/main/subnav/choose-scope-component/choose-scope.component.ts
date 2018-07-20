@@ -25,11 +25,6 @@ export class ChooseScope implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
-        this.orgs = [
-            { id: '1', name: "My-Very-Frist-Org1" },
-            { id: '2', name: "My-Very-Frist-Org2" },
-            { id: '3', name: "My-Very-Frist-Org3" }
-        ]
         this.getOrgs();
     }
 
@@ -42,8 +37,8 @@ export class ChooseScope implements OnInit, OnDestroy {
     }
 
     public getOrgs(): void {
-        this.getOrgsSubs = this.orgsService.getOrgs().subscribe((data: any) => {
-            console.log("ORGS", data);
+        this.getOrgsSubs = this.orgsService.getOrgs().subscribe((orgs: Organisation[]) => {
+            this.orgs = orgs;
         });
     }
 }

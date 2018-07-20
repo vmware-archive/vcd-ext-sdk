@@ -84,18 +84,26 @@ export class PluginManager {
             .all(deleteProcesses);
     }
 
-    public setPluginScopeFor(plugins: Plugin[], data: ScopeFeedback): Promise<Response[]> {
+    public setPluginScopeFor(plugins: Plugin[], pluginScope: ScopeFeedback): Promise<Response[]> {
         const setScopeProcesses: Promise<Response>[] = [];
-        if (data.forAllTenants) {
             plugins.forEach((pluginToUpdate) => {
-                setScopeProcesses.push(
-                    this.enablePluginForAllTenants(pluginToUpdate)
-                );
+                if (pluginScope.forAllTenants) {
+                    setScopeProcesses.push(
+                        this.enablePluginForAllTenants(pluginToUpdate)
+                    );
+                    return;
+                }
+
+                if (pluginScope.forTenant) {
+                    setScopeProcesses.push(
+                        this.enablePluginForSpecificTenants(pluginToUpdate, pluginScope.orgs)
+                    );
+                    return;
+                }
+
+                return;
             });
             return Promise.all(setScopeProcesses);
-        }
-
-        // Handle scope change for spec orgs.
     }
 
     private enablePluginForAllTenants(plugin: Plugin): Promise<Response> {
@@ -115,9 +123,14 @@ export class PluginManager {
         const opts = new RequestOptions();
         opts.headers = headers;
 
-        const body: any = [];
+        const body: { name: string }[] = [];
+        
+        forOrgs.forEach((org: Organisation) => {
+            const obj = { name: org.name };
+            body.push(obj);
+        })
 
-        return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/publishAll`, body, opts).toPromise();
+        return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/publish`, body, opts).toPromise();
     }
 
     public refresh(): Promise<void> {
