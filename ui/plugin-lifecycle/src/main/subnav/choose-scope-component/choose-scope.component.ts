@@ -32,11 +32,6 @@ export class ChooseScope implements OnInit {
     constructor() {}
 
     ngOnInit() {
-        this.orgs = [
-            { id: '1', name: "My-Very-Frist-Org1" },
-            { id: '2', name: "My-Very-Frist-Org2" },
-            { id: '3', name: "My-Very-Frist-Org3" }
-        ]
         this.getOrgs();
     }
 
