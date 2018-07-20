@@ -50,6 +50,7 @@ export class UploadComponent implements OnInit {
     public scopeFeedback: ScopeFeedback = new ScopeFeedback();
     // The data which is extacted from the uploaded file and the actual file
     public uploadPayload: UploadPayload;
+<<<<<<< HEAD
     // Show spinner while uploading
     public loading = false;
     // Show / hide next button in the wizard
@@ -57,6 +58,11 @@ export class UploadComponent implements OnInit {
     // Show / hide spinner while parsing the manifest file
     public parsing = false;
     // Shows on the sceen when any warning appear
+=======
+    public loading: boolean = false;
+    public canGoNext: boolean = false;
+    public parsing: boolean = false;
+>>>>>>> Add @vcd/modules in bundle
     public alertMessage: string;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
     public orgs: QueryResultOrgRecordType[];
