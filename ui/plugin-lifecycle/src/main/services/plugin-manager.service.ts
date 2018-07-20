@@ -6,7 +6,6 @@ import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { Organisation } from "../interfaces/Organisation";
-import { resolve } from "url";
 import { OrganisationService } from "./organisation.service";
 
 interface PluginUpdateOptions {
@@ -241,7 +240,7 @@ export class PluginManager {
         });
     }
 
-    public uploadPlugin(payload: UploadPayload, pluginScope: ScopeFeedback): Promise<Response|void> {
+    public uploadPlugin(payload: UploadPayload, pluginScope: ScopeFeedback): Promise<Response | void> {
         const PLUGIN: any = {
             id: null,
             file: null
@@ -277,12 +276,12 @@ export class PluginManager {
                 if (pluginScope.forAllTenants) {
                     return this.enablePluginForAllTenants(PLUGIN);
                 }
-                
+
                 if (pluginScope.forTenant) {
                     return this.enablePluginForSpecificTenants(PLUGIN, pluginScope.orgs);
                 }
 
-                return new Promise<Response|void>((resolve) => {
+                return new Promise<Response | void>((resolve) => {
                     resolve();
                 });
             })
