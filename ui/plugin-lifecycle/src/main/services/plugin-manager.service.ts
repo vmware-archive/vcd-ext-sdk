@@ -4,7 +4,10 @@ import { Observable, Subject } from "rxjs";
 import { Plugin, PluginManifest, PluginDesc, PluginFileDetails, UploadPayload } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
-import { ChangeScopeFeedback } from "../classes/ChangeScopeFeedback";
+import { ScopeFeedback } from "../classes/ScopeFeedback";
+import { Organisation } from "../interfaces/Organisation";
+import { resolve } from "url";
+import { OrganisationService } from "./organisation.service";
 
 interface PluginUpdateOptions {
     tenant_scoped: boolean,
@@ -18,7 +21,10 @@ export class PluginManager {
     private _plugins: Plugin[];
     private _pluginsSubject = new Subject<Plugin[]>();
 
-    constructor(private http: Http, private authService: AuthService) {
+    constructor(
+        private http: Http,
+        private authService: AuthService,
+        private orgService: OrganisationService) {
         this.authService.auth().then(() => {
             this.getPluginsList();
         });
@@ -58,7 +64,7 @@ export class PluginManager {
             provider_scoped: null,
             enabled: true
         }
-    
+
         return this.updatePluginData(plugins, options);
     }
 
@@ -79,8 +85,8 @@ export class PluginManager {
             .all(deleteProcesses);
     }
 
-    public setPluginScopeFor(plugins: Plugin[], data: ChangeScopeFeedback): Promise<Response[]> {
-        const setScopeProcesses: Promise<Response>[] = []; 
+    public setPluginScopeFor(plugins: Plugin[], data: ScopeFeedback): Promise<Response[]> {
+        const setScopeProcesses: Promise<Response>[] = [];
         if (data.forAllTenants) {
             plugins.forEach((pluginToUpdate) => {
                 setScopeProcesses.push(
@@ -89,6 +95,8 @@ export class PluginManager {
             });
             return Promise.all(setScopeProcesses);
         }
+
+        // Handle scope change for spec orgs.
     }
 
     private enablePluginForAllTenants(plugin: Plugin): Promise<Response> {
@@ -97,8 +105,20 @@ export class PluginManager {
         headers.append("x-vcloud-authorization", this.authService.getAuthToken());
         const opts = new RequestOptions();
         opts.headers = headers;
-        
+
         return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/publishAll`, null, opts).toPromise();
+    }
+
+    private enablePluginForSpecificTenants(plugin: Plugin, forOrgs: Organisation[]): Promise<Response> {
+        const headers = new Headers();
+        headers.append("Accept", "application/json");
+        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+        const opts = new RequestOptions();
+        opts.headers = headers;
+
+        const body: any = [];
+
+        return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/publishAll`, body, opts).toPromise();
     }
 
     public refresh(): Promise<void> {
@@ -184,45 +204,6 @@ export class PluginManager {
         return promise;
     }
 
-    private registerPlugin(payload: UploadPayload): Promise<string> {
-        const promise = new Promise<string>((resolve, reject) => {
-            this.proccessManifest(payload.manifest)
-                .then((pluginDesc) => {
-                    const headers = new Headers();
-                    headers.append("Accept", "application/json");
-                    headers.append("Content-Type", "application/json");
-                    headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-                    // headers.append("Content-Type", "multipart/form-data");
-                    const opts = new RequestOptions();
-                    opts.headers = headers;
-
-                    return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui`, pluginDesc, opts).toPromise();
-                })
-                .then((registerPluginResponse: Response) => {
-                    // Validate and Handle success
-                    const RES = registerPluginResponse.json();
-                    const PLUGIN = {
-                        id: RES.id,
-                        file: payload.file
-                    };
-                    return this.enablePluginUpload(PLUGIN);
-                })
-                .then((enableResponse: Response) => {
-                    // Send transfer link in the reslove where the plugin will be uploaded.
-                    const linkHeader: string = enableResponse.headers.get("Link");
-                    const url: string = linkHeader.split(">;")[0];
-                    const transferLink = url.slice(1, url.length);
-                    resolve(transferLink);
-                })
-                .catch((err) => {
-                    // Handle error
-                    reject(err);
-                });
-        });
-
-        return promise;
-    }
-
     private enablePluginUpload(plugin: { id: string, file: File }): Promise<Response> {
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -240,7 +221,7 @@ export class PluginManager {
         return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/plugin`, JSON.stringify(body), opts).toPromise();
     }
 
-    private sendZip(transferLink: string, file: File): Promise<void> {
+    private sendZip(transferLink: string, file: File): Promise<any> {
         return new Promise<void>((resolve, reject) => {
             const headers = new Headers();
             headers.append("Content-Type", "application/zip");
@@ -260,10 +241,50 @@ export class PluginManager {
         });
     }
 
-    public uploadPlugin(payload: UploadPayload): Promise<void> {
-        return this.registerPlugin(payload)
-            .then((transferLink: string) => {
+    public uploadPlugin(payload: UploadPayload, pluginScope: ScopeFeedback): Promise<Response|void> {
+        const PLUGIN: any = {
+            id: null,
+            file: null
+        };
+
+        return this.proccessManifest(payload.manifest)
+            .then((pluginDesc) => {
+                const headers = new Headers();
+                headers.append("Accept", "application/json");
+                headers.append("Content-Type", "application/json");
+                headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+                // headers.append("Content-Type", "multipart/form-data");
+                const opts = new RequestOptions();
+                opts.headers = headers;
+
+                return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui`, pluginDesc, opts).toPromise();
+            })
+            .then((registerPluginResponse: Response) => {
+                // Validate and Handle success
+                const RES = registerPluginResponse.json();
+                PLUGIN.id = RES.id;
+                PLUGIN.file = payload.file;
+                return this.enablePluginUpload(PLUGIN);
+            })
+            .then((enableResponse: Response) => {
+                // Send transfer link in the reslove where the plugin will be uploaded.
+                const linkHeader: string = enableResponse.headers.get("Link");
+                const url: string = linkHeader.split(">;")[0];
+                const transferLink = url.slice(1, url.length);
                 return this.sendZip(transferLink, payload.file);
+            })
+            .then(() => {
+                if (pluginScope.forAllTenants) {
+                    return this.enablePluginForAllTenants(PLUGIN);
+                }
+                
+                if (pluginScope.forTenant) {
+                    return this.enablePluginForSpecificTenants(PLUGIN, pluginScope.orgs);
+                }
+
+                return new Promise<Response|void>((resolve) => {
+                    resolve();
+                });
             })
     }
 }

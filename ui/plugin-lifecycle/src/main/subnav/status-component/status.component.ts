@@ -8,7 +8,7 @@ import {PluginManager} from "../../services/plugin-manager.service";
 import {Subscription, Observable, Subject} from "rxjs";
 import {ModalData, ModalWindow} from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
-import { ChangeScopeFeedback } from "../../classes/ChangeScopeFeedback";
+import { ScopeFeedback } from "../../classes/ScopeFeedback";
 
 interface SubjectModalData {
     accept: boolean;
@@ -166,7 +166,7 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.changeScopeState = true;
     }
 
-    public onChangeScope(data: ChangeScopeFeedback): void {
+    public onChangeScope(data: ScopeFeedback): void {
         this.pluginManager
             .setPluginScopeFor(this.selected, data)
             .then(() => {

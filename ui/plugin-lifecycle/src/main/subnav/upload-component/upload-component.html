@@ -6,8 +6,6 @@
 
         <clr-wizard-title>Upload plugin</clr-wizard-title>
 
-        <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
-
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
             <ng-template clrPageTitle>Upload plugin</ng-template>
 
@@ -31,11 +29,11 @@
 
             <ng-template clrPageButtons>
                 <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
-                <clr-wizard-button *ngIf="canUpload" [type]="'custom-finish'">Finish</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-finish'">Finish</clr-wizard-button>
             </ng-template>
 
             <vcd-choose-scope [(feedback)]="scopeFeedback"></vcd-choose-scope>
-            
         </clr-wizard-page>
     </clr-wizard>
 </div>

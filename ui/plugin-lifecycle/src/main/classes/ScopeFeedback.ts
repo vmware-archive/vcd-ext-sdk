@@ -1,6 +1,9 @@
-export class ChangeScopeFeedback {
+import { Organisation } from "../interfaces/Organisation";
+
+export class ScopeFeedback {
     private _forTenant: boolean = false;
     private _forAllTenants: boolean = false;
+    private _orgs: Organisation[] = [];
 
     constructor() {}
 
@@ -18,5 +21,18 @@ export class ChangeScopeFeedback {
 
     set forAllTenants(val: boolean) {
         this._forAllTenants = val;
+    }
+
+    get orgs(): Organisation[] {
+        return this._orgs;
+    }
+
+    set orgs(orgs: Organisation[]) {
+        this._orgs = orgs;
+    }
+
+    public addNewOrg(org: Organisation): void {
+        if (!org) { return; }
+        this._orgs.push(org);
     }
 }

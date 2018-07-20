@@ -8,7 +8,7 @@ import { UploadPayload } from "../../interfaces/Plugin";
 import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
 import { PluginValidator } from "../../classes/plugin-validator";
-import { ChangeScopeFeedback } from "../../classes/ChangeScopeFeedback";
+import { ScopeFeedback } from "../../classes/ScopeFeedback";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;
@@ -23,11 +23,10 @@ export class UploadComponent implements OnInit {
     @Input() wantToUpload: boolean = false;
     @Output() change = new EventEmitter<boolean>();
     @ViewChild("wizardlg") wizardLarge: Wizard;
-    public scopeFeedback: ChangeScopeFeedback = new ChangeScopeFeedback();
+    public scopeFeedback: ScopeFeedback = new ScopeFeedback();
     public uploadPayload: UploadPayload;
     public loading: boolean = false;
     public canGoNext: boolean = false;
-    public canUpload: boolean = false;
     public parsing: boolean = false;
     public alertMessage: string;
 
@@ -99,13 +98,10 @@ export class UploadComponent implements OnInit {
 
     public doUpload(): void {
         console.log('DO UPLOAD');
-        if (!this.canUpload) {
-            return;
-        }
 
         this.loading = true;
         this.pluginManager
-            .uploadPlugin(this.uploadPayload)
+            .uploadPlugin(this.uploadPayload, this.scopeFeedback)
             .then(() => {
                 this.loading = false;
                 this.uploadPayload.file = null;
@@ -114,7 +110,6 @@ export class UploadComponent implements OnInit {
                 this.uploadPayload.manifest = null;
                 this.pluginManager.refresh();
                 this.setWantToUpload(false);
-                this.canUpload = false;
                 this.wizardLarge.reset();
             })
             .catch((err) => {
@@ -142,7 +137,6 @@ export class UploadComponent implements OnInit {
 
         if ("custom-next" === buttonType && this.canGoNext) {
             this.wizardLarge.next();
-            this.canGoNext = false;
         }
     }
 }

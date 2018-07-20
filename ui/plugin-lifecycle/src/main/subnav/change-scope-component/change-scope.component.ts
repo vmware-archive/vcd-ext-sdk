@@ -3,7 +3,7 @@
  */
 import { Component, Inject, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
-import { ChangeScopeFeedback } from "../../classes/ChangeScopeFeedback";
+import { ScopeFeedback } from "../../classes/ScopeFeedback";
 
 @Component({
     selector: "vcd-change-scope",
@@ -11,7 +11,7 @@ import { ChangeScopeFeedback } from "../../classes/ChangeScopeFeedback";
 })
 export class ChangeScope implements OnInit {
     private _state: boolean;
-    public feedback: ChangeScopeFeedback = new ChangeScopeFeedback();
+    public feedback: ScopeFeedback = new ScopeFeedback();
     @Input()
     set state (val: boolean) {
         if (val === false) {
@@ -21,7 +21,7 @@ export class ChangeScope implements OnInit {
         this._state = val;
     }
     @Output() public stateChange = new EventEmitter<boolean>();
-    @Output() public scopeChange = new EventEmitter<ChangeScopeFeedback>();
+    @Output() public scopeChange = new EventEmitter<ScopeFeedback>();
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string
