@@ -27,6 +27,10 @@ export class OrganisationService {
         return this._orgs;
     }
 
+    set orgs(orgs: Organisation[]) {
+        this._orgs = orgs;
+    }
+
     private addOrg(org: Organisation) {
         Object.keys(org).forEach((key) => {
             try {
@@ -40,7 +44,7 @@ export class OrganisationService {
         this._orgsSubject.next(this.orgs);
     }
 
-    public getOrgs(): Observable<Organisation[]> {
+    public watchOrgs(): Observable<Organisation[]> {
         return this._orgsSubject.asObservable();
     }
 

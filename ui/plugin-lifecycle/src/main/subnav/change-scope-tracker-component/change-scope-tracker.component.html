@@ -1,17 +1,19 @@
 <div class="change-scope-tracker">
     <clr-datagrid>
         <!-- PLACEHOLDER -->
-        <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
+        <clr-dg-placeholder>We couldn't find any plugins...</clr-dg-placeholder>
         <!-- END PLACEHOLDER -->
 
-        <clr-dg-column>Organisation Name</clr-dg-column>
         <clr-dg-column>Plugin Name</clr-dg-column>
         <clr-dg-column>Status</clr-dg-column>
 
         <clr-dg-row *clrDgItems="let req of requests" [clrDgItem]="req">
-            <clr-dg-cell>{{ req.orgs }}</clr-dg-cell>
             <clr-dg-cell>{{ req.pluginName }}</clr-dg-cell>
-            <clr-dg-cell>{{ req.status }}</clr-dg-cell>
+            <clr-dg-cell>
+                <clr-icon *ngIf="req.status === true" shape="check"></clr-icon>
+                <span *ngIf="req.status === null" class="spinner spinner-inline"></span>
+                <clr-icon *ngIf="req.status === false" shape="exclamation-triangle"></clr-icon>
+            </clr-dg-cell>
         </clr-dg-row>
     </clr-datagrid>
 </div>
