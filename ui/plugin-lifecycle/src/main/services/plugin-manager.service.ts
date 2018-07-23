@@ -6,7 +6,6 @@ import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { Organisation } from "../interfaces/Organisation";
-import { OrganisationService } from "./organisation.service";
 
 interface PluginUpdateOptions {
     tenant_scoped: boolean,
@@ -14,19 +13,68 @@ interface PluginUpdateOptions {
     enabled: boolean
 }
 
+interface ChangeRequest {
+    reqUrl: string;
+    pluginName: string;
+    orgs: { name: string }[];
+    status: boolean;
+}
+
+class ChangeScopeRequest {
+    reqUrl: string = "";
+    pluginName: string = "";
+    orgs: { name: string }[] = [];
+    status: boolean = false;
+
+    constructor(options: ChangeRequest) {
+        this.reqUrl = options.reqUrl;
+        this.pluginName = options.pluginName;
+        this.orgs = options.orgs;
+        this.status = options.status;
+    }
+
+    public updateChangeReqStatus(val: boolean): void {
+        this.status = val;
+    }
+}
+
 @Injectable()
 export class PluginManager {
     private _baseUrl = "https://bos1-vcd-sp-static-200-117.eng.vmware.com";
     private _plugins: Plugin[];
     private _pluginsSubject = new Subject<Plugin[]>();
+    private _changeScopeRequests: ChangeScopeRequest[] = [];
+    private _changeScopeRequestsSubject = new Subject<ChangeScopeRequest[]>();
 
     constructor(
         private http: Http,
-        private authService: AuthService,
-        private orgService: OrganisationService) {
+        private authService: AuthService) {
         this.authService.auth().then(() => {
             this.getPluginsList();
         });
+    }
+
+    public watchChangeScopeReq(): Observable<ChangeScopeRequest[]> {
+        return this._changeScopeRequestsSubject.asObservable();
+    }
+
+    get changeScopeRequests(): ChangeScopeRequest[] {
+        return this._changeScopeRequests;
+    }
+
+    set changeScopeRequests(val: ChangeScopeRequest[]) {
+        this.changeScopeRequests = val;
+    }
+
+    private addNewChangeRequest(req: ChangeRequest): void {
+        const changeReq = new ChangeScopeRequest(req);
+        this.changeScopeRequests.push(changeReq);
+        this._changeScopeRequestsSubject.next(this.changeScopeRequests);
+    }
+
+    private updateChangeReqStatus(index: number, val: boolean) {
+        this.changeScopeRequests[index].updateChangeReqStatus(val);
+        this._changeScopeRequestsSubject.next(this.changeScopeRequests);
     }
 
     public getPlugins(): Plugin[] {
@@ -84,52 +132,75 @@ export class PluginManager {
             .all(deleteProcesses);
     }
 
-    public setPluginScopeFor(plugins: Plugin[], pluginScope: ScopeFeedback): Promise<Response[]> {
+    public enablePluginForAllTenants(plugins: Plugin[]): Promise<Response | void | Response[]> {
+        const headers = new Headers();
+        headers.append("Accept", "application/json");
+        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+        const opts = new RequestOptions();
+        opts.headers = headers;
+
         const setScopeProcesses: Promise<Response>[] = [];
-            plugins.forEach((pluginToUpdate) => {
-                if (pluginScope.forAllTenants) {
-                    setScopeProcesses.push(
-                        this.enablePluginForAllTenants(pluginToUpdate)
-                    );
-                    return;
-                }
+        plugins.forEach((pluginToUpdate) => {
+            setScopeProcesses.push(
+                this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/publishAll`, null, opts).toPromise()
+            );
+        });
+        return Promise.all(setScopeProcesses);
+    }
 
-                if (pluginScope.forTenant) {
-                    setScopeProcesses.push(
-                        this.enablePluginForSpecificTenants(pluginToUpdate, pluginScope.orgs)
-                    );
-                    return;
-                }
-                return;
+    public enablePluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[]): void {
+        // Create headers
+        const headers = new Headers();
+        headers.append("Accept", "application/json");
+        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+        const opts = new RequestOptions();
+        opts.headers = headers;
+
+        // Collect promises
+        const setScopeProcesses: Promise<Response>[] = [];
+
+        // Loop through plugins
+        plugins.forEach((pluginToUpdate) => {
+            const body: { name: string }[] = [];
+
+            // Assing org to req body
+            forOrgs.forEach((org: Organisation) => {
+                const obj = { name: org.name };
+                body.push(obj);
             });
-            return Promise.all(setScopeProcesses);
-    }
 
-    private enablePluginForAllTenants(plugin: Plugin): Promise<Response> {
-        const headers = new Headers();
-        headers.append("Accept", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-        const opts = new RequestOptions();
-        opts.headers = headers;
+            // Create req url
+            const REQ_URL = `${this._baseUrl}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/publish`;
 
-        return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/publishAll`, null, opts).toPromise();
-    }
+            // Create new change req
+            this.addNewChangeRequest({
+                reqUrl: REQ_URL,
+                pluginName: pluginToUpdate.pluginName,
+                orgs: body,
+                status: false
+            });
 
-    private enablePluginForSpecificTenants(plugin: Plugin, forOrgs: Organisation[]): Promise<Response> {
-        const headers = new Headers();
-        headers.append("Accept", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-        const opts = new RequestOptions();
-        opts.headers = headers;
+            // Create req and collect the promise
+            setScopeProcesses.push(
+                this.http.post(REQ_URL, body, opts).toPromise()
+            )
+        });
 
-        const body: { name: string }[] = [];
-        
-        forOrgs.forEach((org: Organisation) => {
-            const obj = { name: org.name };
-            body.push(obj);
-        })
-
-        return this.http.post(`${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/publish`, body, opts).toPromise();
+        // Get first element of the promise collection
+        const firstElement = setScopeProcesses.shift();
+        // Check request
+        firstElement
+            .then((res) => {
+                // Chage the status to true if the req is successful
+                const found = this.changeScopeRequests.find((el: ChangeScopeRequest) => {
+                    return el.reqUrl === res.url
+                })
+                const foundIndex = this.changeScopeRequests.indexOf(found);
+                this.updateChangeReqStatus(foundIndex, true);
+            })
+            .catch((err) => {
+                // Leave status false and set message
+            })
     }
 
     public refresh(): Promise<void> {
@@ -252,7 +323,7 @@ export class PluginManager {
         });
     }
 
-    public uploadPlugin(payload: UploadPayload, pluginScope: ScopeFeedback): Promise<Response | void> {
+    public uploadPlugin(payload: UploadPayload, pluginScope: ScopeFeedback): Promise<Response | void | Response[]> {
         const PLUGIN: any = {
             id: null,
             file: null
@@ -286,7 +357,7 @@ export class PluginManager {
             })
             .then(() => {
                 if (pluginScope.forAllTenants) {
-                    return this.enablePluginForAllTenants(PLUGIN);
+                    return this.enablePluginForAllTenants([PLUGIN]);
                 }
 
                 if (pluginScope.forTenant) {

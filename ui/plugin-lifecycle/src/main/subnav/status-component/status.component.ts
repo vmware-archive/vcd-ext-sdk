@@ -1,12 +1,12 @@
 /*
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
-import {Component, Inject, OnInit, OnDestroy} from "@angular/core";
-import {EXTENSION_ASSET_URL} from "@vcd-ui/common";
-import {Plugin} from "../../interfaces/Plugin";
-import {PluginManager} from "../../services/plugin-manager.service";
-import {Subscription, Observable, Subject} from "rxjs";
-import {ModalData, ModalWindow} from "../../interfaces/Modal";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
+import { Plugin } from "../../interfaces/Plugin";
+import { PluginManager } from "../../services/plugin-manager.service";
+import { Subscription, Observable, Subject } from "rxjs";
+import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 
@@ -33,7 +33,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         public pluginManager: PluginManager
-    ) {}
+    ) { }
 
     public ngOnInit() {
         this.selected = [];
@@ -133,28 +133,28 @@ export class StatusComponent implements OnInit, OnDestroy {
             accept: "Yes",
             waitToClose: true
         })
-        .subscribe((modalSubjectData: SubjectModalData) => {
-            if (modalSubjectData.accept === false) {
+            .subscribe((modalSubjectData: SubjectModalData) => {
+                if (modalSubjectData.accept === false) {
+                    this.setOpened(false);
+                    onDeleteSub.unsubscribe();
+                    return;
+                }
+
                 this.setOpened(false);
                 onDeleteSub.unsubscribe();
-                return;
-            }
+                this.loading();
 
-            this.setOpened(false);
-            onDeleteSub.unsubscribe();
-            this.loading();
-
-            this.pluginManager
-                .deletePlugins(this.selected)
-                .then(() => {
-                    this.pluginManager.refresh();
-                    this.endLoading();
-                })
-                .catch((err) => {
-                    // Handle err
-                    this.endLoading();
-                });
-        });
+                this.pluginManager
+                    .deletePlugins(this.selected)
+                    .then(() => {
+                        this.pluginManager.refresh();
+                        this.endLoading();
+                    })
+                    .catch((err) => {
+                        // Handle err
+                        this.endLoading();
+                    });
+            });
     }
 
     public onUpload(): void {
@@ -166,18 +166,24 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     public onChangeScope(data: ScopeFeedback): void {
+        if (data.forAllTenants) {
+            this.pluginManager
+                .enablePluginForAllTenants(this.selected)
+                .then(() => {
+                    return this.pluginManager.refresh();
+                })
+                .then(() => {
+                    this.changeScopeState = false;
+                })
+                .catch((err) => {
+                    // Handle Error
+                    console.warn(err);
+                })
+            return;
+        }
+
         this.pluginManager
-            .setPluginScopeFor(this.selected, data)
-            .then(() => {
-                return this.pluginManager.refresh();
-            })
-            .then(() => {
-                this.changeScopeState = false;
-            })
-            .catch((err) => {
-                // Handle Error
-                console.warn(err);
-            })
+            .enablePluginForSpecificTenants(this.selected, data.orgs);
     }
 
     public setWantToUpload(val: boolean): void {
