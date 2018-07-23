@@ -17,7 +17,6 @@ interface ScopeChangeRequest {
 export class ChangeScopeTracker implements OnInit {
     public requests: ScopeChangeRequest[];
     constructor(
-        private orgService: OrganisationService,
         private pluginService: PluginManager
     ) { }
 
