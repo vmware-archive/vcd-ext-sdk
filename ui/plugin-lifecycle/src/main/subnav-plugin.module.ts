@@ -21,6 +21,7 @@ import { AuthService } from "./services/auth.service";
 import { ChangeScope } from "./subnav/change-scope-component/change-scope.component";
 import { ChooseScope } from "./subnav/choose-scope-component/choose-scope.component";
 import { OrganisationService } from "./services/organisation.service";
+import { ChangeScopeTracker } from "./subnav/change-scope-tracker-component/change-scope-tracker.component";
 
 const ROUTES: Routes = [
     { path: "", component: SubnavComponent, children: [
@@ -49,6 +50,7 @@ const ROUTES: Routes = [
         VcdManifestStackView,
         ChangeScope,
         ChooseScope,
+        ChangeScopeTracker,
         LoadingIndicatorComponent
     ],
     bootstrap: [SubnavComponent],
