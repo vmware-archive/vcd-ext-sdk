@@ -30,6 +30,7 @@ export class ChooseScope implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.getOrgsSubs.unsubscribe();
+        this.selectedOrgs = [];
     }
 
     public onChange(): void {
