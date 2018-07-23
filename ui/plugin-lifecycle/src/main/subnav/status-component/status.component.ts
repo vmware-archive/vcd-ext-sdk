@@ -9,6 +9,7 @@ import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
+import { ChangeScopeService } from "../../services/change-scope.service";
 
 interface SubjectModalData {
     accept: boolean;
@@ -32,7 +33,8 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
-        public pluginManager: PluginManager
+        private pluginManager: PluginManager,
+        private changeScopeService: ChangeScopeService
     ) { }
 
     public ngOnInit() {
@@ -166,6 +168,8 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     public onChangeScope(data: ScopeFeedback): void {
+        this.changeScopeService.clearChangeScopeReq();
+
         if (data.forAllTenants) {
             this.pluginManager
                 .enablePluginForAllTenants(this.selected)
@@ -182,8 +186,25 @@ export class StatusComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.pluginManager
-            .enablePluginForSpecificTenants(this.selected, data.orgs);
+        if (!data.forTenant) {
+            return;
+        }
+
+        const requests = this.pluginManager.enablePluginForSpecificTenants(this.selected, data.orgs, true);
+
+        requests.forEach((element) => {
+            const subs = element.req.subscribe(
+                (res) => {
+                    this.changeScopeService.changeReqStatusTo(res.url, true);
+                    subs.unsubscribe();
+                },
+                (err) => {
+                    // Handle Error
+                    this.changeScopeService.changeReqStatusTo(element.url, false);
+                    console.warn(err);
+                }
+            )
+        });
     }
 
     public setWantToUpload(val: boolean): void {

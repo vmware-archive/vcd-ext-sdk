@@ -22,6 +22,11 @@ import { ChangeScope } from "./subnav/change-scope-component/change-scope.compon
 import { ChooseScope } from "./subnav/choose-scope-component/choose-scope.component";
 import { OrganisationService } from "./services/organisation.service";
 import { ChangeScopeTracker } from "./subnav/change-scope-tracker-component/change-scope-tracker.component";
+import { ChangeScopeService } from "./services/change-scope.service";
+import { DeletePluginService } from "./services/delete-plugin.service";
+import { PluginUploaderService } from "./services/plugin-uploader.service";
+import { DisableEnablePluginService } from "./services/disable-enable-plugin.service";
+import { PluginPublisher } from "./services/plugin-publisher.service";
 
 const ROUTES: Routes = [
     { path: "", component: SubnavComponent, children: [
@@ -59,6 +64,11 @@ const ROUTES: Routes = [
         AuthService,
         OrganisationService,
         VcdApiClient,
+        ChangeScopeService,
+        DeletePluginService,
+        DisableEnablePluginService,
+        PluginPublisher,
+        PluginUploaderService,
         PluginManager,
         ZipManager
     ]

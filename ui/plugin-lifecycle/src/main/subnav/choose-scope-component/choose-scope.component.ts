@@ -38,7 +38,8 @@ export class ChooseScope implements OnInit, OnDestroy {
     }
 
     public getOrgs(): void {
-        this.getOrgsSubs = this.orgsService.getOrgs().subscribe((orgs: Organisation[]) => {
+        this.orgs = this.orgsService.orgs;
+        this.getOrgsSubs = this.orgsService.watchOrgs().subscribe((orgs: Organisation[]) => {
             this.orgs = orgs;
         });
     }
