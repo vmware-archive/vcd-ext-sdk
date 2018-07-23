@@ -24,8 +24,6 @@ export class StatusComponent implements OnInit, OnDestroy {
     public modal: ModalData;
     public changeScopeState: boolean = false;
     public wantToUpload: boolean;
-    public changingPluginScope: boolean = false;
-
     public isLoading: boolean;
 
     public watchPluginListSub: Subscription;
@@ -168,7 +166,6 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     public onChangeScope(data: ScopeFeedback): void {
-        this.changingPluginScope = true;
         this.pluginManager
             .setPluginScopeFor(this.selected, data)
             .then(() => {
@@ -176,12 +173,10 @@ export class StatusComponent implements OnInit, OnDestroy {
             })
             .then(() => {
                 this.changeScopeState = false;
-                this.changingPluginScope = false;
             })
             .catch((err) => {
                 // Handle Error
                 console.warn(err);
-                this.changingPluginScope = false;
             })
     }
 

@@ -100,7 +100,6 @@ export class PluginManager {
                     );
                     return;
                 }
-
                 return;
             });
             return Promise.all(setScopeProcesses);
