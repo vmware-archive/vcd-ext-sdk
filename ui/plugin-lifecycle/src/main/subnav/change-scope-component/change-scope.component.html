@@ -2,6 +2,7 @@
     <clr-modal [clrModalOpen]="state" [clrModalClosable]="false">
         <h3 class="modal-title">Change Scope</h3>
         <div class="modal-body">
+            <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true"></vcd-loading-indicator>
             <vcd-choose-scope [(feedback)]="feedback"></vcd-choose-scope>
         </div>
         <div class="modal-footer">

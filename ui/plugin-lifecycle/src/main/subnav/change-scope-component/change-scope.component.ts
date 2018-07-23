@@ -10,8 +10,13 @@ import { ScopeFeedback } from "../../classes/ScopeFeedback";
     templateUrl: "./change-scope.component.html"
 })
 export class ChangeScope implements OnInit {
-    private _state: boolean;
+    private _state: boolean = false;
+    private _loading: boolean = false;
     public feedback: ScopeFeedback = new ScopeFeedback();
+    @Input() 
+    set loading(val: boolean) {
+        this._loading = val;
+    }
     @Input()
     set state (val: boolean) {
         if (val === false) {
@@ -31,6 +36,10 @@ export class ChangeScope implements OnInit {
 
     get state (): boolean {
         return this._state;
+    }
+
+    get loading (): boolean {
+        return this._loading;
     }
 
     public onUpdate(): void {
