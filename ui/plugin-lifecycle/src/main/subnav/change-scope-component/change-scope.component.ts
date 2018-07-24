@@ -68,6 +68,15 @@ export class ChangeScope implements OnInit {
     }
 
     public handleMixedScope(feedback: ScopeFeedback): void {
+        const checkForAction = feedback.data.find((item) => {
+            return item.action !== "none";
+        });
+
+        if (!checkForAction) {
+            console.log("Please select action");
+            return;
+        }
+
         const requests = this.pluginManager.handleMixedScope(feedback, true);
 
         requests.forEach((element) => {
