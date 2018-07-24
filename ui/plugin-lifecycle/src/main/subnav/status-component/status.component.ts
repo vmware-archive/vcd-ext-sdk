@@ -10,6 +10,7 @@ import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { ChangeScopeService } from "../../services/change-scope.service";
+import { Organisation } from "../../interfaces/Organisation";
 
 interface SubjectModalData {
     accept: boolean;
@@ -167,30 +168,23 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.changeScopeState = true;
     }
 
-    public onChangeScope(data: ScopeFeedback): void {
-        this.changeScopeService.clearChangeScopeReq();
+    public publishForAllTenants(): void {
+        this.pluginManager
+            .publishPluginForAllTenants(this.selected)
+            .then(() => {
+                return this.pluginManager.refresh();
+            })
+            .then(() => {
+                this.changeScopeState = false;
+            })
+            .catch((err) => {
+                // Handle Error
+                console.warn(err);
+            })
+    }
 
-        if (data.forAllTenants) {
-            this.pluginManager
-                .enablePluginForAllTenants(this.selected)
-                .then(() => {
-                    return this.pluginManager.refresh();
-                })
-                .then(() => {
-                    this.changeScopeState = false;
-                })
-                .catch((err) => {
-                    // Handle Error
-                    console.warn(err);
-                })
-            return;
-        }
-
-        if (!data.forTenant) {
-            return;
-        }
-
-        const requests = this.pluginManager.enablePluginForSpecificTenants(this.selected, data.orgs, true);
+    public publishForTenant(orgs: Organisation[]): void {
+        const requests = this.pluginManager.publishPluginForSpecificTenants(this.selected, orgs, true);
 
         requests.forEach((element) => {
             const subs = element.req.subscribe(
@@ -205,6 +199,63 @@ export class StatusComponent implements OnInit, OnDestroy {
                 }
             )
         });
+    }
+
+    public unpublishForAllTenants(): void {
+        this.pluginManager
+            .unpublishPluginForAllTenants(this.selected)
+            .then(() => {
+                return this.pluginManager.refresh();
+            })
+            .then(() => {
+                this.changeScopeState = false;
+            })
+            .catch((err) => {
+                // Handle Error
+                console.warn(err);
+            })
+    }
+
+    public unpublishForTenants(orgs: Organisation[]): void {
+        const requests = this.pluginManager.unpublishPluginForSpecificTenants(this.selected, orgs, true);
+
+        requests.forEach((element) => {
+            const subs = element.req.subscribe(
+                (res) => {
+                    this.changeScopeService.changeReqStatusTo(res.url, true);
+                    subs.unsubscribe();
+                },
+                (err) => {
+                    // Handle Error
+                    this.changeScopeService.changeReqStatusTo(element.url, false);
+                    console.warn(err);
+                }
+            )
+        });
+    }
+
+    public onChangeScope(data: ScopeFeedback): void {
+        this.changeScopeService.clearChangeScopeReq();
+
+        if (data.forAllTenants) {
+            this.publishForAllTenants();
+            return;
+        }
+
+        if (data.forTenant) {
+            this.publishForTenant(data.orgs);
+            return
+        }
+
+        if (data.unpublishForAllTenants) {
+            this.unpublishForAllTenants();
+            return;
+        }
+
+        if (data.unpublishForTenant) {
+            this.unpublishForTenants(data.orgs);
+            return;
+        }
     }
 
     public setWantToUpload(val: boolean): void {

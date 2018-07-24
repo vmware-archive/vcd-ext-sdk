@@ -60,12 +60,20 @@ export class PluginManager {
         return this.deletePluginService.deletePlugins(plugins, this._baseUrl);
     }
 
-    public enablePluginForAllTenants(plugins: Plugin[]): Promise<Response | void | Response[]> {
-        return this.pluginPublisher.enablePluginForAllTenants(plugins, this._baseUrl);
+    public publishPluginForAllTenants(plugins: Plugin[]): Promise<Response | void | Response[]> {
+        return this.pluginPublisher.publishPluginForAllTenants(plugins, this._baseUrl);
     }
 
-    public enablePluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean): { url: string, req: Observable<Response> }[] {
-        return this.pluginPublisher.enablePluginForSpecificTenants(plugins, forOrgs, trackScope, this._baseUrl);
+    public publishPluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean): { url: string, req: Observable<Response> }[] {
+        return this.pluginPublisher.publishPluginForSpecificTenants(plugins, forOrgs, trackScope, this._baseUrl);
+    }
+
+    public unpublishPluginForAllTenants(plugins: Plugin[]): Promise<void | Response | Response[]> {
+        return this.pluginPublisher.unpublishPluginForAllTenants(plugins, this._baseUrl);
+    }
+
+    public unpublishPluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean): { url: string, req: Observable<Response> }[] {
+        return this.pluginPublisher.unpublishPluginForSpecificTenants(plugins, forOrgs, trackScope, this._baseUrl);
     }
 
     public refresh(): Promise<void> {
@@ -126,11 +134,11 @@ export class PluginManager {
             })
             .then(() => {
                 if (pluginScope.forAllTenants) {
-                    return this.enablePluginForAllTenants([PLUGIN]);
+                    return this.publishPluginForAllTenants([PLUGIN]);
                 }
 
                 if (pluginScope.forTenant) {
-                    const publishFor: any[] = this.enablePluginForSpecificTenants([PLUGIN], pluginScope.orgs, false);
+                    const publishFor: any[] = this.publishPluginForSpecificTenants([PLUGIN], pluginScope.orgs, false);
                     publishFor.forEach((element, index) => {
                         publishFor[index].req = element.req.toPromise();
                     });

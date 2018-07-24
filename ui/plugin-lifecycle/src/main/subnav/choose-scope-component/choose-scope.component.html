@@ -5,14 +5,20 @@
                 <label>Publish the plugins for all tenants.</label>
 
                 <div class="toggle-switch">
-                    <input
-                        type="checkbox"
-                        name="forAllTenants"
-                        id="forAllTenants"
-                        [(ngModel)]="feedback.forAllTenants"
-                        (change)="onChange()"
-                        [attr.disabled]="feedback.forTenant ? 'disabled' : null">
+                    <input type="checkbox" name="forAllTenants" id="forAllTenants" [(ngModel)]="feedback.forAllTenants" (change)="onChange()"
+                        [attr.disabled]="feedback.forTenant || feedback.unpublishForTenant || feedback.unpublishForAllTenants ? 'disabled' : null">
                     <label for="forAllTenants"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <!-- Unpublish for all tenants -->
+                <label>Unpublish the plugins for all tenants.</label>
+
+                <div class="toggle-switch">
+                    <input type="checkbox" name="unpublishForAllTenants" id="unpublishForAllTenants" [(ngModel)]="feedback.unpublishForAllTenants"
+                        (change)="onChange()" [attr.disabled]="feedback.unpublishForTenant || feedback.forTenant || feedback.forAllTenants ? 'disabled' : null">
+                    <label for="unpublishForAllTenants"></label>
                 </div>
             </div>
 
@@ -20,20 +26,25 @@
                 <label>Publish the plugins for tenants.</label>
 
                 <div class="toggle-switch">
-                    <input
-                        type="checkbox"
-                        name="forTenant"
-                        id="forTenant"
-                        [(ngModel)]="feedback.forTenant"
-                        (change)="onChange()"
-                        [attr.disabled]="feedback.forAllTenants ? 'disabled' : null">
+                    <input type="checkbox" name="forTenant" id="forTenant" [(ngModel)]="feedback.forTenant" (change)="onChange()" [attr.disabled]="feedback.forAllTenants || feedback.unpublishForTenant || feedback.unpublishForAllTenants ? 'disabled' : null">
                     <label for="forTenant"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <!-- Unpublish for specific tenants -->
+                <label>Unpublish the plugins for tenants.</label>
+
+                <div class="toggle-switch">
+                    <input type="checkbox" name="unpublishForTenant" id="unpublishForTenant" [(ngModel)]="feedback.unpublishForTenant" (change)="onChange()"
+                        [attr.disabled]="feedback.unpublishForAllTenants || feedback.forTenant || feedback.forAllTenants ? 'disabled' : null">
+                    <label for="unpublishForTenant"></label>
                 </div>
             </div>
         </section>
     </form>
 
-    <div class="orgs" *ngIf="feedback.forTenant">
+    <div class="orgs" *ngIf="feedback.forTenant || feedback.unpublishForTenant">
         <clr-datagrid [(clrDgSelected)]="feedback.orgs" [clDgRowSelection]="true">
             <!-- PLACEHOLDER -->
             <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>

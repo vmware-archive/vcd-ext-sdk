@@ -15,7 +15,7 @@ export class PluginPublisher {
         private changeScopeService: ChangeScopeService
     ) {}
 
-    public enablePluginForAllTenants(plugins: Plugin[], url: string): Promise<Response | void | Response[]> {
+    private togglePluginStateForAllTenants(plugins: Plugin[], url: string, publishAll: boolean): Promise<Response | void | Response[]> {
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("x-vcloud-authorization", this.authService.getAuthToken());
@@ -25,13 +25,13 @@ export class PluginPublisher {
         const setScopeProcesses: Promise<Response>[] = [];
         plugins.forEach((pluginToUpdate) => {
             setScopeProcesses.push(
-                this.http.post(`${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/publishAll`, null, opts).toPromise()
+                this.http.post(`${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${publishAll ? 'publishAll' : 'unpublishAll'}`, null, opts).toPromise()
             );
         });
         return Promise.all(setScopeProcesses);
     }
 
-    public enablePluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean, url: string): { url: string, req: Observable<Response> }[] {
+    private togglePluginStateForSpecTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean, url: string, publish: boolean): { url: string, req: Observable<Response> }[] {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -53,10 +53,10 @@ export class PluginPublisher {
             });
 
             // Create req url
-            const REQ_URL = `${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/publish`;
+            const REQ_URL = `${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${publish ? 'publish': 'unpublish'}`;
 
             if (trackScope) {
-                this.changeScopeService.addChangeScopeReq(new ChangeScopeRequest(REQ_URL, pluginToUpdate.pluginName));
+                this.changeScopeService.addChangeScopeReq(new ChangeScopeRequest(REQ_URL, pluginToUpdate.pluginName, `${publish ? 'publish': 'unpublish'}`));
             }
 
             // Create req and collect the promise
@@ -67,5 +67,21 @@ export class PluginPublisher {
         });
 
         return setScopeProcesses;
+    }
+
+    public publishPluginForAllTenants(plugins: Plugin[], url: string): Promise<Response | void | Response[]> {
+        return this.togglePluginStateForAllTenants(plugins, url, true);
+    }
+
+    public publishPluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean, url: string): { url: string, req: Observable<Response> }[] {
+        return this.togglePluginStateForSpecTenants(plugins, forOrgs, trackScope, url, true);
+    }
+
+    public unpublishPluginForAllTenants(plugins: Plugin[], url: string): Promise<Response | void | Response[]> {
+        return this.togglePluginStateForAllTenants(plugins, url, false);
+    }
+
+    public unpublishPluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean, url: string): { url: string, req: Observable<Response> }[] {
+        return this.togglePluginStateForSpecTenants(plugins, forOrgs, trackScope, url, false);
     }
 }
