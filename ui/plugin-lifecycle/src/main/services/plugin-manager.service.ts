@@ -77,11 +77,11 @@ export class PluginManager {
     }
 
     public publishPluginForAllTenants(plugins: Plugin[]): Promise<Response | void | Response[]> {
-        return this.pluginPublisher.publishPluginForAllTenants(plugins, this._baseUrl);
+        return this.pluginPublisher.publishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl);
     }
 
     public unpublishPluginForAllTenants(plugins: Plugin[]): Promise<void | Response | Response[]> {
-        return this.pluginPublisher.unpublishPluginForAllTenants(plugins, this._baseUrl);
+        return this.pluginPublisher.unpublishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl);
     }
 
     public handleMixedScope(feedback: ScopeFeedback, trackScope: boolean): { url: string, req: Observable<Response> }[] {

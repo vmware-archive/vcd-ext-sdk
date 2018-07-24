@@ -8,8 +8,6 @@ import { PluginManager } from "../../services/plugin-manager.service";
 import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
-import { ScopeFeedback } from "../../classes/ScopeFeedback";
-import { ChangeScopeService } from "../../services/change-scope.service";
 
 interface SubjectModalData {
     accept: boolean;
@@ -33,8 +31,7 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
-        private pluginManager: PluginManager,
-        private changeScopeService: ChangeScopeService
+        private pluginManager: PluginManager
     ) { }
 
     public ngOnInit() {
@@ -174,72 +171,6 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     public openChangeScope(): void {
         this.changeScopeState = true;
-    }
-
-    public publishForAllTenants(): void {
-        this.pluginManager
-            .publishPluginForAllTenants(this.selected)
-            .then(() => {
-                return this.pluginManager.refresh();
-            })
-            .then(() => {
-                this.changeScopeState = false;
-            })
-            .catch((err) => {
-                // Handle Error
-                console.warn(err);
-            })
-    }
-
-    public unpublishForAllTenants(): void {
-        this.pluginManager
-            .unpublishPluginForAllTenants(this.selected)
-            .then(() => {
-                return this.pluginManager.refresh();
-            })
-            .then(() => {
-                this.changeScopeState = false;
-            })
-            .catch((err) => {
-                // Handle Error
-                console.warn(err);
-            })
-    }
-
-    public handleMixedScope(feedback: ScopeFeedback): void {
-        const requests = this.pluginManager.handleMixedScope(feedback, true);
-
-        requests.forEach((element) => {
-            const subs = element.req.subscribe(
-                (res) => {
-                    this.changeScopeService.changeReqStatusTo(res.url, true);
-                    subs.unsubscribe();
-                },
-                (err) => {
-                    // Handle Error
-                    this.changeScopeService.changeReqStatusTo(element.url, false);
-                    console.warn(err);
-                }
-            )
-        });
-    }
-
-    public onChangeScope(feedback: ScopeFeedback): void {
-        this.changeScopeService.clearChangeScopeReq();
-
-        if (feedback.forAllOrgs && feedback.publishForAllTenants) {
-            this.publishForAllTenants();
-            return;
-        }
-
-        if (feedback.forAllOrgs && feedback.unpublishForAllTenants) {
-            this.unpublishForAllTenants();
-            return;
-        }
-
-        if (feedback.data.length > 0) {
-            this.handleMixedScope(feedback);
-        }
     }
 
     public setWantToUpload(val: boolean): void {
