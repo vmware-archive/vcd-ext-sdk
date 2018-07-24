@@ -25,7 +25,6 @@
     "@ngrx/core": "1.2.0",
     "@ngrx/effects": "2.0.3",
     "@ngrx/store": "2.2.2",
-    "@vcd-ui/common": "file:vcd-ui/common",
     "@vcd/bindings": "file:../api-client/packages/bindings/dist",
     "@vcd/sdk": "file:../api-client/packages/sdk/dist",
     "@webcomponents/custom-elements": "1.0.0",

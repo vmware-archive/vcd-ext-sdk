@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { VcdApiClient } from './vcd.api.client';
 import { httpInterceptorProviders } from './http-interceptors';
 
+export * from './container-hooks';
 export * from './vcd.api.client';
 export * from './query';
 export * from './api.result.service';
