@@ -34,7 +34,7 @@
     "zone.js": "0.8.18",
     "es6-shim": "0.35.3",
 
-    "@vcd-ui/common": "file:vcd-ui/common"
+    "@vcd/common": "file:vcd/common"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.47",

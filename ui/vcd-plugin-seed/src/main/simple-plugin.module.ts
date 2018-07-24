@@ -3,9 +3,8 @@ import {Inject, NgModule, Optional} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
 import {ClarityModule} from "clarity-angular";
 import {Store} from "@ngrx/store";
-import {API_ROOT_URL, EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule, AuthTokenHolderService} from "@vcd-ui/common";
+import {API_ROOT_URL, EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule, AuthTokenHolderService, VcdApiClient, VcdSdkModule} from "@vcd/sdk";
 import {SimpleComponent} from "./simple/simple.component";
-import { VcdApiClient, VcdSdkModule } from "@vcd/sdk";
 
 const ROUTES: Routes = [
     { path: "", component: SimpleComponent }
