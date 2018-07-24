@@ -1,60 +1,66 @@
 <div class="choose-scope">
     <form #form="ngForm" novalidate>
         <section class="form-block">
-            <div class="form-group">
-                <label>Publish the plugins for all tenants.</label>
+            <div class="radio">
+                <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="true" name="activate" id="forAllOrgs">
+                <label for="forAllOrgs">For all organisations</label>
+            </div>
 
-                <div class="toggle-switch">
-                    <input type="checkbox" name="forAllTenants" id="forAllTenants" [(ngModel)]="feedback.forAllTenants" (change)="onChange()"
-                        [attr.disabled]="feedback.forTenant || feedback.unpublishForTenant || feedback.unpublishForAllTenants ? 'disabled' : null">
-                    <label for="forAllTenants"></label>
+            <div class="relative">
+                <div class="overlay" *ngIf="!feedback.forAllOrgs"></div>
+
+                <div class="form-group">
+                    <label>Publish the plugins for all tenants.</label>
+
+                    <div class="checkbox">
+                        <input type="checkbox" name="publishForAllTenants" id="publishForAllTenants" [(ngModel)]="feedback.publishForAllTenants" (change)="onChange()"
+                            [attr.disabled]="feedback.unpublishForAllTenants || !feedback.forAllOrgs ? 'disabled' : null">
+                        <label for="publishForAllTenants"></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Unpublish the plugins for all tenants.</label>
+
+                    <div class="checkbox">
+                        <input type="checkbox" name="unpublishForAllTenants" id="unpublishForAllTenants" [(ngModel)]="feedback.unpublishForAllTenants"
+                            (change)="onChange()" [attr.disabled]="feedback.publishForAllTenants || !feedback.forAllOrgs ? 'disabled' : null">
+                        <label for="unpublishForAllTenants"></label>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <!-- Unpublish for all tenants -->
-                <label>Unpublish the plugins for all tenants.</label>
-
-                <div class="toggle-switch">
-                    <input type="checkbox" name="unpublishForAllTenants" id="unpublishForAllTenants" [(ngModel)]="feedback.unpublishForAllTenants"
-                        (change)="onChange()" [attr.disabled]="feedback.unpublishForTenant || feedback.forTenant || feedback.forAllTenants ? 'disabled' : null">
-                    <label for="unpublishForAllTenants"></label>
-                </div>
+            <div class="radio">
+                <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="false" name="activate" id="forSpecOrgs">
+                <label for="forSpecOrgs">For specific organisations</label>
             </div>
 
-            <div class="form-group">
-                <label>Publish the plugins for tenants.</label>
+            <div class="relative list">
+                <div class="overlay" *ngIf="feedback.forAllOrgs"></div>
+                <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
+                    <!-- PLACEHOLDER -->
+                    <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
+                    <!-- END PLACEHOLDER -->
 
-                <div class="toggle-switch">
-                    <input type="checkbox" name="forTenant" id="forTenant" [(ngModel)]="feedback.forTenant" (change)="onChange()" [attr.disabled]="feedback.forAllTenants || feedback.unpublishForTenant || feedback.unpublishForAllTenants ? 'disabled' : null">
-                    <label for="forTenant"></label>
-                </div>
-            </div>
+                    <clr-dg-column>Organisation Name</clr-dg-column>
+                    <clr-dg-column>Plugin Name</clr-dg-column>
+                    <clr-dg-column>Action</clr-dg-column>
 
-            <div class="form-group">
-                <!-- Unpublish for specific tenants -->
-                <label>Unpublish the plugins for tenants.</label>
-
-                <div class="toggle-switch">
-                    <input type="checkbox" name="unpublishForTenant" id="unpublishForTenant" [(ngModel)]="feedback.unpublishForTenant" (change)="onChange()"
-                        [attr.disabled]="feedback.unpublishForAllTenants || feedback.forTenant || feedback.forAllTenants ? 'disabled' : null">
-                    <label for="unpublishForTenant"></label>
-                </div>
+                    <clr-dg-row *clrDgItems="let item of list" [clrDgItem]="item">
+                        <clr-dg-cell>{{ item.orgName }}</clr-dg-cell>
+                        <clr-dg-cell>{{ item.plugin.pluginName }}</clr-dg-cell>
+                        <clr-dg-cell>
+                            <div class="select">
+                                <select [ngModel]="item.action" (ngModelChange)="setItemValue($event, item)" name="action" #action="ngModel">
+                                    <option [value]="'none'">None</option>
+                                    <option [value]="'publish'">Publish</option>
+                                    <option [value]="'unpublish'">Unpublish</option>
+                                </select>
+                            </div>
+                        </clr-dg-cell>
+                    </clr-dg-row>
+                </clr-datagrid>
             </div>
         </section>
     </form>
-
-    <div class="orgs" *ngIf="feedback.forTenant || feedback.unpublishForTenant">
-        <clr-datagrid [(clrDgSelected)]="feedback.orgs" [clDgRowSelection]="true">
-            <!-- PLACEHOLDER -->
-            <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
-            <!-- END PLACEHOLDER -->
-
-            <clr-dg-column>Organisation Name</clr-dg-column>
-
-            <clr-dg-row *clrDgItems="let org of orgs" [clrDgItem]="org">
-                <clr-dg-cell>{{ org.name }}</clr-dg-cell>
-            </clr-dg-row>
-        </clr-datagrid>
-    </div>
 </div>

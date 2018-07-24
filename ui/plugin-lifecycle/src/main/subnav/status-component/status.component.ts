@@ -10,7 +10,6 @@ import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { ChangeScopeService } from "../../services/change-scope.service";
-import { Organisation } from "../../interfaces/Organisation";
 
 interface SubjectModalData {
     accept: boolean;
@@ -21,7 +20,7 @@ interface SubjectModalData {
     templateUrl: "./status.component.html"
 })
 export class StatusComponent implements OnInit, OnDestroy {
-    public selected: Plugin[];
+    public _selected: Plugin[];
     public plugins: Plugin[];
     public modal: ModalData;
     public changeScopeState: boolean = false;
@@ -48,6 +47,15 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.watchPluginListSub.unsubscribe();
+    }
+
+    get selected(): Plugin[] {
+        return this._selected;
+    }
+
+    set selected(plugins: Plugin[]) {
+        this._selected = plugins;
+        this.pluginManager.selectedPlugins = this._selected;
     }
 
     public getOpened(): boolean {
@@ -183,24 +191,6 @@ export class StatusComponent implements OnInit, OnDestroy {
             })
     }
 
-    public publishForTenant(orgs: Organisation[]): void {
-        const requests = this.pluginManager.publishPluginForSpecificTenants(this.selected, orgs, true);
-
-        requests.forEach((element) => {
-            const subs = element.req.subscribe(
-                (res) => {
-                    this.changeScopeService.changeReqStatusTo(res.url, true);
-                    subs.unsubscribe();
-                },
-                (err) => {
-                    // Handle Error
-                    this.changeScopeService.changeReqStatusTo(element.url, false);
-                    console.warn(err);
-                }
-            )
-        });
-    }
-
     public unpublishForAllTenants(): void {
         this.pluginManager
             .unpublishPluginForAllTenants(this.selected)
@@ -216,8 +206,8 @@ export class StatusComponent implements OnInit, OnDestroy {
             })
     }
 
-    public unpublishForTenants(orgs: Organisation[]): void {
-        const requests = this.pluginManager.unpublishPluginForSpecificTenants(this.selected, orgs, true);
+    public handleMixedScope(feedback: ScopeFeedback): void {
+        const requests = this.pluginManager.handleMixedScope(feedback, true);
 
         requests.forEach((element) => {
             const subs = element.req.subscribe(
@@ -234,27 +224,21 @@ export class StatusComponent implements OnInit, OnDestroy {
         });
     }
 
-    public onChangeScope(data: ScopeFeedback): void {
+    public onChangeScope(feedback: ScopeFeedback): void {
         this.changeScopeService.clearChangeScopeReq();
 
-        if (data.forAllTenants) {
+        if (feedback.forAllOrgs && feedback.publishForAllTenants) {
             this.publishForAllTenants();
             return;
         }
 
-        if (data.forTenant) {
-            this.publishForTenant(data.orgs);
-            return
-        }
-
-        if (data.unpublishForAllTenants) {
+        if (feedback.forAllOrgs && feedback.unpublishForAllTenants) {
             this.unpublishForAllTenants();
             return;
         }
 
-        if (data.unpublishForTenant) {
-            this.unpublishForTenants(data.orgs);
-            return;
+        if (feedback.data.length > 0) {
+            this.handleMixedScope(feedback);
         }
     }
 

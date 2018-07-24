@@ -16,6 +16,9 @@ export class PluginManager {
     private _baseUrl = "https://bos1-vcd-sp-static-200-117.eng.vmware.com";
     private _plugins: Plugin[];
     private _pluginsSubject = new Subject<Plugin[]>();
+    
+    private _selectedPlugins: Plugin[] = [];
+    private _selectedPluginsSubj = new Subject<Plugin[]>();
 
     constructor(
         private http: Http,
@@ -28,6 +31,19 @@ export class PluginManager {
         this.authService.auth().then(() => {
             this.getPluginsList();
         });
+    }
+
+    set selectedPlugins(plugins: Plugin[]) {
+        this._selectedPlugins = plugins;
+        this._selectedPluginsSubj.next(this.selectedPlugins);
+    }
+
+    get selectedPlugins(): Plugin[] {
+        return this._selectedPlugins;
+    }
+
+    public watchSelectedPlugins(): Observable<Plugin[]> {
+        return this._selectedPluginsSubj.asObservable();
     }
 
     public getPlugins(): Plugin[] {
@@ -64,16 +80,12 @@ export class PluginManager {
         return this.pluginPublisher.publishPluginForAllTenants(plugins, this._baseUrl);
     }
 
-    public publishPluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean): { url: string, req: Observable<Response> }[] {
-        return this.pluginPublisher.publishPluginForSpecificTenants(plugins, forOrgs, trackScope, this._baseUrl);
-    }
-
     public unpublishPluginForAllTenants(plugins: Plugin[]): Promise<void | Response | Response[]> {
         return this.pluginPublisher.unpublishPluginForAllTenants(plugins, this._baseUrl);
     }
 
-    public unpublishPluginForSpecificTenants(plugins: Plugin[], forOrgs: Organisation[], trackScope: boolean): { url: string, req: Observable<Response> }[] {
-        return this.pluginPublisher.unpublishPluginForSpecificTenants(plugins, forOrgs, trackScope, this._baseUrl);
+    public handleMixedScope(feedback: ScopeFeedback, trackScope: boolean): { url: string, req: Observable<Response> }[] {
+        return this.pluginPublisher.handleMixedScope(this.selectedPlugins, feedback, trackScope, this._baseUrl);
     }
 
     public refresh(): Promise<void> {
@@ -133,12 +145,12 @@ export class PluginManager {
                 return this.pluginUploaderService.sendZip(transferLink, payload.file);
             })
             .then(() => {
-                if (pluginScope.forAllTenants) {
+                if (pluginScope.publishForAllTenants) {
                     return this.publishPluginForAllTenants([PLUGIN]);
                 }
 
-                if (pluginScope.forTenant) {
-                    const publishFor: any[] = this.publishPluginForSpecificTenants([PLUGIN], pluginScope.orgs, false);
+                if (pluginScope.data.length > 0) {
+                    const publishFor: any[] = this.handleMixedScope(pluginScope, false);
                     publishFor.forEach((element, index) => {
                         publishFor[index].req = element.req.toPromise();
                     });

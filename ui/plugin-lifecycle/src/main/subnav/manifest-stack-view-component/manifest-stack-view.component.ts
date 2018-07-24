@@ -3,7 +3,6 @@
  */
 import { Component, Inject, OnInit, Input } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
-import { UploadPayload } from "../../interfaces/Plugin";
 
 @Component({
     selector: "vcd-manifest-stack-view",
@@ -11,7 +10,7 @@ import { UploadPayload } from "../../interfaces/Plugin";
 })
 export class VcdManifestStackView implements OnInit {
     @Input() parsing: boolean;
-    @Input() uploadPayload: UploadPayload;
+    @Input() uploadPayload: any;
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string

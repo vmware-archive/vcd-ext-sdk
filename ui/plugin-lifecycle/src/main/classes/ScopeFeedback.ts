@@ -1,40 +1,21 @@
 import { Organisation } from "../interfaces/Organisation";
+import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 
 export class ScopeFeedback {
-    private _forTenant: boolean = false;
-    private _unpublishForTenant: boolean = false;
-
-    private _forAllTenants: boolean = false;
+    private _publishForAllTenants: boolean = false;
     private _unpublishForAllTenants: boolean = false;
+    private _forAllOrgs: boolean = true;
 
-    private _orgs: Organisation[] = [];
+    private _data: ChangeScopeItem[] = [];
 
     constructor() {}
 
-    // Publishing...
-    get forTenant(): boolean {
-        return this._forTenant;
+    get publishForAllTenants(): boolean {
+        return this._publishForAllTenants;
     }
 
-    set forTenant(val: boolean) {
-        this._forTenant = val;
-    }
-
-    get forAllTenants(): boolean {
-        return this._forAllTenants;
-    }
-
-    set forAllTenants(val: boolean) {
-        this._forAllTenants = val;
-    }
-
-    // Unpublishing...
-    get unpublishForTenant(): boolean {
-        return this._unpublishForTenant;
-    }
-
-    set unpublishForTenant(val: boolean) {
-        this._unpublishForTenant = val;
+    set publishForAllTenants(val: boolean) {
+        this._publishForAllTenants = val;
     }
 
     get unpublishForAllTenants(): boolean {
@@ -45,24 +26,28 @@ export class ScopeFeedback {
         this._unpublishForAllTenants = val;
     }
 
-    // Orgs...
-    get orgs(): Organisation[] {
-        return this._orgs;
+    get forAllOrgs(): boolean {
+        return this._forAllOrgs;
     }
 
-    set orgs(orgs: Organisation[]) {
-        this._orgs = orgs;
+    set forAllOrgs(val: boolean) {
+        this._forAllOrgs = val;
     }
 
-    public addNewOrg(org: Organisation): void {
+    set data(data: ChangeScopeItem[]) {
+        this._data = data;
+    }
+
+    get data(): ChangeScopeItem[] {
+        return this._data
+    }
+
+    public addNewOrg(org: ChangeScopeItem): void {
         if (!org) { return; }
-        this._orgs.push(org);
+        this._data.push(org);
     }
 
     public reset(): void {
-        this.forAllTenants = false;
-        this.forTenant = false;
         this.unpublishForAllTenants = false;
-        this.unpublishForTenant = false;
     }
 }

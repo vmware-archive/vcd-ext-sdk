@@ -7,7 +7,8 @@ import { ScopeFeedback } from "../../classes/ScopeFeedback";
 
 @Component({
     selector: "vcd-change-scope",
-    templateUrl: "./change-scope.component.html"
+    templateUrl: "./change-scope.component.html",
+    styleUrls: ["./change-scope.component.scss"]
 })
 export class ChangeScope implements OnInit {
     private _state: boolean = false;
