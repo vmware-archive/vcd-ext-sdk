@@ -9,7 +9,8 @@ import { getPropsWithout } from "../../helpers/object-helpers";
 
 @Component({
     selector: "vcd-change-scope",
-    templateUrl: "./change-scope.component.html"
+    templateUrl: "./change-scope.component.html",
+    styleUrls: ["./change-scope.component.scss"]
 })
 export class ChangeScope implements OnInit {
     public feedback = new ScopeFeedback();

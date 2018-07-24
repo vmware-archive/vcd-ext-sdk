@@ -6,7 +6,8 @@ import { ScopeFeedback } from "../../classes/ScopeFeedback";
 
 @Component({
     selector: "vcd-choose-scope",
-    templateUrl: "./choose-scope.component.html"
+    templateUrl: "./choose-scope.component.html",
+    styleUrls: ["./choose-scope.component.scss"]
 })
 export class ChooseScope implements OnInit {
     private _feedback: ScopeFeedback;
@@ -32,7 +33,7 @@ export class ChooseScope implements OnInit {
     constructor() {}
 
     ngOnInit() {
-        this.getOrgs();
+        this.loadData();
     }
 
     get feedback(): ScopeFeedback {

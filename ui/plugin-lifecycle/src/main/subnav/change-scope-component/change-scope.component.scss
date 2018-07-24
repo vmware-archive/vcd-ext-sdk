@@ -1,0 +1,10 @@
+@function calculateRem($size) {
+    $remSize: $size / 24px;
+    @return #{$remSize}rem;
+  }
+
+.modal-lg {
+    .modal-dialog {
+        width: calculateRem(960px);
+    }
+}
