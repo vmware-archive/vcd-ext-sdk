@@ -6,7 +6,7 @@ import {CommonModule} from "@angular/common";
 import {Inject, NgModule} from "@angular/core";
 import {RouterModule} from "@angular/router";
 import {Store} from "@ngrx/store";
-import {EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction} from "@vcd-ui/common";
+import {EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction} from "@vcd/common";
 import {AboutComponent} from "./about.component";
 import {ROUTES} from "./about.routes";
 

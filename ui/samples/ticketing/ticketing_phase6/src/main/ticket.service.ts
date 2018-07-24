@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 
 import {Ticket} from './ticket';
 
-import {AuthTokenHolderService, API_ROOT_URL} from '@vcd-ui/common';
+import {AuthTokenHolderService, API_ROOT_URL} from '@vcd/common';
 
 @Injectable()
 export class TicketService {

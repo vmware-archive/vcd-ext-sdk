@@ -26,7 +26,7 @@ export default {
         '@ngrx/effects',
         'clarity-angular',
         'reselect',
-        '@vcd-ui/common'
+        '@vcd/common'
     ],
     plugins: [
         angular({
