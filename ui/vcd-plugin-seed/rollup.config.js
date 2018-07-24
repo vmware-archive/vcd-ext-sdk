@@ -1,8 +1,8 @@
 // rollup.config.js
 import angular from 'rollup-plugin-angular';
-import commonjs from 'rollup-plugin-commonjs';
-import resolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 import sass from 'node-sass';
 import tsc from 'typescript';
 
@@ -29,8 +29,7 @@ export default {
         '@ngrx/store',
         '@ngrx/effects',
         'clarity-angular',
-        'reselect',
-        '@vcd-ui/common'
+        'reselect'
     ],
     plugins: [
         angular({
