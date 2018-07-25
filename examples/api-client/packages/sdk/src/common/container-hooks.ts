@@ -2,14 +2,18 @@
  * This is the currently supported - albeit very minimal - public SDK.
  */
 
-import {OpaqueToken} from '@angular/core';
+import {OpaqueToken, NgModule} from '@angular/core';
 
 // Bind straight into the hooks provided by the container.
 if (!window["System"] || !window["System"]["registry"] || !window["System"]["registry"]["get"]) {
     throw new Error("SystemJS registry not found");
 }
 
-const containerHooks: any = window["System"]["registry"]["get"]("@vcd/common");
+let containerHooks: any = window["System"]["registry"]["get"]("@vcd/common");
+if (!containerHooks) {
+    containerHooks = window["System"]["registry"]["get"]("@vcd-ui/common");
+}
+
 if (!containerHooks) {
     throw new Error("VCD UI container hooks not present in SystemJS registry");
 }

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { EXTENSION_ASSET_URL, VcdApiClient } from '@vcd/sdk';
+import { VcdApiClient } from '@vcd/sdk';
+import { EXTENSION_ASSET_URL } from '@vcd/sdk/common';
 
 @Component({
     selector: "plugin-simple",
