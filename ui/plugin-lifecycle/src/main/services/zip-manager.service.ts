@@ -33,7 +33,7 @@ export class ZipManager {
             isValid: boolean;
             entries: any[];
         }>((resolve, reject) => {
-            if (entries.length < 4) {
+            if (entries.length < 3) {
                 resolve({
                     isValid: false,
                     entries
@@ -42,8 +42,8 @@ export class ZipManager {
             }
 
             entries.forEach((entrie) => {
-                const validStructure = /((manifest|i18n|).(json)$)|((bundle).(js)$)|((assets\/)([0-9]|[a-z]+).(svg|png|jpg))$/gm.test(entrie.filename)
-                
+                const validStructure = /((manifest|i18n|).(json)$)|((bundle).(js)$)|([0-9]|[a-z]+\/)([0-9]|[a-z]+).(svg|png|jpg)$/gm.test(entrie.filename);
+            
                 if (!validStructure) {
                     resolve({
                         isValid: false,
