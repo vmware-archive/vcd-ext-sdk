@@ -3,7 +3,8 @@ import {Inject, NgModule, Optional} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
 import {ClarityModule} from "clarity-angular";
 import {Store} from "@ngrx/store";
-import {API_ROOT_URL, EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule, AuthTokenHolderService, VcdApiClient, VcdSdkModule} from "@vcd/sdk";
+import { VcdApiClient, VcdSdkModule } from "@vcd/sdk";
+import { EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule } from "@vcd/sdk/common";
 import {SimpleComponent} from "./simple/simple.component";
 
 const ROUTES: Routes = [
@@ -26,8 +27,7 @@ const ROUTES: Routes = [
     providers: [VcdApiClient]
 })
 export class SimplePluginModule {
-    constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string, @Inject(API_ROOT_URL) private baseUrl: string, private client: VcdApiClient,
-            @Optional() private authToken: AuthTokenHolderService) {
+    constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
         const registration: ExtensionNavRegistration = {
             path: extensionRoute,
             icon: "page",
@@ -36,10 +36,5 @@ export class SimplePluginModule {
         };
 
         appStore.dispatch(new ExtensionNavRegistrationAction(registration));
-
-        this.client.baseUrl = this.baseUrl;
-        if (this.authToken) {
-            this.client.setAuthentication(this.authToken.token).subscribe();
-        }
     }
 }

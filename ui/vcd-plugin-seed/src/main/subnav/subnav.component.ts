@@ -1,5 +1,5 @@
 import {Component, Inject} from "@angular/core";
-import {EXTENSION_ASSET_URL} from '@vcd/sdk';
+import {EXTENSION_ASSET_URL} from '@vcd/sdk/common';
 
 @Component({
     selector: "plugin-subnav",

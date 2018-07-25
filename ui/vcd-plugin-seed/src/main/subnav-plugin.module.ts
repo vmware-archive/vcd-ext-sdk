@@ -3,7 +3,7 @@ import {Inject, NgModule} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
 import {ClarityModule} from "clarity-angular";
 import {Store} from "@ngrx/store";
-import {EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule} from "@vcd/sdk";
+import {EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule} from "@vcd/sdk/common";
 import {SubnavComponent} from "./subnav/subnav.component";
 import {AboutComponent} from "./subnav/about.component";
 import {StatusComponent} from "./subnav/status.component";
