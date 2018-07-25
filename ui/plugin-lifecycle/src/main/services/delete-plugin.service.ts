@@ -8,9 +8,7 @@ export class DeletePluginService {
     constructor(
         private http: Http,
         private authService: AuthService
-    ) {
-
-    }
+    ) {}
 
     public deletePlugins(plugins: Plugin[], url: string): Promise<Response[]> {
         const headers = new Headers();

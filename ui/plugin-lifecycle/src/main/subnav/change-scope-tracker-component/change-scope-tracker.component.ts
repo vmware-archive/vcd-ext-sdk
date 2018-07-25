@@ -1,8 +1,7 @@
 /*
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PluginManager } from "../../services/plugin-manager.service";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ChangeScopeRequest } from "../../classes/ChangeScopeRequest";
 import { ChangeScopeService } from "../../services/change-scope.service";
@@ -11,7 +10,24 @@ import { ChangeScopeService } from "../../services/change-scope.service";
     selector: "vcd-change-scope-tracker",
     templateUrl: "./change-scope-tracker.component.html"
 })
-export class ChangeScopeTracker implements OnInit, OnDestroy {
+export class ChangeScopeTracker implements OnInit {
+    private _open: boolean = false;
+
+    @Input() 
+    set open(val: boolean) {
+        if (val === false) {
+            if (this.watchChangeScopeReq) {
+                this.watchChangeScopeReq.unsubscribe();
+            }
+        }
+
+        if (val === true) {
+            this.loadRequests();
+        }
+
+        this._open = val;
+    }
+    @Output() openChange = new EventEmitter<boolean>();
     public requests: ChangeScopeRequest[];
     public watchChangeScopeReq: Subscription;
 
@@ -23,13 +39,18 @@ export class ChangeScopeTracker implements OnInit, OnDestroy {
         this.loadRequests();
     }
 
-    ngOnDestroy() {
-        this.watchChangeScopeReq.unsubscribe();
+    get open(): boolean {
+        return this._open;
     }
 
     public loadRequests(): void {
         this.watchChangeScopeReq = this.changeScopeService.watchChangeScopeReq().subscribe((data) => {
             this.requests = data;
-        })
+        });
+    }
+
+    public onClose(): void {
+        this.open = false;
+        this.openChange.emit(false);
     }
 }

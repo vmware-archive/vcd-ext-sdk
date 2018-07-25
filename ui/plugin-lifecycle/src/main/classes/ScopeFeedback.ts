@@ -48,7 +48,9 @@ export class ScopeFeedback {
     }
 
     public reset(): void {
+        this.forAllOrgs = true;
         this.publishForAllTenants = false;
         this.unpublishForAllTenants = false;
+        this.data = [];
     }
 }
