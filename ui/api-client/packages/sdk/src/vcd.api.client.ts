@@ -1,12 +1,13 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Inject, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HTTP_INTERCEPTORS, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 import { LoggingInterceptor, RequestHeadersInterceptor } from './http-interceptors/index';
 import { SessionType, QueryResultRecordsType, AuthorizedLocationType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
 import { Query } from './query';
+import { AuthTokenHolderService, API_ROOT_URL } from './common';
 
 /**
  * A basic client for interacting with the vCloud Director APIs.
@@ -25,11 +26,13 @@ export class VcdApiClient {
 
     private interceptors: HttpInterceptor[];
 
-    private _session: SessionType;
-    private _locations: object = {};
+    private _session: BehaviorSubject<SessionType> = new BehaviorSubject<SessionType>(null);
+    private _sessionObservable: Observable<SessionType> = this._session.asObservable().skipWhile(session => !session);
 
-    constructor(private http: HttpClient, private injector: Injector) {
+    constructor(private http: HttpClient, private authToken: AuthTokenHolderService, @Inject(API_ROOT_URL) @Optional() private apiRootUrl: string = '', private injector: Injector) {
         this.interceptors = injector.get(HTTP_INTERCEPTORS);
+        this._baseUrl = apiRootUrl;
+        this.setAuthentication(this.authToken.token).subscribe();
     }
 
     public setVersion(version: string): VcdApiClient {
@@ -53,8 +56,7 @@ export class VcdApiClient {
             .pipe(
                 map(this.extractSessionType),
                 tap(session => {
-                    this._session = session;
-                    this._session.authorizedLocations.location.forEach(element => this._locations[element.locationId] = element);
+                    this._session.next(session);
                 })
             );
     }
@@ -80,8 +82,7 @@ export class VcdApiClient {
                 ),
                 map(this.extractSessionType),
                 tap(session => {
-                    this._session = session;
-                    this._session.authorizedLocations.location.forEach(element => this._locations[element.locationId] = element);
+                    this._session.next(session);
                 })
             );
     }
@@ -90,16 +91,24 @@ export class VcdApiClient {
         return this.http.get<T>(`${this._baseUrl}/api/query${builder.get()}`)
     }
 
-    public get username(): string {
-        return this._session.user;
+    public get session(): Observable<SessionType> {
+        return this._sessionObservable;
     }
 
-    public get organization(): string {
-        return this._session.org;
+    public get username(): Observable<string> {
+        return this._sessionObservable.map(session => session.user);
     }
 
-    public get location(): AuthorizedLocationType {
-        return this._locations[this._session.locationId];
+    public get organization(): Observable<string> {
+        return this._sessionObservable.map(session => session.org);
+    }
+
+    public get location(): Observable<AuthorizedLocationType> {
+        return this._sessionObservable.map(session => session.authorizedLocations.location.find(location => location.locationId == session.locationId));
+    }
+
+    public getLocation(session: SessionType): AuthorizedLocationType {
+        return session.authorizedLocations.location.find(location => location.locationId == session.locationId);
     }
 
 
