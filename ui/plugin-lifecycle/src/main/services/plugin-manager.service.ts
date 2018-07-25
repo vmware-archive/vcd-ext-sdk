@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable, Subject } from "rxjs";
-import { Plugin, UploadPayload } from "../interfaces/Plugin";
+import { Plugin, UploadPayload, ChangeScopePlugin } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
@@ -10,6 +10,7 @@ import { DisableEnablePluginService } from "./disable-enable-plugin.service";
 import { PluginUploaderService } from "./plugin-uploader.service";
 import { DeletePluginService } from "./delete-plugin.service";
 import { PluginPublisher } from "./plugin-publisher.service";
+import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
 
 @Injectable()
 export class PluginManager {
@@ -76,16 +77,16 @@ export class PluginManager {
         return this.deletePluginService.deletePlugins(plugins, this._baseUrl);
     }
 
-    public publishPluginForAllTenants(plugins: Plugin[]): Promise<Response | void | Response[]> {
-        return this.pluginPublisher.publishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl);
+    public publishPluginForAllTenants(plugins: Plugin[], trackScopeChange: boolean): ChangeScopeRequestTo[] {
+        return this.pluginPublisher.publishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl, trackScopeChange);
     }
 
-    public unpublishPluginForAllTenants(plugins: Plugin[]): Promise<void | Response | Response[]> {
-        return this.pluginPublisher.unpublishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl);
+    public unpublishPluginForAllTenants(plugins: Plugin[], trackScopeChange: boolean): ChangeScopeRequestTo[] {
+        return this.pluginPublisher.unpublishPluginForAllTenants(plugins ? plugins : this.selectedPlugins, this._baseUrl, trackScopeChange);
     }
 
-    public handleMixedScope(feedback: ScopeFeedback, trackScope: boolean): { url: string, req: Observable<Response> }[] {
-        return this.pluginPublisher.handleMixedScope(this.selectedPlugins, feedback, trackScope, this._baseUrl);
+    public handleMixedScope(plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean): { url: string, req: Observable<Response> }[] {
+        return this.pluginPublisher.handleMixedScope(plugins, scopeFeedback, trackScopeChange, this._baseUrl);
     }
 
     public refresh(): Promise<void> {
@@ -112,19 +113,19 @@ export class PluginManager {
         return promise;
     }
 
-    public uploadPlugin(payload: UploadPayload, pluginScope: ScopeFeedback): Promise<Response | void | Response[]> {
+    public uploadPlugin(payload: UploadPayload, scopeFeedback: ScopeFeedback): Observable<ChangeScopeRequestTo[]> {
         const PLUGIN: any = {
             id: null,
             file: null
         };
 
-        return this.pluginUploaderService.proccessManifest(payload.manifest)
+        const observable = new Observable<ChangeScopeRequestTo[]>((observer) => {
+            this.pluginUploaderService.proccessManifest(payload.manifest)
             .then((pluginDesc) => {
                 const headers = new Headers();
                 headers.append("Accept", "application/json");
                 headers.append("Content-Type", "application/json");
                 headers.append("x-vcloud-authorization", this.authService.getAuthToken());
-                // headers.append("Content-Type", "multipart/form-data");
                 const opts = new RequestOptions();
                 opts.headers = headers;
 
@@ -145,21 +146,26 @@ export class PluginManager {
                 return this.pluginUploaderService.sendZip(transferLink, payload.file);
             })
             .then(() => {
-                if (pluginScope.publishForAllTenants) {
-                    return this.publishPluginForAllTenants([PLUGIN]);
+                if (scopeFeedback.forAllOrgs && scopeFeedback.publishForAllTenants) {
+                    observer.next(this.publishPluginForAllTenants([PLUGIN], false));
+                    return
                 }
 
-                if (pluginScope.data.length > 0) {
-                    const publishFor: any[] = this.handleMixedScope(pluginScope, false);
-                    publishFor.forEach((element, index) => {
-                        publishFor[index].req = element.req.toPromise();
-                    });
-                    return publishFor;
+                if (scopeFeedback.forAllOrgs && scopeFeedback.unpublishForAllTenants) {
+                    observer.next(this.unpublishPluginForAllTenants([PLUGIN], false));
+                    return
                 }
 
-                return new Promise<Response | void>((resolve) => {
-                    resolve();
-                });
-            })
+                if (scopeFeedback.data.length > 0) {
+                    const publishFor = this.handleMixedScope([{ id: PLUGIN.id, pluginName: payload.manifest.name }], scopeFeedback, false);
+                    observer.next(publishFor);
+                    return;
+                }
+
+                observer.next();
+            });
+        });
+
+        return observable;
     }
 }

@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs";
-import { Plugin } from "../interfaces/Plugin";
+import { Plugin, ChangeScopePlugin } from "../interfaces/Plugin";
 import { AuthService } from "./auth.service";
-import { Organisation } from "../interfaces/Organisation";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
 import { ChangeScopeService } from "./change-scope.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
-import { forEach } from "@angular/router/src/utils/collection";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
+import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
 
 @Injectable()
 export class PluginPublisher {
@@ -18,23 +17,30 @@ export class PluginPublisher {
         private changeScopeService: ChangeScopeService
     ) {}
 
-    private togglePluginStateForAllTenants(plugins: Plugin[], url: string, publishAll: boolean): Promise<Response | void | Response[]> {
+    private togglePluginStateForAllTenants(plugins: Plugin[], url: string, hasToBe: string, trackScopeChange: boolean = false): ChangeScopeRequestTo[] {
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("x-vcloud-authorization", this.authService.getAuthToken());
         const opts = new RequestOptions();
         opts.headers = headers;
 
-        const setScopeProcesses: Promise<Response>[] = [];
+        const setScopeProcesses: ChangeScopeRequestTo[] = [];
         plugins.forEach((pluginToUpdate) => {
-            setScopeProcesses.push(
-                this.http.post(`${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${publishAll ? 'publishAll' : 'unpublishAll'}`, null, opts).toPromise()
-            );
+            const REQ_URL = `${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${hasToBe}`;
+
+            if (trackScopeChange) {
+                this.changeScopeService.addChangeScopeReq(new ChangeScopeRequest(REQ_URL, pluginToUpdate.pluginName, `${hasToBe}`));
+            }
+
+            setScopeProcesses.push({
+                url: REQ_URL,
+                req: this.http.post(REQ_URL, null, opts)
+            });
         });
-        return Promise.all(setScopeProcesses);
+        return setScopeProcesses;
     }
 
-    private togglePluginStateForSpecTenants(plugin: Plugin, changeScopeItems: ChangeScopeItem[], trackScope: boolean, url: string, hasToBe: string): { url: string, req: Observable<Response> } {
+    private togglePluginStateForSpecTenants(plugin: Plugin, changeScopeItems: ChangeScopeItem[], trackScopeChange: boolean, url: string, hasToBe: string): ChangeScopeRequestTo {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -53,31 +59,30 @@ export class PluginPublisher {
         // Create req url
         const REQ_URL = `${url}/cloudapi/extensions/ui/${plugin.id}/tenants/${hasToBe}`;
 
-        if (trackScope) {
-            this.changeScopeService.addChangeScopeReq(new ChangeScopeRequest(REQ_URL, plugin.pluginName, `${hasToBe}`));
+        if (trackScopeChange) {
+            this.changeScopeService.addChangeScopeReq(new ChangeScopeRequest(REQ_URL, plugin.pluginName ? plugin.pluginName : plugin.id, `${hasToBe}`));
         }
 
-        // Create req and collect the promise
         return {
             url: REQ_URL,
             req: this.http.post(REQ_URL, body, opts)
         };
     }
 
-    public publishPluginForAllTenants(plugins: Plugin[], url: string): Promise<Response | void | Response[]> {
-        return this.togglePluginStateForAllTenants(plugins, url, true);
+    public publishPluginForAllTenants(plugins: Plugin[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
+        return this.togglePluginStateForAllTenants(plugins, url, "publishAll", trackScopeChange);
     }
 
-    public unpublishPluginForAllTenants(plugins: Plugin[], url: string): Promise<Response | void | Response[]> {
-        return this.togglePluginStateForAllTenants(plugins, url, false);
+    public unpublishPluginForAllTenants(plugins: Plugin[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
+        return this.togglePluginStateForAllTenants(plugins, url, "unpublishAll", trackScopeChange);
     }
 
-    public handleMixedScope(selectedPlugins: Plugin[], feedback: ScopeFeedback, trackScope: boolean, url: string): { url: string, req: Observable<Response> }[] {
+    public handleMixedScope(plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean, url: string): ChangeScopeRequestTo[] {
         const result: { url: string, req: Observable<Response> }[] = [];
 
-        selectedPlugins.forEach((selectedPlugin: Plugin) => {
-            const changeScopeItems = feedback.data.filter((el) => {
-                return selectedPlugin.id === el.plugin.id;
+        plugins.forEach((selectedPlugin: Plugin) => {
+            const changeScopeItems = scopeFeedback.data.filter((el) => {
+                return selectedPlugin.pluginName === el.plugin;
             });
 
             const toBePublished = changeScopeItems.filter((item) => {
@@ -89,11 +94,11 @@ export class PluginPublisher {
             });
 
             if (toBePublished.length > 0) {
-                result.push(this.togglePluginStateForSpecTenants(selectedPlugin, toBePublished, trackScope, url, 'publish'));
+                result.push(this.togglePluginStateForSpecTenants(selectedPlugin, toBePublished, trackScopeChange, url, 'publish'));
             }
 
             if (toBeUnpublishd.length > 0) {
-                result.push(this.togglePluginStateForSpecTenants(selectedPlugin, toBeUnpublishd, trackScope, url, 'unpublish'));
+                result.push(this.togglePluginStateForSpecTenants(selectedPlugin, toBeUnpublishd, trackScopeChange, url, 'unpublish'));
             }            
         });
 

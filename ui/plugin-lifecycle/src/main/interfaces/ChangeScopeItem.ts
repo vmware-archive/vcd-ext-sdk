@@ -2,6 +2,6 @@ import { Plugin } from "./Plugin"
 
 export interface ChangeScopeItem {
     orgName: string;
-    plugin: Plugin;
+    plugin: string;
     action: string;
 }

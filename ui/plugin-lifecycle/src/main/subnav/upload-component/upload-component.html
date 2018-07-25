@@ -1,6 +1,6 @@
 <div class="upload">
     <!-- Wizard -->
-    <clr-wizard #wizardlg [clrWizardOpen]="wantToUpload" (clrWizardOpen)="setWantToUpload($event)" (clrWizardOnCancel)="onCancel()"
+    <clr-wizard #wizardlg [(clrWizardOpen)]="open" (clrWizardOnCancel)="onCancel()"
         clrWizardSize="lg">
         <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true" loadingTextKey="Uploading..."></vcd-loading-indicator>
 
@@ -15,7 +15,7 @@
             </ng-template>
 
             <!-- Form -->
-            <vcd-upload-zip-field *ngIf="wantToUpload" (change)="onChange($event)"></vcd-upload-zip-field>
+            <vcd-upload-zip-field *ngIf="open" (change)="onFileSelection($event)"></vcd-upload-zip-field>
 
             <!-- Alert -->
             <vcd-alert [alertMessage]="alertMessage"></vcd-alert>
@@ -33,7 +33,7 @@
                 <clr-wizard-button [type]="'custom-finish'">Finish</clr-wizard-button>
             </ng-template>
 
-            <vcd-choose-scope [(feedback)]="scopeFeedback"></vcd-choose-scope>
+            <vcd-choose-scope *ngIf="open" [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin"></vcd-choose-scope>
         </clr-wizard-page>
     </clr-wizard>
 </div>

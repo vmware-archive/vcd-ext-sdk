@@ -173,10 +173,6 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.changeScopeState = true;
     }
 
-    public setWantToUpload(val: boolean): void {
-        this.wantToUpload = val;
-    }
-
     public loading(): void {
         this.isLoading = true;
     }

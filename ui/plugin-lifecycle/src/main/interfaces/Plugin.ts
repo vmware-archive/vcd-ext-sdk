@@ -51,3 +51,8 @@ export interface PluginFileDetails {
     fileName: string;
     size: number;
 }
+
+export interface ChangeScopePlugin {
+    id: string;
+    pluginName: string;
+}

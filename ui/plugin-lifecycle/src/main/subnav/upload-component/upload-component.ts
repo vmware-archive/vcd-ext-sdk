@@ -1,7 +1,7 @@
 /*
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
-import { Component, Inject, OnInit, Input, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, Inject, OnInit, Input, EventEmitter, Output, ViewChild, OnDestroy } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
 import { PluginManager } from "../../services/plugin-manager.service";
 import { UploadPayload } from "../../interfaces/Plugin";
@@ -9,6 +9,10 @@ import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
+import { Subscription } from "rxjs";
+import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
+import { Organisation } from "../../interfaces/Organisation";
+import { OrganisationService } from "../../services/organisation.service";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;
@@ -20,8 +24,23 @@ interface InputNativeElement {
     styleUrls: ["upload-component.scss"]
 })
 export class UploadComponent implements OnInit {
-    @Input() wantToUpload: boolean = false;
-    @Output() change = new EventEmitter<boolean>();
+    private _open: boolean;
+
+    @Input()
+    set open(val: boolean) {
+        this._open = val;
+
+        if (val === false) {
+            if (this.watchOrgsSubs) {
+                this.watchOrgsSubs.unsubscribe();
+            }
+
+            if (this.uploadSubs) {
+                this.uploadSubs.unsubscribe();
+            }
+        }
+    }
+    @Output() openChange = new EventEmitter<boolean>();
     @ViewChild("wizardlg") wizardLarge: Wizard;
     public scopeFeedback: ScopeFeedback = new ScopeFeedback();
     public uploadPayload: UploadPayload;
@@ -29,11 +48,17 @@ export class UploadComponent implements OnInit {
     public canGoNext: boolean = false;
     public parsing: boolean = false;
     public alertMessage: string;
+    public listOfOrgsPerPlugin: ChangeScopeItem[];
+    public orgs: Organisation[];
+
+    public watchOrgsSubs: Subscription;
+    public uploadSubs: Subscription;
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         public pluginManager: PluginManager,
-        public zipManager: ZipManager
+        public zipManager: ZipManager,
+        public orgService: OrganisationService
     ) { }
 
     public ngOnInit() {
@@ -45,7 +70,11 @@ export class UploadComponent implements OnInit {
         };
     }
 
-    public onChange(pluginZip: InputNativeElement) {
+    get open(): boolean {
+        return this._open;
+    }
+
+    public onFileSelection(pluginZip: InputNativeElement) {
         if (!pluginZip.nativeElement) {
             return;
         }
@@ -78,6 +107,8 @@ export class UploadComponent implements OnInit {
                 this.alertMessage = null;
                 this.canGoNext = true;
                 this.parsing = false;
+
+                this.loadListOfOrgsPerPlugin();
             })
             .catch((err: Error) => {
                 console.warn(err);
@@ -87,43 +118,48 @@ export class UploadComponent implements OnInit {
             });
     }
 
-    public setWantToUpload(val: boolean): void {
-        this.wantToUpload = val;
-        this.change.emit(val);
-    }
-
-    public getWantToUpload(): boolean {
-        return this.wantToUpload;
-    }
-
     public doUpload(): void {
-        console.log('DO UPLOAD');
-
         this.loading = true;
-        this.pluginManager
+        this.uploadSubs = this.pluginManager
             .uploadPlugin(this.uploadPayload, this.scopeFeedback)
-            .then(() => {
-                this.loading = false;
-                this.uploadPayload.file = null;
-                this.uploadPayload.fileName = null;
-                this.uploadPayload.fileDir = null;
-                this.uploadPayload.manifest = null;
-                this.pluginManager.refresh();
-                this.setWantToUpload(false);
-                this.wizardLarge.reset();
-                this.scopeFeedback.reset();
-                this.canGoNext = false;
-            })
-            .catch((err) => {
-                // Handle error
-                console.warn(err);
-                this.alertMessage = err.message;
-                this.loading = false;
-            });
+            .subscribe((changeScopeRequests) => {
+                if (!changeScopeRequests || changeScopeRequests.length < 1) {
+                    this.handleUploadSuccess();
+                    this.uploadSubs.unsubscribe();
+                    return;
+                }
+
+                changeScopeRequests.forEach((element) => {
+                    const subscription = element.req.subscribe((res) => {
+                        this.handleUploadSuccess();
+                        subscription.unsubscribe();
+                    }, this.handleUploadError);
+                });
+            }, this.handleUploadError);
+    }
+
+    public handleUploadSuccess(): void {
+        this.loading = false;
+        this.uploadPayload.file = null;
+        this.uploadPayload.fileName = null;
+        this.uploadPayload.fileDir = null;
+        this.uploadPayload.manifest = null;
+        this.pluginManager.refresh();
+        this.onCancel();
+        this.wizardLarge.reset();
+        this.scopeFeedback.reset();
+        this.canGoNext = false;
+    }
+
+    public handleUploadError(err: Error): void {
+        console.warn(err);
+        this.alertMessage = err.message;
+        this.loading = false;
     }
 
     public onCancel(): void {
-        this.setWantToUpload(false);
+        this.open = false;
+        this.openChange.emit(this.open);
     }
 
     public doCustomClick(buttonType: string): void {
@@ -140,5 +176,27 @@ export class UploadComponent implements OnInit {
         if ("custom-next" === buttonType && this.canGoNext) {
             this.wizardLarge.next();
         }
+    }
+
+    public loadListOfOrgsPerPlugin(): void {
+        this.loadOrgs();
+        this.populateList();
+    }
+
+    public loadOrgs(): void {
+        this.orgs = this.orgService.orgs;
+        this.watchOrgsSubs = this.orgService.watchOrgs().subscribe(
+            (orgs) => {
+                this.orgs = orgs;
+                this.populateList();
+            }
+        )
+    }
+
+    public populateList(): void {
+        this.listOfOrgsPerPlugin = [];
+        this.orgs.forEach((org: Organisation) => {
+            this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: this.uploadPayload.manifest.name, action: 'none' });
+        });
     }
 }
