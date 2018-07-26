@@ -56,6 +56,7 @@ const ROUTES: Routes = [
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
+        CapitalizeFirstPipe,
         AboutComponent,
         StatusComponent,
         SubnavComponent,
@@ -84,7 +85,7 @@ const ROUTES: Routes = [
         PluginUploaderService,
         PluginManager,
         ZipManager
-    ]
+    ],
 })
 export class SubnavPluginModule {
     constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
