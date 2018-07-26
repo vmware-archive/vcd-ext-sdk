@@ -1,7 +1,7 @@
 /*
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ChangeScopeRequest } from "../../classes/ChangeScopeRequest";
 import { ChangeScopeService } from "../../services/change-scope.service";
@@ -10,7 +10,7 @@ import { ChangeScopeService } from "../../services/change-scope.service";
     selector: "vcd-change-scope-tracker",
     templateUrl: "./change-scope-tracker.component.html"
 })
-export class ChangeScopeTracker implements OnInit {
+export class ChangeScopeTracker implements OnInit, OnDestroy {
     private _open: boolean = false;
 
     @Input() 
@@ -37,6 +37,12 @@ export class ChangeScopeTracker implements OnInit {
 
     ngOnInit() {
         this.loadRequests();
+    }
+
+    ngOnDestroy() {
+        if (this.watchChangeScopeReq) {
+            this.watchChangeScopeReq.unsubscribe();
+        }
     }
 
     get open(): boolean {
