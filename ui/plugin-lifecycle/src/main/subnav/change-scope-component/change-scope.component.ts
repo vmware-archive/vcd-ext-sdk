@@ -18,6 +18,7 @@ import { Organisation } from "../../interfaces/Organisation";
 })
 export class ChangeScope implements OnInit {
     private _state: boolean = false;
+    private _action: string;
     public feedback: ScopeFeedback = new ScopeFeedback();
     public showTracker: boolean;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
@@ -45,6 +46,11 @@ export class ChangeScope implements OnInit {
     }
     @Output() public stateChange = new EventEmitter<boolean>();
 
+    @Input() 
+    set action(val: string) {
+        this._action = val;
+    }
+
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
@@ -58,6 +64,10 @@ export class ChangeScope implements OnInit {
 
     get state (): boolean {
         return this._state;
+    }
+
+    get action (): string {
+        return this._action;
     }
 
     public publishForAllTenants(): void {
@@ -101,15 +111,6 @@ export class ChangeScope implements OnInit {
     }
 
     public handleMixedScope(feedback: ScopeFeedback): void {
-        const checkForAction = feedback.data.find((item) => {
-            return item.action !== "none";
-        });
-
-        if (!checkForAction) {
-            console.log("Please select action");
-            return;
-        }
-
         this.showTracker = true;
 
         const requests = this.pluginManager.handleMixedScope(this.pluginManager.selectedPlugins, feedback, true);
@@ -174,7 +175,7 @@ export class ChangeScope implements OnInit {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Organisation) => {
             this.pluginManager.selectedPlugins.forEach(plugin => {
-                this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: plugin.pluginName, action: 'none' });             
+                this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: plugin.pluginName, action: this.action });           
             });
         });
     }

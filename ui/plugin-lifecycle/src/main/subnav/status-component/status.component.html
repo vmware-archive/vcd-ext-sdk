@@ -15,7 +15,10 @@
                 <button type="button" class="btn btn-sm btn-link" (click)="onDisable()">Disable</button>
                 <button type="button" class="btn btn-sm btn-link" (click)="onEnable()">Enable</button>
                 <button type="button" class="btn btn-sm btn-link" (click)="onDelete()">Delete</button>
-                <button type="button" class="btn btn-sm btn-link" (click)="openChangeScope()">Change Scope</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="publishForAllTenants()">Publish For All Tenants</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="unpublishForAllTenants()">Unpublish For All Tenants</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="openChangeScope('publish')">Publish</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="openChangeScope('unpublish')">Unpublish</button>
             </div>
         </clr-dg-action-bar>
 
@@ -60,6 +63,6 @@
     </clr-modal>
 </div>
 
-<vcd-change-scope [(state)]="changeScopeState"></vcd-change-scope>
+<vcd-change-scope [(state)]="changeScopeState" [action]="action"></vcd-change-scope>
 
 <vcd-plugin-upload [(open)]="wantToUpload"></vcd-plugin-upload>
