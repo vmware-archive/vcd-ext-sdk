@@ -28,6 +28,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public isLoading: boolean;
     public action: string;
     public showTracker: boolean = false;
+    public openChangeScope: boolean = false;
 
     public watchPluginListSub: Subscription;
 
@@ -174,9 +175,13 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.wantToUpload = true;
     }
 
-    public openChangeScope(action: string): void {
+    public openChangeOrgScope(action: string): void {
         this.changeScopeState = true;
         this.action = action;
+    }
+
+    public changeScope() {
+        this.openChangeScope = true;
     }
 
     public publishForAllTenants(): void {

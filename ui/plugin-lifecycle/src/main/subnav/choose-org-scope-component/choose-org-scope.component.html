@@ -1,25 +1,6 @@
 <div class="choose-org-scope">
     <form #form="ngForm" novalidate>
         <section class="form-block">
-            <div>
-                <h3>Plugin Scope</h3>
-                <div class="form-group">
-                    <label>Tenant Scope</label>
-                    <div class="checkbox">
-                        <input type="checkbox" name="tenantScope" id="tenantScope" [(ngModel)]="tenantScope">
-                        <label for="tenantScope"></label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Provider Scope</label>
-                    <div class="checkbox">
-                        <input type="checkbox" name="providerScope" id="providerScope" [(ngModel)]="providerScope">
-                        <label for="providerScope"></label>
-                    </div>
-                </div>
-            </div>
-
             <div class="relative">
                 <div class="radio">
                     <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="true" name="activate" id="forAllOrgs">
@@ -47,27 +28,28 @@
                 </div>
             </div>
 
-            <div class="relative list" *ngIf="listOfOrgsPerPlugin">
+            <div *ngIf="listOfOrgsPerPlugin">
                 <div class="radio">
                     <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="false" name="activate" id="forSpecOrgs">
                     <label for="forSpecOrgs">For specific organisations</label>
                 </div>
 
-                <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
+                <div class="relative list">
                     <div class="overlay" *ngIf="feedback.forAllOrgs"></div>
+                    <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
+                        <!-- PLACEHOLDER -->
+                        <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
+                        <!-- END PLACEHOLDER -->
 
-                    <!-- PLACEHOLDER -->
-                    <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
-                    <!-- END PLACEHOLDER -->
+                        <clr-dg-column>Organisation Name</clr-dg-column>
+                        <clr-dg-column>Plugin Name</clr-dg-column>
 
-                    <clr-dg-column>Organisation Name</clr-dg-column>
-                    <clr-dg-column>Plugin Name</clr-dg-column>
-
-                    <clr-dg-row *clrDgItems="let item of listOfOrgsPerPlugin" [clrDgItem]="item">
-                        <clr-dg-cell>{{ item.orgName }}</clr-dg-cell>
-                        <clr-dg-cell>{{ item.plugin }}</clr-dg-cell>
-                    </clr-dg-row>
-                </clr-datagrid>
+                        <clr-dg-row *clrDgItems="let item of listOfOrgsPerPlugin" [clrDgItem]="item">
+                            <clr-dg-cell>{{ item.orgName }}</clr-dg-cell>
+                            <clr-dg-cell>{{ item.plugin }}</clr-dg-cell>
+                        </clr-dg-row>
+                    </clr-datagrid>
+                </div>
             </div>
         </section>
     </form>

@@ -22,12 +22,14 @@
                         <clr-icon shape="caret down"></clr-icon>
                     </button>
                     <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-                        <label class="dropdown-header">Change Scope</label>
+                        <label class="dropdown-header">Change Org/Scope</label>
                         <button clrDropdownItem type="button" (click)="publishForAllTenants()">Publish For All Tenants</button>
                         <button clrDropdownItem type="button" (click)="unpublishForAllTenants()">Unpublish For All Tenants</button>
                         <div class="dropdown-divider"></div>
-                        <button clrDropdownItem type="button" (click)="openChangeScope('publish')">Publish</button>
-                        <button clrDropdownItem type="button" (click)="openChangeScope('unpublish')">Unpublish</button>
+                        <button clrDropdownItem type="button" (click)="openChangeOrgScope('publish')">Publish</button>
+                        <button clrDropdownItem type="button" (click)="openChangeOrgScope('unpublish')">Unpublish</button>
+                        <div class="dropdown-divider"></div>
+                        <button clrDropdownItem type="button" (click)="changeScope()">Change Scope</button>
                     </clr-dropdown-menu>
                 </clr-dropdown>
             </div>
@@ -79,3 +81,5 @@
 <vcd-plugin-upload [(open)]="wantToUpload"></vcd-plugin-upload>
 
 <vcd-change-org-scope-tracker [(open)]="showTracker"></vcd-change-org-scope-tracker>
+
+<vcd-change-scope [(open)]="openChangeScope"></vcd-change-scope>

@@ -34,6 +34,10 @@ export class PluginManager {
         });
     }
 
+    get baseUrl(): string {
+        return this._baseUrl;
+    }
+
     set selectedPlugins(plugins: Plugin[]) {
         this._selectedPlugins = plugins;
         this._selectedPluginsSubj.next(this.selectedPlugins);
