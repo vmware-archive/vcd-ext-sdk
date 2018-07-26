@@ -14,15 +14,14 @@ import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 export class ChooseScope implements OnInit {
     @Input() listOfOrgsPerPlugin: ChangeScopeItem[];
     @Input() feedback: ScopeFeedback;
+    @Input() canUnpublish: boolean = true;
     @Output() feedbackChange = new EventEmitter<ScopeFeedback>();
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string
     ) {}
 
-    ngOnInit() {
-        this.feedback.forAllOrgs = true;
-    }
+    ngOnInit() {}
 
     public onChange(): void {
         this.feedbackChange.emit(this.feedback);

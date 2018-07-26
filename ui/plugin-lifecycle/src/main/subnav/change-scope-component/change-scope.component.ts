@@ -30,7 +30,6 @@ export class ChangeScope implements OnInit {
     set state (val: boolean) {
         if (val === false) {
             this.feedback.reset();
-            this.changeScopeService.clearChangeScopeReq();
             
             if (this.watchOrgsSubs) {
                 this.watchOrgsSubs.unsubscribe();
@@ -39,16 +38,16 @@ export class ChangeScope implements OnInit {
 
         if (val === true) {
             this.showTracker = false;
-            this.loadListOfOrgsPerPlugin();
         }
 
         this._state = val;
     }
     @Output() public stateChange = new EventEmitter<boolean>();
 
-    @Input() 
+    @Input()
     set action(val: string) {
         this._action = val;
+        this.loadListOfOrgsPerPlugin();
     }
 
     constructor(
@@ -68,46 +67,6 @@ export class ChangeScope implements OnInit {
 
     get action (): string {
         return this._action;
-    }
-
-    public publishForAllTenants(): void {
-        this.showTracker = true;
-        this.pluginManager
-            .publishPluginForAllTenants(null, true)
-            .forEach((reqData) => {
-                const subscription = reqData.req.subscribe(
-                    (res) => {
-                        this.changeScopeService.changeReqStatusTo(res.url, true);
-                        subscription.unsubscribe();
-                    },
-                    (err) => {
-                        // Handle Error
-                        this.changeScopeService.changeReqStatusTo(reqData.url, false);
-                        subscription.unsubscribe();
-                        console.warn(err);
-                    }
-                )
-            });
-    }
-
-    public unpublishForAllTenants(): void {
-        this.showTracker = true;
-        this.pluginManager
-            .unpublishPluginForAllTenants(null, true)
-            .forEach((reqData) => {
-                const subscription = reqData.req.subscribe(
-                    (res) => {
-                        this.changeScopeService.changeReqStatusTo(res.url, true);
-                        subscription.unsubscribe();
-                    },
-                    (err) => {
-                        // Handle Error
-                        this.changeScopeService.changeReqStatusTo(reqData.url, false);
-                        subscription.unsubscribe();
-                        console.warn(err);
-                    }
-                )
-            });
     }
 
     public handleMixedScope(feedback: ScopeFeedback): void {
@@ -131,18 +90,6 @@ export class ChangeScope implements OnInit {
     }
 
     public onUpdate(): void {
-        this.changeScopeService.clearChangeScopeReq();
-
-        if (this.feedback.forAllOrgs && this.feedback.publishForAllTenants) {
-            this.publishForAllTenants();
-            return;
-        }
-
-        if (this.feedback.forAllOrgs && this.feedback.unpublishForAllTenants) {
-            this.unpublishForAllTenants();
-            return;
-        }
-
         if (this.feedback.data.length > 0) {
             this.handleMixedScope(this.feedback);
             return;

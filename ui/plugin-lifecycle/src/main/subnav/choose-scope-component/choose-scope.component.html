@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div *ngIf="canUnpublish" class="form-group">
                     <label>Unpublish the plugins for all tenants.</label>
 
                     <div class="checkbox">
@@ -42,20 +42,10 @@
 
                     <clr-dg-column>Organisation Name</clr-dg-column>
                     <clr-dg-column>Plugin Name</clr-dg-column>
-                    <clr-dg-column>Action</clr-dg-column>
 
                     <clr-dg-row *clrDgItems="let item of listOfOrgsPerPlugin" [clrDgItem]="item">
                         <clr-dg-cell>{{ item.orgName }}</clr-dg-cell>
                         <clr-dg-cell>{{ item.plugin }}</clr-dg-cell>
-                        <clr-dg-cell>
-                            <div class="select">
-                                <select [ngModel]="item.action" (ngModelChange)="setItemValue($event, item)" name="action" #action="ngModel">
-                                    <option [value]="'none'">None</option>
-                                    <option [value]="'publish'">Publish</option>
-                                    <option [value]="'unpublish'">Unpublish</option>
-                                </select>
-                            </div>
-                        </clr-dg-cell>
                     </clr-dg-row>
                 </clr-datagrid>
             </div>

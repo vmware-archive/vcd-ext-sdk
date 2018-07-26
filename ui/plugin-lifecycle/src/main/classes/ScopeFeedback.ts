@@ -4,7 +4,7 @@ import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 export class ScopeFeedback {
     private _publishForAllTenants: boolean = false;
     private _unpublishForAllTenants: boolean = false;
-    private _forAllOrgs: boolean = true;
+    private _forAllOrgs: boolean = false;
 
     private _data: ChangeScopeItem[] = [];
 
@@ -48,7 +48,7 @@ export class ScopeFeedback {
     }
 
     public reset(): void {
-        this.forAllOrgs = true;
+        this.forAllOrgs = false;
         this.publishForAllTenants = false;
         this.unpublishForAllTenants = false;
         this.data = [];

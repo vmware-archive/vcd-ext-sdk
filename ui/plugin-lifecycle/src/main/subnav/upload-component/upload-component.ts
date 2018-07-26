@@ -196,7 +196,7 @@ export class UploadComponent implements OnInit {
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Organisation) => {
-            this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: this.uploadPayload.manifest.name, action: 'none' });
+            this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: this.uploadPayload.manifest.name, action: 'publish' });
         });
     }
 }

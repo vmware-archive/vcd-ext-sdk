@@ -8,6 +8,8 @@ import { PluginManager } from "../../services/plugin-manager.service";
 import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
+import { ChangeScopeService } from "../../services/change-scope.service";
+import { ChangeScopeRequestTo } from "../../interfaces/ChangeScopeRequestTo";
 
 interface SubjectModalData {
     accept: boolean;
@@ -25,6 +27,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public wantToUpload: boolean;
     public isLoading: boolean;
     public action: string;
+    public showTracker: boolean = false;
 
     public watchPluginListSub: Subscription;
 
@@ -32,7 +35,8 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
-        private pluginManager: PluginManager
+        private pluginManager: PluginManager,
+        private changeScopeService: ChangeScopeService
     ) { }
 
     public ngOnInit() {
@@ -172,16 +176,36 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     public openChangeScope(action: string): void {
         this.changeScopeState = true;
-
         this.action = action;
     }
 
     public publishForAllTenants(): void {
-        this.pluginManager.publishPluginForAllTenants(this.selected, false);
+        this.showTracker = true;
+        this.pluginManager
+            .publishPluginForAllTenants(this.selected, true)
+            .forEach(this.handleScopeChanging.bind(this));
     }
 
     public unpublishForAllTenants(): void {
-        this.pluginManager.unpublishPluginForAllTenants(this.selected, false);
+        this.showTracker = true;
+        this.pluginManager
+            .unpublishPluginForAllTenants(this.selected, true)
+            .forEach(this.handleScopeChanging.bind(this));
+    }
+
+    public handleScopeChanging(reqData: ChangeScopeRequestTo): void {
+        const subscription = reqData.req.subscribe(
+            (res) => {
+                this.changeScopeService.changeReqStatusTo(res.url, true);
+                subscription.unsubscribe();
+            },
+            (err) => {
+                // Handle Error
+                this.changeScopeService.changeReqStatusTo(reqData.url, false);
+                subscription.unsubscribe();
+                console.warn(err);
+            }
+        )
     }
 
     public loading(): void {

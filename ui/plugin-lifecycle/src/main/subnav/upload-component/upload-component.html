@@ -33,7 +33,7 @@
                 <clr-wizard-button [type]="'custom-finish'">Finish</clr-wizard-button>
             </ng-template>
 
-            <vcd-choose-scope *ngIf="open" [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin"></vcd-choose-scope>
+            <vcd-choose-scope [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin" [canUnpublish]="false"></vcd-choose-scope>
         </clr-wizard-page>
     </clr-wizard>
 </div>
