@@ -91,6 +91,7 @@ export class UploadComponent implements OnInit {
             .parse(this.uploadPayload.file)
             .then((manifest: string) => {
                 this.uploadPayload.manifest = JSON.parse(manifest);
+                this.scopeFeedback.scope = this.uploadPayload.manifest.scope;
 
                 const isValidManifest = PluginValidator.validateManifestFields(this.uploadPayload.manifest);
                 if (!isValidManifest.success) {
@@ -121,7 +122,7 @@ export class UploadComponent implements OnInit {
     public doUpload(): void {
         this.loading = true;
 
-        if (this.scopeFeedback.scope) {
+        if (this.scopeFeedback.scope !== this.uploadPayload.manifest.scope) {
             this.uploadPayload.manifest.scope = this.scopeFeedback.scope;
         }
 

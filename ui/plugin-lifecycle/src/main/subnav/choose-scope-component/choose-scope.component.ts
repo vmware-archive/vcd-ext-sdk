@@ -1,0 +1,57 @@
+/*
+ * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
+ */
+import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
+import { ScopeFeedback } from "../../classes/ScopeFeedback";
+
+@Component({
+    selector: "vcd-choose-scope",
+    templateUrl: "./choose-scope.component.html"
+})
+export class ChooseScope implements OnInit {
+    @Input() feedback: ScopeFeedback;
+    @Output() feebackChange = new EventEmitter<ScopeFeedback>();
+
+    private _enableForProviders: boolean;
+    private _enableForTenants: boolean;
+
+    constructor() {}
+
+    ngOnInit() {
+        this.enableForProviders = false;
+        this.enableForTenants = false;
+    }
+
+    get enableForProviders(): boolean {
+        return this._enableForProviders;
+    }
+
+    set enableForProviders(val: boolean) {
+        this._enableForProviders = val;
+
+        if (this.enableForProviders) {
+            this.feedback.addNewScope('service-provider');
+        } else {
+            this.feedback.removeScope('service-provider');
+        }
+
+        this.feebackChange.emit(this.feedback);
+    }
+
+    get enableForTenants(): boolean {
+        return this._enableForTenants;
+    }
+
+    set enableForTenants(val: boolean) {
+        this._enableForTenants = val;
+
+        if (this.enableForTenants) {
+            this.feedback.addNewScope('tenant');
+        } else {
+            this.feedback.removeScope('tenant');
+        }
+
+        this.feebackChange.emit(this.feedback);
+    }
+
+}

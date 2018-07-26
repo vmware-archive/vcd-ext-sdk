@@ -36,10 +36,7 @@ export class ChangeScopeService {
                 tenant_scoped: scope.indexOf("tenant") !== -1,
                 provider_scoped: scope.indexOf("service-provider") !== -1,
                 enabled: pluginToUpdate.enabled
-            };
-
-            console.log(newPluginData, scope);
-            
+            };            
 
             updateProcesses.push(this.http
                 .put(`${url}/cloudapi/extensions/ui/${pluginToUpdate.id}`, JSON.stringify(newPluginData), opts)

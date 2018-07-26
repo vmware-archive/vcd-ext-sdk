@@ -30,6 +30,18 @@
             <ng-template clrPageButtons>
                 <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
                 <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-next'">Next</clr-wizard-button>
+            </ng-template>
+
+            <vcd-choose-scope *ngIf="uploadPayload.manifest" [(feedback)]="scopeFeedback"></vcd-choose-scope>
+        </clr-wizard-page>
+
+        <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
+            <ng-template clrPageTitle>Select Organisation Scope</ng-template>
+
+            <ng-template clrPageButtons>
+                <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
                 <clr-wizard-button [type]="'custom-finish'">Finish</clr-wizard-button>
             </ng-template>
 

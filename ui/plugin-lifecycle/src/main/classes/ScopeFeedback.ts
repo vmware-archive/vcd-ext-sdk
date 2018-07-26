@@ -69,6 +69,6 @@ export class ScopeFeedback {
         this.publishForAllTenants = false;
         this.unpublishForAllTenants = false;
         this.data = [];
-        this.scope = null;
+        this.scope = [];
     }
 }
