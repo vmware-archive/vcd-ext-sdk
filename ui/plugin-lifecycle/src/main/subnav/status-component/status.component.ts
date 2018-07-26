@@ -333,6 +333,10 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.action = action;
     }
 
+    public changeScope() {
+        this.openChangeScope = true;
+    }
+
     public publishForAllTenants(): void {
         this.showTracker = true;
         this.pluginManager

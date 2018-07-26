@@ -17,46 +17,11 @@ export class ChooseOrgScope implements OnInit {
     @Input() canUnpublish: boolean = true;
     @Output() feedbackChange = new EventEmitter<ScopeFeedback>();
 
-    private _providerScope: boolean;
-    private _tenantScope: boolean;
-
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string
     ) {}
 
     ngOnInit() {}
-
-    get providerScope(): boolean {
-        return this._providerScope;
-    }
-
-    set providerScope(val: boolean) {
-        this._providerScope = val;
-
-        if (this.providerScope) {
-            this.feedback.addNewScope('service-provider');
-        } else {
-            this.feedback.removeScope('service-provider');
-        }
-
-        this.onChange();
-    }
-
-    get tenantScope(): boolean {
-        return this._tenantScope;
-    }
-
-    set tenantScope(val: boolean) {
-        this._tenantScope = val;
-
-        if (this.tenantScope) {
-            this.feedback.addNewScope('tenant');
-        } else {
-            this.feedback.removeScope('tenant');
-        }
-
-        this.onChange();
-    }
 
     public onChange(): void {
         this.feedbackChange.emit(this.feedback);

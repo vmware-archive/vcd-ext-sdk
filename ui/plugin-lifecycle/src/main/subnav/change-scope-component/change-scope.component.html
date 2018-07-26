@@ -1,0 +1,38 @@
+<div class="choose-scope">
+    <clr-modal [clrModalOpen]="open" [clrModalClosable]="false" [clrModalSize]="'lg'">
+        <h3 class="modal-title">Change plugin scope</h3>
+        <div class="modal-body">
+            <form #form="ngForm" novalidate>
+                <section class="form-block">
+                    <div class="relative">
+                        <div class="form-group">
+                            <label>Enable plugin for tenant scope.</label>
+
+                            <div class="checkbox">
+                                <input type="checkbox" name="enableForTenants" id="enableForTenants" [(ngModel)]="enableForTenants">
+                                <label for="enableForTenants"></label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Enable plugin for provider scope.</label>
+
+                            <div class="checkbox">
+                                <input type="checkbox" name="enableForProviders" id="enableForProviders" [(ngModel)]="enableForProviders">
+                                <label for="enableForProviders"></label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="onClose()">
+                Close
+            </button>
+            <button type="button" class="btn btn-primary" (click)="changeScope()">
+                Change Scope
+            </button>
+        </div>
+    </clr-modal>
+</div>

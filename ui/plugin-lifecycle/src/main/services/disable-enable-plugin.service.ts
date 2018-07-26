@@ -37,10 +37,6 @@ export class DisableEnablePluginService {
         return this.updatePluginData(plugins, options, url);
     }
 
-    public enableFor(plugins: Plugin[], options: PluginUpdateOptions, url: string): Promise<Response[]> {
-        return this.updatePluginData(plugins, options, url);
-    }
-
     private updatePluginData(plugins: Plugin[], options: PluginUpdateOptions, url: string): Promise<Response[]> {
         const headers = new Headers();
         headers.append("Accept", "application/json");
