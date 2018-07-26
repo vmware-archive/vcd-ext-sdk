@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { VcdApiClient } from '@vcd/sdk';
 import { EXTENSION_ASSET_URL } from '@vcd/sdk/common';
+import { Observable } from "rxjs";
 
 @Component({
     selector: "plugin-simple",
@@ -9,8 +10,8 @@ import { EXTENSION_ASSET_URL } from '@vcd/sdk/common';
     host: {'class': 'content-container'}
 })
 export class SimpleComponent implements OnInit {
-    username: string = 'unknown';
-    tenant: string = 'unknown'
+    username: Observable<string>;
+    tenant: Observable<string>;
 
     constructor(@Inject(EXTENSION_ASSET_URL) public assetUrl: string, private client: VcdApiClient) {}
 

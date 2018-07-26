@@ -10,6 +10,8 @@
     "@angular/common": "4.4.4",
     "@angular/core": "4.4.4",
     "@angular/http": "4.4.4",
+    "@ngrx/core": "1.2.0",
+    "@ngrx/store": "2.2.2",
     "@vcd/bindings": "9.1.0",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.4"
