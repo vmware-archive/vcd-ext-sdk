@@ -26,9 +26,10 @@ export class ChangeScope implements OnInit {
     }
     @Output() openChange = new EventEmitter<boolean>();
 
-    @Input() 
+    @Input()
     set action(val: string) {
         this._action = val;
+        this.loadListOfOrgsPerPlugin();
     }
 
     constructor(

@@ -51,6 +51,7 @@ export class ChangeScopeTracker implements OnInit {
 
     public onClose(): void {
         this.open = false;
+        this.changeScopeService.clearChangeScopeReq();
         this.openChange.emit(false);
     }
 }
