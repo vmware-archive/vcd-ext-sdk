@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { Plugin, ChangeScopePlugin } from "../interfaces/Plugin";
 import { AuthService } from "./auth.service";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
-import { ChangeScopeService } from "./change-scope.service";
+import { ChangeOrgScopeService } from "./change-org-scope.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
@@ -14,7 +14,7 @@ export class PluginPublisher {
     constructor(
         private http: Http,
         private authService: AuthService,
-        private changeScopeService: ChangeScopeService
+        private changeScopeService: ChangeOrgScopeService
     ) {}
 
     private togglePluginStateForAllTenants(plugins: Plugin[], url: string, hasToBe: string, trackScopeChange: boolean = false): ChangeScopeRequestTo[] {

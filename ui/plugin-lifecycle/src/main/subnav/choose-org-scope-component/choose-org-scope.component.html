@@ -1,18 +1,37 @@
-<div class="choose-scope">
+<div class="choose-org-scope">
     <form #form="ngForm" novalidate>
         <section class="form-block">
-            <div class="radio">
-                <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="true" name="activate" id="forAllOrgs">
-                <label for="forAllOrgs">For all organisations</label>
+            <div>
+                <h3>Plugin Scope</h3>
+                <div class="form-group">
+                    <label>Tenant Scope</label>
+                    <div class="checkbox">
+                        <input type="checkbox" name="tenantScope" id="tenantScope" [(ngModel)]="tenantScope">
+                        <label for="tenantScope"></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Provider Scope</label>
+                    <div class="checkbox">
+                        <input type="checkbox" name="providerScope" id="providerScope" [(ngModel)]="providerScope">
+                        <label for="providerScope"></label>
+                    </div>
+                </div>
             </div>
 
             <div class="relative">
+                <div class="radio">
+                    <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="true" name="activate" id="forAllOrgs">
+                    <label for="forAllOrgs">For all organisations</label>
+                </div>
+
                 <div class="form-group">
                     <label>Publish the plugins for all tenants.</label>
 
                     <div class="checkbox">
-                        <input type="checkbox" name="publishForAllTenants" id="publishForAllTenants" [(ngModel)]="feedback.publishForAllTenants" (change)="onChange()"
-                            [attr.disabled]="feedback.unpublishForAllTenants || !feedback.forAllOrgs ? 'disabled' : null">
+                        <input type="checkbox" name="publishForAllTenants" id="publishForAllTenants" [(ngModel)]="feedback.publishForAllTenants"
+                            (change)="onChange()" [attr.disabled]="feedback.unpublishForAllTenants || !feedback.forAllOrgs ? 'disabled' : null">
                         <label for="publishForAllTenants"></label>
                     </div>
                 </div>
@@ -28,14 +47,15 @@
                 </div>
             </div>
 
-            <div class="radio" *ngIf="listOfOrgsPerPlugin">
-                <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="false" name="activate" id="forSpecOrgs">
-                <label for="forSpecOrgs">For specific organisations</label>
-            </div>
-
             <div class="relative list" *ngIf="listOfOrgsPerPlugin">
-                <div class="overlay" *ngIf="feedback.forAllOrgs"></div>
+                <div class="radio">
+                    <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="false" name="activate" id="forSpecOrgs">
+                    <label for="forSpecOrgs">For specific organisations</label>
+                </div>
+
                 <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
+                    <div class="overlay" *ngIf="feedback.forAllOrgs"></div>
+
                     <!-- PLACEHOLDER -->
                     <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
                     <!-- END PLACEHOLDER -->

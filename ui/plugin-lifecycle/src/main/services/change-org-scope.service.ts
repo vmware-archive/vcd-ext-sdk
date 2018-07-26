@@ -3,7 +3,7 @@ import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
 import { Subject, Observable } from "rxjs";
 
 @Injectable()
-export class ChangeScopeService {
+export class ChangeOrgScopeService {
     private _changeScopeReq: ChangeScopeRequest[] = [];
     private _changeScopeReqSubject = new Subject<ChangeScopeRequest[]>();
     

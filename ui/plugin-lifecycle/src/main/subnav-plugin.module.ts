@@ -18,11 +18,11 @@ import { UploadZipField } from "./subnav/upload-zip-field-component/upload-zip-f
 import { VcdAlert } from "./subnav/alert-component/alert.component";
 import { VcdManifestStackView } from "./subnav/manifest-stack-view-component/manifest-stack-view.component";
 import { AuthService } from "./services/auth.service";
-import { ChangeScope } from "./subnav/change-scope-component/change-scope.component";
-import { ChooseScope } from "./subnav/choose-scope-component/choose-scope.component";
+import { ChangeOrgScope } from "./subnav/change-org-scope-component/change-org-scope.component";
+import { ChooseOrgScope } from "./subnav/choose-org-scope-component/choose-org-scope.component";
 import { OrganisationService } from "./services/organisation.service";
-import { ChangeScopeTracker } from "./subnav/change-scope-tracker-component/change-scope-tracker.component";
-import { ChangeScopeService } from "./services/change-scope.service";
+import { ChangeOrgScopeTracker } from "./subnav/change-org-scope-tracker-component/change-org-scope-tracker.component";
+import { ChangeOrgScopeService } from "./services/change-org-scope.service";
 import { DeletePluginService } from "./services/delete-plugin.service";
 import { PluginUploaderService } from "./services/plugin-uploader.service";
 import { DisableEnablePluginService } from "./services/disable-enable-plugin.service";
@@ -55,9 +55,9 @@ const ROUTES: Routes = [
         UploadZipField,
         VcdAlert,
         VcdManifestStackView,
-        ChangeScope,
-        ChooseScope,
-        ChangeScopeTracker,
+        ChangeOrgScope,
+        ChooseOrgScope,
+        ChangeOrgScopeTracker,
         LoadingIndicatorComponent
     ],
     bootstrap: [SubnavComponent],
@@ -66,7 +66,7 @@ const ROUTES: Routes = [
         AuthService,
         OrganisationService,
         VcdApiClient,
-        ChangeScopeService,
+        ChangeOrgScopeService,
         DeletePluginService,
         DisableEnablePluginService,
         PluginPublisher,

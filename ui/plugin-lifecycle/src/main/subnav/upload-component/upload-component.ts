@@ -120,6 +120,11 @@ export class UploadComponent implements OnInit {
 
     public doUpload(): void {
         this.loading = true;
+
+        if (this.scopeFeedback.scope) {
+            this.uploadPayload.manifest.scope = this.scopeFeedback.scope;
+        }
+
         this.uploadSubs = this.pluginManager
             .uploadPlugin(this.uploadPayload, this.scopeFeedback)
             .subscribe((changeScopeRequests) => {

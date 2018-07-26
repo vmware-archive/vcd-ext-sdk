@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Plugin, PluginDesc } from "../interfaces/Plugin";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { AuthService } from "./auth.service";
+import { Observable } from "rxjs";
 
 interface PluginUpdateOptions {
     tenant_scoped: boolean,
@@ -33,6 +34,10 @@ export class DisableEnablePluginService {
             enabled: true
         }
 
+        return this.updatePluginData(plugins, options, url);
+    }
+
+    public enableFor(plugins: Plugin[], options: PluginUpdateOptions, url: string): Promise<Response[]> {
         return this.updatePluginData(plugins, options, url);
     }
 

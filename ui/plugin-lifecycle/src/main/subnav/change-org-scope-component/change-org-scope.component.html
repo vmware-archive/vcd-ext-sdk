@@ -1,9 +1,9 @@
-<div class="change-scope-modal" *ngIf="state">
+<div class="change-org-scope-modal" *ngIf="state">
     <clr-modal [clrModalOpen]="state" [clrModalClosable]="false" [clrModalSize]="'lg'">
         <h3 class="modal-title">{{ action | capitalizeFirst }}</h3>
         <div class="modal-body">
-            <vcd-choose-scope [(feedback)]="feedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin"></vcd-choose-scope>
-            <vcd-change-scope-tracker [(open)]="showTracker"></vcd-change-scope-tracker>
+            <vcd-choose-org-scope [(feedback)]="feedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin"></vcd-choose-org-scope>
+            <vcd-change-org-scope-tracker [(open)]="showTracker"></vcd-change-org-scope-tracker>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onClose()">

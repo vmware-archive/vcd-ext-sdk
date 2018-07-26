@@ -5,18 +5,18 @@ import { Component, Inject, OnInit, Input, Output, EventEmitter, OnChanges, OnDe
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { PluginManager } from "../../services/plugin-manager.service";
-import { ChangeScopeService } from "../../services/change-scope.service";
+import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
 import { Subscription } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { OrganisationService } from "../../services/organisation.service";
 import { Organisation } from "../../interfaces/Organisation";
 
 @Component({
-    selector: "vcd-change-scope",
-    templateUrl: "./change-scope.component.html",
-    styleUrls: ["./change-scope.component.scss"]
+    selector: "vcd-change-org-scope",
+    templateUrl: "./change-org-scope.component.html",
+    styleUrls: ["./change-org-scope.component.scss"]
 })
-export class ChangeScope implements OnInit {
+export class ChangeOrgScope implements OnInit {
     private _state: boolean = false;
     private _action: string;
     public feedback: ScopeFeedback = new ScopeFeedback();
@@ -53,7 +53,7 @@ export class ChangeScope implements OnInit {
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
-        private changeScopeService: ChangeScopeService,
+        private changeScopeService: ChangeOrgScopeService,
         private orgService: OrganisationService
     ) {}
 

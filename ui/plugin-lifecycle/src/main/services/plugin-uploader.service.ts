@@ -29,7 +29,7 @@ export class PluginUploaderService {
                 "license": manifest.license,
                 "link": manifest.link,
                 "tenant_scoped": manifest.scope.indexOf("tenant") !== -1,
-                "provider_scoped": manifest.scope.indexOf("provider") !== -1,
+                "provider_scoped": manifest.scope.indexOf("service-provider") !== -1,
                 "enabled": true
             });
             resolve(pluginDesc);
