@@ -74,9 +74,7 @@
     </clr-modal>
 </div>
 
-<vcd-change-scope [(state)]="changeScopeState" [action]="action">
-    {{ action | capitalizefirst }}
-</vcd-change-scope>
+<vcd-change-scope [(state)]="changeScopeState" [action]="action"></vcd-change-scope>
 
 <vcd-plugin-upload [(open)]="wantToUpload"></vcd-plugin-upload>
 
