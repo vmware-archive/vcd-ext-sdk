@@ -27,6 +27,7 @@ import { DeletePluginService } from "./services/delete-plugin.service";
 import { PluginUploaderService } from "./services/plugin-uploader.service";
 import { DisableEnablePluginService } from "./services/disable-enable-plugin.service";
 import { PluginPublisher } from "./services/plugin-publisher.service";
+import { CapitalizeFirstPipe } from "./pipes/capitalizefirst/capitalizefirst.pipe";
 
 const ROUTES: Routes = [
     { path: "", component: SubnavComponent, children: [
@@ -46,6 +47,7 @@ const ROUTES: Routes = [
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
+        CapitalizeFirstPipe,
         AboutComponent,
         StatusComponent,
         SubnavComponent,
@@ -71,7 +73,7 @@ const ROUTES: Routes = [
         PluginUploaderService,
         PluginManager,
         ZipManager
-    ]
+    ],
 })
 export class SubnavPluginModule {
     constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
