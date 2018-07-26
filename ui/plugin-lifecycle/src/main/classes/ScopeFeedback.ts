@@ -6,6 +6,7 @@ export class ScopeFeedback {
     private _unpublishForAllTenants: boolean = false;
     private _forAllOrgs: boolean = false;
 
+    private _scope: string[] = [];
     private _data: ChangeScopeItem[] = [];
 
     constructor() {}
@@ -47,10 +48,27 @@ export class ScopeFeedback {
         this._data.push(org);
     }
 
+    set scope(scope: string[]) {
+        this._scope = scope;
+    }
+
+    get scope(): string[] {
+        return this._scope;
+    }
+
+    public addNewScope(scope: string): void {
+        this.scope.push(scope);
+    }
+
+    public removeScope(scope: string): void {
+        this.scope.splice(this.scope.indexOf(scope), 1);
+    }
+
     public reset(): void {
         this.forAllOrgs = false;
         this.publishForAllTenants = false;
         this.unpublishForAllTenants = false;
         this.data = [];
+        this.scope = null;
     }
 }

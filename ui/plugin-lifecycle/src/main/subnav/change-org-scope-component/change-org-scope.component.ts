@@ -8,9 +8,9 @@ import { UiPluginMetadataResponse, UiPluginMetadata } from "@vcd/bindings/vcloud
 import { getPropsWithout } from "../../helpers/object-helpers";
 
 @Component({
-    selector: "vcd-change-scope",
-    templateUrl: "./change-scope.component.html",
-    styleUrls: ["./change-scope.component.scss"]
+    selector: "vcd-change-org-scope",
+    templateUrl: "./change-org-scope.component.html",
+    styleUrls: ["./change-org-scope.component.scss"]
 })
 export class ChangeScope implements OnInit {
     public feedback = new ScopeFeedback();

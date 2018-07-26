@@ -5,9 +5,9 @@ import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 
 @Component({
-    selector: "vcd-choose-scope",
-    templateUrl: "./choose-scope.component.html",
-    styleUrls: ["./choose-scope.component.scss"]
+    selector: "vcd-choose-org-scope",
+    templateUrl: "./choose-org-scope.component.html",
+    styleUrls: ["./choose-org-scope.component.scss"]
 })
 export class ChooseScope implements OnInit {
     private _feedback: ScopeFeedback;
