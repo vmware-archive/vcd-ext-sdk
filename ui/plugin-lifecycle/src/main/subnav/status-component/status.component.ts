@@ -329,6 +329,16 @@ export class StatusComponent implements OnInit, OnDestroy {
      */
     public openChangeOrgScope(): void {
         this.changeScopeState = true;
+
+        this.action = action;
+    }
+
+    public publishForAllTenants(): void {
+        this.pluginManager.publishPluginForAllTenants(this.selected, false);
+    }
+
+    public unpublishForAllTenants(): void {
+        this.pluginManager.unpublishPluginForAllTenants(this.selected, false);
     }
 
     /**
