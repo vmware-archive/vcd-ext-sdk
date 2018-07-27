@@ -33,7 +33,7 @@ export class ChangeOrgScope implements OnInit {
         if (val === false) {
             this.feedback.reset();
             
-            if (this.watchSourceData) {
+            if (this.watchSourceDataSub) {
                 this.watchSourceDataSub.unsubscribe();
             }
         }
@@ -74,7 +74,7 @@ export class ChangeOrgScope implements OnInit {
     public handleMixedScope(feedback: ScopeFeedback): void {
         this.showTracker = true;
 
-        const requests = this.pluginManager.handleMixedScope(this.pluginManager.selectedPlugins, feedback, true);
+        const requests = this.pluginManager.handleMixedScope(this.plugins, feedback, true);
         requests.forEach((element) => {
             const subscription = element.req.subscribe(
                 (res) => {
