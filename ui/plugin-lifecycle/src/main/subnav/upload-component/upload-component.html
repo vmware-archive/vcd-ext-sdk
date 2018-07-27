@@ -33,7 +33,7 @@
                 <clr-wizard-button [type]="'custom-next'">Next</clr-wizard-button>
             </ng-template>
 
-            <vcd-choose-scope [(feedback)]="scopeFeedback"></vcd-choose-scope>
+            <vcd-choose-scope *ngIf="uploadPayload.manifest" [(feedback)]="scopeFeedback"></vcd-choose-scope>
         </clr-wizard-page>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
