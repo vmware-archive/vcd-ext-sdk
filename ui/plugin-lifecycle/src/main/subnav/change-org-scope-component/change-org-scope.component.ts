@@ -108,6 +108,7 @@ export class ChangeOrgScope implements OnInit {
     public loadListOfOrgsPerPlugin(): void {
         this.loadOrgs();
         this.loadPlugins();
+        this.watchSourceData();
         this.populateList();
     }
 
@@ -130,13 +131,13 @@ export class ChangeOrgScope implements OnInit {
 
             if (Object.keys(data[0]).indexOf("pluginName") !== -1) {
                 this.plugins = <Plugin[]>data;
-                return;
             }
 
             if (Object.keys(data[0]).indexOf("displayName") !== -1) {
                 this.orgs = <Organisation[]>data;
-                return;
             }
+
+            this.populateList();
         }, (err) => {
             // Handle error
         });
