@@ -1,11 +1,13 @@
-import {CommonModule} from "@angular/common";
-import {Inject, NgModule, Optional} from "@angular/core";
-import {Routes, RouterModule} from "@angular/router";
-import {ClarityModule} from "clarity-angular";
-import {Store} from "@ngrx/store";
+import { CommonModule } from "@angular/common";
+import { Inject, NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { Store } from "@ngrx/store";
 import { VcdApiClient, VcdSdkModule } from "@vcd/sdk";
-import { EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule } from "@vcd/sdk/common";
-import {SimpleComponent} from "./simple/simple.component";
+import { ExtensionNavRegistration, EXTENSION_ROUTE } from "@vcd/sdk/common";
+import { PluginModule } from "@vcd/sdk/core";
+import { TranslateService } from "@vcd/sdk/i18n";
+import { ClarityModule } from "clarity-angular";
+import { SimpleComponent } from "./simple/simple.component";
 
 const ROUTES: Routes = [
     { path: "", component: SimpleComponent }
@@ -15,7 +17,6 @@ const ROUTES: Routes = [
     imports: [
         ClarityModule,
         CommonModule,
-        I18nModule,
         VcdSdkModule,
         RouterModule.forChild(ROUTES)
     ],
@@ -26,15 +27,14 @@ const ROUTES: Routes = [
     exports: [],
     providers: [VcdApiClient]
 })
-export class SimplePluginModule {
-    constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
-        const registration: ExtensionNavRegistration = {
+export class SimplePluginModule extends PluginModule {
+    constructor(appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string, translate: TranslateService) {
+        super(appStore, translate);
+        this.registerExtension(<ExtensionNavRegistration>{
             path: extensionRoute,
             icon: "page",
             nameCode: "nav.label",
             descriptionCode: "nav.description"
-        };
-
-        appStore.dispatch(new ExtensionNavRegistrationAction(registration));
+        });
     }
 }

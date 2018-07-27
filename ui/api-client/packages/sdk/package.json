@@ -18,6 +18,8 @@
     "@angular/compiler-cli": "^4.3.0",
     "@angular/core": "^4.3.0",
     "@angular/platform-browser": "^4.3.0",
+    "@ngrx/core": "1.2.0",
+    "@ngrx/store": "2.2.2",
     "cpy-cli": "^2.0.0",
     "ncp": "2.0.0",
     "rimraf": "^2.6.2",

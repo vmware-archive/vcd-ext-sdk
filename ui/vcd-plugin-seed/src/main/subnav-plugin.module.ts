@@ -1,12 +1,15 @@
-import {CommonModule} from "@angular/common";
-import {Inject, NgModule} from "@angular/core";
-import {Routes, RouterModule} from "@angular/router";
-import {ClarityModule} from "clarity-angular";
-import {Store} from "@ngrx/store";
-import {EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule} from "@vcd/sdk/common";
-import {SubnavComponent} from "./subnav/subnav.component";
-import {AboutComponent} from "./subnav/about.component";
-import {StatusComponent} from "./subnav/status.component";
+import { CommonModule } from "@angular/common";
+import { Inject, NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { VcdApiClient, VcdSdkModule } from "@vcd/sdk";
+import { ExtensionNavRegistration, EXTENSION_ROUTE } from "@vcd/sdk/common";
+import { PluginModule } from "@vcd/sdk/core";
+import { TranslateService } from "@vcd/sdk/i18n";
+import { ClarityModule } from "clarity-angular";
+import { AboutComponent } from "./subnav/about.component";
+import { StatusComponent } from "./subnav/status.component";
+import { SubnavComponent } from "./subnav/subnav.component";
 
 const ROUTES: Routes = [
     { path: "", component: SubnavComponent, children: [
@@ -20,7 +23,7 @@ const ROUTES: Routes = [
     imports: [
         ClarityModule,
         CommonModule,
-        I18nModule,
+        VcdSdkModule,
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
@@ -30,16 +33,16 @@ const ROUTES: Routes = [
     ],
     bootstrap: [SubnavComponent],
     exports: [],
-    providers: []
+    providers: [VcdApiClient]
 })
-export class SubnavPluginModule {
-    constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
-        const registration: ExtensionNavRegistration = {
+export class SubnavPluginModule extends PluginModule {
+    constructor(appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string, translate: TranslateService) {
+        super(appStore, translate);
+        this.registerExtension(<ExtensionNavRegistration>{
             path: extensionRoute,
             icon: "page",
             nameCode: "nav.label",
             descriptionCode: "nav.description"
-        };
-        appStore.dispatch(new ExtensionNavRegistrationAction(registration));
+        });
     }
 }
