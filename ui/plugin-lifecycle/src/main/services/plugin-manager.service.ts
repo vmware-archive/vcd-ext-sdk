@@ -5,7 +5,6 @@ import { Plugin, UploadPayload, ChangeScopePlugin } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
-import { Organisation } from "../interfaces/Organisation";
 import { DisableEnablePluginService } from "./disable-enable-plugin.service";
 import { PluginUploaderService } from "./plugin-uploader.service";
 import { DeletePluginService } from "./delete-plugin.service";

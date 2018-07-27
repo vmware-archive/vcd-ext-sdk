@@ -10,6 +10,7 @@ import { Subscription } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { OrganisationService } from "../../services/organisation.service";
 import { Organisation } from "../../interfaces/Organisation";
+import { Plugin } from "../../interfaces/Plugin";
 
 @Component({
     selector: "vcd-change-org-scope",
@@ -23,6 +24,7 @@ export class ChangeOrgScope implements OnInit {
     public showTracker: boolean;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
     public orgs: Organisation[];
+    public plugins: Plugin[];
     
     public watchOrgsSubs: Subscription;
 
@@ -105,23 +107,30 @@ export class ChangeOrgScope implements OnInit {
 
     public loadListOfOrgsPerPlugin(): void {
         this.loadOrgs();
+        this.loadPlugins();
         this.populateList();
     }
 
     public loadOrgs(): void {
         this.orgs = this.orgService.orgs;
-        this.watchOrgsSubs = this.orgService.watchOrgs().subscribe(
-            (orgs) => {
-                this.orgs = orgs;
-                this.populateList();
-            }
-        )
+        this.watchOrgsSubs = this.orgService.watchOrgs().subscribe((orgs) => {
+            this.orgs = orgs;
+            this.populateList();
+        });
+    }
+
+    public loadPlugins(): void {
+        this.plugins = this.pluginManager.selectedPlugins;
+        this.pluginManager.watchPluginList().subscribe((plugins) => {
+            this.plugins = plugins;
+            this.populateList();
+        });
     }
 
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Organisation) => {
-            this.pluginManager.selectedPlugins.forEach(plugin => {
+            this.plugins.forEach(plugin => {
                 this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: plugin.pluginName, action: this.action });           
             });
         });
