@@ -1,6 +1,8 @@
 // rollup.config.js
 import angular from 'rollup-plugin-angular';
 import typescript from 'rollup-plugin-typescript';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 import sass from 'node-sass';
 import tsc from 'typescript';
 
@@ -10,9 +12,11 @@ export default {
     dest: 'dist/bundle.js',
     external: [
         'rxjs',
+        'rxjs/operators',
         '@angular/animations',
         '@angular/animations/browser',
         '@angular/common',
+        '@angular/common/http',
         '@angular/compiler',
         '@angular/core',
         '@angular/forms',
@@ -25,8 +29,7 @@ export default {
         '@ngrx/store',
         '@ngrx/effects',
         'clarity-angular',
-        'reselect',
-        '@vcd-ui/common'
+        'reselect'
     ],
     plugins: [
         angular({
@@ -37,6 +40,10 @@ export default {
                     }
                 }
         }),
-        typescript({typescript: tsc})
+        typescript({typescript: tsc}),
+        resolve({
+          only: [ '@vcd/bindings', '@vcd/sdk' ]
+        }),
+        commonjs()
     ]
 }

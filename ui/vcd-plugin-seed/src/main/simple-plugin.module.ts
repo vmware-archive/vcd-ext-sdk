@@ -1,9 +1,10 @@
 import {CommonModule} from "@angular/common";
-import {Inject, NgModule} from "@angular/core";
+import {Inject, NgModule, Optional} from "@angular/core";
 import {Routes, RouterModule} from "@angular/router";
 import {ClarityModule} from "clarity-angular";
 import {Store} from "@ngrx/store";
-import {EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule} from "@vcd-ui/common";
+import { VcdApiClient, VcdSdkModule } from "@vcd/sdk";
+import { EXTENSION_ROUTE, ExtensionNavRegistration, ExtensionNavRegistrationAction, I18nModule } from "@vcd/sdk/common";
 import {SimpleComponent} from "./simple/simple.component";
 
 const ROUTES: Routes = [
@@ -15,6 +16,7 @@ const ROUTES: Routes = [
         ClarityModule,
         CommonModule,
         I18nModule,
+        VcdSdkModule,
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
@@ -22,7 +24,7 @@ const ROUTES: Routes = [
     ],
     bootstrap: [SimpleComponent],
     exports: [],
-    providers: []
+    providers: [VcdApiClient]
 })
 export class SimplePluginModule {
     constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
@@ -32,6 +34,7 @@ export class SimplePluginModule {
             nameCode: "nav.label",
             descriptionCode: "nav.description"
         };
+
         appStore.dispatch(new ExtensionNavRegistrationAction(registration));
     }
 }

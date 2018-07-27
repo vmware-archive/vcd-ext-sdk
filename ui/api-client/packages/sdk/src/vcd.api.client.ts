@@ -1,13 +1,13 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Inject, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HTTP_INTERCEPTORS, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
-import { catchError, tap, map } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 
 import { LoggingInterceptor, RequestHeadersInterceptor } from './http-interceptors/index';
-import { SessionType, QueryResultRecordsType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
+import { SessionType, QueryResultRecordsType, AuthorizedLocationType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
 import { Query } from './query';
+import { AuthTokenHolderService, API_ROOT_URL } from './common';
 
 /**
  * A basic client for interacting with the vCloud Director APIs.
@@ -26,10 +26,13 @@ export class VcdApiClient {
 
     private interceptors: HttpInterceptor[];
 
-    private _session: SessionType;
+    private _session: BehaviorSubject<SessionType> = new BehaviorSubject<SessionType>(null);
+    private _sessionObservable: Observable<SessionType> = this._session.asObservable().skipWhile(session => !session);
 
-    constructor(private http: HttpClient, private injector: Injector) {
+    constructor(private http: HttpClient, private authToken: AuthTokenHolderService, @Inject(API_ROOT_URL) @Optional() private apiRootUrl: string = '', private injector: Injector) {
         this.interceptors = injector.get(HTTP_INTERCEPTORS);
+        this._baseUrl = apiRootUrl;
+        this.setAuthentication(this.authToken.token).subscribe();
     }
 
     public setVersion(version: string): VcdApiClient {
@@ -51,10 +54,9 @@ export class VcdApiClient {
 
         return this.http.get<SessionType>(`${this._baseUrl}/api/session`, {observe: 'response'})
             .pipe(
-                catchError(this.handleError),
                 map(this.extractSessionType),
                 tap(session => {
-                    this._session = session;
+                    this._session.next(session);
                 })
             );
     }
@@ -75,31 +77,40 @@ export class VcdApiClient {
 
         return this.http.post<SessionType>(`${this._baseUrl}/api/sessions`, null, { observe: 'response', headers: new HttpHeaders({ 'Authorization': `Basic ${authString}` }) })
             .pipe(
-                catchError(this.handleError),
                 tap((response: HttpResponse<any>) =>
                     this.setAuthenticationOnInterceptor(`${response.headers.get('x-vmware-vcloud-token-type')} ${response.headers.get('x-vmware-vcloud-access-token')}`)
                 ),
                 map(this.extractSessionType),
                 tap(session => {
-                    this._session = session;
+                    this._session.next(session);
                 })
             );
     }
 
     public query<T>(builder: Query.Builder): Observable<QueryResultRecordsType> {
         return this.http.get<T>(`${this._baseUrl}/api/query${builder.get()}`)
-            .pipe(
-                catchError(this.handleError)
-            );
     }
 
-    public get username(): string {
-        return this._session.user;
+    public get session(): Observable<SessionType> {
+        return this._sessionObservable;
     }
 
-    public get organization(): string {
-        return this._session.org;
+    public get username(): Observable<string> {
+        return this._sessionObservable.map(session => session.user);
     }
+
+    public get organization(): Observable<string> {
+        return this._sessionObservable.map(session => session.org);
+    }
+
+    public get location(): Observable<AuthorizedLocationType> {
+        return this._sessionObservable.map(session => session.authorizedLocations.location.find(location => location.locationId == session.locationId));
+    }
+
+    public getLocation(session: SessionType): AuthorizedLocationType {
+        return session.authorizedLocations.location.find(location => location.locationId == session.locationId);
+    }
+
 
     private setAuthenticationOnInterceptor(authentication: string): void {
         for (let interceptor of this.interceptors) {
@@ -116,14 +127,5 @@ export class VcdApiClient {
         } else {
             return response.body as SessionType;
         }
-    }
-
-    private handleError<T>(response: HttpErrorResponse): Observable<T> {
-        const error = new DOMParser().parseFromString(response.error, 'text/xml').getElementsByTagName('Error')[0];
-        console.error(`Error occurred communicating with server:
-            message: ${error.getAttribute('message')}
-            request id: ${response.headers.get('x-vmware-vcloud-request-id')}
-        `);
-        return empty();
     }
 }

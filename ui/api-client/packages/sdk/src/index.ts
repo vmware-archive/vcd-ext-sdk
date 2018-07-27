@@ -1,14 +1,20 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders , NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { VcdApiClient } from './vcd.api.client';
 import { httpInterceptorProviders } from './http-interceptors';
 
+import * as query from './query';
+import * as common from './common';
+
 export * from './vcd.api.client';
-export * from './query';
 export * from './api.result.service';
 
-export { httpInterceptorProviders };
+export { 
+  common,
+  httpInterceptorProviders,
+  query
+};
 
 @NgModule({
   imports: [
@@ -17,7 +23,7 @@ export { httpInterceptorProviders };
   ],
   declarations: [],
   exports: [],
-  providers: [VcdApiClient,httpInterceptorProviders]
+  providers: [httpInterceptorProviders, VcdApiClient]
 })
 export class VcdSdkModule {
 }

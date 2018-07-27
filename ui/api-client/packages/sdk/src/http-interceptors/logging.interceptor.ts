@@ -4,7 +4,7 @@ import {
   HttpRequest, HttpResponse
 } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { ApiResultService, ApiResult } from '../api.result.service';
 
