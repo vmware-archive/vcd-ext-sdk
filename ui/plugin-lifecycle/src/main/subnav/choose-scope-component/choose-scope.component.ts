@@ -9,17 +9,32 @@ import { ScopeFeedback } from "../../classes/ScopeFeedback";
     templateUrl: "./choose-scope.component.html"
 })
 export class ChooseScope implements OnInit {
-    @Input() feedback: ScopeFeedback;
-    @Output() feebackChange = new EventEmitter<ScopeFeedback>();
+    private _feedback: ScopeFeedback;
 
     private _enableForProviders: boolean;
     private _enableForTenants: boolean;
 
+    @Input()
+    set feedback(val: ScopeFeedback) {
+        this._feedback = val;
+        
+        if (this.feedback.scope.indexOf("service-provider") !== -1) {
+            this.enableForProviders = true;
+        }
+
+        if (this.feedback.scope.indexOf("tenant") !== -1 ) {
+            this.enableForTenants = true;
+        }
+    }
+
+    @Output() feebackChange = new EventEmitter<ScopeFeedback>();
+
     constructor() {}
 
-    ngOnInit() {
-        this.enableForProviders = false;
-        this.enableForTenants = false;
+    ngOnInit() {}
+
+    get feedback(): ScopeFeedback {
+        return this._feedback;
     }
 
     get enableForProviders(): boolean {

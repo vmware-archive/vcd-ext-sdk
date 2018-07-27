@@ -32,7 +32,7 @@
                 <clr-wizard-button [type]="'custom-next'">{{ "subnav.upload-plugin.wizard.page-2.next.btn" | translate }}</clr-wizard-button>
             </ng-template>
 
-            <vcd-choose-scope *ngIf="uploadPayload.manifest" [(feedback)]="scopeFeedback"></vcd-choose-scope>
+            <vcd-choose-scope [(feedback)]="scopeFeedback"></vcd-choose-scope>
         </clr-wizard-page>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)" *ngIf="scopeFeedback.scope.indexOf('tenant') !== -1">

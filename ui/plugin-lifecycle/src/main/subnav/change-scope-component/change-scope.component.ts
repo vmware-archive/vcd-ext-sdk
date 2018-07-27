@@ -12,6 +12,7 @@ import { PluginManager } from "../../services/plugin-manager.service";
 })
 export class ChangeScope implements OnInit {
     public feedback = new ScopeFeedback();
+    public loading: boolean = false;
     private _open: boolean = false;
 
     @Input() 
@@ -32,6 +33,7 @@ export class ChangeScope implements OnInit {
     }
 
     public changeScope(): void {
+        this.loading = true;
         const subs = this.changeScopeService.changeScope(this.pluginManager.selectedPlugins, this.feedback.scope, this.pluginManager.baseUrl)
             .subscribe((res) => {
                 console.log(res);
@@ -39,6 +41,7 @@ export class ChangeScope implements OnInit {
                 // Handle err
                 console.warn(err);
             }, () => {
+                this.loading = false;
                 subs.unsubscribe();
             });
     }
