@@ -2,7 +2,8 @@
     <clr-modal [clrModalOpen]="open" [clrModalClosable]="false" [clrModalSize]="'lg'">
         <h3 class="modal-title">Change plugin scope</h3>
         <div class="modal-body">
-            <vcd-choose-scope *ngIf="open" [(feedback)]="feedback"></vcd-choose-scope>
+            <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true"></vcd-loading-indicator>
+            <vcd-choose-scope [(feedback)]="feedback"></vcd-choose-scope>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onClose()">
