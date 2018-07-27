@@ -1,0 +1,16 @@
+<ng-container *ngIf="isLoading">
+    <div class="overlay vcd-plugin-managment" [ngClass]="fixed ? 'fixed-position' : null"></div>
+    <div *ngIf="showSpinner" class="indicator-container" [ngClass]="fixed ? 'fixed-position' : null">
+        <div class="indicator-container__wrapper" [ngClass]="fixed ? 'fixed-position' : null">
+            <span
+                [ngClass]="[
+                    'spinner',
+                    loadingTextKey ? 'spinner-inline' : ('spinner-' + size)
+                ]"
+            >
+            </span>
+            <span class="qa-loading-text" *ngIf="loadingTextKey">{{loadingTextKey | translate}}</span>
+        </div>
+    </div>
+</ng-container>
+<ng-content></ng-content>
