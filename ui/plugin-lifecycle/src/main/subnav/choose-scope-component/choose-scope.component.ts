@@ -27,7 +27,7 @@ export class ChooseScope implements OnInit {
         }
     }
 
-    @Output() feebackChange = new EventEmitter<ScopeFeedback>();
+    @Output() feedbackChange = new EventEmitter<ScopeFeedback>();
 
     constructor() {}
 
@@ -50,7 +50,7 @@ export class ChooseScope implements OnInit {
             this.feedback.removeScope('service-provider');
         }
 
-        this.feebackChange.emit(this.feedback);
+        this.feedbackChange.emit(this.feedback);
     }
 
     get enableForTenants(): boolean {
@@ -66,7 +66,7 @@ export class ChooseScope implements OnInit {
             this.feedback.removeScope('tenant');
         }
 
-        this.feebackChange.emit(this.feedback);
+        this.feedbackChange.emit(this.feedback);
     }
 
 }
