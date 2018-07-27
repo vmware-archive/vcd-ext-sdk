@@ -6,7 +6,7 @@ import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { PluginManager } from "../../services/plugin-manager.service";
 import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { OrganisationService } from "../../services/organisation.service";
 import { Organisation } from "../../interfaces/Organisation";
@@ -26,15 +26,15 @@ export class ChangeOrgScope implements OnInit {
     public orgs: Organisation[];
     public plugins: Plugin[];
     
-    public watchOrgsSubs: Subscription;
+    public watchSourceDataSub: Subscription;
 
     @Input()
     set state (val: boolean) {
         if (val === false) {
             this.feedback.reset();
             
-            if (this.watchOrgsSubs) {
-                this.watchOrgsSubs.unsubscribe();
+            if (this.watchSourceData) {
+                this.watchSourceDataSub.unsubscribe();
             }
         }
 
@@ -113,17 +113,32 @@ export class ChangeOrgScope implements OnInit {
 
     public loadOrgs(): void {
         this.orgs = this.orgService.orgs;
-        this.watchOrgsSubs = this.orgService.watchOrgs().subscribe((orgs) => {
-            this.orgs = orgs;
-            this.populateList();
-        });
     }
 
     public loadPlugins(): void {
         this.plugins = this.pluginManager.selectedPlugins;
-        this.pluginManager.watchPluginList().subscribe((plugins) => {
-            this.plugins = plugins;
-            this.populateList();
+    }
+
+    public watchSourceData(): void {
+        this.watchSourceDataSub = Observable.concat<Plugin[], Organisation[]>(
+            this.pluginManager.watchSelectedPlugins(),
+            this.orgService.watchOrgs()
+        ).subscribe((data) => {
+            if (data.length === 0) {
+                return;                
+            }
+
+            if (Object.keys(data[0]).indexOf("pluginName") !== -1) {
+                this.plugins = <Plugin[]>data;
+                return;
+            }
+
+            if (Object.keys(data[0]).indexOf("displayName") !== -1) {
+                this.orgs = <Organisation[]>data;
+                return;
+            }
+        }, (err) => {
+            // Handle error
         });
     }
 
