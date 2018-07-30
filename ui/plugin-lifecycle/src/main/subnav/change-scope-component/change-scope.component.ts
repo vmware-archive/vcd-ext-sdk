@@ -77,5 +77,6 @@ export class ChangeScope implements OnInit {
         this.alertMessage = null;
         this.feedback.reset();
         this.openChange.emit(false);
+        this.pluginManager.refresh();
     }
 }
