@@ -15,6 +15,7 @@ export class ChangeScope implements OnInit {
     public feedback = new ScopeFeedback();
     public loading: boolean = false;
     public alertMessage: string;
+    public hasToRefresh: boolean = false;
     private _open: boolean = false;
 
     @Input() 
@@ -62,6 +63,7 @@ export class ChangeScope implements OnInit {
         this.loading = true;
         const subs = this.changeScopeService.changeScope(pluginsToBeUpdated, this.feedback.scope, this.pluginManager.baseUrl)
             .subscribe((res) => {
+                this.hasToRefresh = true;
                 console.log(res);
             }, (err) => {
                 // Handle err
@@ -77,6 +79,10 @@ export class ChangeScope implements OnInit {
         this.alertMessage = null;
         this.feedback.reset();
         this.openChange.emit(false);
-        this.pluginManager.refresh();
+
+        if (this.hasToRefresh) {
+            this.hasToRefresh = false;
+            this.pluginManager.refresh();
+        }
     }
 }
