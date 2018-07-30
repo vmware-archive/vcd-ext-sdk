@@ -35,6 +35,7 @@ export class ChangeScope implements OnInit {
     }
 
     public changeScope(): void {
+        this.alertMessage = null;
         // Validate change scope action
         const pluginsToBeUpdated: Plugin[] = [];
         this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
@@ -54,7 +55,9 @@ export class ChangeScope implements OnInit {
             return;
         }
 
-        this.alertMessage = `Only ${pluginsToBeUpdated.length} plugins will be scope changed, others are already in this state.`;
+        if (pluginsToBeUpdated.length !== this.pluginManager.selectedPlugins.length) {
+            this.alertMessage = `Only ${pluginsToBeUpdated.length} plugins will be scope changed, others are already in this state.`;
+        }
 
         this.loading = true;
         const subs = this.changeScopeService.changeScope(pluginsToBeUpdated, this.feedback.scope, this.pluginManager.baseUrl)
@@ -71,6 +74,7 @@ export class ChangeScope implements OnInit {
 
     public onClose(): void {
         this.open = false;
+        this.alertMessage = null;
         this.feedback.reset();
         this.openChange.emit(false);
     }
