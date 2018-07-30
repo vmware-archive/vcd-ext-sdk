@@ -5,6 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { ChangeScopeService } from "../../services/change-scope.service";
 import { PluginManager } from "../../services/plugin-manager.service";
+import { Plugin } from "../../interfaces/Plugin";
 
 @Component({
     selector: "vcd-change-scope",
@@ -13,6 +14,7 @@ import { PluginManager } from "../../services/plugin-manager.service";
 export class ChangeScope implements OnInit {
     public feedback = new ScopeFeedback();
     public loading: boolean = false;
+    public alertMessage: string;
     private _open: boolean = false;
 
     @Input() 
@@ -33,8 +35,29 @@ export class ChangeScope implements OnInit {
     }
 
     public changeScope(): void {
+        // Validate change scope action
+        const pluginsToBeUpdated: Plugin[] = [];
+        this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
+            // Already in state
+            if (
+                (selectedPlugin.tenant_scoped === (this.feedback.scope.indexOf("tenant") !== -1)) &&
+                (selectedPlugin.provider_scoped === (this.feedback.scope.indexOf("service-provider") !== -1))
+            ) {
+                return;
+            }
+    
+            pluginsToBeUpdated.push(selectedPlugin);
+        });
+
+        if (pluginsToBeUpdated.length < 1) {
+            this.alertMessage = "All plugins are in this state already!";
+            return;
+        }
+
+        this.alertMessage = `Only ${pluginsToBeUpdated.length} plugins will be scope changed, others are already in this state.`;
+
         this.loading = true;
-        const subs = this.changeScopeService.changeScope(this.pluginManager.selectedPlugins, this.feedback.scope, this.pluginManager.baseUrl)
+        const subs = this.changeScopeService.changeScope(pluginsToBeUpdated, this.feedback.scope, this.pluginManager.baseUrl)
             .subscribe((res) => {
                 console.log(res);
             }, (err) => {
