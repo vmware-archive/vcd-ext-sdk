@@ -26,6 +26,6 @@ export class HttpTransferService {
     private trackUploadProgress() {}
 
     // Process the file
-    private processTheFile(file: FileUpload) {}
+    private processTheFile(headers: Headers, file: FileUpload) {}
 
 }
