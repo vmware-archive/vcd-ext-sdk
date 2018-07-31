@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, BehaviorSubject } from "rxjs";
 import { Plugin, UploadPayload, ChangeScopePlugin } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { AuthService } from "./auth.service";
@@ -10,15 +10,17 @@ import { PluginUploaderService } from "./plugin-uploader.service";
 import { DeletePluginService } from "./delete-plugin.service";
 import { PluginPublisher } from "./plugin-publisher.service";
 import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
+import { HttpTransferService } from "./http-transfer.service";
+import { HttpHeaders } from "@angular/common/http";
 
 @Injectable()
 export class PluginManager {
     private _baseUrl = "https://bos1-vcd-sp-static-200-117.eng.vmware.com";
     private _plugins: Plugin[];
-    private _pluginsSubject = new Subject<Plugin[]>();
+    private _pluginsSubject = new BehaviorSubject<Plugin[]>(this._plugins);
     
     private _selectedPlugins: Plugin[] = [];
-    private _selectedPluginsSubj = new Subject<Plugin[]>();
+    private _selectedPluginsSubj = new BehaviorSubject<Plugin[]>(this.selectedPlugins);
 
     constructor(
         private http: Http,
@@ -26,7 +28,8 @@ export class PluginManager {
         private disableEnablePlugin: DisableEnablePluginService,
         private pluginUploaderService: PluginUploaderService,
         private deletePluginService: DeletePluginService,
-        private pluginPublisher: PluginPublisher
+        private pluginPublisher: PluginPublisher,
+        private httpTransferService: HttpTransferService
     ) {
         this.authService.auth().then(() => {
             this.getPluginsList();
@@ -147,11 +150,10 @@ export class PluginManager {
                 const transferLink = url.slice(1, url.length);
 
                 const headers = {
-                    "Content-Type": "application/zip",
                     "x-vcloud-authorization": this.authService.getAuthToken()
-                }
+                };
 
-                return this.pluginUploaderService.sendZip(transferLink, payload.file);
+                return this.httpTransferService.upload(headers, { file: payload.file, url: transferLink }).toPromise();
             })
             .then(() => {
                 if (scopeFeedback.forAllOrgs && scopeFeedback.publishForAllTenants) {

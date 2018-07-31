@@ -53,6 +53,7 @@ const ROUTES: Routes = [
         HttpModule,
         I18nModule,
         FormsModule,
+        HttpClientModule,
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
@@ -75,6 +76,11 @@ const ROUTES: Routes = [
     bootstrap: [SubnavComponent],
     exports: [],
     providers: [
+        {
+            provide: HttpTransferService,
+            useFactory: transferServiceFactory,
+            deps: [HttpClient]
+        },
         AuthService,
         OrganisationService,
         ChangeOrgScopeService,

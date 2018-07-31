@@ -17,6 +17,7 @@ gulp.task('build', function () {
       '@angular/animations',
       '@angular/animations/browser',
       '@angular/common',
+      '@angular/common/http',
       '@angular/compiler',
       '@angular/core',
       '@angular/forms',
@@ -28,9 +29,9 @@ gulp.task('build', function () {
       '@ngrx/core',
       '@ngrx/store',
       '@ngrx/effects',
+      '@vcd-ui/common',
       'clarity-angular',
-      'reselect',
-      '@vcd-ui/common'
+      'reselect'
     ],
     plugins: [
       angular({
