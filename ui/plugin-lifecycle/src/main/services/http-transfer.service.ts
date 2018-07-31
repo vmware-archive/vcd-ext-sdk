@@ -1,6 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 
+interface FileToBeUploaded {
+    file: File;
+    url: string;
+}
+
 @Injectable()
 export class HttpTransferService {
     constructor() {}
@@ -21,6 +26,6 @@ export class HttpTransferService {
     private trackUploadProgress() {}
 
     // Process the file
-    private processTheFile() {}
+    private processTheFile(file: FileToBeUploaded) {}
 
 }
