@@ -1,9 +1,17 @@
 /*
  * Copyright 2017 VMware, Inc. All rights reserved. VMware Confidential
  */
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable, Subscriber, Subscription} from "rxjs/Rx";
+import {
+    HttpClient,
+    HttpErrorResponse,
+    HttpEventType,
+    HttpHeaders,
+    HttpProgressEvent,
+    HttpRequest
+} from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable, Subscriber, Subscription } from "rxjs";
+// import { TranslationService } from "../i18n/TranslationService";
 
 export const CHUNK_SIZE = 5 * 10 * 1024 * 1024;
 export const PARALLEL_REQUESTS = 3;
@@ -36,7 +44,7 @@ export class HttpTransferService {
      * @param headers Additional headers
      */
     private getChunkHeader(offset: number, end: number, fileSize: number, headers = {}) {
-        return new Headers({
+        return new HttpHeaders({
             ...headers,
             "Content-Range": `bytes ${offset} - ${end} / ${fileSize}`
         });
@@ -97,15 +105,13 @@ export class HttpTransferService {
                         this.getChunkHeader(offset, end, fileSize, headers)
                     );
                     uploadSubscription = uploadObservable.subscribe(
-                        (event) => {
-                            console.log(event);
-                            
-                            // if (event.type === HttpEventType.UploadProgress) {
+                        (event: HttpProgressEvent) => {
+                            if (event.type === HttpEventType.UploadProgress) {
                                 subscriber.next(offset + event.loaded);
                                 return;
-                            // }
+                            }
                         },
-                        (error) => subscriber.error(error),
+                        (error: HttpErrorResponse) => subscriber.error(error),
                         () => {
                             if (end >= file.size || (subscriber.closed)) {
                                 subscriber.complete();
@@ -143,29 +149,32 @@ export class HttpTransferService {
      *
      * @returns An observable that completes when chunk is uploaded.
      */
-    private uploadChunk(blob: Blob, url: string, headers: Headers) {
-        const opts = new RequestOptions();
-        opts.headers = headers;
+    private uploadChunk(blob: Blob, url: string, headers: HttpHeaders) {
+        const request = new HttpRequest("PUT", url, blob, {
+            headers: headers,
+            reportProgress: true,
+            responseType: RESPONSE_TYPE
+        });
 
-        return this.httpClient.put(url, blob, opts)
-                .retryWhen((error) => error.flatMap((error) => {
-                    if (error.status !== 200) {
-                        return Observable.of(error).delay(RETRY_TIMEOUT);
-                    }
+        return this.httpClient.request(request)
+            .retryWhen((error) => error.flatMap((error: HttpErrorResponse) => {
+                if (error.status !== 200) {
+                    return Observable.of(error).delay(RETRY_TIMEOUT);
+                }
 
-                    return Observable.throw(error.error);
-                }).take(CHUNK_UPLOAD_RETRY_COUNT).concat(
-                    Observable.throw({
-                        error: "Error in zip uploading..."
-                    }))
-                );
+                return Observable.throw(error.error);
+            }).take(CHUNK_UPLOAD_RETRY_COUNT).concat(
+                Observable.throw({
+                    error: "Chunk upload error!"
+                }))
+            );
     }
 
     constructor(
-        private httpClient: Http,
+        private httpClient: HttpClient,
         private chunkSize: number,
         private parallelRequests: number
-    ) {}
+    ) { }
 
     /**
      * Flag that indicates weather service is uploading files.
@@ -180,7 +189,7 @@ export class HttpTransferService {
      * Files are uploaded in parallel based on the service configuration.
      * Chunks are uploaded in sequence.
      */
-    upload(headers: {}, ...tasks: FileUpload[]): Observable<number> {
+    upload(headers: Headers, ...tasks: FileUpload[]): Observable<number> {
         const parallel = this.parallelRequests;
         const total = tasks.reduce((ac, item) => (ac + item.file.size), 0);
 
@@ -247,18 +256,18 @@ export class HttpTransferService {
             };
 
             const progressSubscription = Observable.of(0)
-            .combineLatest(
-                ...this.uploadTasks.map((task) => task.subject),
-                (empty, ...progresses) => progresses.reduce((start, value) => (start + value), 0))
-            .subscribe(
-                (value) => subscriber.next(value),
-                (error) => subscriber.error(error),
-                ()      => subscriber.complete()
-            );
+                .combineLatest(
+                    ...this.uploadTasks.map((task) => task.subject),
+                    (empty, ...progresses) => progresses.reduce((start, value) => (start + value), 0))
+                .subscribe(
+                    (value) => subscriber.next(value),
+                    (error) => subscriber.error(error),
+                    () => subscriber.complete()
+                );
 
             runNext();
             return () => progressSubscription.unsubscribe();
         })
-        .map((value: number) => this.getProgress(value, total));
+            .map((value: number) => this.getProgress(value, total));
     }
 }

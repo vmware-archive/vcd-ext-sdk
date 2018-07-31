@@ -29,6 +29,7 @@ gulp.task('build', function () {
       '@ngrx/core',
       '@ngrx/store',
       '@ngrx/effects',
+      '@vcd-ui/common',
       'clarity-angular',
       'reselect'
     ],
