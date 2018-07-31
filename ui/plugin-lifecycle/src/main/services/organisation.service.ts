@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Organisation } from "../interfaces/Organisation";
-import { Subject, Observable } from "rxjs";
+import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { AuthService } from "./auth.service";
 import { XMLHelper } from "../classes/XMLHelper";
 
 @Injectable()
 export class OrganisationService {
     private _orgs: Organisation[] = [];
-    private _orgsSubject = new Subject<Organisation[]>();
+    private _orgsSubject = new BehaviorSubject<Organisation[]>(this.orgs);
 
     constructor(
         private http: Http,
