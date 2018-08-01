@@ -66,7 +66,7 @@ export class ChangeScope implements OnInit {
                 this.hasToRefresh = true;
                 console.log(res);
             }, (err) => {
-                // Handle err
+                // Handle error
                 console.warn(err);
             }, () => {
                 this.loading = false;

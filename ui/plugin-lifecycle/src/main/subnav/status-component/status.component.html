@@ -61,7 +61,6 @@
 <div class="plugins-modal">
     <clr-modal [(clrModalOpen)]="modal.opened" [clrModalClosable]="false">
         <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alert-info"></vcd-alert>
-
         <h3 class="modal-title">{{ modal.title }}</h3>
         <div class="modal-body">
             <p *ngIf="modal.body">{{ modal.body }}</p>
