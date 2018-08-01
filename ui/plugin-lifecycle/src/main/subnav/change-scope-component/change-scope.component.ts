@@ -16,6 +16,7 @@ export class ChangeScope implements OnInit {
     public loading: boolean = false;
     public alertMessage: string;
     public hasToRefresh: boolean = false;
+    public alertClasses: string;
     private _open: boolean = false;
 
     @Input() 
@@ -29,7 +30,9 @@ export class ChangeScope implements OnInit {
         private pluginManager: PluginManager
     ) { }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.alertClasses = "alert-info";
+    }
 
     get open(): boolean {
         return this._open;
@@ -37,6 +40,7 @@ export class ChangeScope implements OnInit {
 
     public changeScope(): void {
         this.alertMessage = null;
+        this.alertClasses = "alert-info";
         // Validate change scope action
         const pluginsToBeUpdated: Plugin[] = [];
         this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
@@ -65,9 +69,9 @@ export class ChangeScope implements OnInit {
             .subscribe((res) => {
                 this.hasToRefresh = true;
                 console.log(res);
-            }, (err) => {
-                // Handle error
-                console.warn(err);
+            }, (error: Error) => {
+                this.alertMessage = error.message;
+                this.alertClasses = "alert-danger";
             }, () => {
                 this.loading = false;
                 subs.unsubscribe();
@@ -76,7 +80,6 @@ export class ChangeScope implements OnInit {
 
     public onClose(): void {
         this.open = false;
-        this.alertMessage = null;
         this.feedback.reset();
         this.openChange.emit(false);
 

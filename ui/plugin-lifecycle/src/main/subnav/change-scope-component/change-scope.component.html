@@ -3,7 +3,7 @@
         <h3 class="modal-title">Change plugin scope</h3>
         <div class="modal-body">
             <!-- Alert -->
-            <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alert-info"></vcd-alert>
+            <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alertClasses"></vcd-alert>
 
             <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true"></vcd-loading-indicator>
             <vcd-choose-scope *ngIf="open" [(feedback)]="feedback"></vcd-choose-scope>

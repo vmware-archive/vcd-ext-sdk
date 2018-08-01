@@ -338,6 +338,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     public publishForAllTenants(): void {
+        this.errorMessage = null;
         this.showTracker = true;
         this.pluginManager
             .publishPluginForAllTenants(this.selected, true)
@@ -345,6 +346,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     public unpublishForAllTenants(): void {
+        this.errorMessage = null;
         this.showTracker = true;
         this.pluginManager
             .unpublishPluginForAllTenants(this.selected, true)
@@ -357,11 +359,10 @@ export class StatusComponent implements OnInit, OnDestroy {
                 this.changeScopeService.changeReqStatusTo(res.url, true);
                 subscription.unsubscribe();
             },
-            (err) => {
-                // Handle Error
+            (error) => {
+                this.errorMessage = error.message;
                 this.changeScopeService.changeReqStatusTo(reqData.url, false);
                 subscription.unsubscribe();
-                console.warn(err);
             }
         )
     }
