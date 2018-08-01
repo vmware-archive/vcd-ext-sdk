@@ -10,7 +10,7 @@ import {
     HttpRequest
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subscriber, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subscriber, Subscription, Observer } from "rxjs";
 // import { TranslationService } from "../i18n/TranslationService";
 
 export const CHUNK_SIZE = 5 * 10 * 1024 * 1024;
@@ -204,7 +204,7 @@ export class HttpTransferService {
             }))
         ];
 
-        return Observable.create((subscriber) => {
+        return Observable.create((subscriber: Observer<number>) => {
             if (!tasks.length) {
                 subscriber.complete();
                 return;
