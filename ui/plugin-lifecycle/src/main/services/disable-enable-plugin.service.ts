@@ -17,6 +17,11 @@ export class DisableEnablePluginService {
         private authService: AuthService
     ) {}
 
+    /**
+     * Disable list of plugins.
+     * @param plugins list of plugins which will be disabled
+     * @param url the base url where the request will be made
+     */
     public disablePlugins(plugins: Plugin[], url: string): Promise<Response[]> {
         const options: PluginUpdateOptions = {
             tenant_scoped: null,
@@ -24,9 +29,15 @@ export class DisableEnablePluginService {
             enabled: false
         }
 
+        // Start update process
         return this.updatePluginData(plugins, options, url);
     }
 
+    /**
+     * Enable list of plugins
+     * @param plugins list of plugins which will be disabled
+     * @param url the base url where the request will be made
+     */
     public enablePlugins(plugins: Plugin[], url: string): Promise<Response[]> {
         const options: PluginUpdateOptions = {
             tenant_scoped: null,
@@ -34,10 +45,18 @@ export class DisableEnablePluginService {
             enabled: true
         }
 
+        // Start update process
         return this.updatePluginData(plugins, options, url);
     }
 
+    /**
+     * Gets a list of plugins and update them with data provided in options parameter.
+     * @param plugins list of plugins
+     * @param options options which will be applied for each plugin
+     * @param url the base url where will be makde the request
+     */
     private updatePluginData(plugins: Plugin[], options: PluginUpdateOptions, url: string): Promise<Response[]> {
+        // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("Content-Type", "application/json");
@@ -45,8 +64,9 @@ export class DisableEnablePluginService {
         const opts = new RequestOptions();
         opts.headers = headers;
 
+        // Collect the processes
         const updateProcesses: Promise<Response>[] = [];
-
+        
         plugins.forEach((pluginToUpdate: Plugin) => {
             const newPluginData: PluginDesc = {
                 pluginName: pluginToUpdate.pluginName,
@@ -60,12 +80,14 @@ export class DisableEnablePluginService {
                 enabled: options.enabled !== null ? options.enabled : pluginToUpdate.enabled
             };
 
+            // Add each process into the list
             updateProcesses.push(this.http
                 .put(`${url}/cloudapi/extensions/ui/${pluginToUpdate.id}`, JSON.stringify(newPluginData), opts)
                 .toPromise()
             );
         });
 
+        // Start all requests in parallel
         return Promise
             .all(updateProcesses);
     }
