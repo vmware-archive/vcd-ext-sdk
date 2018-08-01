@@ -45,7 +45,9 @@ export class AuthService {
      */
     public auth(): Promise<string> {
         const promise = new Promise<string>((resolve, reject) => {
+            // Get the auth token from LS
             const authToken = window.localStorage.getItem('authtoken');
+            // If any token
             if (authToken || authToken.length === 0) {
                 this.setAuthToken(authToken);
                 resolve(authToken)
