@@ -43,6 +43,10 @@ export class ScopeFeedback {
         return this._data
     }
 
+    /**
+     * Adds new organisation into the organisations list.
+     * @param org organisation to be added in the list
+     */
     public addNewOrg(org: ChangeScopeItem): void {
         if (!org) { return; }
         this._data.push(org);
@@ -56,14 +60,25 @@ export class ScopeFeedback {
         return this._scope;
     }
 
+    /**
+     * Adds new scope into the list of scopes.
+     * @param scope scope to be added into the list of scopes
+     */
     public addNewScope(scope: string): void {
         this.scope.push(scope);
     }
 
+    /**
+     * Remove one scope record from the list of scopes.
+     * @param scope scope to be removed from the list
+     */
     public removeScope(scope: string): void {
         this.scope.splice(this.scope.indexOf(scope), 1);
     }
 
+    /**
+     * Reset all properties.
+     */
     public reset(): void {
         this.forAllOrgs = false;
         this.publishForAllTenants = false;
