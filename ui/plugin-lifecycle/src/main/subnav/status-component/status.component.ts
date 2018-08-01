@@ -347,7 +347,7 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.errorMessage = null;
         this.showTracker = true;
         this.pluginManager
-            .publishPluginForAllTenants(this.selected, true)
+            .publishPluginForAllTenants(true)
             .forEach(this.handleScopeChanging.bind(this));
     }
 
@@ -359,7 +359,7 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.showTracker = true;
         this.pluginManager
             // Call unpublish all selected plugins
-            .unpublishPluginForAllTenants(this.selected, true)
+            .unpublishPluginForAllTenants(true)
             // Map the requests to change scope service
             .forEach(this.handleScopeChanging.bind(this));
     }
