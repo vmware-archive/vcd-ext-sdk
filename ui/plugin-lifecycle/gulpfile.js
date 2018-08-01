@@ -44,7 +44,7 @@ gulp.task('build', function () {
       }),
       typescript({ typescript: tsc }),
       resolve({
-        only: [ '@vcd/bindings', '@vcd/sdk' ]
+        only: [ '@vcd/bindings', '@vcd/sdk', '@vcd/http-transfer-service' ]
       }),
       commonjs()
     ]

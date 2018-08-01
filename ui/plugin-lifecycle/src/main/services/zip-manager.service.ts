@@ -7,7 +7,11 @@ zip.useWebWorkers = false;
 @Injectable()
 export class ZipManager {
 
-    private parseManifestFile(manifest: any): Promise<string> {
+    /**
+     * Read the manifest file
+     * @param manifest manifest file
+     */
+    private readManifestFile(manifest: any): Promise<string> {
         const promise = new Promise<string>((resolve, reject) => {
             if (!manifest) {
                 reject(new Error("Manifest is required!"));
@@ -25,6 +29,10 @@ export class ZipManager {
         return promise;
     }
 
+    /**
+     * Validate the files and files structure into the zip
+     * @param entries the fiels into the zip
+     */
     private validatePluginStructure(entries: any[]): Promise<{
         isValid: boolean;
         entries: any[];
@@ -62,6 +70,10 @@ export class ZipManager {
         return promise;
     }
 
+    /**
+     * The method is used to read zip files.
+     * @param file the file will be read
+     */
     private parseFile(file: File): Promise<any[]> {
         const promise = new Promise<any[]>((resolve, reject) => {
             // use a BlobReader to read the zip from a Blob object
@@ -79,6 +91,10 @@ export class ZipManager {
         return promise;
     }
 
+    /**
+     * Parse zip file and extract the manifest json.
+     * @param file zip file
+     */
     public parse(file: File): Promise<string> {
         return this.parseFile(file)
             .then((entries) => {
@@ -93,7 +109,7 @@ export class ZipManager {
                     return entrie.filename === "manifest.json";
                 });
 
-                return this.parseManifestFile(manifestFile);
-            })
+                return this.readManifestFile(manifestFile);
+            });
     }
 }

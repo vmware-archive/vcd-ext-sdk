@@ -16,7 +16,6 @@ import { ZipManager } from "./services/zip-manager.service";
 import { UploadZipField } from "./subnav/upload-zip-field-component/upload-zip-field.component";
 import { VcdAlert } from "./subnav/alert-component/alert.component";
 import { VcdManifestStackView } from "./subnav/manifest-stack-view-component/manifest-stack-view.component";
-import { AuthService } from "./services/auth.service";
 import { ChangeOrgScope } from "./subnav/change-org-scope-component/change-org-scope.component";
 import { ChooseOrgScope } from "./subnav/choose-org-scope-component/choose-org-scope.component";
 import { OrganisationService } from "./services/organisation.service";
@@ -30,13 +29,9 @@ import { CapitalizeFirstPipe } from "./pipes/capitalizefirst/capitalizefirst.pip
 import { ChangeScope } from "./subnav/change-scope-component/change-scope.component";
 import { ChangeScopeService } from "./services/change-scope.service";
 import { ChooseScope } from "./subnav/choose-scope-component/choose-scope.component";
-import { HttpTransferService, CHUNK_SIZE, PARALLEL_REQUESTS } from "./services/http-transfer.service";
 import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { ErrorNotifyerComponent } from "./subnav/error-notifyer-component/error-notifyer.component";
-
-export function transferServiceFactory(httpClient: HttpClient) {
-    return new HttpTransferService(httpClient, CHUNK_SIZE, PARALLEL_REQUESTS);
-}
+import { VcdHttpTransferServiceModule } from "@vcd/http-transfer-service";
 
 const ROUTES: Routes = [
     { path: "", component: SubnavComponent, children: [
@@ -54,6 +49,7 @@ const ROUTES: Routes = [
         I18nModule,
         FormsModule,
         HttpClientModule,
+        VcdHttpTransferServiceModule,
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
@@ -76,12 +72,6 @@ const ROUTES: Routes = [
     bootstrap: [SubnavComponent],
     exports: [],
     providers: [
-        {
-            provide: HttpTransferService,
-            useFactory: transferServiceFactory,
-            deps: [HttpClient]
-        },
-        AuthService,
         OrganisationService,
         ChangeOrgScopeService,
         ChangeScopeService,

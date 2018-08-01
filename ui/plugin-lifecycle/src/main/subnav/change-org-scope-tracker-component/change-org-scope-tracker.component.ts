@@ -22,6 +22,7 @@ export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
         }
 
         if (val === true) {
+            // Get all requests whcih are made
             this.loadRequests();
         }
 
@@ -49,12 +50,18 @@ export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
         return this._open;
     }
 
+    /**
+     * Load all requests which are made at this moment and watch for new.
+     */
     public loadRequests(): void {
         this.watchChangeScopeReq = this.changeScopeService.watchChangeScopeReq().subscribe((data) => {
             this.requests = data;
         });
     }
 
+    /**
+     * Close the chage org request tracker modal.
+     */
     public onClose(): void {
         this.open = false;
         this.changeScopeService.clearChangeScopeReq();

@@ -24,8 +24,10 @@ interface InputNativeElement {
     styleUrls: ["upload-component.scss"]
 })
 export class UploadComponent implements OnInit {
+    // Toggle the uploading modal
     private _open: boolean;
 
+    // Set the open value
     @Input()
     set open(val: boolean) {
         this._open = val;
@@ -40,13 +42,21 @@ export class UploadComponent implements OnInit {
             }
         }
     }
+    // Emits the change of the open flag to all listeners
     @Output() openChange = new EventEmitter<boolean>();
+    // Gets the wizard html element
     @ViewChild("wizardlg") wizardLarge: Wizard;
+    // Track the user selection
     public scopeFeedback: ScopeFeedback = new ScopeFeedback();
+    // The data which is extacted from the uploaded file and the actual file
     public uploadPayload: UploadPayload;
+    // Show spinner while uploading
     public loading: boolean = false;
+    // Show / hide next button in the wizard
     public canGoNext: boolean = false;
+    // Show / hide spinner while parsing the manifest file
     public parsing: boolean = false;
+    // Shows on the sceen when any warning appear
     public alertMessage: string;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
     public orgs: Organisation[];
@@ -70,10 +80,17 @@ export class UploadComponent implements OnInit {
         };
     }
 
+    /**
+     * Get open value.
+     */
     get open(): boolean {
         return this._open;
     }
 
+    /**
+     * Triggered when some file is selected via the file input.
+     * @param pluginZip the input field which contains the fiel which will be uploaded
+     */
     public onFileSelection(pluginZip: InputNativeElement) {
         if (!pluginZip.nativeElement) {
             return;
@@ -82,23 +99,33 @@ export class UploadComponent implements OnInit {
         this.uploadPayload.fileName = pluginZip.nativeElement.files[0].name;
         this.uploadPayload.file = pluginZip.nativeElement.files[0];
 
-        this.proccessZip();
+        // Process the zip file
+        this.processZip();
     }
 
-    public proccessZip(): void {
+    /**
+     * Parsing the zip file
+     */
+    public processZip(): void {
+        // Show spinner while parsing the zip
         this.parsing = true;
         this.zipManager
+            // Parse the zip file
             .parse(this.uploadPayload.file)
             .then((manifest: string) => {
+                // Parse the manifest
                 this.uploadPayload.manifest = JSON.parse(manifest);
+                // Set inital values for the scope from the manifest
                 this.scopeFeedback.scope = this.uploadPayload.manifest.scope;
 
+                // Validate the manifest
                 const isValidManifest = PluginValidator.validateManifestFields(this.uploadPayload.manifest);
                 if (!isValidManifest.success) {
                     const reason = isValidManifest.errors[Object.keys(isValidManifest.errors)[0]];
                     throw new Error(`${isValidManifest.message} ${reason}`);
                 }
 
+                // Check for plugin duplicatons
                 return this.pluginManager.checkForDuplications(this.uploadPayload.manifest.name);
             })
             .then((duplication) => {
@@ -109,6 +136,7 @@ export class UploadComponent implements OnInit {
                 this.canGoNext = true;
                 this.parsing = false;
 
+                // Load the list of plugins and organistaions
                 this.loadListOfOrgsPerPlugin();
             })
             .catch((err: Error) => {
@@ -119,7 +147,11 @@ export class UploadComponent implements OnInit {
             });
     }
 
+    /**
+     * Trigger upload process
+     */
     public doUpload(): void {
+        // Show spinner
         this.loading = true;
 
         if (this.scopeFeedback.scope !== this.uploadPayload.manifest.scope) {
@@ -127,6 +159,7 @@ export class UploadComponent implements OnInit {
         }
 
         this.uploadSubs = this.pluginManager
+            // Start upload process
             .uploadPlugin(this.uploadPayload, this.scopeFeedback)
             .subscribe((changeScopeRequests) => {
                 if (!changeScopeRequests || changeScopeRequests.length < 1) {
@@ -135,6 +168,7 @@ export class UploadComponent implements OnInit {
                     return;
                 }
 
+                // Execute scope settup
                 changeScopeRequests.forEach((element) => {
                     const subscription = element.req.subscribe((res) => {
                         this.handleUploadSuccess();
@@ -144,50 +178,83 @@ export class UploadComponent implements OnInit {
             }, this.handleUploadError);
     }
 
+    /**
+     * Execute on successfull plugin upload
+     */
     public handleUploadSuccess(): void {
+        // Hide spinner
         this.loading = false;
+        // Remove file loaded in the payload
         this.uploadPayload.file = null;
+        // Remove file name loaded in the payload        
         this.uploadPayload.fileName = null;
+        // Remove file dir loaded in the payload
         this.uploadPayload.fileDir = null;
+        // Remove file manifest loaded in the payload
         this.uploadPayload.manifest = null;
+        // Refresh the plugins list
         this.pluginManager.refresh();
+        // Close the modal
         this.onCancel();
+        // Reset the wizard
         this.wizardLarge.reset();
+        // Reset the select scope data
         this.scopeFeedback.reset();
+        // Disable next button into the wizard
         this.canGoNext = false;
     }
 
+    /**
+     * Handle provided error.
+     * @param err error
+     */
     public handleUploadError(err: Error): void {
         this.loading = false;
         this.alertMessage = err.message;
     }
 
+    /**
+     * Close upload modal.
+     */
     public onCancel(): void {
         this.open = false;
         this.openChange.emit(this.open);
     }
 
+    /**
+     * Create custom actions for the buttons in the wizard.
+     * @param buttonType type of the button clicked
+     */
     public doCustomClick(buttonType: string): void {
         if ("custom-finish" === buttonType) {
+            // Start upload process
             this.doUpload();
             return;
         }
 
         if ("custom-cancel" === buttonType) {
+            // Cancel the modal
             this.onCancel();
             return;
         }
 
         if ("custom-next" === buttonType && this.canGoNext) {
+            // Go to the next page
             this.wizardLarge.next();
         }
     }
 
+    /**
+     * Load the list of organisations.
+     */
     public loadListOfOrgsPerPlugin(): void {
         this.loadOrgs();
         this.populateList();
     }
 
+    /**
+     * Load all organisations.
+     */
     public loadOrgs(): void {
         this.orgs = this.orgService.orgs;
         this.watchOrgsSubs = this.orgService.watchOrgs().subscribe(
@@ -198,6 +265,9 @@ export class UploadComponent implements OnInit {
         )
     }
 
+    /**
+     * Populate the list of organisations.
+     */
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Organisation) => {

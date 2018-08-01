@@ -34,6 +34,7 @@ export class ChangeOrgScope implements OnInit {
     @Input()
     set state (val: boolean) {
         if (val === false) {
+            // Reset the feedback data
             this.feedback.reset();
             
             if (this.watchSourceDataSub) {
@@ -42,6 +43,7 @@ export class ChangeOrgScope implements OnInit {
         }
 
         if (val === true) {
+            // Hide tracker
             this.showTracker = false;
         }
 
@@ -75,17 +77,26 @@ export class ChangeOrgScope implements OnInit {
         return this._action;
     }
 
+    /**
+     * Publish or unpublish plugins for specific tenants
+     * @param feedback the data which will be applied on each plugin
+     */
     public handleMixedScope(feedback: ScopeFeedback): void {
+        // Load all pulbish / unpublish requests
         const requests = this.pluginManager.handleMixedScope(this.plugins, feedback, true);
         requests.forEach((element) => {
+            // Execute each request
             const subscription = element.req.subscribe(
                 (res) => {
+                    // Set the status of the request
                     this.changeScopeService.changeReqStatusTo(res.url, true);
                     subscription.unsubscribe();
                 },
                 (error: Error) => {
+                    // Set the status of the request
                     this.changeScopeService.changeReqStatusTo(element.url, false);
                     subscription.unsubscribe();
+                    // Load error data
                     this.alertMessage = error.message;
                     this.alertClasses = "alert-danger";
                 }
@@ -93,6 +104,9 @@ export class ChangeOrgScope implements OnInit {
         });
     }
 
+    /**
+     * Trigger update action
+     */
     public onUpdate(): void {
         if (this.feedback.data.length > 0) {
             this.alertMessage = null;
@@ -107,6 +121,9 @@ export class ChangeOrgScope implements OnInit {
         console.log("Please select some options...");
     }
 
+    /**
+     * Close the chage org scope modal and notify all listeners
+     */
     public onClose(): void {
         this.state = false;
 
@@ -117,6 +134,9 @@ export class ChangeOrgScope implements OnInit {
         }
     }
 
+    /**
+     * Load all organisations plugins and watch them for changes.
+     */
     public loadListOfOrgsPerPlugin(): void {
         this.loadOrgs();
         this.loadPlugins();
@@ -124,16 +144,26 @@ export class ChangeOrgScope implements OnInit {
         this.populateList();
     }
 
+    /**
+     * Get all organistaions.
+     */
     public loadOrgs(): void {
         this.orgs = this.orgService.orgs;
     }
 
+    /**
+     * Get all plugins.
+     */
     public loadPlugins(): void {
         this.plugins = this.pluginManager.selectedPlugins;
     }
 
+    /**
+     * Observe the lists of organisations and plugins.
+     */
     public watchSourceData(): void {
-        this.watchSourceDataSub = Observable.concat<Plugin[], Organisation[]>(
+        // Merge the plugin and organisation observables
+        this.watchSourceDataSub = Observable.merge<Plugin[], Organisation[]>(
             this.pluginManager.watchSelectedPlugins(),
             this.orgService.watchOrgs()
         ).subscribe((data) => {
@@ -141,14 +171,17 @@ export class ChangeOrgScope implements OnInit {
                 return;                
             }
 
+            // Assign plugins list
             if (Object.keys(data[0]).indexOf("pluginName") !== -1) {
                 this.plugins = <Plugin[]>data;
             }
 
+            // Assaign organisations list
             if (Object.keys(data[0]).indexOf("displayName") !== -1) {
                 this.orgs = <Organisation[]>data;
             }
 
+            // Populate the list with new data
             this.populateList();
         }, (error) => {
             this.alertMessage = error.message;
@@ -156,6 +189,9 @@ export class ChangeOrgScope implements OnInit {
         });
     }
 
+    /**
+     * Populate the list with organisations and plugins data.
+     */
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Organisation) => {

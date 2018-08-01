@@ -38,10 +38,14 @@ export class ChangeScope implements OnInit {
         return this._open;
     }
 
+    /**
+     * Change the scope of the plugin (ex: tenant / provider)
+     */
     public changeScope(): void {
         this.alertMessage = null;
         this.alertClasses = "alert-info";
         // Validate change scope action
+        // Collect the plugins which will be update
         const pluginsToBeUpdated: Plugin[] = [];
         this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
             // Already in state
@@ -64,11 +68,12 @@ export class ChangeScope implements OnInit {
             this.alertMessage = `Only ${pluginsToBeUpdated.length} plugins will be scope changed, others are already in this state.`;
         }
 
+        // Show spinner
         this.loading = true;
+        // Start the change scope action
         const subs = this.changeScopeService.changeScope(pluginsToBeUpdated, this.feedback.scope, this.pluginManager.baseUrl)
             .subscribe((res) => {
                 this.hasToRefresh = true;
-                console.log(res);
             }, (error: Error) => {
                 this.alertMessage = error.message;
                 this.alertClasses = "alert-danger";
@@ -78,6 +83,9 @@ export class ChangeScope implements OnInit {
             });
     }
 
+    /**
+     * Close the change scope modal.
+     */
     public onClose(): void {
         this.open = false;
         this.feedback.reset();
@@ -85,6 +93,7 @@ export class ChangeScope implements OnInit {
 
         if (this.hasToRefresh) {
             this.hasToRefresh = false;
+            // Refresh the list of the plugins
             this.pluginManager.refresh();
         }
     }
