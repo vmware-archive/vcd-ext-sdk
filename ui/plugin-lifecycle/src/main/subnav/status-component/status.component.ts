@@ -40,7 +40,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
-        private changeScopeService: ChangeOrgScopeService
+        private changeOrgScopeService: ChangeOrgScopeService
     ) { }
 
     public ngOnInit() {
@@ -101,7 +101,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public getOpened(): boolean {
         return this.modal.opened;
     }
-
+    
     public setOpened(val: boolean): void {
         this.modal.waitToClose = false;
         this.modal.opened = val;
@@ -333,10 +333,16 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.action = action;
     }
 
+    /**
+     * Open the modal for scope changing.
+     */
     public changeScope() {
         this.openChangeScope = true;
     }
 
+    /**
+     * Publish the plugins for all tenants.
+     */
     public publishForAllTenants(): void {
         this.errorMessage = null;
         this.showTracker = true;
@@ -345,23 +351,36 @@ export class StatusComponent implements OnInit, OnDestroy {
             .forEach(this.handleScopeChanging.bind(this));
     }
 
+    /**
+     * Unpublish the plugins for all tenants.
+     */
     public unpublishForAllTenants(): void {
         this.errorMessage = null;
         this.showTracker = true;
         this.pluginManager
+            // Call unpublish all selected plugins
             .unpublishPluginForAllTenants(this.selected, true)
+            // Map the requests to change scope service
             .forEach(this.handleScopeChanging.bind(this));
     }
 
+    /**
+     * Execute requests and notify the change scope service.
+     * @param reqData data which describes the change scope request.
+     */
     public handleScopeChanging(reqData: ChangeScopeRequestTo): void {
         const subscription = reqData.req.subscribe(
             (res) => {
-                this.changeScopeService.changeReqStatusTo(res.url, true);
+                // Notify the service if request complete successfully
+                this.changeOrgScopeService.changeReqStatusTo(reqData.url, true);
                 subscription.unsubscribe();
             },
             (error) => {
+                this.endLoading();
+                this.openErrorNotifyer = true;
                 this.errorMessage = error.message;
-                this.changeScopeService.changeReqStatusTo(reqData.url, false);
+                // Notify the service if request complete successfully
+                this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
                 subscription.unsubscribe();
             }
         )
