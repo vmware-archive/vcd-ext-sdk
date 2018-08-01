@@ -43,7 +43,7 @@ export class HttpTransferService {
      * @param fileSize File size
      * @param headers Additional headers
      */
-    private getChunkHeader(offset: number, end: number, fileSize: number, headers = {}) {
+    private getChunkHeader(offset: number, end: number, fileSize: number, headers: {} = {}): HttpHeaders {
         return new HttpHeaders({
             ...headers,
             "Content-Range": `bytes ${offset} - ${end} / ${fileSize}`
@@ -150,13 +150,7 @@ export class HttpTransferService {
      * @returns An observable that completes when chunk is uploaded.
      */
     private uploadChunk(blob: Blob, url: string, headers: HttpHeaders) {
-        const request = new HttpRequest("PUT", url, blob, {
-            headers: headers,
-            reportProgress: true,
-            responseType: RESPONSE_TYPE
-        });
-
-        return this.httpClient.request(request)
+        return this.httpClient.request("PUT", url, { body: blob, headers, reportProgress: true, responseType: RESPONSE_TYPE})
             .retryWhen((error) => error.flatMap((error: HttpErrorResponse) => {
                 if (error.status !== 200) {
                     return Observable.of(error).delay(RETRY_TIMEOUT);
@@ -189,7 +183,7 @@ export class HttpTransferService {
      * Files are uploaded in parallel based on the service configuration.
      * Chunks are uploaded in sequence.
      */
-    upload(headers: Headers, ...tasks: FileUpload[]): Observable<number> {
+    upload(headers: {}, ...tasks: FileUpload[]): Observable<number> {
         const parallel = this.parallelRequests;
         const total = tasks.reduce((ac, item) => (ac + item.file.size), 0);
 
