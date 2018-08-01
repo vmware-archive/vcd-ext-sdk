@@ -4,6 +4,7 @@ import { Organisation } from "../interfaces/Organisation";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { AuthService } from "./auth.service";
 import { XMLHelper } from "../classes/XMLHelper";
+import { PluginManager } from "./plugin-manager.service";
 
 @Injectable()
 export class OrganisationService {
@@ -12,11 +13,14 @@ export class OrganisationService {
 
     constructor(
         private http: Http,
-        private authService: AuthService
+        private authService: AuthService,
+        private pluginManager: PluginManager
     ) {
+        // Authorize on init
         this.authService.auth()
             .then(() => {
-                this.loadOrgs();
+                // Load the organisations
+                this.loadOrgs(this.pluginManager.baseUrl);
             })
             .catch((err) => {
                 console.error(err);
@@ -31,6 +35,10 @@ export class OrganisationService {
         this._orgs = orgs;
     }
 
+    /**
+     * Add new organisation into the list.
+     * @param org organisation which will be added into the list
+     */
     private addOrg(org: Organisation) {
         Object.keys(org).forEach((key) => {
             try {
@@ -44,20 +52,32 @@ export class OrganisationService {
         this._orgsSubject.next(this.orgs);
     }
 
+    /**
+     * Observe the list of organisations.
+     */
     public watchOrgs(): Observable<Organisation[]> {
         return this._orgsSubject.asObservable();
     }
 
+    /**
+     * Refresh the list of organisations.
+     */
     public refresh() {
-        this.loadOrgs();
+        this.loadOrgs(this.pluginManager.baseUrl);
     }
 
-    private loadOrgs(): void {
-        this.getAllOrganisations("https://bos1-vcd-sp-static-200-117.eng.vmware.com", this.authService.getAuthToken())
+    /**
+     * Make request to take all existing organistaions.
+     */
+    private loadOrgs(url: string): void {
+        this.getAllOrganisations(url, this.authService.getAuthToken())
             .then((res: Response) => {
+                // Parse the xml response
                 const parser = new DOMParser();
                 const XML = parser.parseFromString(res.text(), "text/xml");
                 const data: any = XMLHelper.xmlToJson(XML);
+
+                // If is array
                 if (Array.isArray(data.QueryResultRecords.OrgRecord)) {
                     data.QueryResultRecords.OrgRecord.forEach((el: any) => {
                         this.addOrg(el["@attributes"]);
@@ -71,6 +91,11 @@ export class OrganisationService {
             });
     }
 
+    /**
+     * Creates a request to take all organisations.
+     * @param baseUrl the url where the request will be made
+     * @param token the authorization token
+     */
     private getAllOrganisations(baseUrl: string, token: string): Promise<Response> {
         const headers = new Headers();
         headers.append("Accept", "application/*+xml;version=31.0");
