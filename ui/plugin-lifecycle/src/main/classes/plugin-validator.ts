@@ -9,6 +9,11 @@ interface ValidationResult {
 
 export abstract class PluginValidator {
 
+    /**
+     * Check for duplications in list of plugins.
+     * @param pluginName name of the plugin.
+     * @param plugins the list of plugins in which will be checked for the provided plugin.
+     */
     public static checkForDuplications(pluginName: string, plugins: Plugin[]) {
         const promise = new Promise<boolean>((resolve, reject) => {
             const search = plugins.find((plugin: Plugin) => {
@@ -25,6 +30,10 @@ export abstract class PluginValidator {
         return promise;
     }
 
+    /**
+     * Validate the plugins name, vendor, version, license, link.
+     * @param manifest the data from plugins manifest.json file
+     */
     public static validateManifestFields(manifest: PluginManifest): ValidationResult {
         const result: ValidationResult = {
             success: true,
@@ -64,6 +73,13 @@ export abstract class PluginValidator {
         return result;
     }
 
+
+    /**
+     * Validate the disable / enable action.
+     * @param selected list of selected plugins
+     * @param hasToBe boolean value which indicates is this enable or disable action
+     * @param openModalFn function which opens the modal in status component
+     */
     public static validateDisableEnableAction(selected: Plugin[], hasToBe: boolean, openModalFn: any): Promise<void> {
         const promise = new Promise<void>((resolve, reject) => {
             // If no selected elements
@@ -74,6 +90,7 @@ export abstract class PluginValidator {
             // If only one is selected
             if (selected.length === 1) {
                 if (selected[0].enabled === hasToBe) {
+                    // Open modal in a component
                     openModalFn({
                         title: "Notify",
                         body: `This plugin is already ${ hasToBe ? "enabled" : "disabled" }, click close to procceed.`,
@@ -96,6 +113,7 @@ export abstract class PluginValidator {
             });
 
             if (alreadyInState.length === selected.length) {
+                // Open modal in a component
                 openModalFn({
                     title: "Notify",
                     body: `These plugins is already ${ hasToBe ? "enabled" : "disabled" }, click close to procceed.`,
@@ -106,6 +124,7 @@ export abstract class PluginValidator {
 
             if (alreadyInState.length > 0) {
                 let subs: Subscription;
+                // Open modal in a component
                 subs = openModalFn({
                     title: "Notify",
                     body: `${alreadyInState.length} of ${selected.length} are
