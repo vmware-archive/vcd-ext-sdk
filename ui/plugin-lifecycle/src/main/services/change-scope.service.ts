@@ -15,7 +15,7 @@ export class ChangeScopeService {
      * Execute the change scope action.
      * @param plugins list of plugins
      * @param scope list of scopes / ['service-scope', 'tenant'] /
-     * @param url the url where will be made the request
+     * @param url the base url where will be made the request
      */
     public changeScope(plugins: Plugin[], scope: string[], url: string): Observable<Response> {
         return this.changeScopeForEach(plugins, scope, url);
@@ -25,7 +25,7 @@ export class ChangeScopeService {
      * Change the scope for each plugin into the list.
      * @param plugins list of plugins
      * @param scope list of scopes / ['service-scope', 'tenant'] /
-     * @param url the url where will be made the request 
+     * @param url the base url where will be made the request 
      */
     private changeScopeForEach(plugins: Plugin[], scope: string[], url: string): Observable<Response> {
         // Create headers
