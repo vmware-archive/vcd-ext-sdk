@@ -105,7 +105,7 @@ export class HttpTransferService {
                         this.getChunkHeader(offset, end, fileSize, headers)
                     );
                     uploadSubscription = uploadObservable.subscribe(
-                        (event: HttpProgressEvent) => {
+                        (event) => {
                             if (event.type === HttpEventType.UploadProgress) {
                                 subscriber.next(offset + event.loaded);
                                 return;
@@ -150,7 +150,13 @@ export class HttpTransferService {
      * @returns An observable that completes when chunk is uploaded.
      */
     private uploadChunk(blob: Blob, url: string, headers: HttpHeaders) {
-        return this.httpClient.request("PUT", url, { body: blob, headers, reportProgress: true, responseType: RESPONSE_TYPE})
+        const request = new HttpRequest("PUT", url, blob, {
+            headers,
+            reportProgress: true,
+            responseType: RESPONSE_TYPE
+        });
+
+        return this.httpClient.request(request)
             .retryWhen((error) => error.flatMap((error: HttpErrorResponse) => {
                 if (error.status !== 200) {
                     return Observable.of(error).delay(RETRY_TIMEOUT);
