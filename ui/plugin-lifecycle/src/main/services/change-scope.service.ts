@@ -11,11 +11,24 @@ export class ChangeScopeService {
         private authService: AuthService
     ) {}
 
+    /**
+     * Execute the change scope action.
+     * @param plugins list of plugins
+     * @param scope list of scopes / ['service-scope', 'tenant'] /
+     * @param url the url where will be made the request
+     */
     public changeScope(plugins: Plugin[], scope: string[], url: string): Observable<Response> {
         return this.changeScopeForEach(plugins, scope, url);
     }
 
+    /**
+     * Change the scope for each plugin into the list.
+     * @param plugins list of plugins
+     * @param scope list of scopes / ['service-scope', 'tenant'] /
+     * @param url the url where will be made the request 
+     */
     private changeScopeForEach(plugins: Plugin[], scope: string[], url: string): Observable<Response> {
+        // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("Content-Type", "application/json");
@@ -23,9 +36,12 @@ export class ChangeScopeService {
         const opts = new RequestOptions();
         opts.headers = headers;
 
+        // Collect update processes
         const updateProcesses: Observable<Response>[] = [];
 
+        // Loop through the list of plugins
         plugins.forEach((pluginToUpdate: Plugin) => {
+            // Create new plugin payload
             const newPluginData: PluginDesc = {
                 pluginName: pluginToUpdate.pluginName,
                 vendor: pluginToUpdate.vendor,
@@ -38,11 +54,13 @@ export class ChangeScopeService {
                 enabled: pluginToUpdate.enabled
             };            
 
+            // Add the update request into the list of update requests
             updateProcesses.push(this.http
                 .put(`${url}/cloudapi/extensions/ui/${pluginToUpdate.id}`, JSON.stringify(newPluginData), opts)
             );
         });
 
+        // Merge all observables into one. They will be executed independantly.
         return Observable.merge(...updateProcesses);
     }
 }
