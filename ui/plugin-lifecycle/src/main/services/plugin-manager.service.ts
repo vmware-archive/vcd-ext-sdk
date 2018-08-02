@@ -10,32 +10,6 @@ import { AuthTokenHolderService } from "@vcd/sdk/common";
 import { UiPluginMetadataResponse, UiPluginMetadata, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { PluginService } from "./plugin.service";
 import { getPropsWithout } from "../helpers/object-helpers";
-import { HttpResponse } from "@angular/common/http";
-
-interface ChangeRequest {
-    reqUrl: string;
-    pluginName: string;
-    orgs: { name: string }[];
-    status: boolean;
-}
-
-class ChangeScopeRequest {
-    reqUrl: string = "";
-    pluginName: string = "";
-    orgs: { name: string }[] = [];
-    status: boolean = false;
-
-    constructor(options: ChangeRequest) {
-        this.reqUrl = options.reqUrl;
-        this.pluginName = options.pluginName;
-        this.orgs = options.orgs;
-        this.status = options.status;
-    }
-
-    public updateChangeReqStatus(val: boolean): void {
-        this.status = val;
-    }
-}
 
 @Injectable()
 export class PluginManager {

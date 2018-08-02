@@ -39,7 +39,14 @@
     "reselect": "3.0.0",
     "rxjs": "5.5.2",
     "web-animations-js": "2.3.1",
+<<<<<<< HEAD
     "zone.js": "0.8.18"
+=======
+    "zone.js": "0.8.18",
+    "es6-shim": "0.35.3",
+    "@vcd-ui/common": "file:vcd-ui/common",
+    "@vcd/http-transfer-service": "file:D:/http-transfer-service/dist"
+>>>>>>> 53d06fb... Add http-transfer package
   },
   "devDependencies": {
     "@types/jasmine": "2.5.47",
