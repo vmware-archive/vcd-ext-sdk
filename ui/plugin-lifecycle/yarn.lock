@@ -85,6 +85,9 @@
 "@vcd/sdk@file:../api-client/packages/sdk/dist":
   version "1.0.0"
 
+"@vcd/http-transfer-service@file:../../../../http-transfer-service/dist":
+  version "1.0.0"
+
 "@webcomponents/custom-elements@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.0.0.tgz#b1726e12074b556aa31b93f36ff6a03a435259c4"
