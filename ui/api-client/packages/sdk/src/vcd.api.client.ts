@@ -4,8 +4,8 @@ import { HttpClient, HttpHeaders, HttpResponse, HTTP_INTERCEPTORS, HttpIntercept
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
-import { LoggingInterceptor, RequestHeadersInterceptor } from './http-interceptors/index';
-import { SessionType, QueryResultRecordsType, AuthorizedLocationType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
+import { LoggingInterceptor, RequestHeadersInterceptor } from './http-interceptors';
+import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
 import { Query } from './query';
 import { AuthTokenHolderService, API_ROOT_URL } from './common';
 
@@ -43,11 +43,13 @@ export class VcdApiClient {
 
     /**
      * Sets the authentication token to use for the VcdApiClient.
-     * 
+     *
      * After setting the token, the client will get the current session
      * information associated with the authenticated token.
-     * 
-     * @param authentication the authentication string (to be used in the 'Authorization' header)
+     *
+     * @param authentication the authentication string (to be used in either the 'Authorization'
+     *  or 'x-vcloud-authorization' header)
+     * @returns the session associated with the authentication token
      */
     public setAuthentication(authentication: string): Observable<SessionType> {
         this.setAuthenticationOnInterceptor(authentication);
@@ -72,6 +74,14 @@ export class VcdApiClient {
         return this;
     }
 
+    /**
+     * Creates an authenticated session for the specified credential data.
+     *
+     * @param username the name of the user to authenticate
+     * @param tenant the organization the user belongs to
+     * @param password the password for the user
+     * @returns an authenticated session for the given credentials
+     */
     public login(username: String, tenant: String, password: String): Observable<SessionType> {
         const authString: String = btoa(`${username}@${tenant}:${password}`);
 
@@ -87,8 +97,154 @@ export class VcdApiClient {
             );
     }
 
-    public query<T>(builder: Query.Builder): Observable<QueryResultRecordsType> {
-        return this.http.get<T>(`${this._baseUrl}/api/query${builder.get()}`)
+    /**
+     * Queries the vCloud Director API based on the specified Query.Builder instance.
+     *
+     * @param builder An definition of the query to construct (type, filter, page size, etc.)
+     * @param multisite a flag indicating whether or not to fan the query out to all available sites
+     * @returns a query result for the specified query
+     */
+    public query<T>(builder: Query.Builder, multisite?: boolean): Observable<QueryResultRecordsType>;
+    /**
+     * Queries the vCloud Director API based on the specified Query.Builder instance.
+     *
+     * @param builder An definition of the query to construct (type, filter, page size, etc.)
+     * @param multisite the set of site locations to include in the query fanout
+     * @returns a query result for the specified query
+     */
+    public query<T>(builder: Query.Builder, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
+    public query<T>(builder: Query.Builder, multisite?: any): Observable<QueryResultRecordsType> {
+        return this.getQueryPage(`${this._baseUrl}/api/query${builder.get()}`, multisite);
+    }
+
+    /**
+     * Queries the vCloud Director API for the first page of the provided result set.
+     *
+     * @param result the result set to retrieve the first page of records for
+     * @param multisite a flag indicating whether or not to fan the query out to all available sites
+     * @returns the records for the first page of the query
+     */
+    public firstPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    /**
+     * Queries the vCloud Director API for the first page of the provided result set.
+     *
+     * @param result the result set to retrieve the first page of records for
+     * @param multisite the set of site locations to include in the query fanout
+     * @returns the records for the first page of the query
+     */
+    public firstPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
+    public firstPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
+        const href = this.findLink(result, 'firstPage').href;
+        if (!href) {
+            Observable.throw(`No 'firstPage' link for specified query.`);
+        }
+
+        return this.getQueryPage(href, multisite);
+    }
+
+    public hasFirstPage(result: QueryResultRecordsType): boolean {
+        return !!this.findLink(result, 'firstPage');
+    }
+
+    /**
+     * Queries the vCloud Director API for the previous page of the provided result set.
+     *
+     * @param result the result set to retrieve the previous page of records for
+     * @param multisite a flag indicating whether or not to fan the query out to all available sites
+     * @returns the records for the previous page of the query
+     */
+    public previousPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    /**
+     * Queries the vCloud Director API for the previous page of the provided result set.
+     *
+     * @param result the result set to retrieve the previous page of records for
+     * @param multisite the set of site locations to include in the query fanout
+     * @returns the records for the previous page of the query
+     */
+    public previousPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
+    public previousPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
+        const href = this.findLink(result, 'previousPage').href;
+        if (!href) {
+            Observable.throw(`No 'previousPage' link for specified query.`);
+        }
+
+        return this.getQueryPage(href, multisite);
+    }
+
+    public hasPreviousPage(result: QueryResultRecordsType): boolean {
+        return !!this.findLink(result, 'previousPage');
+    }
+
+    /**
+     * Queries the vCloud Director API for the next page of the provided result set.
+     *
+     * @param result the result set to retrieve the next page of records for
+     * @param multisite a flag indicating whether or not to fan the query out to all available sites
+     * @returns the records for the next page of the query
+     */
+    public nextPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    /**
+     * Queries the vCloud Director API for the next page of the provided result set.
+     *
+     * @param result the result set to retrieve the next page of records for
+     * @param multisite the set of site locations to include in the query fanout
+     * @returns the records for the next page of the query
+     */
+    public nextPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
+    public nextPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
+        const href = this.findLink(result, 'nextPage').href;
+        if (!href) {
+            Observable.throw(`No 'nextPage' link for specified query.`);
+        }
+
+        return this.getQueryPage(href, multisite);
+    }
+
+    public hasNextPage(result: QueryResultRecordsType): boolean {
+        return !!this.findLink(result, 'nextPage');
+    }
+
+    /**
+     * Queries the vCloud Director API for the last page of the provided result set.
+     *
+     * @param result the result set to retrieve the last page of records for
+     * @param multisite a flag indicating whether or not to fan the query out to all available sites
+     * @returns the records for the last page of the query
+     */
+    public lastPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    /**
+     * Queries the vCloud Director API for the last page of the provided result set.
+     *
+     * @param result the result set to retrieve the last page of records for
+     * @param multisite the set of site locations to include in the query fanout
+     * @returns the records for the last page of the query
+     */
+    public lastPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
+    public lastPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
+        const href = this.findLink(result, 'lastPage').href;
+        if (!href) {
+            Observable.throw(`No 'lastPage' link for specified query.`);
+        }
+
+        return this.getQueryPage(href, multisite);
+    }
+
+    public hasLastPage(result: QueryResultRecordsType): boolean {
+        return !!this.findLink(result, 'lastPage');
+    }
+
+    private getQueryPage<T>(href: string, multisite?: any): Observable<QueryResultRecordsType> {
+        this.lastPage
+        return !multisite ? this.http.get<T>(href) :
+            this.http.get<T>(href, { headers: new HttpHeaders({ '_multisite': this.parseMultisiteValue(multisite) }) });
+    }
+
+    private findLink(item: ResourceType, rel: string): LinkType {
+        return item.link.find(link => link.rel == rel);
+    }
+
+    private parseMultisiteValue(multisite: boolean | AuthorizedLocationType[]): string {
+        return typeof multisite === 'boolean' ? (multisite ? 'global' : 'local') : multisite.map(site => site.locationId).join(',');
     }
 
     public get session(): Observable<SessionType> {
