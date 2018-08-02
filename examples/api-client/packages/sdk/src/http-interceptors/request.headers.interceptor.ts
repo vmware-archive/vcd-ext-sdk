@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpHandler, HttpInterceptor, HttpRequest, HttpEvent } from '@angular/common/http';
+import { HttpHandler, HttpInterceptor, HttpRequest, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -22,7 +22,8 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
     }
     
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let headers = req.headers.set('Accept', [`application/*+json;version=${this._version}`, `application/json;version=${this._version}`]);
+        let headers = this.setAcceptHeader(req);
+        headers = headers.delete('_multisite');
         if (this._authentication) {
             headers = headers.set(this._authenticationHeader, `${this._authentication}`);
         }
@@ -32,5 +33,16 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
         });
         
         return next.handle(customReq);
+    }
+
+    private setAcceptHeader(request: HttpRequest<any>): HttpHeaders {
+        const value = request.headers.get('_multisite');
+
+        return request.headers.set(
+            'Accept', [
+                `application/*+json;version=${this._version}${value ? `;multisite=${value}` : ''}`,
+                `application/json;version=${this._version}${value ? `;multisite=${value}` : ''}`
+            ]
+        );
     }
 }
