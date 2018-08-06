@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 
 @Injectable()
 export class AuthService {
-    private _baseUrl = "https://bos1-vcd-sp-static-200-117.eng.vmware.com";
     private _authToken: string;
 
     constructor(private http: Http) {}
@@ -22,22 +21,6 @@ export class AuthService {
      */
     public getAuthToken(): string {
         return this._authToken;
-    }
-
-    /**
-     * Creates authorization request.
-     * @param username The name of the organisation for which you want to be authorized.
-     * @param tenant username of your profile
-     * @param password password of your profile
-     */
-    private authRequst(username: String, tenant: String, password: String): Observable<Response> {
-        const authString: String = btoa(`${username}@${tenant}:${password}`);
-        const headers = new Headers();
-        headers.append("Authorization", `Basic ${authString}`);
-        headers.append("Accept", "application/*+xml;version=30.0");
-        const opts = new RequestOptions();
-        opts.headers = headers;
-        return this.http.post(`${this._baseUrl}/api/sessions`, null, opts);
     }
 
     /**
