@@ -9,7 +9,7 @@ import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { TenantService } from "../../services/tenant.service";
 import { QueryResultOrgRecordType } from "@vcd/bindings/vcloud/api/rest/schema_v1_5";
