@@ -5,7 +5,10 @@
             <!-- Alert -->
             <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alertClasses"></vcd-alert>
 
-            <vcd-choose-org-scope [(feedback)]="feedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin"></vcd-choose-org-scope>
+            <vcd-choose-org-scope
+                [(feedback)]="feedback"
+                [listOfOrgsPerPlugin]="listOfOrgsPerPlugin">
+            </vcd-choose-org-scope>
             <vcd-change-org-scope-tracker [(open)]="showTracker"></vcd-change-org-scope-tracker>
         </div>
         <div class="modal-footer">

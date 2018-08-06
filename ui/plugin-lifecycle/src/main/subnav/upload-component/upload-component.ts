@@ -9,10 +9,11 @@ import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { Organisation } from "../../interfaces/Organisation";
 import { OrganisationService } from "../../services/organisation.service";
+import { Response} from "@angular/http";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;
@@ -60,6 +61,10 @@ export class UploadComponent implements OnInit {
     public alertMessage: string;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
     public orgs: Organisation[];
+    // Toggle publish section
+    public publishing: boolean;
+    // Summary to describe what will be applied on upload
+    public summary: string;
 
     public watchOrgsSubs: Subscription;
     public uploadSubs: Subscription;
@@ -161,20 +166,29 @@ export class UploadComponent implements OnInit {
         this.uploadSubs = this.pluginManager
             // Start upload process
             .uploadPlugin(this.uploadPayload, this.scopeFeedback)
-            .subscribe((changeScopeRequests) => {
-                if (!changeScopeRequests || changeScopeRequests.length < 1) {
+            .subscribe((listOfChangeScopeReq) => {
+                if (!listOfChangeScopeReq || listOfChangeScopeReq.length < 1) {
                     this.handleUploadSuccess();
                     this.uploadSubs.unsubscribe();
                     return;
                 }
 
-                // Execute scope settup
-                changeScopeRequests.forEach((element) => {
-                    const subscription = element.req.subscribe((res) => {
-                        this.handleUploadSuccess();
-                        subscription.unsubscribe();
-                    }, this.handleUploadError);
+                // Load scope setup
+                const changeScopeRequests: Observable<Response>[] = [];
+                listOfChangeScopeReq.forEach((element) => {
+                    changeScopeRequests.push(element.req);
                 });
+
+                // Execute scope requests in parallel
+                const subs = Observable.merge(...changeScopeRequests).subscribe(() => {
+                    this.handleUploadSuccess();
+                }, this.handleUploadError.bind(this),
+                () => {
+                    // Completed
+                    subs.unsubscribe();
+                    this.uploadSubs.unsubscribe();
+                });
+
             }, this.handleUploadError);
     }
 
@@ -241,6 +255,11 @@ export class UploadComponent implements OnInit {
         if ("custom-next" === buttonType && this.canGoNext) {
             // Go to the next page
             this.wizardLarge.next();
+
+            if (this.wizardLarge.isLast) {
+                this.summary = `Upload plugin which is scoped for ${this.scopeFeedback.scope.toString()} and published for
+                ${this.scopeFeedback.forAllOrgs ? 'all tenants.' : this.scopeFeedback.data.length > 0 ? this.scopeFeedback.data.length + ' tenants.' : 'no one tenant.'}`
+            }
         }
     }
 

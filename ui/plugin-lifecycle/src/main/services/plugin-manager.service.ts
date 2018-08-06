@@ -202,14 +202,9 @@ export class PluginManager {
             })
             .then(() => {
                 // Publish the plugin if this kind of data is provided
-                if (scopeFeedback.forAllOrgs && scopeFeedback.publishForAllTenants) {
+                if (scopeFeedback.forAllOrgs) {
                     observer.next(this.pluginPublisher.publishPluginForAllTenants([PLUGIN], this.baseUrl, false));
                     return;
-                }
-
-                if (scopeFeedback.forAllOrgs && scopeFeedback.unpublishForAllTenants) {
-                    observer.next(this.pluginPublisher.unpublishPluginForAllTenants([PLUGIN], this.baseUrl, false));
-                    return
                 }
 
                 if (scopeFeedback.data.length > 0) {

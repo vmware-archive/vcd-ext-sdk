@@ -42,10 +42,34 @@
             <ng-template clrPageButtons>
                 <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
                 <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
-                <clr-wizard-button [type]="'custom-finish'">Finish</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-next'">Next</clr-wizard-button>
             </ng-template>
 
-            <vcd-choose-org-scope [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin" [canUnpublish]="false"></vcd-choose-org-scope>
+            <div class="checkbox">
+                <input type="checkbox" name="publishing" id="publishing" [(ngModel)]="publishing">
+                <label for="publishing">Do you want to publish?</label>
+            </div>
+
+            <vcd-choose-org-scope
+                *ngIf="publishing"
+                [(feedback)]="scopeFeedback"
+                [listOfOrgsPerPlugin]="listOfOrgsPerPlugin">
+            </vcd-choose-org-scope>
         </clr-wizard-page>
+
+        <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
+                <ng-template clrPageTitle>Summary</ng-template>
+    
+                <ng-template clrPageButtons>
+                    <clr-wizard-button [type]="'custom-cancel'">Cancel</clr-wizard-button>
+                    <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+                    <clr-wizard-button [type]="'custom-finish'">Finish</clr-wizard-button>
+                </ng-template>
+    
+                <div class="summary-body">
+                    <h4>Your changes will: </h4>
+                    {{ summary }}
+                </div>
+            </clr-wizard-page>
     </clr-wizard>
 </div>

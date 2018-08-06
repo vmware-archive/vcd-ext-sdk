@@ -11,6 +11,8 @@ import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { OrganisationService } from "../../services/organisation.service";
 import { Organisation } from "../../interfaces/Organisation";
 import { Plugin } from "../../interfaces/Plugin";
+import { ChangeScopeRequestTo } from "../../interfaces/ChangeScopeRequestTo";
+import { Response} from "@angular/http";
 
 @Component({
     selector: "vcd-change-org-scope",
@@ -78,43 +80,92 @@ export class ChangeOrgScope implements OnInit {
     }
 
     /**
-     * Publish or unpublish plugins for specific tenants
-     * @param feedback the data which will be applied on each plugin
+     * Reset values before each update
      */
-    public handleMixedScope(feedback: ScopeFeedback): void {
-        // Load all pulbish / unpublish requests
-        const requests = this.pluginManager.handleMixedScope(this.plugins, feedback, true);
-        requests.forEach((element) => {
-            // Execute each request
-            const subscription = element.req.subscribe(
-                (res) => {
-                    // Set the status of the request
-                    this.changeScopeService.changeReqStatusTo(res.url, true);
-                    subscription.unsubscribe();
-                },
-                (error: Error) => {
-                    // Set the status of the request
-                    this.changeScopeService.changeReqStatusTo(element.url, false);
-                    subscription.unsubscribe();
-                    // Load error data
-                    this.alertMessage = error.message;
-                    this.alertClasses = "alert-danger";
-                }
-            )
-        });
+
+    public beforeUpdate(): void {
+        this.alertMessage = null;
+        this.alertClasses = "alert-info";
+
+        this.hasToRefresh = true;
+        this.showTracker = true;
     }
 
     /**
      * Trigger update action
      */
     public onUpdate(): void {
-        if (this.feedback.data.length > 0) {
-            this.alertMessage = null;
-            this.alertClasses = "alert-info";
+        if (this.feedback.forAllOrgs && this.action === 'publish') {
+            // Reset values
+            this.beforeUpdate();            
 
-            this.hasToRefresh = true;
-            this.showTracker = true;
-            this.handleMixedScope(this.feedback);
+            const changeScopeRequests: Observable<Response>[] = [];
+            this.pluginManager.publishPluginForAllTenants(true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
+                changeScopeRequests.push(changeScopeReq.req)
+            });
+            const subs = Observable.merge(...changeScopeRequests)
+                .subscribe((res) => {
+                    if (res.status === 500) {
+                        this.changeScopeService.changeReqStatusTo(res.url, false);
+                        return;
+                    }
+                    this.changeScopeService.changeReqStatusTo(res.url, true);
+                }, (error) => {
+                    this.alertMessage = error.message;
+                    this.alertClasses = "alert-danger";
+                }, () => {
+                    subs.unsubscribe();
+                });
+            return;
+        }
+
+        if (this.feedback.forAllOrgs && this.action === 'unpublish') {
+            // Reset values
+            this.beforeUpdate();
+
+            const changeScopeRequests: Observable<Response>[] = [];
+            this.pluginManager.unpublishPluginForAllTenants(true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
+                changeScopeRequests.push(changeScopeReq.req)
+            });
+            const subs = Observable.merge(...changeScopeRequests)
+                .subscribe((res) => {
+                    if (res.status === 500) {
+                        this.changeScopeService.changeReqStatusTo(res.url, false);
+                        return;
+                    }
+
+                    this.changeScopeService.changeReqStatusTo(res.url, true);
+                }, (error) => {
+                    this.alertMessage = error.message;
+                    this.alertClasses = "alert-danger";
+                }, () => {
+                    subs.unsubscribe();
+                });
+            return;
+        }
+
+        if (!this.feedback.forAllOrgs && this.feedback.data.length > 0) {
+            // Reset values
+            this.beforeUpdate();
+
+            const changeScopeRequests: Observable<Response>[] = []; 
+            this.pluginManager.handleMixedScope(this.plugins, this.feedback, true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
+                changeScopeRequests.push(changeScopeReq.req);
+            });
+            const subs = Observable.merge(...changeScopeRequests)
+                .subscribe((res) => {
+                    if (res.status === 500) {
+                        this.changeScopeService.changeReqStatusTo(res.url, false);
+                        return;
+                    }
+
+                    this.changeScopeService.changeReqStatusTo(res.url, true);
+                }, (error) => {
+                    this.alertMessage = error.message;
+                    this.alertClasses = "alert-danger";
+                }, () => {
+                    subs.unsubscribe();
+                });
             return;
         }
 
