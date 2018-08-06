@@ -14,8 +14,6 @@ import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 export class ChooseOrgScope implements OnInit {
     @Input() listOfOrgsPerPlugin: ChangeScopeItem[];
     @Input() feedback: ScopeFeedback;
-    @Input() canUnpublish: boolean = true;
-    @Input() canPublish: boolean = true;
     @Output() feedbackChange = new EventEmitter<ScopeFeedback>();
 
     constructor(
