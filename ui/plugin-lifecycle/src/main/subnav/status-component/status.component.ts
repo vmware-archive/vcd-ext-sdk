@@ -344,24 +344,114 @@ export class StatusComponent implements OnInit, OnDestroy {
      * Publish the plugins for all tenants.
      */
     public publishForAllTenants(): void {
-        this.errorMessage = null;
-        this.showTracker = true;
-        this.pluginManager
-            .publishPluginForAllTenants(true)
-            .forEach(this.handleScopeChanging.bind(this));
+        const onPublishForAllSub = this.openModal({
+            title: "Publish for all tenants",
+            body: "Are you sure you want to publish the plugin for all tenants?",
+            decline: "No",
+            accept: "Yes",
+            waitToClose: true
+        })
+        .subscribe((modalSubjectData) => {
+            // If user doesn't authorize the action
+            if (modalSubjectData.accept === false) {
+                this.setOpened(false);
+                onPublishForAllSub.unsubscribe();
+                return;
+            }
+
+            // Close modal
+            this.setOpened(false);
+
+            this.errorMessage = null;
+            this.showTracker = true;
+            this.pluginManager
+                .publishPluginForAllTenants(true)
+                .forEach((reqData: ChangeScopeRequestTo, index, changeScopeReqList) => {
+                    const subscription = reqData.req.subscribe(
+                        (res) => {
+                            // Notify the service if request complete successfully
+                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, true);
+                            subscription.unsubscribe();
+
+                            // Clear the modal subscription when loop completes
+                            if (index === (changeScopeReqList.length - 1)) {
+                                onPublishForAllSub.unsubscribe();
+                            }
+                        },
+                        (error) => {
+                            this.endLoading();
+                            this.openErrorNotifyer = true;
+                            this.errorMessage = error.message;
+                            // Notify the service if request complete successfully
+                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
+                            subscription.unsubscribe();
+                            
+                            // Clear the modal subscription when loop completes
+                            if (index === (changeScopeReqList.length - 1)) {
+                                onPublishForAllSub.unsubscribe();
+                            }
+                        }
+                    )
+                });
+            });
     }
 
     /**
      * Unpublish the plugins for all tenants.
      */
     public unpublishForAllTenants(): void {
-        this.errorMessage = null;
-        this.showTracker = true;
-        this.pluginManager
-            // Call unpublish all selected plugins
-            .unpublishPluginForAllTenants(true)
-            // Map the requests to change scope service
-            .forEach(this.handleScopeChanging.bind(this));
+        const onUnpublishForAllSub = this.openModal({
+            title: "Unpublish for all tenants",
+            body: "Are you sure you want to unpublish the plugin for all tenants?",
+            decline: "No",
+            accept: "Yes",
+            waitToClose: true
+        })
+        .subscribe((modalSubjectData) => {
+            // If user doesn't authorize the action
+            if (modalSubjectData.accept === false) {
+                this.setOpened(false);
+                onUnpublishForAllSub.unsubscribe();
+                return;
+            }
+
+            // Close modal
+            this.setOpened(false);
+
+            this.errorMessage = null;
+            this.showTracker = true;
+            this.pluginManager
+                // Call unpublish all selected plugins
+                .unpublishPluginForAllTenants(true)
+                // Map the requests to change scope service
+                .forEach((reqData: ChangeScopeRequestTo, index, changeScopeReqList) => {
+                    const subscription = reqData.req.subscribe(
+                        (res) => {
+                            // Notify the service if request complete successfully
+                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, true);
+                            subscription.unsubscribe();
+
+                            // Clear the modal subscription when loop completes
+                            if (index === (changeScopeReqList.length - 1)) {
+                                onUnpublishForAllSub.unsubscribe();
+                            }
+                        },
+                        (error) => {
+                            this.endLoading();
+                            this.openErrorNotifyer = true;
+                            this.errorMessage = error.message;
+                            // Notify the service if request complete successfully
+                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
+                            subscription.unsubscribe();
+                            
+                            // Clear the modal subscription when loop completes
+                            if (index === (changeScopeReqList.length - 1)) {
+                                onUnpublishForAllSub.unsubscribe();
+                            }
+                        }
+                    )
+                });
+        });
     }
 
     /**
