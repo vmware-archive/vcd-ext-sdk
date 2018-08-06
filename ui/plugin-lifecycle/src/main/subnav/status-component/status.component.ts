@@ -346,7 +346,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public publishForAllTenants(): void {
         const onPublishForAllSub = this.openModal({
             title: "Publish for all tenants",
-            body: "Are you sure you want to publish the plugin for all tenants?",
+            body: "Are you sure you want to publish the plugins for all tenants?",
             decline: "No",
             accept: "Yes",
             waitToClose: true
@@ -402,7 +402,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public unpublishForAllTenants(): void {
         const onUnpublishForAllSub = this.openModal({
             title: "Unpublish for all tenants",
-            body: "Are you sure you want to unpublish the plugin for all tenants?",
+            body: "Are you sure you want to unpublish the plugins for all tenants?",
             decline: "No",
             accept: "Yes",
             waitToClose: true
