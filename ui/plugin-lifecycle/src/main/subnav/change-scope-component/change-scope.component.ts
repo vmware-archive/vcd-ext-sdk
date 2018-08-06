@@ -68,7 +68,6 @@ export class ChangeScope implements OnInit {
         const subs = this.changeScopeService.changeScope(pluginsToBeUpdated, this.feedback.scope, this.pluginManager.baseUrl)
             .subscribe((res) => {
                 this.hasToRefresh = true;
-                console.log(res);
             }, (error: Error) => {
                 this.alertMessage = error.message;
                 this.alertClasses = "alert-danger";
