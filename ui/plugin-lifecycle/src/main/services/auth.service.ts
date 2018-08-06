@@ -54,15 +54,7 @@ export class AuthService {
                 return;
             }
 
-            return this.authRequst("administrator", "System", "ca$hc0w").toPromise()
-                .then((res: Response) => {
-                    const authToken = res.headers.get("x-vcloud-authorization")
-                    this.setAuthToken(authToken);
-                    resolve(authToken);
-                })
-                .catch((err) => {
-                    reject(err);
-                });
+            console.log("NOT AUTHORIZED");
         });
         return promise;
     }
