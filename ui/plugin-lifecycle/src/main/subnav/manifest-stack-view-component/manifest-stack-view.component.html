@@ -1,12 +1,8 @@
 <div class="manifest">
-    <div *ngIf="parsing" class="spinner-container">
-        <span class="spinner spinner-md">
-            Loading...
-        </span>
-    </div>
+    <vcd-loading-indicator class="loader" [isLoading]="parsing" [showSpinner]="parsing"></vcd-loading-indicator>
 
-    <clr-stack-view>
-        <clr-stack-header>Angular stack view</clr-stack-header>
+    <clr-stack-view class="stackManifest">
+        <clr-stack-header>Plugin manifest</clr-stack-header>
 
         <clr-stack-block [clrSbExpandable]="false">
             <clr-stack-label>File:</clr-stack-label>

@@ -6,7 +6,10 @@ import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
 
 @Component({
     selector: "vcd-manifest-stack-view",
-    templateUrl: "./manifest-stack-view.component.html"
+    templateUrl: "./manifest-stack-view.component.html",
+    styleUrls: [
+        "./manifest-stack-view.component.scss"
+    ]
 })
 export class VcdManifestStackView {
     // Show / hide spinner while parsing
