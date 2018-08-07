@@ -85,7 +85,13 @@
 "@vcd/sdk@file:../api-client/packages/sdk/dist":
   version "1.0.0"
 
+"@vcd/bindings@file:../api-client/packages/bindings/dist":
+  version "9.1.0"
+
 "@vcd/http-transfer-service@file:../../../../http-transfer-service/dist":
+  version "1.0.0"
+
+"@vcd/sdk@file:../api-client/packages/sdk/dist":
   version "1.0.0"
 
 "@webcomponents/custom-elements@1.0.0":
