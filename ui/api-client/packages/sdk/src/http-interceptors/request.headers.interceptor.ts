@@ -23,7 +23,7 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let headers = this.setAcceptHeader(req);
-        headers = headers.set('Content-Type', 'application/*+json');
+        headers = headers.set('Content-Type', req.url.indexOf('cloudapi') > -1 ? 'application/json' : 'application/*+json');
         if (this._authentication) {
             headers = headers.set(this._authenticationHeader, `${this._authentication}`);
         }
