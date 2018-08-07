@@ -32,7 +32,7 @@ export class ChooseOrgScope implements OnInit {
         }
 
         const found = this.listOfOrgsPerPlugin.find((el) => {
-            return el === item
+            return el === item;
         });
 
         found.action = data;

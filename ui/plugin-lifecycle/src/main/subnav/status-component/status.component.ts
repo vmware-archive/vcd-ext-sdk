@@ -101,7 +101,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public getOpened(): boolean {
         return this.modal.opened;
     }
-    
+
     public setOpened(val: boolean): void {
         this.modal.waitToClose = false;
         this.modal.opened = val;
@@ -385,13 +385,13 @@ export class StatusComponent implements OnInit, OnDestroy {
                             // Notify the service if request complete successfully
                             this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
                             subscription.unsubscribe();
-                            
+
                             // Clear the modal subscription when loop completes
                             if (index === (changeScopeReqList.length - 1)) {
                                 onPublishForAllSub.unsubscribe();
                             }
                         }
-                    )
+                    );
                 });
             });
     }
@@ -443,13 +443,13 @@ export class StatusComponent implements OnInit, OnDestroy {
                             // Notify the service if request complete successfully
                             this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
                             subscription.unsubscribe();
-                            
+
                             // Clear the modal subscription when loop completes
                             if (index === (changeScopeReqList.length - 1)) {
                                 onUnpublishForAllSub.unsubscribe();
                             }
                         }
-                    )
+                    );
                 });
         });
     }
@@ -473,7 +473,7 @@ export class StatusComponent implements OnInit, OnDestroy {
                 this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
                 subscription.unsubscribe();
             }
-        )
+        );
     }
 
     /**

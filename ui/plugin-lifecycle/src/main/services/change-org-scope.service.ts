@@ -6,7 +6,7 @@ import { Subject, Observable } from "rxjs";
 export class ChangeOrgScopeService {
     private _changeScopeReq: ChangeScopeRequest[] = [];
     private _changeScopeReqSubject = new Subject<ChangeScopeRequest[]>();
-    
+
     constructor() {}
 
     /**
@@ -29,9 +29,9 @@ export class ChangeOrgScopeService {
             return el.reqUrl === url;
         });
         const index = this._changeScopeReq.indexOf(found);
-        
+
         if (index === -1) {
-            console.error('This element does not exist!');
+            console.error("This element does not exist!");
             return;
         }
 
