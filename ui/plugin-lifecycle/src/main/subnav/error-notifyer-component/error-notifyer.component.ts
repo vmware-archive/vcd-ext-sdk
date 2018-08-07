@@ -26,5 +26,4 @@ export class ErrorNotifyerComponent implements OnInit {
     get opened(): boolean {
         return this._opened;
     }
-
 }

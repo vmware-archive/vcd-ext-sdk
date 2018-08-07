@@ -21,7 +21,7 @@ export class ZipManager {
             manifest.getData(new zip.TextWriter(), function(text: string) {
                 // text contains the entry data as a String
                 resolve(text);
-        
+
               }, function(current: number, total: number) {
                 // onprogress callback
               });
@@ -60,7 +60,7 @@ export class ZipManager {
                     });
                     return;
                 }
-            })
+            });
 
             resolve({
                 isValid: true,
@@ -102,7 +102,7 @@ export class ZipManager {
             })
             .then((data) => {
                 if (!data.isValid) {
-                    throw new Error('Plugin file structure is incorrect!');
+                    throw new Error("Plugin file structure is incorrect!");
                 }
 
                 const manifestFile = data.entries.find((entrie) => {

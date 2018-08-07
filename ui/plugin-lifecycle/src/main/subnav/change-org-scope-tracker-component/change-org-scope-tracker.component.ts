@@ -11,7 +11,7 @@ import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
     templateUrl: "./change-org-scope-tracker.component.html"
 })
 export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
-    private _open: boolean = false;
+    private _open = false;
 
     @Input()
     set open(val: boolean) {

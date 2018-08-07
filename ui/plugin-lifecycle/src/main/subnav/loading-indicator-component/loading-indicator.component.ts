@@ -43,7 +43,7 @@ export class LoadingIndicatorComponent {
      * Show/hide the spinner if only an overlay is required.
      */
     @Input()
-    public showSpinner: boolean = true;
+    public showSpinner = true;
 
     /**
      * Text to show next to the spinner.
@@ -68,7 +68,7 @@ export class LoadingIndicatorComponent {
      * Spinner position
      */
     @Input()
-    public fixed: boolean = false;
+    public fixed = false;
 
     get size(): SpinnerSize {
         return this._size;

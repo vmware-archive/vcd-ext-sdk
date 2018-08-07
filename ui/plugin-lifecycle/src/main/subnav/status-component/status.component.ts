@@ -23,12 +23,12 @@ export class StatusComponent implements OnInit, OnDestroy {
     public _selected: Plugin[];
     public plugins: Plugin[];
     public modal: ModalData;
-    public changeScopeState: boolean = false;
+    public changeScopeState = false;
     public wantToUpload: boolean;
     public isLoading: boolean;
     public action: string;
-    public showTracker: boolean = false;
-    public openChangeScope: boolean = false;
+    public showTracker = false;
+    public openChangeScope = false;
     public errorMessage: string;
     public openErrorNotifyer: boolean;
     public watchPluginListSub: Subscription;
@@ -65,7 +65,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public getOpened(): boolean {
         return this.modal.opened;
     }
-    
+
     public setOpened(val: boolean): void {
         this.modal.waitToClose = false;
         this.modal.opened = val;
@@ -142,7 +142,7 @@ export class StatusComponent implements OnInit, OnDestroy {
 
                 return this.pluginManager
                     // Start the disable process
-                    .disablePlugins()
+                    .disablePlugins();
             })
             .then(() => {
                 // Refresh the list of plugins
@@ -163,7 +163,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     // Enable all selected plugins
     public onEnable(): void {
         this.errorMessage = null;
-        
+
         const onEnableSub = this.openModal({
             title: "Enable",
             body: "Are you sure you want to enable the plugins?",
@@ -207,7 +207,7 @@ export class StatusComponent implements OnInit, OnDestroy {
                 this.openErrorNotifyer = true;
                 this.errorMessage = error.message;
             });
-        })
+        });
     }
 
     /**
@@ -324,13 +324,13 @@ export class StatusComponent implements OnInit, OnDestroy {
                             // Notify the service if request complete successfully
                             this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
                             subscription.unsubscribe();
-                            
+
                             // Clear the modal subscription when loop completes
                             if (index === (changeScopeReqList.length - 1)) {
                                 onPublishForAllSub.unsubscribe();
                             }
                         }
-                    )
+                    );
                 });
             });
     }
@@ -382,13 +382,13 @@ export class StatusComponent implements OnInit, OnDestroy {
                             // Notify the service if request complete successfully
                             this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
                             subscription.unsubscribe();
-                            
+
                             // Clear the modal subscription when loop completes
                             if (index === (changeScopeReqList.length - 1)) {
                                 onUnpublishForAllSub.unsubscribe();
                             }
                         }
-                    )
+                    );
                 });
         });
     }
@@ -412,7 +412,7 @@ export class StatusComponent implements OnInit, OnDestroy {
                 this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
                 subscription.unsubscribe();
             }
-        )
+        );
     }
 
     /**

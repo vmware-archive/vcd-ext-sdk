@@ -39,7 +39,7 @@ export abstract class PluginValidator {
             success: true,
             message: "",
             errors: {}
-        }
+        };
 
         if (!manifest.name || manifest.name.length < 3) {
             result.errors["name"] = "Plugin name is required and has to be more then 3 characters.";
@@ -67,7 +67,7 @@ export abstract class PluginValidator {
         }
 
         if (!result.success) {
-            result.message = "Validation error, check your manifest.json file."
+            result.message = "Validation error, check your manifest.json file.";
         }
 
         return result;

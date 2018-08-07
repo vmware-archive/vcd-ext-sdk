@@ -13,13 +13,13 @@ import { Plugin } from "../../interfaces/Plugin";
 })
 export class ChangeScope implements OnInit {
     public feedback = new ScopeFeedback();
-    public loading: boolean = false;
+    public loading = false;
     public alertMessage: string;
-    public hasToRefresh: boolean = false;
+    public hasToRefresh = false;
     public alertClasses: string;
-    private _open: boolean = false;
+    private _open = false;
 
-    @Input() 
+    @Input()
     set open(val: boolean) {
         this._open = val;
     }
@@ -55,7 +55,7 @@ export class ChangeScope implements OnInit {
             ) {
                 return;
             }
-    
+
             pluginsToBeUpdated.push(selectedPlugin);
         });
 

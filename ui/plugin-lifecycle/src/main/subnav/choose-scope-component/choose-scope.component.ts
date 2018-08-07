@@ -17,7 +17,7 @@ export class ChooseScope implements OnInit {
     @Input()
     set feedback(val: ScopeFeedback) {
         this._feedback = val;
-        
+
         if (this.feedback.scope.indexOf("service-provider") !== -1) {
             this.enableForProviders = true;
         }
@@ -45,9 +45,9 @@ export class ChooseScope implements OnInit {
         this._enableForProviders = val;
 
         if (this.enableForProviders) {
-            this.feedback.addNewScope('service-provider');
+            this.feedback.addNewScope("service-provider");
         } else {
-            this.feedback.removeScope('service-provider');
+            this.feedback.removeScope("service-provider");
         }
 
         this.feedbackChange.emit(this.feedback);
@@ -61,12 +61,11 @@ export class ChooseScope implements OnInit {
         this._enableForTenants = val;
 
         if (this.enableForTenants) {
-            this.feedback.addNewScope('tenant');
+            this.feedback.addNewScope("tenant");
         } else {
-            this.feedback.removeScope('tenant');
+            this.feedback.removeScope("tenant");
         }
 
         this.feedbackChange.emit(this.feedback);
     }
-
 }

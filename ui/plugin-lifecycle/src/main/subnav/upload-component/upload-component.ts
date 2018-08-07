@@ -52,11 +52,11 @@ export class UploadComponent implements OnInit {
     // The data which is extacted from the uploaded file and the actual file
     public uploadPayload: UploadPayload;
     // Show spinner while uploading
-    public loading: boolean = false;
+    public loading = false;
     // Show / hide next button in the wizard
-    public canGoNext: boolean = false;
+    public canGoNext = false;
     // Show / hide spinner while parsing the manifest file
-    public parsing: boolean = false;
+    public parsing = false;
     // Shows on the sceen when any warning appear
     public alertMessage: string;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
@@ -135,7 +135,7 @@ export class UploadComponent implements OnInit {
             })
             .then((duplication) => {
                 if (duplication) {
-                    throw new Error('Plugin with this name already exists, please ensure your plugin name is unique.')
+                    throw new Error("Plugin with this name already exists, please ensure your plugin name is unique.");
                 }
                 this.alertMessage = null;
                 this.canGoNext = true;
@@ -200,7 +200,7 @@ export class UploadComponent implements OnInit {
         this.loading = false;
         // Remove file loaded in the payload
         this.uploadPayload.file = null;
-        // Remove file name loaded in the payload        
+        // Remove file name loaded in the payload
         this.uploadPayload.fileName = null;
         // Remove file dir loaded in the payload
         this.uploadPayload.fileDir = null;
@@ -258,7 +258,9 @@ export class UploadComponent implements OnInit {
 
             if (this.wizardLarge.isLast) {
                 this.summary = `Upload plugin which is scoped for ${this.scopeFeedback.scope.toString()} and published for
-                ${this.scopeFeedback.forAllOrgs ? 'all tenants.' : this.scopeFeedback.data.length > 0 ? this.scopeFeedback.data.length + ' tenants.' : 'no one tenant.'}`
+                ${this.scopeFeedback.forAllOrgs ?
+                    "all tenants." : this.scopeFeedback.data.length > 0 ?
+                        this.scopeFeedback.data.length + " tenants." : "no one tenant."}`;
             }
         }
     }
@@ -281,7 +283,7 @@ export class UploadComponent implements OnInit {
                 this.orgs = orgs;
                 this.populateList();
             }
-        )
+        );
     }
 
     /**
@@ -290,7 +292,7 @@ export class UploadComponent implements OnInit {
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Organisation) => {
-            this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: this.uploadPayload.manifest.name, action: 'publish' });
+            this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: this.uploadPayload.manifest.name, action: "publish" });
         });
     }
 }

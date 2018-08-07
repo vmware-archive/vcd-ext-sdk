@@ -20,17 +20,17 @@ import { Response} from "@angular/http";
     styleUrls: ["./change-org-scope.component.scss"]
 })
 export class ChangeOrgScope implements OnInit {
-    private _state: boolean = false;
+    private _state = false;
     private _action: string;
     public feedback: ScopeFeedback = new ScopeFeedback();
     public showTracker: boolean;
-    public hasToRefresh: boolean = false;
+    public hasToRefresh = false;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
     public orgs: Organisation[];
     public plugins: Plugin[];
     public alertMessage: string;
     public alertClasses: string;
-    
+
     public watchSourceDataSub: Subscription;
 
     @Input()
@@ -38,7 +38,7 @@ export class ChangeOrgScope implements OnInit {
         if (val === false) {
             // Reset the feedback data
             this.feedback.reset();
-            
+
             if (this.watchSourceDataSub) {
                 this.watchSourceDataSub.unsubscribe();
             }
@@ -95,13 +95,13 @@ export class ChangeOrgScope implements OnInit {
      * Trigger update action
      */
     public onUpdate(): void {
-        if (this.feedback.forAllOrgs && this.action === 'publish') {
+        if (this.feedback.forAllOrgs && this.action === "publish") {
             // Reset values
-            this.beforeUpdate();            
+            this.beforeUpdate();
 
             const changeScopeRequests: Observable<Response>[] = [];
             this.pluginManager.publishPluginForAllTenants(true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
-                changeScopeRequests.push(changeScopeReq.req)
+                changeScopeRequests.push(changeScopeReq.req);
             });
             const subs = Observable.merge(...changeScopeRequests)
                 .subscribe((res) => {
@@ -119,13 +119,13 @@ export class ChangeOrgScope implements OnInit {
             return;
         }
 
-        if (this.feedback.forAllOrgs && this.action === 'unpublish') {
+        if (this.feedback.forAllOrgs && this.action === "unpublish") {
             // Reset values
             this.beforeUpdate();
 
             const changeScopeRequests: Observable<Response>[] = [];
             this.pluginManager.unpublishPluginForAllTenants(true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
-                changeScopeRequests.push(changeScopeReq.req)
+                changeScopeRequests.push(changeScopeReq.req);
             });
             const subs = Observable.merge(...changeScopeRequests)
                 .subscribe((res) => {
@@ -148,7 +148,7 @@ export class ChangeOrgScope implements OnInit {
             // Reset values
             this.beforeUpdate();
 
-            const changeScopeRequests: Observable<Response>[] = []; 
+            const changeScopeRequests: Observable<Response>[] = [];
             this.pluginManager.handleMixedScope(this.plugins, this.feedback, true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
                 changeScopeRequests.push(changeScopeReq.req);
             });
@@ -219,7 +219,7 @@ export class ChangeOrgScope implements OnInit {
             this.orgService.watchOrgs()
         ).subscribe((data) => {
             if (data.length === 0) {
-                return;                
+                return;
             }
 
             // Assign plugins list
@@ -247,7 +247,7 @@ export class ChangeOrgScope implements OnInit {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Organisation) => {
             this.plugins.forEach(plugin => {
-                this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: plugin.pluginName, action: this.action });           
+                this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: plugin.pluginName, action: this.action });
             });
         });
     }

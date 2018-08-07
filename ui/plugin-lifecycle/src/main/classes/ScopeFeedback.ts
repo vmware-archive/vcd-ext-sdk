@@ -3,11 +3,11 @@ import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 
 export class ScopeFeedback {
     // Publish for all tenants
-    private _publishForAllTenants: boolean = false;
+    private _publishForAllTenants = false;
     // Unpublish for all tenants
-    private _unpublishForAllTenants: boolean = false;
+    private _unpublishForAllTenants = false;
     // Is the scope applied for all organisations
-    private _forAllOrgs: boolean = false;
+    private _forAllOrgs = false;
 
     // List of scopes ex: ['tenant', 'provider']
     private _scope: string[] = [];
@@ -53,7 +53,7 @@ export class ScopeFeedback {
 
     // Get data which describe the change scope request
     get data(): ChangeScopeItem[] {
-        return this._data
+        return this._data;
     }
 
     /**

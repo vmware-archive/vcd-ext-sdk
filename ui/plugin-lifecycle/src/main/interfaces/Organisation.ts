@@ -12,5 +12,5 @@ export interface Organisation {
     numberOfRunningVMs: number;
     numberOfVApps: number;
     numberOfVdcs: number;
-    storedVMQuota: number
+    storedVMQuota: number;
 }

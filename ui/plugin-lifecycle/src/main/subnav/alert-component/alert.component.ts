@@ -9,7 +9,7 @@ import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
     templateUrl: "./alert.component.html"
 })
 export class VcdAlert implements OnInit {
-    private _alertClasses: string = "alert-danger";
+    private _alertClasses = "alert-danger";
     @Input() alertMessage: string;
     @Input()
     set alertClasses(val: string) {
