@@ -135,6 +135,7 @@ export abstract class PluginValidator {
                 })
                 .subscribe((modalSubjectData: { accept: boolean; }) => {
                     if (modalSubjectData.accept === false) {
+                        subs.unsubscribe();
                         return;
                     }
                     subs.unsubscribe();

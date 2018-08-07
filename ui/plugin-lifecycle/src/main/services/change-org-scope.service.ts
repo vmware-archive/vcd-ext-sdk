@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
-import { Subject, Observable } from "rxjs";
+import { Observable, BehaviorSubject } from "rxjs";
 
 @Injectable()
 export class ChangeOrgScopeService {
     private _changeScopeReq: ChangeScopeRequest[] = [];
-    private _changeScopeReqSubject = new Subject<ChangeScopeRequest[]>();
+    private _changeScopeReqSubject = new BehaviorSubject<ChangeScopeRequest[]>([]);
 
     constructor() {}
 
@@ -31,7 +31,16 @@ export class ChangeOrgScopeService {
         const index = this._changeScopeReq.indexOf(found);
 
         if (index === -1) {
-            console.error("This element does not exist!");
+            /* This is double check because the plugin is in development and it runs under localhost,
+            so the URL of the REQ and RES can be different, and this is how the request is identified (by URL).
+            In other words it's possible the URL to be not in the list.
+            */
+            const urlLastTry = url.split(window.location.origin);
+            if (urlLastTry[0].length !== 0 && !urlLastTry[1]) {
+                console.error("This element does not exist!");
+                return;
+            }
+            this.changeReqStatusTo(urlLastTry[1], value);
             return;
         }
 
