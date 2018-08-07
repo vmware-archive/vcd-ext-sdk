@@ -8,6 +8,7 @@ import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
 import { AuthTokenHolderService } from "@vcd-ui/common";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Injectable()
 export class PluginPublisher {
@@ -25,7 +26,7 @@ export class PluginPublisher {
      * @param trackScopeChange determinate will this request be tracked
      */
     private togglePluginStateForAllTenants(
-        plugins: Plugin[], url: string, hasToBe: string, trackScopeChange: boolean = false
+        plugins: UiPluginMetadataResponse[], url: string, hasToBe: string, trackScopeChange: boolean = false
     ): ChangeScopeRequestTo[] {
         // Create headers
         const headers = new Headers();
@@ -64,7 +65,7 @@ export class PluginPublisher {
      * @param hasToBe value which determitate thas is this "publis" or "unpublish" action
      */
     private togglePluginStateForSpecTenants(
-        plugin: Plugin, changeScopeItems: ChangeScopeItem[], trackScopeChange: boolean, url: string, hasToBe: string
+        plugin: ChangeScopePlugin, changeScopeItems: ChangeScopeItem[], trackScopeChange: boolean, url: string, hasToBe: string
     ): ChangeScopeRequestTo {
         // Create headers
         const headers = new Headers();
@@ -103,7 +104,7 @@ export class PluginPublisher {
      * @param url the base url where the request will be made
      * @param trackScopeChange determinate will this request be tracked
      */
-    public publishPluginForAllTenants(plugins: Plugin[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
+    public publishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
         return this.togglePluginStateForAllTenants(plugins, url, "publishAll", trackScopeChange);
     }
 
@@ -113,7 +114,7 @@ export class PluginPublisher {
      * @param url the base url where the request will be made
      * @param trackScopeChange determinate will this request be tracked
      */
-    public unpublishPluginForAllTenants(plugins: Plugin[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
+    public unpublishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
         return this.togglePluginStateForAllTenants(plugins, url, "unpublishAll", trackScopeChange);
     }
 
@@ -130,7 +131,7 @@ export class PluginPublisher {
         // Create the result object with the url of the request and the request
         const result: { url: string, req: Observable<Response> }[] = [];
 
-        plugins.forEach((selectedPlugin: Plugin) => {
+        plugins.forEach((selectedPlugin: ChangeScopePlugin) => {
             // Extract the data for this plugin only from scope feedback
             const changeScopeItems = scopeFeedback.data.filter((el) => {
                 return selectedPlugin.pluginName === el.plugin;

@@ -1,4 +1,4 @@
-export interface Plugin {
+export interface PluginResponse {
     pluginName: string;
     vendor: string;
     description: string;
@@ -53,6 +53,6 @@ export interface PluginFileDetails {
 }
 
 export interface ChangeScopePlugin {
-    id: string;
+    id?: string;
     pluginName: string;
 }

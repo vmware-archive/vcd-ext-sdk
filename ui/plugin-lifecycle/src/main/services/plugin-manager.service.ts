@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { Observable, Subject, BehaviorSubject } from "rxjs";
-import { Plugin, UploadPayload, ChangeScopePlugin } from "../interfaces/Plugin";
+import { Observable, BehaviorSubject } from "rxjs";
+import { UploadPayload, ChangeScopePlugin } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { DisableEnablePluginService } from "./disable-enable-plugin.service";
@@ -11,13 +11,14 @@ import { PluginPublisher } from "./plugin-publisher.service";
 import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
 import {HttpTransferService} from "@vcd/http-transfer-service";
 import { API_ROOT_URL, AuthTokenHolderService } from "@vcd-ui/common";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Injectable()
 export class PluginManager {
-    private _plugins: Plugin[];
-    private _pluginsSubject = new BehaviorSubject<Plugin[]>(this._plugins);
-    private _selectedPlugins: Plugin[] = [];
-    private _selectedPluginsSubj = new BehaviorSubject<Plugin[]>(this.selectedPlugins);
+    private _plugins: UiPluginMetadataResponse[];
+    private _pluginsSubject = new BehaviorSubject<UiPluginMetadataResponse[]>(this._plugins);
+    private _selectedPlugins: UiPluginMetadataResponse[] = [];
+    private _selectedPluginsSubj = new BehaviorSubject<UiPluginMetadataResponse[]>(this.selectedPlugins);
 
     constructor(
         @Inject(API_ROOT_URL) private _baseUrl: string = "",
@@ -36,24 +37,24 @@ export class PluginManager {
         return this._baseUrl;
     }
 
-    set selectedPlugins(plugins: Plugin[]) {
+    set selectedPlugins(plugins: UiPluginMetadataResponse[]) {
         this._selectedPlugins = plugins;
         this._selectedPluginsSubj.next(this.selectedPlugins);
     }
 
-    get selectedPlugins(): Plugin[] {
+    get selectedPlugins(): UiPluginMetadataResponse[] {
         return this._selectedPlugins;
     }
 
-    public watchSelectedPlugins(): Observable<Plugin[]> {
+    public watchSelectedPlugins(): Observable<UiPluginMetadataResponse[]> {
         return this._selectedPluginsSubj.asObservable();
     }
 
-    public getPlugins(): Plugin[] {
+    public getPlugins(): UiPluginMetadataResponse[] {
         return this._plugins;
     }
 
-    public watchPluginList(): Observable<Plugin[]> {
+    public watchPluginList(): Observable<UiPluginMetadataResponse[]> {
         return this._pluginsSubject.asObservable();
     }
 

@@ -3,13 +3,14 @@
  */
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
-import { Plugin } from "../../interfaces/Plugin";
 import { PluginManager } from "../../services/plugin-manager.service";
 import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
 import { ChangeScopeRequestTo } from "../../interfaces/ChangeScopeRequestTo";
+import { Response } from "@angular/http";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model/uiPluginMetadataResponse";
 
 interface SubjectModalData {
     accept: boolean;
@@ -20,8 +21,8 @@ interface SubjectModalData {
     templateUrl: "./status.component.html"
 })
 export class StatusComponent implements OnInit, OnDestroy {
-    public _selected: Plugin[];
-    public plugins: Plugin[];
+    public _selected: UiPluginMetadataResponse[];
+    public plugins: UiPluginMetadataResponse[];
     public modal: ModalData;
     public changeScopeState = false;
     public wantToUpload: boolean;
@@ -53,11 +54,11 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.watchPluginListSub.unsubscribe();
     }
 
-    get selected(): Plugin[] {
+    get selected(): UiPluginMetadataResponse[] {
         return this._selected;
     }
 
-    set selected(plugins: Plugin[]) {
+    set selected(plugins: UiPluginMetadataResponse[]) {
         this._selected = plugins;
         this.pluginManager.selectedPlugins = this._selected;
     }
@@ -100,7 +101,7 @@ export class StatusComponent implements OnInit, OnDestroy {
      * Observe the plugin list in plugin manager service
      */
     public watchPluginsList(): void {
-        this.watchPluginListSub = this.pluginManager.watchPluginList().subscribe((plugins: Plugin[]) => {
+        this.watchPluginListSub = this.pluginManager.watchPluginList().subscribe((plugins: UiPluginMetadataResponse[]) => {
             this.plugins = plugins;
         });
     }
@@ -303,35 +304,38 @@ export class StatusComponent implements OnInit, OnDestroy {
 
             this.errorMessage = null;
             this.showTracker = true;
+
+            const changeOrgScopeRequestList: Observable<Response>[] = [];
+
             this.pluginManager
                 .publishPluginForAllTenants(true)
-                .forEach((reqData: ChangeScopeRequestTo, index, changeScopeReqList) => {
-                    const subscription = reqData.req.subscribe(
-                        (res) => {
-                            // Notify the service if request complete successfully
-                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, true);
-                            subscription.unsubscribe();
-
-                            // Clear the modal subscription when loop completes
-                            if (index === (changeScopeReqList.length - 1)) {
-                                onPublishForAllSub.unsubscribe();
-                            }
-                        },
-                        (error) => {
-                            this.endLoading();
-                            this.openErrorNotifyer = true;
-                            this.errorMessage = error.message;
-                            // Notify the service if request complete successfully
-                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
-                            subscription.unsubscribe();
-
-                            // Clear the modal subscription when loop completes
-                            if (index === (changeScopeReqList.length - 1)) {
-                                onPublishForAllSub.unsubscribe();
-                            }
-                        }
-                    );
+                .forEach((reqData: ChangeScopeRequestTo) => {
+                    changeOrgScopeRequestList.push(reqData.req);
                 });
+
+                const subscription = Observable.merge(...changeOrgScopeRequestList).subscribe(
+                    (res) => {
+                        if (res.status !== 200) {
+                            this.changeOrgScopeService.changeReqStatusTo(res.url, false);
+                            return;
+                        }
+
+                        // Notify the service if request complete successfully
+                        this.changeOrgScopeService.changeReqStatusTo(res.url, true);
+                    },
+                    (error) => {
+                        this.endLoading();
+                        this.openErrorNotifyer = true;
+                        this.errorMessage = error.message;
+                        // Notify the service if request complete successfully
+                        subscription.unsubscribe();
+                        onPublishForAllSub.unsubscribe();
+                    },
+                    () => {
+                        subscription.unsubscribe();
+                        onPublishForAllSub.unsubscribe();
+                    }
+                );
             });
     }
 
@@ -359,60 +363,41 @@ export class StatusComponent implements OnInit, OnDestroy {
 
             this.errorMessage = null;
             this.showTracker = true;
+
+            const changeOrgScopeRequestList: Observable<Response>[] = [];
+
             this.pluginManager
                 // Call unpublish all selected plugins
                 .unpublishPluginForAllTenants(true)
                 // Map the requests to change scope service
-                .forEach((reqData: ChangeScopeRequestTo, index, changeScopeReqList) => {
-                    const subscription = reqData.req.subscribe(
-                        (res) => {
-                            // Notify the service if request complete successfully
-                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, true);
-                            subscription.unsubscribe();
-
-                            // Clear the modal subscription when loop completes
-                            if (index === (changeScopeReqList.length - 1)) {
-                                onUnpublishForAllSub.unsubscribe();
-                            }
-                        },
-                        (error) => {
-                            this.endLoading();
-                            this.openErrorNotifyer = true;
-                            this.errorMessage = error.message;
-                            // Notify the service if request complete successfully
-                            this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
-                            subscription.unsubscribe();
-
-                            // Clear the modal subscription when loop completes
-                            if (index === (changeScopeReqList.length - 1)) {
-                                onUnpublishForAllSub.unsubscribe();
-                            }
-                        }
-                    );
+                .forEach((reqData: ChangeScopeRequestTo) => {
+                    changeOrgScopeRequestList.push(reqData.req);
                 });
-        });
-    }
 
-    /**
-     * Execute requests and notify the change scope service.
-     * @param reqData data which describes the change scope request.
-     */
-    public handleScopeChanging(reqData: ChangeScopeRequestTo): void {
-        const subscription = reqData.req.subscribe(
-            (res) => {
-                // Notify the service if request complete successfully
-                this.changeOrgScopeService.changeReqStatusTo(reqData.url, true);
-                subscription.unsubscribe();
-            },
-            (error) => {
-                this.endLoading();
-                this.openErrorNotifyer = true;
-                this.errorMessage = error.message;
-                // Notify the service if request complete successfully
-                this.changeOrgScopeService.changeReqStatusTo(reqData.url, false);
-                subscription.unsubscribe();
-            }
-        );
+                const subscription = Observable.merge(...changeOrgScopeRequestList).subscribe(
+                    (res) => {
+                        if (res.status !== 200) {
+                            this.changeOrgScopeService.changeReqStatusTo(res.url, false);
+                            return;
+                        }
+
+                        // Notify the service if request complete successfully
+                        this.changeOrgScopeService.changeReqStatusTo(res.url, true);
+                    },
+                    (error) => {
+                        this.endLoading();
+                        this.openErrorNotifyer = true;
+                        this.errorMessage = error.message;
+                        // Notify the service if request complete successfully
+                        subscription.unsubscribe();
+                        onUnpublishForAllSub.unsubscribe();
+                    },
+                    () => {
+                        subscription.unsubscribe();
+                        onUnpublishForAllSub.unsubscribe();
+                    }
+                );
+            });
     }
 
     /**

@@ -10,9 +10,9 @@ import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { OrganisationService } from "../../services/organisation.service";
 import { Organisation } from "../../interfaces/Organisation";
-import { Plugin } from "../../interfaces/Plugin";
 import { ChangeScopeRequestTo } from "../../interfaces/ChangeScopeRequestTo";
 import { Response} from "@angular/http";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Component({
     selector: "vcd-change-org-scope",
@@ -27,7 +27,7 @@ export class ChangeOrgScope implements OnInit {
     public hasToRefresh = false;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
     public orgs: Organisation[];
-    public plugins: Plugin[];
+    public plugins: UiPluginMetadataResponse[];
     public alertMessage: string;
     public alertClasses: string;
 
@@ -105,10 +105,11 @@ export class ChangeOrgScope implements OnInit {
             });
             const subs = Observable.merge(...changeScopeRequests)
                 .subscribe((res) => {
-                    if (res.status === 500) {
+                    if (res.status !== 200) {
                         this.changeScopeService.changeReqStatusTo(res.url, false);
                         return;
                     }
+
                     this.changeScopeService.changeReqStatusTo(res.url, true);
                 }, (error) => {
                     this.alertMessage = error.message;
@@ -129,7 +130,7 @@ export class ChangeOrgScope implements OnInit {
             });
             const subs = Observable.merge(...changeScopeRequests)
                 .subscribe((res) => {
-                    if (res.status === 500) {
+                    if (res.status !== 200) {
                         this.changeScopeService.changeReqStatusTo(res.url, false);
                         return;
                     }
@@ -154,7 +155,7 @@ export class ChangeOrgScope implements OnInit {
             });
             const subs = Observable.merge(...changeScopeRequests)
                 .subscribe((res) => {
-                    if (res.status === 500) {
+                    if (res.status !== 200) {
                         this.changeScopeService.changeReqStatusTo(res.url, false);
                         return;
                     }
@@ -214,7 +215,7 @@ export class ChangeOrgScope implements OnInit {
      */
     public watchSourceData(): void {
         // Merge the plugin and organisation observables
-        this.watchSourceDataSub = Observable.merge<Plugin[], Organisation[]>(
+        this.watchSourceDataSub = Observable.merge<UiPluginMetadataResponse[], Organisation[]>(
             this.pluginManager.watchSelectedPlugins(),
             this.orgService.watchOrgs()
         ).subscribe((data) => {
@@ -224,7 +225,7 @@ export class ChangeOrgScope implements OnInit {
 
             // Assign plugins list
             if (Object.keys(data[0]).indexOf("pluginName") !== -1) {
-                this.plugins = <Plugin[]>data;
+                this.plugins = <UiPluginMetadataResponse[]>data;
             }
 
             // Assaign organisations list

@@ -5,7 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { ChangeScopeService } from "../../services/change-scope.service";
 import { PluginManager } from "../../services/plugin-manager.service";
-import { Plugin } from "../../interfaces/Plugin";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Component({
     selector: "vcd-change-scope",
@@ -46,12 +46,12 @@ export class ChangeScope implements OnInit {
         this.alertClasses = "alert-info";
         // Validate change scope action
         // Collect the plugins which will be update
-        const pluginsToBeUpdated: Plugin[] = [];
-        this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
+        const pluginsToBeUpdated: UiPluginMetadataResponse[] = [];
+        this.pluginManager.selectedPlugins.forEach((selectedPlugin: UiPluginMetadataResponse) => {
             // Already in state
             if (
-                (selectedPlugin.tenant_scoped === (this.feedback.scope.indexOf("tenant") !== -1)) &&
-                (selectedPlugin.provider_scoped === (this.feedback.scope.indexOf("service-provider") !== -1))
+                (selectedPlugin.tenantScoped === (this.feedback.scope.indexOf("tenant") !== -1)) &&
+                (selectedPlugin.providerScoped === (this.feedback.scope.indexOf("service-provider") !== -1))
             ) {
                 return;
             }

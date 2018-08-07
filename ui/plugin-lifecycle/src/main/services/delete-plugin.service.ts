@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { Plugin } from "../interfaces/Plugin";
 import { AuthTokenHolderService } from "@vcd-ui/common";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Injectable()
 export class DeletePluginService {
@@ -15,7 +15,7 @@ export class DeletePluginService {
      * @param plugins list of plugins to be deleted
      * @param url base url where will be made the request
      */
-    public deletePlugins(plugins: Plugin[], url: string): Promise<Response[]> {
+    public deletePlugins(plugins: UiPluginMetadataResponse[], url: string): Promise<Response[]> {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -28,7 +28,7 @@ export class DeletePluginService {
         const deleteProcesses: Promise<Response>[] = [];
 
         // Add each request into the list
-        plugins.forEach((pluginToDelete: Plugin) => {
+        plugins.forEach((pluginToDelete: UiPluginMetadataResponse) => {
             deleteProcesses.push(this.http.delete(`${url}/cloudapi/extensions/ui/${pluginToDelete.id}`, opts).toPromise());
         });
 

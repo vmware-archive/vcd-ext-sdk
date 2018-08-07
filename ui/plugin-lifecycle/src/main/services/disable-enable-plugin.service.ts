@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Plugin, PluginDesc } from "../interfaces/Plugin";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { AuthTokenHolderService } from "@vcd-ui/common";
+import { UiPluginMetadataResponse, UiPluginMetadata } from "@vcd/bindings/vcloud/rest/openapi/model";
+import { PluginDesc } from "../interfaces/Plugin";
 
 interface PluginUpdateOptions {
     tenant_scoped: boolean;
@@ -21,7 +22,7 @@ export class DisableEnablePluginService {
      * @param plugins list of plugins which will be disabled
      * @param url the base url where the request will be made
      */
-    public disablePlugins(plugins: Plugin[], url: string): Promise<Response[]> {
+    public disablePlugins(plugins: UiPluginMetadataResponse[], url: string): Promise<Response[]> {
         const options: PluginUpdateOptions = {
             tenant_scoped: null,
             provider_scoped: null,
@@ -37,7 +38,7 @@ export class DisableEnablePluginService {
      * @param plugins list of plugins which will be disabled
      * @param url the base url where the request will be made
      */
-    public enablePlugins(plugins: Plugin[], url: string): Promise<Response[]> {
+    public enablePlugins(plugins: UiPluginMetadataResponse[], url: string): Promise<Response[]> {
         const options: PluginUpdateOptions = {
             tenant_scoped: null,
             provider_scoped: null,
@@ -54,7 +55,7 @@ export class DisableEnablePluginService {
      * @param options options which will be applied for each plugin
      * @param url the base url where will be makde the request
      */
-    private updatePluginData(plugins: Plugin[], options: PluginUpdateOptions, url: string): Promise<Response[]> {
+    private updatePluginData(plugins: UiPluginMetadataResponse[], options: PluginUpdateOptions, url: string): Promise<Response[]> {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -66,7 +67,7 @@ export class DisableEnablePluginService {
         // Collect the processes
         const updateProcesses: Promise<Response>[] = [];
 
-        plugins.forEach((pluginToUpdate: Plugin) => {
+        plugins.forEach((pluginToUpdate: UiPluginMetadataResponse) => {
             const newPluginData: PluginDesc = {
                 pluginName: pluginToUpdate.pluginName,
                 vendor: pluginToUpdate.vendor,
@@ -74,8 +75,8 @@ export class DisableEnablePluginService {
                 version: pluginToUpdate.version,
                 license: pluginToUpdate.license,
                 link: pluginToUpdate.link,
-                tenant_scoped: options.tenant_scoped !== null ? options.tenant_scoped : pluginToUpdate.tenant_scoped,
-                provider_scoped: options.provider_scoped !== null ? options.provider_scoped : pluginToUpdate.provider_scoped,
+                tenant_scoped: options.tenant_scoped !== null ? options.tenant_scoped : pluginToUpdate.tenantScoped,
+                provider_scoped: options.provider_scoped !== null ? options.provider_scoped : pluginToUpdate.providerScoped,
                 enabled: options.enabled !== null ? options.enabled : pluginToUpdate.enabled
             };
 
