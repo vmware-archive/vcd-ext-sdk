@@ -1,20 +1,19 @@
 import { Injectable } from "@angular/core";
 import { Plugin, PluginDesc } from "../interfaces/Plugin";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { AuthService } from "./auth.service";
-import { Observable } from "rxjs";
+import { AuthTokenHolderService } from "@vcd-ui/common";
 
 interface PluginUpdateOptions {
-    tenant_scoped: boolean,
-    provider_scoped: boolean,
-    enabled: boolean
+    tenant_scoped: boolean;
+    provider_scoped: boolean;
+    enabled: boolean;
 }
 
 @Injectable()
 export class DisableEnablePluginService {
     constructor(
         private http: Http,
-        private authService: AuthService
+        private authService: AuthTokenHolderService
     ) {}
 
     /**
@@ -27,7 +26,7 @@ export class DisableEnablePluginService {
             tenant_scoped: null,
             provider_scoped: null,
             enabled: false
-        }
+        };
 
         // Start update process
         return this.updatePluginData(plugins, options, url);
@@ -43,7 +42,7 @@ export class DisableEnablePluginService {
             tenant_scoped: null,
             provider_scoped: null,
             enabled: true
-        }
+        };
 
         // Start update process
         return this.updatePluginData(plugins, options, url);
@@ -60,13 +59,13 @@ export class DisableEnablePluginService {
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("Content-Type", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+        headers.append("x-vcloud-authorization", this.authService.token);
         const opts = new RequestOptions();
         opts.headers = headers;
 
         // Collect the processes
         const updateProcesses: Promise<Response>[] = [];
-        
+
         plugins.forEach((pluginToUpdate: Plugin) => {
             const newPluginData: PluginDesc = {
                 pluginName: pluginToUpdate.pluginName,

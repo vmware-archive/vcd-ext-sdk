@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Plugin } from "../interfaces/Plugin";
-import { AuthService } from "./auth.service";
+import { AuthTokenHolderService } from "@vcd-ui/common";
 
 @Injectable()
 export class DeletePluginService {
     constructor(
         private http: Http,
-        private authService: AuthService
+        private authService: AuthTokenHolderService
     ) {}
 
     /**
@@ -20,7 +20,7 @@ export class DeletePluginService {
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("Content-Type", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+        headers.append("x-vcloud-authorization", this.authService.token);
         const opts = new RequestOptions();
         opts.headers = headers;
 

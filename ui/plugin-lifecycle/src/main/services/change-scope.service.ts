@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Plugin, PluginDesc } from "../interfaces/Plugin";
-import { AuthService } from "./auth.service";
 import { Observable } from "rxjs";
+import { AuthTokenHolderService } from "@vcd-ui/common";
 
 @Injectable()
 export class ChangeScopeService {
     constructor(
         private http: Http,
-        private authService: AuthService
+        private authService: AuthTokenHolderService
     ) {}
 
     /**
@@ -25,14 +25,14 @@ export class ChangeScopeService {
      * Change the scope for each plugin into the list.
      * @param plugins list of plugins
      * @param scope list of scopes / ['service-scope', 'tenant'] /
-     * @param url the base url where will be made the request 
+     * @param url the base url where will be made the request
      */
     private changeScopeForEach(plugins: Plugin[], scope: string[], url: string): Observable<Response> {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("Content-Type", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.getAuthToken());
+        headers.append("x-vcloud-authorization", this.authService.token);
         const opts = new RequestOptions();
         opts.headers = headers;
 
@@ -52,7 +52,7 @@ export class ChangeScopeService {
                 tenant_scoped: scope.indexOf("tenant") !== -1,
                 provider_scoped: scope.indexOf("service-provider") !== -1,
                 enabled: pluginToUpdate.enabled
-            };            
+            };
 
             // Add the update request into the list of update requests
             updateProcesses.push(this.http

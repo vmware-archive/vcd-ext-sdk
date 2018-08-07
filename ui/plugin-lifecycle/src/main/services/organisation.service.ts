@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Organisation } from "../interfaces/Organisation";
-import { Subject, Observable, BehaviorSubject } from "rxjs";
-import { AuthService } from "./auth.service";
+import { Observable, BehaviorSubject } from "rxjs";
 import { XMLHelper } from "../classes/XMLHelper";
 import { PluginManager } from "./plugin-manager.service";
+import { AuthTokenHolderService } from "@vcd-ui/common";
 
 @Injectable()
 export class OrganisationService {
@@ -13,18 +13,11 @@ export class OrganisationService {
 
     constructor(
         private http: Http,
-        private authService: AuthService,
+        private authService: AuthTokenHolderService,
         private pluginManager: PluginManager
     ) {
-        // Authorize on init
-        this.authService.auth()
-            .then(() => {
-                // Load the organisations
-                this.loadOrgs(this.pluginManager.baseUrl);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        // Load the organisations
+        this.loadOrgs(this.pluginManager.baseUrl);
     }
 
     get orgs(): Organisation[] {
@@ -42,9 +35,9 @@ export class OrganisationService {
     private addOrg(org: Organisation) {
         Object.keys(org).forEach((key) => {
             try {
-                org[key] = JSON.parse(org[key])
+                org[key] = JSON.parse(org[key]);
             } catch (error) {
-                org[key] = org[key]
+                org[key] = org[key];
             }
         });
 
@@ -70,7 +63,7 @@ export class OrganisationService {
      * Make request to take all existing organistaions.
      */
     private loadOrgs(url: string): void {
-        this.getAllOrganisations(url, this.authService.getAuthToken())
+        this.getAllOrganisations(url, this.authService.token)
             .then((res: Response) => {
                 // Parse the xml response
                 const parser = new DOMParser();
