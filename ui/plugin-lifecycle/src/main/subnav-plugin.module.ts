@@ -50,6 +50,7 @@ const ROUTES: Routes = [
         HttpClientModule,
         VcdSdkModule,
         VcdHttpTransferServiceModule,
+        VcdSdkModule,
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
