@@ -193,10 +193,6 @@ any-promise@^1.0.0, any-promise@^1.1.0, any-promise@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/any-promise/-/any-promise-1.3.0.tgz#abc6afeedcea52e809cdc0376aed3ce39635d17f"
 
-app-root-path@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-2.1.0.tgz#98bf6599327ecea199309866e8140368fd2e646a"
-
 aproba@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
@@ -689,17 +685,6 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codelyzer@4.4.3:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-4.4.3.tgz#367841b9a8dba94fbae55b1606f0c4321593c72e"
-  dependencies:
-    app-root-path "^2.1.0"
-    css-selector-tokenizer "^0.7.0"
-    cssauron "^1.4.0"
-    semver-dsl "^1.0.1"
-    source-map "^0.5.7"
-    sprintf-js "^1.1.1"
-
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -880,24 +865,6 @@ cryptiles@2.x.x:
 crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
-
-css-selector-tokenizer@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/css-selector-tokenizer/-/css-selector-tokenizer-0.7.0.tgz#e6988474ae8c953477bf5e7efecfceccd9cf4c86"
-  dependencies:
-    cssesc "^0.1.0"
-    fastparse "^1.1.1"
-    regexpu-core "^1.0.0"
-
-cssauron@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/cssauron/-/cssauron-1.4.0.tgz#a6602dff7e04a8306dc0db9a551e92e8b5662ad8"
-  dependencies:
-    through X.X.X
-
-cssesc@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-0.1.0.tgz#c814903e45623371a0477b40109aaafbeeaddbb4"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -1279,10 +1246,6 @@ fast-deep-equal@^1.0.0:
 fast-json-stable-stringify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.0.0.tgz#d5142c0caee6b1189f87d3a76111064f86c8bbf2"
-
-fastparse@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/fastparse/-/fastparse-1.1.1.tgz#d1e2643b38a94d7583b479060e6c4affc94071f8"
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -3656,10 +3619,6 @@ reflect-metadata@0.1.10:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.10.tgz#b4f83704416acad89988c9b15635d47e03b9344a"
 
-regenerate@^1.2.1:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
-
 regex-cache@^0.4.2:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/regex-cache/-/regex-cache-0.4.4.tgz#75bdc58a2a1496cec48a12835bc54c8d562336dd"
@@ -3673,14 +3632,6 @@ regex-not@^1.0.0, regex-not@^1.0.2:
     extend-shallow "^3.0.2"
     safe-regex "^1.1.0"
 
-regexpu-core@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/regexpu-core/-/regexpu-core-1.0.0.tgz#86a763f58ee4d7c2f6b102e4764050de7ed90c6b"
-  dependencies:
-    regenerate "^1.2.1"
-    regjsgen "^0.2.0"
-    regjsparser "^0.1.4"
-
 registry-auth-token@^3.0.1:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/registry-auth-token/-/registry-auth-token-3.3.2.tgz#851fd49038eecb586911115af845260eec983f20"
@@ -3693,16 +3644,6 @@ registry-url@^3.0.3:
   resolved "https://registry.yarnpkg.com/registry-url/-/registry-url-3.1.0.tgz#3d4ef870f73dde1d77f0cf9a381432444e174942"
   dependencies:
     rc "^1.0.1"
-
-regjsgen@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/regjsgen/-/regjsgen-0.2.0.tgz#6c016adeac554f75823fe37ac05b92d5a4edb1f7"
-
-regjsparser@^0.1.4:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/regjsparser/-/regjsparser-0.1.5.tgz#7ee8f84dc6fa792d3fd0ae228d24bd949ead205c"
-  dependencies:
-    jsesc "~0.5.0"
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
@@ -4133,7 +4074,7 @@ source-map@^0.4.2:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@^0.5.6, source-map@^0.5.7:
+source-map@^0.5.6:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
 
@@ -4172,10 +4113,6 @@ split-string@^3.0.1, split-string@^3.0.2:
   resolved "https://registry.yarnpkg.com/split-string/-/split-string-3.1.0.tgz#7cb09dda3a86585705c64b39a6466038682e8fe2"
   dependencies:
     extend-shallow "^3.0.0"
-
-sprintf-js@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.1.tgz#36be78320afe5801f6cea3ee78b6e5aab940ea0c"
 
 sshpk@^1.7.0:
   version "1.14.2"
@@ -4357,10 +4294,6 @@ through2@^2.0.0:
   dependencies:
     readable-stream "^2.1.5"
     xtend "~4.0.1"
-
-through@X.X.X:
-  version "2.3.8"
-  resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
 tildify@^1.0.0:
   version "1.2.0"
