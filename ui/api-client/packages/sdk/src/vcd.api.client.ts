@@ -2,12 +2,14 @@ import { Injectable, Injector, Inject, Optional } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HTTP_INTERCEPTORS, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, concatMap } from 'rxjs/operators';
 
 import { LoggingInterceptor, RequestHeadersInterceptor } from './http-interceptors';
-import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
+import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType, EntityReferenceType, EntityType, TaskType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
 import { Query } from './query';
 import { AuthTokenHolderService, API_ROOT_URL } from './common';
+
+export type Navigable = ResourceType | { link?: LinkType[] }
 
 /**
  * A basic client for interacting with the vCloud Director APIs.
@@ -97,6 +99,80 @@ export class VcdApiClient {
             );
     }
 
+    public get<T>(endpoint: string): Observable<T> {
+        return this.http.get<T>(`${this._baseUrl}/${endpoint}`);
+    }
+
+    public createSync<T>(endpoint: string, item: T): Observable<T> {
+        return this.http.post<T>(`${this._baseUrl}/${endpoint}`, item);
+    }
+
+    public createAsync<T>(endpoint: string, item: T): Observable<TaskType> {
+        return this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).pipe(
+            concatMap(response => this.mapResponseToTask(response, 'POST'))
+        );
+    }
+
+    public updateSync<T>(endpoint: string, item: T): Observable<T> {
+        return this.http.put<T>(`${this._baseUrl}/${endpoint}`, item);
+    }
+
+    public updateAsync<T>(endpoint: string, item: T): Observable<TaskType> {
+        return this.http.put(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).pipe(
+            concatMap(response => this.mapResponseToTask(response, 'PUT'))
+        );
+    }
+
+    public deleteSync(endpoint: string): Observable<void> {
+        return this.http.delete<void>(`${this._baseUrl}/${endpoint}`);
+    }
+
+    public deleteAsync(endpoint: string): Observable<TaskType> {
+        return this.http.delete(`${this._baseUrl}/${endpoint}`, { observe: 'response' }).pipe(
+            concatMap(response => this.mapResponseToTask(response, 'DELETE'))
+        );
+    }
+
+    private mapResponseToTask(response: HttpResponse<any>, httpVerb: string): Observable<TaskType> {
+        if (response.headers.has('Location') && response.status == 202) {
+            return this.http.get<TaskType>(response.headers.get('Location'));
+        } else if (response.body && response.body.type.startsWith('application/vnd.vmware.vcloud.task+')) {
+            const task: TaskType = Object.assign(new TaskType(), response.body);
+            return Observable.of(task);
+        }
+
+        return Observable.throw(`An asynchronous request was made to [${httpVerb} ${response.url}], but no task was returned.  The operation may still have been successful.`);
+    }
+
+    public getEntity<T extends EntityReferenceType>(entityRef: EntityReferenceType): Observable<T>;
+    public getEntity<T extends EntityReferenceType>(urn: string): Observable<T>;
+    public getEntity<T extends EntityReferenceType>(entityRefOrUrn: EntityReferenceType | string): Observable<T> {
+        const entityResolver: Observable<EntityType> = typeof entityRefOrUrn === "string" ?
+            this.http.get<EntityType>(`${this._baseUrl}/api/entity/${entityRefOrUrn}`) :
+            this.http.get<EntityType>(`${this._baseUrl}/api/entity/urn:vcloud:${entityRefOrUrn.type}:${entityRefOrUrn.id}`);
+
+        return entityResolver.pipe(
+            concatMap(entity => this.http.get<T>(`${entity.link[0].href}`))
+        );
+    }
+
+    public updateTask(task: TaskType): Observable<TaskType> {
+        return this.http.get<TaskType>(task.href);
+    }
+
+    public isTaskComplete(task: TaskType): boolean {
+        return ['success', 'error', 'canceled', 'aborted'].indexOf(task.status) > -1;
+    }
+
+    public removeItem(item: Navigable): Observable<TaskType> {
+        const link: LinkType = this.findLink(item, 'remove', null);
+        if (!link) {
+            return Observable.throw(`No 'remove' link for specified resource.`);
+        }
+
+        return this.http.delete<TaskType>(link.href);
+    }
+
     /**
      * Queries the vCloud Director API based on the specified Query.Builder instance.
      *
@@ -134,16 +210,16 @@ export class VcdApiClient {
      */
     public firstPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
     public firstPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const href = this.findLink(result, 'firstPage').href;
-        if (!href) {
-            Observable.throw(`No 'firstPage' link for specified query.`);
+        const link: LinkType = this.findLink(result, 'firstPage', result.type);
+        if (!link) {
+            return Observable.throw(`No 'firstPage' link for specified query.`);
         }
 
-        return this.getQueryPage(href, multisite);
+        return this.getQueryPage(link.href, multisite);
     }
 
     public hasFirstPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'firstPage');
+        return !!this.findLink(result, 'firstPage', result.type);
     }
 
     /**
@@ -163,16 +239,16 @@ export class VcdApiClient {
      */
     public previousPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
     public previousPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const href = this.findLink(result, 'previousPage').href;
-        if (!href) {
-            Observable.throw(`No 'previousPage' link for specified query.`);
+        const link: LinkType = this.findLink(result, 'previousPage', result.type);
+        if (!link) {
+            return Observable.throw(`No 'previousPage' link for specified query.`);
         }
 
-        return this.getQueryPage(href, multisite);
+        return this.getQueryPage(link.href, multisite);
     }
 
     public hasPreviousPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'previousPage');
+        return !!this.findLink(result, 'previousPage', result.type);
     }
 
     /**
@@ -192,16 +268,16 @@ export class VcdApiClient {
      */
     public nextPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
     public nextPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const href = this.findLink(result, 'nextPage').href;
-        if (!href) {
-            Observable.throw(`No 'nextPage' link for specified query.`);
+        const link: LinkType = this.findLink(result, 'nextPage', result.type);
+        if (!link) {
+            return Observable.throw(`No 'nextPage' link for specified query.`);
         }
 
-        return this.getQueryPage(href, multisite);
+        return this.getQueryPage(link.href, multisite);
     }
 
     public hasNextPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'nextPage');
+        return !!this.findLink(result, 'nextPage', result.type);
     }
 
     /**
@@ -221,16 +297,16 @@ export class VcdApiClient {
      */
     public lastPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
     public lastPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const href = this.findLink(result, 'lastPage').href;
-        if (!href) {
-            Observable.throw(`No 'lastPage' link for specified query.`);
+        const link: LinkType = this.findLink(result, 'lastPage', result.type);
+        if (!link) {
+            return Observable.throw(`No 'lastPage' link for specified query.`);
         }
 
-        return this.getQueryPage(href, multisite);
+        return this.getQueryPage(link.href, multisite);
     }
 
     public hasLastPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'lastPage');
+        return !!this.findLink(result, 'lastPage', result.type);
     }
 
     private getQueryPage<T>(href: string, multisite?: any): Observable<QueryResultRecordsType> {
@@ -239,8 +315,12 @@ export class VcdApiClient {
             this.http.get<T>(href, { headers: new HttpHeaders({ '_multisite': this.parseMultisiteValue(multisite) }) });
     }
 
-    private findLink(item: ResourceType, rel: string): LinkType {
-        return item.link.find(link => link.rel == rel);
+    private findLink(item: Navigable, rel: string, type: string): LinkType {
+        if (!item || !item.link) {
+            return undefined;
+        }
+
+        return item.link.find(link => link.rel == rel && link.type == type);
     }
 
     private parseMultisiteValue(multisite: boolean | AuthorizedLocationType[]): string {
