@@ -15,6 +15,16 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/packages/bindings/target/generated-typescript-bindings</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>io.swagger</groupId>
         <artifactId>swagger-codegen-maven-plugin</artifactId>
         <version>2.3.1</version>
@@ -35,6 +45,9 @@
           <generateModelDocumentation>false</generateModelDocumentation>
           <generateSupportingFiles>false</generateSupportingFiles>
           <modelPackage>vcloud.rest.openapi.model</modelPackage>
+          <configOptions>
+            <modelPropertyNaming>original</modelPropertyNaming>
+          </configOptions>
         </configuration>
       </plugin>
       <plugin>

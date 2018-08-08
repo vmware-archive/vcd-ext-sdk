@@ -3,7 +3,7 @@
  */
 #foreach(${import} in ${imports})
 #if(${import.endsWith("/")})
-import * as ${_formatter.chop(${import})} from './${import}';
+import * as ${_formatter.chop(${import})} from './${import}/index';
 export {
     ${_formatter.chop(${import})}
 }
