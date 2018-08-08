@@ -33,7 +33,7 @@ export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
     public watchChangeScopeReq: Subscription;
 
     constructor(
-        private changeScopeService: ChangeOrgScopeService
+        private changeOrgScopeService: ChangeOrgScopeService
     ) { }
 
     ngOnInit() {
@@ -54,7 +54,7 @@ export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
      * Load all requests which are made at this moment and watch for new.
      */
     public loadRequests(): void {
-        this.watchChangeScopeReq = this.changeScopeService.watchChangeScopeReq().subscribe((data) => {
+        this.watchChangeScopeReq = this.changeOrgScopeService.watchChangeScopeReq().subscribe((data) => {
             this.requests = data;
         });
     }
@@ -64,7 +64,7 @@ export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
      */
     public onClose(): void {
         this.open = false;
-        this.changeScopeService.clearChangeScopeReq();
+        this.changeOrgScopeService.clearChangeScopeReq();
         this.openChange.emit(false);
     }
 }

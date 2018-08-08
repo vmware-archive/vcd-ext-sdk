@@ -1,18 +1,3 @@
-export interface PluginResponse {
-    pluginName: string;
-    vendor: string;
-    description: string;
-    version: string;
-    license: string;
-    link: string;
-    tenant_scoped: boolean;
-    provider_scoped: boolean;
-    enabled: boolean;
-    id: string;
-    plugin_status: string;
-    resourcePath: string;
-}
-
 export interface UploadPayload {
     manifest: PluginManifest;
     fileName: string;
@@ -33,18 +18,6 @@ export interface PluginManifest {
     link: string;
     module: string;
     route: string;
-}
-
-export interface PluginDesc {
-    pluginName: string;
-    vendor: string;
-    description: string;
-    version: string;
-    license: string;
-    link: string;
-    tenant_scoped: boolean;
-    provider_scoped: boolean;
-    enabled: boolean;
 }
 
 export interface PluginFileDetails {

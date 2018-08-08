@@ -182,7 +182,8 @@ export class StatusComponent implements OnInit, OnDestroy {
 
                 return this.pluginManager
                     // Start the disable process
-                    .disablePlugins();
+                    .disablePlugins()
+                    .toPromise();
             })
             .then(() => {
                 // Refresh the list of plugins
@@ -231,7 +232,8 @@ export class StatusComponent implements OnInit, OnDestroy {
                 this.loading();
                 return this.pluginManager
                     // Start enable process
-                    .enablePlugins();
+                    .enablePlugins()
+                    .toPromise();
             })
             .then(() => {
                 // Refresh the plugins list
@@ -279,19 +281,23 @@ export class StatusComponent implements OnInit, OnDestroy {
                 onDeleteSub.unsubscribe();
                 this.loading();
 
-                this.pluginManager
+                const deleteSubs = this.pluginManager
                     // Delete all selected plugins
                     .deletePlugins()
-                    .then(() => {
+                    .subscribe(() => {
                         // Refresh the list of plugins
                         this.pluginManager.refresh();
                         // Close the loader
                         this.endLoading();
-                    })
-                    .catch((error) => {
+                    }, (error) => {
                         this.endLoading();
                         this.openErrorNotifyer = true;
                         this.errorMessage = error.message;
+                    }, () => {
+                        // Completed!
+                        this.endLoading();
+                        this.openErrorNotifyer = true;
+                        deleteSubs.unsubscribe();
                     });
             });
     }

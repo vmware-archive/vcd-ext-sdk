@@ -1,5 +1,5 @@
 import { Injectable, Injector, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HTTP_INTERCEPTORS, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse, HTTP_INTERCEPTORS, HttpInterceptor, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map, concatMap } from 'rxjs/operators';
@@ -111,6 +111,10 @@ export class VcdApiClient {
         return this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).pipe(
             concatMap(response => this.mapResponseToTask(response, 'POST'))
         );
+    }
+
+    public createSyncWithObserveResponse<T>(endpoint: string, item: T): Observable<HttpResponse<T>> {
+        return this.http.post<T>(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' });
     }
 
     public updateSync<T>(endpoint: string, item: T): Observable<T> {

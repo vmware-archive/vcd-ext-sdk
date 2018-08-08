@@ -85,6 +85,7 @@ export abstract class PluginValidator {
         const promise = new Promise<void>((resolve, reject) => {
             // If no selected elements
             if (selected.length < 1) {
+                reject(new Error("There are no selected plugins."));
                 return;
             }
 
@@ -97,6 +98,7 @@ export abstract class PluginValidator {
                         body: `This plugin is already ${ hasToBe ? "enabled" : "disabled" }, click close to procceed.`,
                         accept: "Close",
                     });
+                    reject(new Error("The plugin is already in this state."));
                     return;
                 }
 
@@ -120,6 +122,7 @@ export abstract class PluginValidator {
                     body: `These plugins is already ${ hasToBe ? "enabled" : "disabled" }, click close to procceed.`,
                     accept: "Close"
                 });
+                reject(new Error("All plugins are already in that state."));
                 return;
             }
 

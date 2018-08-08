@@ -62,7 +62,7 @@ export class ChangeOrgScope implements OnInit {
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
-        private changeScopeService: ChangeOrgScopeService,
+        private changeOrgScopeService: ChangeOrgScopeService,
         private orgService: OrganisationService
     ) {}
 
@@ -104,7 +104,7 @@ export class ChangeOrgScope implements OnInit {
                 return res;
             })
             .subscribe((res) => {
-                this.changeScopeService.handleCompletedRequest(res);
+                this.changeOrgScopeService.handleCompletedRequest(res);
             }, (error) => {
                 console.error(error);
                 this.alertMessage = error.message;
@@ -124,7 +124,7 @@ export class ChangeOrgScope implements OnInit {
                 return res;
             })
             .subscribe((res) => {
-                this.changeScopeService.handleCompletedRequest(res);
+                this.changeOrgScopeService.handleCompletedRequest(res);
             }, (error) => {
                 console.error(error);
                 this.alertMessage = error.message;
@@ -144,7 +144,7 @@ export class ChangeOrgScope implements OnInit {
                 return res;
             })
             .subscribe((res) => {
-                this.changeScopeService.handleCompletedRequest(res);
+                this.changeOrgScopeService.handleCompletedRequest(res);
             }, (error) => {
                 console.error(error);
                 this.alertMessage = error.message;

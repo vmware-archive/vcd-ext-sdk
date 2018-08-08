@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
 import { RequestTracker } from "../classes/RequestTracker";
-import { Response } from "@angular/http";
 import { Observable } from "rxjs";
+import { HttpResponse } from "@angular/common/http";
+import { getPropsWithout } from "../helpers/object-helpers";
 
 @Injectable()
 export class ChangeOrgScopeService extends RequestTracker<ChangeScopeRequest> {
@@ -11,7 +12,7 @@ export class ChangeOrgScopeService extends RequestTracker<ChangeScopeRequest> {
      * @param url the url of the request
      * @param value the status of the request
      */
-    public handleCompletedRequest(res: Response) {
+    public handleCompletedRequest(res: HttpResponse<any>) {
         const found = this._requests.find((el: ChangeScopeRequest) => {
             return el.reqUrl === res.url;
         });
@@ -28,7 +29,7 @@ export class ChangeOrgScopeService extends RequestTracker<ChangeScopeRequest> {
                 return;
             }
             // Immutable copy
-            const resCopy = Object.assign({}, res);
+            const resCopy = getPropsWithout(["url"], res);
             resCopy.url = urlCheck[1];
             this.handleCompletedRequest(resCopy);
             return;
@@ -38,7 +39,7 @@ export class ChangeOrgScopeService extends RequestTracker<ChangeScopeRequest> {
         this._requestSubject.next(this._requests);
     }
 
-    public executeRequestsInParallel(): Observable<Response> {
+    public executeRequestsInParallel(): Observable<HttpResponse<any>> {
         return Observable.merge(...this._requests.map((req) => req.request));
     }
 }

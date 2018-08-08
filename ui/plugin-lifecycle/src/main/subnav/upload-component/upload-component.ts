@@ -167,7 +167,7 @@ export class UploadComponent implements OnInit {
             // Start upload process
             .uploadPlugin(this.uploadPayload, this.scopeFeedback)
             .subscribe((data) => {
-                if(!data) {
+                if (!data) {
                     this.handleUploadSuccess();
                     this.uploadSubs.unsubscribe();
                     return;

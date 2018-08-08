@@ -43,8 +43,8 @@
         <clr-dg-column>{{ "subnav.status.datagrid.column.vendor" | translate }}</clr-dg-column>
         <clr-dg-column>{{ "subnav.status.datagrid.column.version" | translate }}</clr-dg-column>
         <clr-dg-column>{{ "subnav.status.datagrid.column.desc" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.tenantScoped" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.providerScoped" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "subnav.status.datagrid.column.tenant_scoped" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "subnav.status.datagrid.column.provider_scoped" | translate }}</clr-dg-column>
         <clr-dg-column>{{ "subnav.status.datagrid.column.enabled" | translate }}</clr-dg-column>
 
         <clr-dg-row *clrDgItems="let plugin of plugins" [clrDgItem]="plugin">
@@ -52,8 +52,8 @@
             <clr-dg-cell>{{ plugin.vendor }}</clr-dg-cell>
             <clr-dg-cell>{{ plugin.version }}</clr-dg-cell>
             <clr-dg-cell>{{ plugin.description }}</clr-dg-cell>
-            <clr-dg-cell>{{ plugin.tenantScoped }}</clr-dg-cell>
-            <clr-dg-cell>{{ plugin.providerScoped }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.tenant_scoped }}</clr-dg-cell>
+            <clr-dg-cell>{{ plugin.provider_scoped }}</clr-dg-cell>
             <clr-dg-cell>{{ plugin.enabled }}</clr-dg-cell>
         </clr-dg-row>
     </clr-datagrid>

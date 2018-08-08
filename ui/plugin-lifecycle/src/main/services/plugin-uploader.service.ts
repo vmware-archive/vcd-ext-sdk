@@ -1,22 +1,22 @@
 import { Injectable } from "@angular/core";
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { PluginManifest, PluginFileDetails } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
-import { AuthTokenHolderService } from "@vcd-ui/common";
+import { UiPluginMetadata } from "@vcd/bindings/vcloud/rest/openapi/model";
+import { VcdApiClient } from "@vcd/sdk";
+import { HttpResponse } from "@angular/common/http";
 
 @Injectable()
 export class PluginUploaderService {
     constructor(
-        private http: Http,
-        private authService: AuthTokenHolderService
+        private client: VcdApiClient
     ) {}
 
     /**
      * Extract useful data from the plugins manifest.
      * @param manifest parsed version of the plugins manifest
      */
-    public proccessManifest(manifest: PluginManifest): Promise<string> {
-        const promise = new Promise<string>((resolve, reject) => {
+    public proccessManifest(manifest: PluginManifest): Promise<UiPluginMetadata> {
+        const promise = new Promise<UiPluginMetadata>((resolve, reject) => {
             // Validate the manifest
             const isValidManifest = PluginValidator.validateManifestFields(manifest);
 
@@ -28,8 +28,7 @@ export class PluginUploaderService {
                 return;
             }
 
-            // Create data which will be used to register the plugin
-            const pluginDesc: string = JSON.stringify({
+            resolve({
                 "pluginName": manifest.name,
                 "vendor": manifest.vendor,
                 "description": manifest.description,
@@ -40,7 +39,6 @@ export class PluginUploaderService {
                 "provider_scoped": manifest.scope.indexOf("service-provider") !== -1,
                 "enabled": true
             });
-            resolve(pluginDesc);
         });
         return promise;
     }
@@ -50,37 +48,13 @@ export class PluginUploaderService {
      * @param plugin specific plugin
      * @param url the base url where the request will be made
      */
-    public enablePluginUpload(plugin: { id: string, file: File }, url: string): Promise<Response> {
-        // Create headers
-        const headers = new Headers();
-        headers.append("Accept", "application/json");
-        headers.append("Content-Type", "application/json");
-        headers.append("x-vcloud-authorization", this.authService.token);
-        const opts = new RequestOptions();
-        opts.headers = headers;
-
+    public enablePluginUpload(plugin: { id: string, file: File }, url: string): Promise<HttpResponse<any>> {
         // File size has to be in bytes
         const body: PluginFileDetails = {
             fileName: plugin.file.name,
             size: plugin.file.size
         };
 
-        return this.http.post(`${url}/cloudapi/extensions/ui/${plugin.id}/plugin`, JSON.stringify(body), opts).toPromise();
-    }
-
-    /**
-     * Upload the whole zip file.
-     * @param transferLink the url where the plugin has to be uploaded
-     * @param file the zip file
-     */
-    public sendZip(transferLink: string, file: File): Promise<Response> {
-        // Create headers
-        const headers = new Headers();
-        headers.append("Content-Type", "application/zip");
-        headers.append("x-vcloud-authorization", this.authService.token);
-        const opts = new RequestOptions();
-        opts.headers = headers;
-
-        return this.http.put(transferLink, file, opts).toPromise();
+        return this.client.createSyncWithObserveResponse<any>(`cloudapi/extensions/ui/${plugin.id}/plugin`, JSON.stringify(body)).toPromise();
     }
 }
