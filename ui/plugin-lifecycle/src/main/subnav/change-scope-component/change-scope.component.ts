@@ -5,7 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { ChangeScopeService } from "../../services/change-scope.service";
 import { PluginManager } from "../../services/plugin-manager.service";
-import { Plugin } from "../../interfaces/Plugin";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Component({
     selector: "vcd-change-scope",
@@ -46,8 +46,8 @@ export class ChangeScope implements OnInit {
         this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
             // Already in state
             if (
-                (selectedPlugin.tenant_scoped === (this.feedback.scope.indexOf("tenant") !== -1)) &&
-                (selectedPlugin.provider_scoped === (this.feedback.scope.indexOf("service-provider") !== -1))
+                (selectedPlugin.tenantScoped === (this.feedback.scope.indexOf("tenant") !== -1)) &&
+                (selectedPlugin.providerScoped === (this.feedback.scope.indexOf("service-provider") !== -1))
             ) {
                 return;
             }

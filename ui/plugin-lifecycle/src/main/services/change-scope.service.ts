@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { Plugin, PluginDesc } from "../interfaces/Plugin";
 import { Observable } from "rxjs";
 import { AuthTokenHolderService } from "@vcd-ui/common";
+import { UiPluginMetadataResponse, UiPluginMetadata } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Injectable()
 export class ChangeScopeService {
@@ -17,7 +17,7 @@ export class ChangeScopeService {
      * @param scope list of scopes / ['service-scope', 'tenant'] /
      * @param url the base url where will be made the request
      */
-    public changeScope(plugins: Plugin[], scope: string[], url: string): Observable<Response> {
+    public changeScope(plugins: UiPluginMetadataResponse[], scope: string[], url: string): Observable<Response> {
         return this.changeScopeForEach(plugins, scope, url);
     }
 
@@ -27,7 +27,7 @@ export class ChangeScopeService {
      * @param scope list of scopes / ['service-scope', 'tenant'] /
      * @param url the base url where will be made the request
      */
-    private changeScopeForEach(plugins: Plugin[], scope: string[], url: string): Observable<Response> {
+    private changeScopeForEach(plugins: UiPluginMetadataResponse[], scope: string[], url: string): Observable<Response> {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -40,17 +40,17 @@ export class ChangeScopeService {
         const updateProcesses: Observable<Response>[] = [];
 
         // Loop through the list of plugins
-        plugins.forEach((pluginToUpdate: Plugin) => {
+        plugins.forEach((pluginToUpdate: UiPluginMetadataResponse) => {
             // Create new plugin payload
-            const newPluginData: PluginDesc = {
+            const newPluginData: UiPluginMetadata = {
                 pluginName: pluginToUpdate.pluginName,
                 vendor: pluginToUpdate.vendor,
                 description: pluginToUpdate.description,
                 version: pluginToUpdate.version,
                 license: pluginToUpdate.license,
                 link: pluginToUpdate.link,
-                tenant_scoped: scope.indexOf("tenant") !== -1,
-                provider_scoped: scope.indexOf("service-provider") !== -1,
+                tenantScoped: scope.indexOf("tenant") !== -1,
+                providerScoped: scope.indexOf("service-provider") !== -1,
                 enabled: pluginToUpdate.enabled
             };
 

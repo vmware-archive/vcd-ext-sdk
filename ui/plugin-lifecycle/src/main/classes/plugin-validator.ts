@@ -1,5 +1,6 @@
-import { Plugin, PluginManifest } from "../interfaces/Plugin";
+import { PluginManifest } from "../interfaces/Plugin";
 import { Subscription } from "rxjs";
+import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 interface ValidationResult {
     success: boolean;
@@ -14,9 +15,9 @@ export abstract class PluginValidator {
      * @param pluginName name of the plugin.
      * @param plugins the list of plugins in which will be checked for the provided plugin.
      */
-    public static checkForDuplications(pluginName: string, plugins: Plugin[]) {
+    public static checkForDuplications(pluginName: string, plugins: UiPluginMetadataResponse[]) {
         const promise = new Promise<boolean>((resolve, reject) => {
-            const search = plugins.find((plugin: Plugin) => {
+            const search = plugins.find((plugin: UiPluginMetadataResponse) => {
                 return plugin.pluginName === pluginName;
             });
 
@@ -80,7 +81,7 @@ export abstract class PluginValidator {
      * @param hasToBe boolean value which indicates is this enable or disable action
      * @param openModalFn function which opens the modal in status component
      */
-    public static validateDisableEnableAction(selected: Plugin[], hasToBe: boolean, openModalFn: any): Promise<void> {
+    public static validateDisableEnableAction(selected: UiPluginMetadataResponse[], hasToBe: boolean, openModalFn: any): Promise<void> {
         const promise = new Promise<void>((resolve, reject) => {
             // If no selected elements
             if (selected.length < 1) {
@@ -104,8 +105,8 @@ export abstract class PluginValidator {
             }
 
             // If selected elements are already in this state
-            const alreadyInState: Plugin[] = [];
-            selected.forEach((plugin: Plugin) => {
+            const alreadyInState: UiPluginMetadataResponse[] = [];
+            selected.forEach((plugin: UiPluginMetadataResponse) => {
                 if (plugin.enabled === hasToBe) {
                     alreadyInState.push(plugin);
                     return;
