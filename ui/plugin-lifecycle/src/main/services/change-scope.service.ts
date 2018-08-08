@@ -3,6 +3,7 @@ import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs";
 import { AuthTokenHolderService } from "@vcd-ui/common";
 import { UiPluginMetadataResponse, UiPluginMetadata } from "@vcd/bindings/vcloud/rest/openapi/model";
+import { PluginDesc } from "../interfaces/Plugin";
 
 @Injectable()
 export class ChangeScopeService {
@@ -42,15 +43,15 @@ export class ChangeScopeService {
         // Loop through the list of plugins
         plugins.forEach((pluginToUpdate: UiPluginMetadataResponse) => {
             // Create new plugin payload
-            const newPluginData: UiPluginMetadata = {
+            const newPluginData: PluginDesc = {
                 pluginName: pluginToUpdate.pluginName,
                 vendor: pluginToUpdate.vendor,
                 description: pluginToUpdate.description,
                 version: pluginToUpdate.version,
                 license: pluginToUpdate.license,
                 link: pluginToUpdate.link,
-                tenantScoped: scope.indexOf("tenant") !== -1,
-                providerScoped: scope.indexOf("service-provider") !== -1,
+                tenant_scoped: scope.indexOf("tenant") !== -1,
+                provider_scoped: scope.indexOf("service-provider") !== -1,
                 enabled: pluginToUpdate.enabled
             };
 

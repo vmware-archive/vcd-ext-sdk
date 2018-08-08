@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { AuthTokenHolderService } from "@vcd-ui/common";
 import { UiPluginMetadataResponse, UiPluginMetadata } from "@vcd/bindings/vcloud/rest/openapi/model";
+import { PluginDesc } from "../interfaces/Plugin";
 
 interface PluginUpdateOptions {
     tenant_scoped: boolean;
@@ -67,15 +68,15 @@ export class DisableEnablePluginService {
         const updateProcesses: Promise<Response>[] = [];
 
         plugins.forEach((pluginToUpdate: UiPluginMetadataResponse) => {
-            const newPluginData: UiPluginMetadata = {
+            const newPluginData: PluginDesc = {
                 pluginName: pluginToUpdate.pluginName,
                 vendor: pluginToUpdate.vendor,
                 description: pluginToUpdate.description,
                 version: pluginToUpdate.version,
                 license: pluginToUpdate.license,
                 link: pluginToUpdate.link,
-                tenantScoped: options.tenant_scoped !== null ? options.tenant_scoped : pluginToUpdate.tenantScoped,
-                providerScoped: options.provider_scoped !== null ? options.provider_scoped : pluginToUpdate.providerScoped,
+                tenant_scoped: options.tenant_scoped !== null ? options.tenant_scoped : pluginToUpdate.tenantScoped,
+                provider_scoped: options.provider_scoped !== null ? options.provider_scoped : pluginToUpdate.providerScoped,
                 enabled: options.enabled !== null ? options.enabled : pluginToUpdate.enabled
             };
 
