@@ -7,11 +7,9 @@ import sass from 'node-sass'
 import tsc from 'typescript'
 
 export default {
-  input: 'src/main/index.ts',
-  output: {
-    file: 'dist/bundle.js',
-    format: 'amd'
-  },
+  entry: 'src/main/index.ts',
+  format: 'amd',
+  dest: 'dist/bundle.js',
   external: [
     'rxjs',
     'rxjs/operators',
@@ -30,6 +28,7 @@ export default {
     '@ngrx/core',
     '@ngrx/store',
     '@ngrx/effects',
+    '@vcd-ui/common',
     'clarity-angular',
     'reselect'
   ],
@@ -44,7 +43,7 @@ export default {
     }),
     typescript({ typescript: tsc }),
     resolve({
-      only: [ '@vcd/bindings', '@vcd/sdk' ]
+      only: [ '@vcd/bindings', '@vcd/sdk', '@vcd/http-transfer-service' ]
     }),
     commonjs()
   ]
