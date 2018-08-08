@@ -24,7 +24,7 @@ import { PluginPublisher } from "./services/plugin-publisher.service";
 import { CapitalizeFirstPipe } from "./pipes/capitalizefirst/capitalizefirst.pipe";
 import { ChangeScope } from "./subnav/change-scope-component/change-scope.component";
 import { ChooseScope } from "./subnav/choose-scope-component/choose-scope.component";
-import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { ErrorNotifyerComponent } from "./subnav/error-notifyer-component/error-notifyer.component";
 import { VcdHttpTransferServiceModule } from "@vcd/http-transfer-service";
 import { VcdApiClient, VcdSdkModule } from "@vcd/sdk";
