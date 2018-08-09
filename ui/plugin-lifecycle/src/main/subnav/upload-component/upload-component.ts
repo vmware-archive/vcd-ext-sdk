@@ -166,20 +166,28 @@ export class UploadComponent implements OnInit {
         this.uploadSubs = this.pluginManager
             // Start upload process
             .uploadPlugin(this.uploadPayload, this.scopeFeedback)
-            .subscribe((res) => {
-                const subs = res.subscribe((result) => {
-                    console.log(result);
+            .subscribe((data) => {
+                if(!data) {
+                    this.handleUploadSuccess();
+                    this.uploadSubs.unsubscribe();
+                    return;
+                }
+
+                const subs = data.subscribe((res) => {
+                    console.log(res);
                 }, (error) => {
                     console.error(error);
                     subs.unsubscribe();
                     this.uploadSubs.unsubscribe();
                 }, () => {
+                    this.handleUploadSuccess();
                     subs.unsubscribe();
                     this.uploadSubs.unsubscribe();
-                    this.handleUploadSuccess();
                 });
 
-            }, this.handleUploadError);
+            }, this.handleUploadError, () => {
+                console.log("UPLOAD COMPLETED!");
+            });
     }
 
     /**
@@ -206,6 +214,8 @@ export class UploadComponent implements OnInit {
         this.scopeFeedback.reset();
         // Disable next button into the wizard
         this.canGoNext = false;
+        // Reset publish the plugin flag
+        this.publishing = false;
     }
 
     /**
