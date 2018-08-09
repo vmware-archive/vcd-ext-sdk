@@ -180,7 +180,6 @@ export class UploadComponent implements OnInit {
                     this.handleUploadSuccess();
                     subs.unsubscribe();
                     this.uploadSubs.unsubscribe();
-                    this.handleUploadSuccess();
                 });
 
             }, this.handleUploadError, () => {
