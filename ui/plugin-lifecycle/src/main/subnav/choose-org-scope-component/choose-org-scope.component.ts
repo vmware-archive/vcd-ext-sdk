@@ -13,6 +13,7 @@ import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 })
 export class ChooseOrgScope implements OnInit {
     @Input() listOfOrgsPerPlugin: ChangeScopeItem[];
+    @Input() option: string;
     @Input() feedback: ScopeFeedback;
     @Output() feedbackChange = new EventEmitter<ScopeFeedback>();
 
