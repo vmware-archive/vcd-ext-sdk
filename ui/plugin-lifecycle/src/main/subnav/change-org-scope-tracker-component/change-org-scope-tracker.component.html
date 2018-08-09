@@ -1,15 +1,15 @@
 <div class="change-org-scope-tracker" *ngIf="open">
     <clr-modal [clrModalOpen]="open" [clrModalClosable]="false" [clrModalSize]="'lg'">
-        <h3 class="modal-title">Change Scope Requests</h3>
+        <h3 class="modal-title">{{ "subnav.change-ort-scope-tracker.modal.title" | translate }}</h3>
         <div class="modal-body">
             <clr-datagrid>
                 <!-- PLACEHOLDER -->
-                <clr-dg-placeholder>We couldn't find any plugins...</clr-dg-placeholder>
+                <clr-dg-placeholder>{{ "subnav.change-ort-scope-tracker.org.notFoundMessage" | translate }}</clr-dg-placeholder>
                 <!-- END PLACEHOLDER -->
 
-                <clr-dg-column>Plugin Name</clr-dg-column>
-                <clr-dg-column>Action</clr-dg-column>
-                <clr-dg-column>Status</clr-dg-column>
+                <clr-dg-column>{{ "subnav.change-ort-scope-tracker.datagrid.column.pluginName" | translate }}</clr-dg-column>
+                <clr-dg-column>{{ "subnav.change-ort-scope-tracker.datagrid.column.action" | translate }}</clr-dg-column>
+                <clr-dg-column>{{ "subnav.change-ort-scope-tracker.datagrid.column.status" | translate }}</clr-dg-column>
 
                 <clr-dg-row *clrDgItems="let req of requests" [clrDgItem]="req">
                     <clr-dg-cell>{{ req.pluginName }}</clr-dg-cell>
@@ -24,7 +24,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onClose()">
-                Close
+                {{ "subnav.change-ort-scope-tracker.modal.footer.close.btn" | translate }}
             </button>
         </div>
     </clr-modal>
