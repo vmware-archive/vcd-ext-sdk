@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
 import { RequestTracker } from "../classes/RequestTracker";
 import { Response } from "@angular/http";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class ChangeOrgScopeService extends RequestTracker<ChangeScopeRequest> {
@@ -35,5 +36,9 @@ export class ChangeOrgScopeService extends RequestTracker<ChangeScopeRequest> {
 
         this._requests[index].status = res.status !== 200 ? false : true;
         this._requestSubject.next(this._requests);
+    }
+
+    public executeRequestsInParallel(): Observable<Response> {
+        return Observable.merge(...this._requests.map((req) => req.request));
     }
 }
