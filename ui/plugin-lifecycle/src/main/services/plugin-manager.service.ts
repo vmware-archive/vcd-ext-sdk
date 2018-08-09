@@ -100,7 +100,7 @@ export class PluginManager {
      * @param plugins list of plugins
      * @param trackScopeChange flag which determines requests like trackable
      */
-    public publishPluginForAllTenants(trackScopeChange: boolean): ChangeScopeRequestTo[] {
+    public publishPluginForAllTenants(trackScopeChange: boolean): Observable<Response> {
         return this.pluginPublisher.publishPluginForAllTenants(this.selectedPlugins, this._baseUrl, trackScopeChange);
     }
 
@@ -109,14 +109,14 @@ export class PluginManager {
      * @param plugins list of plugins
      * @param trackScopeChange flag which determines requests like trackable
      */
-    public unpublishPluginForAllTenants(trackScopeChange: boolean): ChangeScopeRequestTo[] {
+    public unpublishPluginForAllTenants(trackScopeChange: boolean): Observable<Response> {
         return this.pluginPublisher.unpublishPluginForAllTenants(this.selectedPlugins, this._baseUrl, trackScopeChange);
     }
 
     /**
      * Publish or unpublish list of plugins.
      */
-    public handleMixedScope(plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean): ChangeScopeRequestTo[] {
+    public handleMixedScope(plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean): Observable<Response> {
         return this.pluginPublisher.handleMixedScope(plugins, scopeFeedback, trackScopeChange, this._baseUrl);
     }
 
@@ -158,14 +158,14 @@ export class PluginManager {
      * @param payload the data of the plugin
      * @param scopeFeedback the data which describes the scope of the plugin which will be uploaded
      */
-    public uploadPlugin(payload: UploadPayload, scopeFeedback: ScopeFeedback): Observable<ChangeScopeRequestTo[]> {
+    public uploadPlugin(payload: UploadPayload, scopeFeedback: ScopeFeedback): Observable<Observable<Response>> {
         // Create data used to register it
         const PLUGIN: any = {
             id: null,
             file: null
         };
 
-        const observable = new Observable<ChangeScopeRequestTo[]>((observer) => {
+        const observable = new Observable<Observable<Response>>((observer) => {
             // Extract useful data from the manifest
             this.pluginUploaderService.proccessManifest(payload.manifest)
             .then((pluginDesc) => {

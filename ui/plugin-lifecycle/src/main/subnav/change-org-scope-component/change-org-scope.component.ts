@@ -96,77 +96,62 @@ export class ChangeOrgScope implements OnInit {
      */
     public onUpdate(): void {
         if (this.feedback.forAllOrgs && this.action === "publish") {
-            // Reset values
-            this.beforeUpdate();
-
-            const changeScopeRequests: Observable<Response>[] = [];
-            this.pluginManager.publishPluginForAllTenants(true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
-                changeScopeRequests.push(changeScopeReq.req);
+            const subs = this.pluginManager.publishPluginForAllTenants(true).first()
+            .map((res, index) => {
+                if (index === 0) {
+                    this.beforeUpdate();
+                }
+                return res;
+            })
+            .subscribe((res) => {
+                this.changeScopeService.handleCompletedRequest(res);
+            }, (error) => {
+                console.error(error);
+                this.alertMessage = error.message;
+                this.alertClasses = "alert-danger";
+            }, () => {
+                subs.unsubscribe();
             });
-            const subs = Observable.merge(...changeScopeRequests)
-                .subscribe((res) => {
-                    if (res.status !== 200) {
-                        this.changeScopeService.changeReqStatusTo(res.url, false);
-                        return;
-                    }
-
-                    this.changeScopeService.changeReqStatusTo(res.url, true);
-                }, (error) => {
-                    this.alertMessage = error.message;
-                    this.alertClasses = "alert-danger";
-                }, () => {
-                    subs.unsubscribe();
-                });
             return;
         }
 
         if (this.feedback.forAllOrgs && this.action === "unpublish") {
-            // Reset values
-            this.beforeUpdate();
-
-            const changeScopeRequests: Observable<Response>[] = [];
-            this.pluginManager.unpublishPluginForAllTenants(true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
-                changeScopeRequests.push(changeScopeReq.req);
+            const subs = this.pluginManager.unpublishPluginForAllTenants(true)
+            .map((res, index) => {
+                if (index === 0) {
+                    this.beforeUpdate();
+                }
+                return res;
+            })
+            .subscribe((res) => {
+                this.changeScopeService.handleCompletedRequest(res);
+            }, (error) => {
+                console.error(error);
+                this.alertMessage = error.message;
+                this.alertClasses = "alert-danger";
+            }, () => {
+                subs.unsubscribe();
             });
-            const subs = Observable.merge(...changeScopeRequests)
-                .subscribe((res) => {
-                    if (res.status !== 200) {
-                        this.changeScopeService.changeReqStatusTo(res.url, false);
-                        return;
-                    }
-
-                    this.changeScopeService.changeReqStatusTo(res.url, true);
-                }, (error) => {
-                    this.alertMessage = error.message;
-                    this.alertClasses = "alert-danger";
-                }, () => {
-                    subs.unsubscribe();
-                });
             return;
         }
 
         if (!this.feedback.forAllOrgs && this.feedback.data.length > 0) {
-            // Reset values
-            this.beforeUpdate();
-
-            const changeScopeRequests: Observable<Response>[] = [];
-            this.pluginManager.handleMixedScope(this.plugins, this.feedback, true).forEach((changeScopeReq: ChangeScopeRequestTo) => {
-                changeScopeRequests.push(changeScopeReq.req);
+            const subs = this.pluginManager.handleMixedScope(this.plugins, this.feedback, true)
+            .map((res, index) => {
+                if (index === 0) {
+                    this.beforeUpdate();
+                }
+                return res;
+            })
+            .subscribe((res) => {
+                this.changeScopeService.handleCompletedRequest(res);
+            }, (error) => {
+                console.error(error);
+                this.alertMessage = error.message;
+                this.alertClasses = "alert-danger";
+            }, () => {
+                subs.unsubscribe();
             });
-            const subs = Observable.merge(...changeScopeRequests)
-                .subscribe((res) => {
-                    if (res.status !== 200) {
-                        this.changeScopeService.changeReqStatusTo(res.url, false);
-                        return;
-                    }
-
-                    this.changeScopeService.changeReqStatusTo(res.url, true);
-                }, (error) => {
-                    this.alertMessage = error.message;
-                    this.alertClasses = "alert-danger";
-                }, () => {
-                    subs.unsubscribe();
-                });
             return;
         }
 

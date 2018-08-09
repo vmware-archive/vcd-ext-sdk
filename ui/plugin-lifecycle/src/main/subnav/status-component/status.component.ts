@@ -307,35 +307,22 @@ export class StatusComponent implements OnInit, OnDestroy {
 
             const changeOrgScopeRequestList: Observable<Response>[] = [];
 
-            this.pluginManager
+            const subscription = this.pluginManager
                 .publishPluginForAllTenants(true)
-                .forEach((reqData: ChangeScopeRequestTo) => {
-                    changeOrgScopeRequestList.push(reqData.req);
+                .subscribe((res) => {
+                    this.changeOrgScopeService.handleCompletedRequest(res);
+                }, (error) => {
+                    console.error(error);
+                    this.endLoading();
+                    this.openErrorNotifyer = true;
+                    this.errorMessage = error.message;
+                    // Notify the service if request complete successfully
+                    subscription.unsubscribe();
+                    onPublishForAllSub.unsubscribe();
+                }, () => {
+                    subscription.unsubscribe();
+                    onPublishForAllSub.unsubscribe();
                 });
-
-                const subscription = Observable.merge(...changeOrgScopeRequestList).subscribe(
-                    (res) => {
-                        if (res.status !== 200) {
-                            this.changeOrgScopeService.changeReqStatusTo(res.url, false);
-                            return;
-                        }
-
-                        // Notify the service if request complete successfully
-                        this.changeOrgScopeService.changeReqStatusTo(res.url, true);
-                    },
-                    (error) => {
-                        this.endLoading();
-                        this.openErrorNotifyer = true;
-                        this.errorMessage = error.message;
-                        // Notify the service if request complete successfully
-                        subscription.unsubscribe();
-                        onPublishForAllSub.unsubscribe();
-                    },
-                    () => {
-                        subscription.unsubscribe();
-                        onPublishForAllSub.unsubscribe();
-                    }
-                );
             });
     }
 
@@ -364,39 +351,23 @@ export class StatusComponent implements OnInit, OnDestroy {
             this.errorMessage = null;
             this.showTracker = true;
 
-            const changeOrgScopeRequestList: Observable<Response>[] = [];
-
-            this.pluginManager
+            const subscription = this.pluginManager
                 // Call unpublish all selected plugins
                 .unpublishPluginForAllTenants(true)
-                // Map the requests to change scope service
-                .forEach((reqData: ChangeScopeRequestTo) => {
-                    changeOrgScopeRequestList.push(reqData.req);
+                .subscribe((res) => {
+                    this.changeOrgScopeService.handleCompletedRequest(res);
+                }, (error) => {
+                    console.error(error);
+                    this.endLoading();
+                    this.openErrorNotifyer = true;
+                    this.errorMessage = error.message;
+                    // Notify the service if request complete successfully
+                    subscription.unsubscribe();
+                    onUnpublishForAllSub.unsubscribe();
+                }, () => {
+                    subscription.unsubscribe();
+                    onUnpublishForAllSub.unsubscribe();
                 });
-
-                const subscription = Observable.merge(...changeOrgScopeRequestList).subscribe(
-                    (res) => {
-                        if (res.status !== 200) {
-                            this.changeOrgScopeService.changeReqStatusTo(res.url, false);
-                            return;
-                        }
-
-                        // Notify the service if request complete successfully
-                        this.changeOrgScopeService.changeReqStatusTo(res.url, true);
-                    },
-                    (error) => {
-                        this.endLoading();
-                        this.openErrorNotifyer = true;
-                        this.errorMessage = error.message;
-                        // Notify the service if request complete successfully
-                        subscription.unsubscribe();
-                        onUnpublishForAllSub.unsubscribe();
-                    },
-                    () => {
-                        subscription.unsubscribe();
-                        onUnpublishForAllSub.unsubscribe();
-                    }
-                );
             });
     }
 

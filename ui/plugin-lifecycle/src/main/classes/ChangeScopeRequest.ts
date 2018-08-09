@@ -1,3 +1,6 @@
+import { Observable } from "rxjs";
+import { Response } from "@angular/http";
+
 export class ChangeScopeRequest {
     // Request url
     reqUrl: string;
@@ -7,11 +10,14 @@ export class ChangeScopeRequest {
     status: boolean;
     // Request action
     action: string;
+    // Http request
+    request: Observable<Response>;
 
-    constructor(reqUrl: string, pluginName: string, action: string) {
+    constructor(reqUrl: string, pluginName: string, action: string, req: Observable<Response>) {
         this.reqUrl = reqUrl;
         this.pluginName = pluginName;
         this.action = action;
         this.status = null;
+        this.request = req;
     }
 }

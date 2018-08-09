@@ -166,27 +166,17 @@ export class UploadComponent implements OnInit {
         this.uploadSubs = this.pluginManager
             // Start upload process
             .uploadPlugin(this.uploadPayload, this.scopeFeedback)
-            .subscribe((listOfChangeScopeReq) => {
-                if (!listOfChangeScopeReq || listOfChangeScopeReq.length < 1) {
-                    this.handleUploadSuccess();
-                    this.uploadSubs.unsubscribe();
-                    return;
-                }
-
-                // Load scope setup
-                const changeScopeRequests: Observable<Response>[] = [];
-                listOfChangeScopeReq.forEach((element) => {
-                    changeScopeRequests.push(element.req);
-                });
-
-                // Execute scope requests in parallel
-                const subs = Observable.merge(...changeScopeRequests).subscribe(() => {
-                    this.handleUploadSuccess();
-                }, this.handleUploadError.bind(this),
-                () => {
-                    // Completed
+            .subscribe((res) => {
+                const subs = res.subscribe((result) => {
+                    console.log(result);
+                }, (error) => {
+                    console.error(error);
                     subs.unsubscribe();
                     this.uploadSubs.unsubscribe();
+                }, () => {
+                    subs.unsubscribe();
+                    this.uploadSubs.unsubscribe();
+                    this.handleUploadSuccess();
                 });
 
             }, this.handleUploadError);

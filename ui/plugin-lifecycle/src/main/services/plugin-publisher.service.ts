@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs";
-import { Plugin, ChangeScopePlugin } from "../interfaces/Plugin";
+import { ChangeScopePlugin } from "../interfaces/Plugin";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
 import { ChangeOrgScopeService } from "./change-org-scope.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
@@ -27,7 +27,7 @@ export class PluginPublisher {
      */
     private togglePluginStateForAllTenants(
         plugins: UiPluginMetadataResponse[], url: string, hasToBe: string, trackScopeChange: boolean = false
-    ): ChangeScopeRequestTo[] {
+    ): Observable<Response> {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -35,25 +35,22 @@ export class PluginPublisher {
         const opts = new RequestOptions();
         opts.headers = headers;
 
-        // Collect the change scope processes
-        const setScopeProcesses: ChangeScopeRequestTo[] = [];
-
         plugins.forEach((pluginToUpdate) => {
             // Create request url
             const REQ_URL = `${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${hasToBe}`;
+            const REQ = this.http.post(REQ_URL, null, opts);
 
             // Track the request if needed
             if (trackScopeChange) {
-                this.changeOrgScopeService.addChangeScopeReq(new ChangeScopeRequest(REQ_URL, pluginToUpdate.pluginName, `${hasToBe}`));
+                this.changeOrgScopeService.addChangeScopeReq(new ChangeScopeRequest(
+                    REQ_URL,
+                    pluginToUpdate.pluginName,
+                    `${hasToBe}`,
+                    REQ
+                ));
             }
-
-            // Add the request into the list of processes
-            setScopeProcesses.push({
-                url: REQ_URL,
-                req: this.http.post(REQ_URL, null, opts)
-            });
         });
-        return setScopeProcesses;
+        return this.changeOrgScopeService.executeRequestsInParallel();
     }
 
     /**
@@ -66,7 +63,7 @@ export class PluginPublisher {
      */
     private togglePluginStateForSpecTenants(
         plugin: ChangeScopePlugin, changeScopeItems: ChangeScopeItem[], trackScopeChange: boolean, url: string, hasToBe: string
-    ): ChangeScopeRequestTo {
+    ): Observable<Response> {
         // Create headers
         const headers = new Headers();
         headers.append("Accept", "application/json");
@@ -84,18 +81,19 @@ export class PluginPublisher {
 
         // Create req url
         const REQ_URL = `${url}/cloudapi/extensions/ui/${plugin.id}/tenants/${hasToBe}`;
+        const REQ = this.http.post(REQ_URL, body, opts);
 
         // Track the request if needed
         if (trackScopeChange) {
-            this.changeOrgScopeService.addChangeScopeReq(
-                new ChangeScopeRequest(REQ_URL, plugin.pluginName ? plugin.pluginName : plugin.id, `${hasToBe}`)
-            );
+            this.changeOrgScopeService.addChangeScopeReq(new ChangeScopeRequest(
+                REQ_URL,
+                plugin.pluginName ? plugin.pluginName : plugin.id,
+                `${hasToBe}`,
+                REQ
+            ));
         }
 
-        return {
-            url: REQ_URL,
-            req: this.http.post(REQ_URL, body, opts)
-        };
+        return this.changeOrgScopeService.executeRequestsInParallel();
     }
 
     /**
@@ -104,7 +102,7 @@ export class PluginPublisher {
      * @param url the base url where the request will be made
      * @param trackScopeChange determinate will this request be tracked
      */
-    public publishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
+    public publishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): Observable<Response> {
         return this.togglePluginStateForAllTenants(plugins, url, "publishAll", trackScopeChange);
     }
 
@@ -114,7 +112,7 @@ export class PluginPublisher {
      * @param url the base url where the request will be made
      * @param trackScopeChange determinate will this request be tracked
      */
-    public unpublishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): ChangeScopeRequestTo[] {
+    public unpublishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): Observable<Response> {
         return this.togglePluginStateForAllTenants(plugins, url, "unpublishAll", trackScopeChange);
     }
 
@@ -127,9 +125,9 @@ export class PluginPublisher {
      */
     public handleMixedScope(
         plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean, url: string
-    ): ChangeScopeRequestTo[] {
+    ): Observable<Response> {
         // Create the result object with the url of the request and the request
-        const result: { url: string, req: Observable<Response> }[] = [];
+        const result: Observable<Response>[] = [];
 
         plugins.forEach((selectedPlugin: ChangeScopePlugin) => {
             // Extract the data for this plugin only from scope feedback
@@ -157,6 +155,6 @@ export class PluginPublisher {
             }
         });
 
-        return result;
+        return Observable.merge(...result);
     }
 }
