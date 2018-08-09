@@ -1,6 +1,6 @@
 <div class="choose-scope">
     <clr-modal [clrModalOpen]="open" [clrModalClosable]="false" [clrModalSize]="'lg'">
-        <h3 class="modal-title">Change plugin scope</h3>
+        <h3 class="modal-title">{{ "subnav.change-scope.modal.title" | translate }}</h3>
         <div class="modal-body">
             <!-- Alert -->
             <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alertClasses"></vcd-alert>
@@ -10,10 +10,10 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onClose()">
-                Close
+                {{ "subnav.change-scope.modal.footer.close.btn" | translate }}
             </button>
             <button type="button" class="btn btn-primary" (click)="changeScope()">
-                Change Scope
+                {{ "subnav.change-scope.modal.footer.changeScope.btn" | translate }}
             </button>
         </div>
     </clr-modal>
