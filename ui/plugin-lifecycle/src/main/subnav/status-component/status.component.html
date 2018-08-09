@@ -12,8 +12,8 @@
             </div>
 
             <div class="btn-group" *ngIf="selected.length > 0">
-                <button type="button" class="btn btn-sm btn-link" (click)="onDisable()">Disable</button>
-                <button type="button" class="btn btn-sm btn-link" (click)="onEnable()">Enable</button>
+                <button *ngIf="canDisable" type="button" class="btn btn-sm btn-link" (click)="onDisable()">Disable</button>
+                <button *ngIf="canEnable" type="button" class="btn btn-sm btn-link" (click)="onEnable()">Enable</button>
                 <button type="button" class="btn btn-sm btn-link" (click)="onDelete()">Delete</button>
 
                 <clr-dropdown>
@@ -45,7 +45,7 @@
         <clr-dg-column>Description</clr-dg-column>
         <clr-dg-column>Tenant Scoped</clr-dg-column>
         <clr-dg-column>Provider Scoped</clr-dg-column>
-        <clr-dg-column>Available</clr-dg-column>
+        <clr-dg-column>Enabled</clr-dg-column>
 
         <clr-dg-row *clrDgItems="let plugin of plugins" [clrDgItem]="plugin">
             <clr-dg-cell>{{ plugin.pluginName }}</clr-dg-cell>

@@ -32,6 +32,11 @@ export class StatusComponent implements OnInit, OnDestroy {
     public openChangeScope = false;
     public errorMessage: string;
     public openErrorNotifyer: boolean;
+    // Flag which toggles the enable button
+    public canEnable: boolean;
+    // Flag which toggles the disable button
+    public canDisable: boolean;
+
     public watchPluginListSub: Subscription;
 
     public modalSubject = new Subject<SubjectModalData>();
@@ -61,6 +66,40 @@ export class StatusComponent implements OnInit, OnDestroy {
     set selected(plugins: UiPluginMetadataResponse[]) {
         this._selected = plugins;
         this.pluginManager.selectedPlugins = this._selected;
+
+        this.canEnable = false;
+        this.canDisable = false;
+
+        if (this.selected.length === 1) {
+            if (this.selected[0].enabled === true) {
+                this.canEnable = false;
+            } else {
+                this.canEnable = true;
+            }
+
+            this.canDisable = !this.canEnable;
+            return;
+        }
+
+
+        let countOfEnabled = 0;
+        let countOfDisabled = 0;
+        this.selected.forEach((plugin) => {
+            plugin.enabled === true ? ++countOfEnabled : ++countOfDisabled;
+        });
+
+        if (countOfEnabled === 0) {
+            this.canEnable = true;
+            return;
+        }
+
+        if (countOfDisabled === 0) {
+            this.canDisable = true;
+            return;
+        }
+
+        this.canEnable = true;
+        this.canDisable = true;
     }
 
     public getOpened(): boolean {
@@ -304,8 +343,6 @@ export class StatusComponent implements OnInit, OnDestroy {
 
             this.errorMessage = null;
             this.showTracker = true;
-
-            const changeOrgScopeRequestList: Observable<Response>[] = [];
 
             const subscription = this.pluginManager
                 .publishPluginForAllTenants(true)
