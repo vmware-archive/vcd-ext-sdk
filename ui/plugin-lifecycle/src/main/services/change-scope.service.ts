@@ -3,8 +3,6 @@ import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs";
 import { AuthTokenHolderService } from "@vcd-ui/common";
 import { UiPluginMetadataResponse, UiPluginMetadata } from "@vcd/bindings/vcloud/rest/openapi/model";
-import { PluginDesc } from "../interfaces/Plugin";
-
 @Injectable()
 export class ChangeScopeService {
     constructor(
@@ -43,7 +41,7 @@ export class ChangeScopeService {
         // Loop through the list of plugins
         plugins.forEach((pluginToUpdate: UiPluginMetadataResponse) => {
             // Create new plugin payload
-            const newPluginData: PluginDesc = {
+            const newPluginData: UiPluginMetadata = {
                 pluginName: pluginToUpdate.pluginName,
                 vendor: pluginToUpdate.vendor,
                 description: pluginToUpdate.description,
