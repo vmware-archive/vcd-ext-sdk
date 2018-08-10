@@ -11,8 +11,8 @@ import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
-import { Organisation } from "../../interfaces/Organisation";
-import { OrganisationService } from "../../services/organisation.service";
+import { Tenant } from "../../interfaces/Tenant";
+import { TenantService } from "../../services/tenant.service";
 import { Response} from "@angular/http";
 
 interface InputNativeElement {
@@ -60,7 +60,7 @@ export class UploadComponent implements OnInit {
     // Shows on the sceen when any warning appear
     public alertMessage: string;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
-    public orgs: Organisation[];
+    public orgs: Tenant[];
     // Toggle publish section
     public publishing: boolean;
     // Summary to describe what will be applied on upload
@@ -73,7 +73,7 @@ export class UploadComponent implements OnInit {
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         public pluginManager: PluginManager,
         public zipManager: ZipManager,
-        public orgService: OrganisationService
+        public orgService: TenantService
     ) { }
 
     public ngOnInit() {
@@ -266,7 +266,7 @@ export class UploadComponent implements OnInit {
     }
 
     /**
-     * Load the list of organisations.
+     * Load the list of tenants.
      */
     public loadListOfOrgsPerPlugin(): void {
         this.loadOrgs();
@@ -274,7 +274,7 @@ export class UploadComponent implements OnInit {
     }
 
     /**
-     * Load all organisations.
+     * Load all tenants.
      */
     public loadOrgs(): void {
         this.orgs = this.orgService.orgs;
@@ -287,11 +287,11 @@ export class UploadComponent implements OnInit {
     }
 
     /**
-     * Populate the list of organisations.
+     * Populate the list of tenants.
      */
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
-        this.orgs.forEach((org: Organisation) => {
+        this.orgs.forEach((org: Tenant) => {
             this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: this.uploadPayload.manifest.name, action: "publish" });
         });
     }

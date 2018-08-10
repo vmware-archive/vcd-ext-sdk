@@ -8,8 +8,8 @@ import { PluginManager } from "../../services/plugin-manager.service";
 import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
 import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
-import { OrganisationService } from "../../services/organisation.service";
-import { Organisation } from "../../interfaces/Organisation";
+import { TenantService } from "../../services/tenant.service";
+import { Tenant } from "../../interfaces/Tenant";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Component({
@@ -24,7 +24,7 @@ export class ChangeOrgScope implements OnInit {
     public showTracker: boolean;
     public hasToRefresh = false;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
-    public orgs: Organisation[];
+    public orgs: Tenant[];
     public plugins: UiPluginMetadataResponse[];
     public alertMessage: string;
     public alertClasses: string;
@@ -61,7 +61,7 @@ export class ChangeOrgScope implements OnInit {
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
         private changeOrgScopeService: ChangeOrgScopeService,
-        private orgService: OrganisationService
+        private orgService: TenantService
     ) {}
 
     public ngOnInit(): void {
@@ -178,7 +178,7 @@ export class ChangeOrgScope implements OnInit {
     }
 
     /**
-     * Load all organisations plugins and watch them for changes.
+     * Load all tenants plugins and watch them for changes.
      */
     public loadListOfOrgsPerPlugin(): void {
         this.loadOrgs();
@@ -202,11 +202,11 @@ export class ChangeOrgScope implements OnInit {
     }
 
     /**
-     * Observe the lists of organisations and plugins.
+     * Observe the lists of tenants and plugins.
      */
     public watchSourceData(): void {
-        // Merge the plugin and organisation observables
-        this.watchSourceDataSub = Observable.merge<UiPluginMetadataResponse[], Organisation[]>(
+        // Merge the plugin and tenant observables
+        this.watchSourceDataSub = Observable.merge<UiPluginMetadataResponse[], Tenant[]>(
             this.pluginManager.watchSelectedPlugins(),
             this.orgService.watchOrgs()
         ).subscribe((data) => {
@@ -219,9 +219,9 @@ export class ChangeOrgScope implements OnInit {
                 this.plugins = <UiPluginMetadataResponse[]>data;
             }
 
-            // Assaign organisations list
+            // Assaign tenants list
             if (Object.keys(data[0]).indexOf("displayName") !== -1) {
-                this.orgs = <Organisation[]>data;
+                this.orgs = <Tenant[]>data;
             }
 
             // Populate the list with new data
@@ -233,11 +233,11 @@ export class ChangeOrgScope implements OnInit {
     }
 
     /**
-     * Populate the list with organisations and plugins data.
+     * Populate the list with tenants and plugins data.
      */
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
-        this.orgs.forEach((org: Organisation) => {
+        this.orgs.forEach((org: Tenant) => {
             this.plugins.forEach(plugin => {
                 this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: plugin.pluginName, action: this.action });
             });

@@ -6,33 +6,33 @@ import { AuthTokenHolderService } from "@vcd-ui/common";
 import { VcdApiClient } from "@vcd/sdk";
 
 @Injectable()
-export class OrganisationService {
-    private _orgs: Organisation[] = [];
-    private _orgsSubject = new BehaviorSubject<Organisation[]>(this.orgs);
+export class TenantService {
+    private _orgs: Tenant[] = [];
+    private _orgsSubject = new BehaviorSubject<Tenant[]>(this.orgs);
 
     constructor(
         private authService: AuthTokenHolderService,
         private pluginManager: PluginManager,
         private client: VcdApiClient
     ) {
-        // Load the organisations
+        // Load the tenants
         this.loadOrgs(this.pluginManager.baseUrl);
     }
 
-    get orgs(): Organisation[] {
+    get orgs(): Tenant[] {
         return this._orgs;
     }
 
-    set orgs(orgs: Organisation[]) {
+    set orgs(orgs: Tenant[]) {
         this._orgs = orgs;
         this._orgsSubject.next(this.orgs);
     }
 
     /**
-     * Add new organisation into the list.
-     * @param org organisation which will be added into the list
+     * Add new tenant into the list.
+     * @param org tenant which will be added into the list
      */
-    private addOrg(org: Organisation) {
+    private addOrg(org: Tenant) {
         Object.keys(org).forEach((key) => {
             try {
                 org[key] = JSON.parse(org[key]);
@@ -46,14 +46,14 @@ export class OrganisationService {
     }
 
     /**
-     * Observe the list of organisations.
+     * Observe the list of tenants.
      */
-    public watchOrgs(): Observable<Organisation[]> {
+    public watchOrgs(): Observable<Tenant[]> {
         return this._orgsSubject.asObservable();
     }
 
     /**
-     * Refresh the list of organisations.
+     * Refresh the list of tenants.
      */
     public refresh() {
         this.loadOrgs(this.pluginManager.baseUrl);
@@ -73,7 +73,7 @@ export class OrganisationService {
     }
 
     /**
-     * Creates a request to take all organisations.
+     * Creates a request to take all tenants.
      * @param baseUrl the url where the request will be made
      * @param token the authorization token
      */

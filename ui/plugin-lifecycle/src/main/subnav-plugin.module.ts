@@ -18,7 +18,7 @@ import { VcdAlert } from "./subnav/alert-component/alert.component";
 import { VcdManifestStackView } from "./subnav/manifest-stack-view-component/manifest-stack-view.component";
 import { ChangeOrgScope } from "./subnav/change-org-scope-component/change-org-scope.component";
 import { ChooseOrgScope } from "./subnav/choose-org-scope-component/choose-org-scope.component";
-import { OrganisationService } from "./services/organisation.service";
+import { TenantService } from "./services/tenant.service";
 import { ChangeOrgScopeTracker } from "./subnav/change-org-scope-tracker-component/change-org-scope-tracker.component";
 import { ChangeOrgScopeService } from "./services/change-org-scope.service";
 import { PluginUploaderService } from "./services/plugin-uploader.service";
@@ -37,9 +37,9 @@ import { PluginService } from "./services/plugin.service";
 const ROUTES: Routes = [
     {
         path: "", component: SubnavComponent, children: [
-            { path: "", redirectTo: "status", pathMatch: "full" },
-            { path: "status", component: StatusComponent },
-            { path: "about", component: AboutComponent }
+            { path: "", redirectTo: "plugin-management", pathMatch: "full" },
+            { path: "plugin-management", component: StatusComponent },
+            { path: "branding", component: AboutComponent }
         ]
     }
 ];
@@ -77,7 +77,7 @@ const ROUTES: Routes = [
     providers: [
         VcdApiClient,
         PluginService,
-        OrganisationService,
+        TenantService,
         ChangeOrgScopeService,
         PluginPublisher,
         PluginUploaderService,

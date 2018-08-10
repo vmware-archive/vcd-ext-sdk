@@ -8,8 +8,8 @@ import {EXTENSION_ASSET_URL} from "@vcd-ui/common";
 })
 export class SubnavComponent {
     navItems: any[] = [
-        {routerLink: "./status", iconShape: "help-info", labelKey: "subnav.menu.status"},
-        {routerLink: "./about", iconShape: "helix", labelKey: "subnav.menu.about"}
+        {routerLink: "./plugin-management", iconShape: "help-info", labelKey: "subnav.menu.status"},
+        {routerLink: "./branding", iconShape: "helix", labelKey: "subnav.menu.about"}
     ];
 
     constructor(@Inject(EXTENSION_ASSET_URL) public assetUrl: string) {}

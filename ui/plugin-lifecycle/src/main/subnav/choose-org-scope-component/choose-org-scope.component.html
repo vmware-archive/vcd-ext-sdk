@@ -26,10 +26,10 @@
                     <div class="overlay" *ngIf="feedback.forAllOrgs"></div>
                     <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
                         <!-- PLACEHOLDER -->
-                        <clr-dg-placeholder>We couldn't find any organisations...</clr-dg-placeholder>
+                        <clr-dg-placeholder>We couldn't find any tenants...</clr-dg-placeholder>
                         <!-- END PLACEHOLDER -->
 
-                        <clr-dg-column>Organisation Name</clr-dg-column>
+                        <clr-dg-column>Tenant Name</clr-dg-column>
                         <clr-dg-column>Plugin Name</clr-dg-column>
 
                         <clr-dg-row *clrDgItems="let item of listOfOrgsPerPlugin" [clrDgItem]="item">

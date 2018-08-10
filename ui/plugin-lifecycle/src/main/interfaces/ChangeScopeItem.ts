@@ -1,5 +1,5 @@
 export interface ChangeScopeItem {
-    // Organisation name
+    // Tenant name
     orgName: string;
     // Plugin name
     plugin: string;

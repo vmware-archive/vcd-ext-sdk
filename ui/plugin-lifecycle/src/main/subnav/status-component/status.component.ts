@@ -295,7 +295,6 @@ export class StatusComponent implements OnInit, OnDestroy {
                     }, () => {
                         // Completed!
                         this.endLoading();
-                        this.openErrorNotifyer = true;
                         deleteSubs.unsubscribe();
                     });
             });
