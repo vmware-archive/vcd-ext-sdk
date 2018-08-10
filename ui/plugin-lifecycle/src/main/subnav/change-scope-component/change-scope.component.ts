@@ -3,7 +3,6 @@
  */
 import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
-import { ChangeScopeService } from "../../services/change-scope.service";
 import { PluginManager } from "../../services/plugin-manager.service";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
@@ -26,7 +25,6 @@ export class ChangeScope implements OnInit {
     @Output() openChange = new EventEmitter<boolean>();
 
     constructor(
-        private changeScopeService: ChangeScopeService,
         private pluginManager: PluginManager
     ) { }
 
@@ -46,8 +44,8 @@ export class ChangeScope implements OnInit {
         this.pluginManager.selectedPlugins.forEach((selectedPlugin: Plugin) => {
             // Already in state
             if (
-                (selectedPlugin.tenantScoped === (this.feedback.scope.indexOf("tenant") !== -1)) &&
-                (selectedPlugin.providerScoped === (this.feedback.scope.indexOf("service-provider") !== -1))
+                (selectedPlugin.tenant_scoped === (this.feedback.scope.indexOf("tenant") !== -1)) &&
+                (selectedPlugin.provider_scoped === (this.feedback.scope.indexOf("service-provider") !== -1))
             ) {
                 return;
             }
