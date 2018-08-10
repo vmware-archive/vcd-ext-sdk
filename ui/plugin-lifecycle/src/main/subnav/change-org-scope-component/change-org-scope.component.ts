@@ -44,6 +44,11 @@ export class ChangeScope implements OnInit {
         return this._open;
     }
 
+    public resetAlertPayload(): void {
+        this.alertMessage = null;
+        this.alertClasses = "alert-info";
+    }
+
     /**
      * Change the scope of the plugin (ex: tenant / provider)
      */
