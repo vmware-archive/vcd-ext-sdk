@@ -212,6 +212,8 @@ export class UploadComponent implements OnInit {
         this.scopeFeedback.reset();
         // Disable next button into the wizard
         this.canGoNext = false;
+        // Reset publish the plugin flag
+        this.publishing = false;
     }
 
     /**
