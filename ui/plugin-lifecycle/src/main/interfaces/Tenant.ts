@@ -1,4 +1,4 @@
-export interface Organisation {
+export interface Tenant {
     canPublishCatalogs: boolean;
     deployedVMQuota: number;
     displayName: string;

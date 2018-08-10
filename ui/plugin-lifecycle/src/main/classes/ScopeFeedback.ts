@@ -1,4 +1,3 @@
-import { Organisation } from "../interfaces/Organisation";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 
 export class ScopeFeedback {
@@ -6,7 +5,7 @@ export class ScopeFeedback {
     private _publishForAllTenants = false;
     // Unpublish for all tenants
     private _unpublishForAllTenants = false;
-    // Is the scope applied for all organisations
+    // Is the scope applied for all tenants
     private _forAllOrgs = false;
 
     // List of scopes ex: ['tenant', 'provider']
@@ -36,12 +35,12 @@ export class ScopeFeedback {
         this._unpublishForAllTenants = val;
     }
 
-    // Get for all organisations flag
+    // Get for all tenantss flag
     get forAllOrgs(): boolean {
         return this._forAllOrgs;
     }
 
-    // Set for all organisations flag
+    // Set for all tenants flag
     set forAllOrgs(val: boolean) {
         this._forAllOrgs = val;
     }
@@ -57,7 +56,7 @@ export class ScopeFeedback {
     }
 
     /**
-     * Adds new organisation into the organisations list.
+     * Adds new tenant into the tenant list.
      * @param item describes the change scope request
      */
     public addNewOrg(item: ChangeScopeItem): void {
