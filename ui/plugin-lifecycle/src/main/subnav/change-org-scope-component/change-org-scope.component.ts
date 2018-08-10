@@ -10,8 +10,6 @@ import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { OrganisationService } from "../../services/organisation.service";
 import { Organisation } from "../../interfaces/Organisation";
-import { ChangeScopeRequestTo } from "../../interfaces/ChangeScopeRequestTo";
-import { Response} from "@angular/http";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 @Component({
@@ -79,6 +77,11 @@ export class ChangeOrgScope implements OnInit {
         return this._action;
     }
 
+    public resetAlertPayload(): void {
+        this.alertMessage = null;
+        this.alertClasses = "alert-info";
+    }
+
     /**
      * Reset values before each update
      */
@@ -95,8 +98,10 @@ export class ChangeOrgScope implements OnInit {
      * Trigger update action
      */
     public onUpdate(): void {
+        this.resetAlertPayload();
+
         if (this.feedback.forAllOrgs && this.action === "publish") {
-            const subs = this.pluginManager.publishPluginForAllTenants(true).first()
+            const subs = this.pluginManager.publishPluginForAllTenants(true)
             .map((res, index) => {
                 if (index === 0) {
                     this.beforeUpdate();
@@ -155,7 +160,8 @@ export class ChangeOrgScope implements OnInit {
             return;
         }
 
-        console.log("Please select some options...");
+        this.alertMessage = "Please select some of the options below...";
+        this.alertClasses = "alert-info";
     }
 
     /**

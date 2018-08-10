@@ -5,7 +5,6 @@ import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
 import { ChangeOrgScopeService } from "./change-org-scope.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
-import { ChangeScopeRequestTo } from "../interfaces/ChangeScopeRequestTo";
 import { AuthTokenHolderService } from "@vcd-ui/common";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { HttpResponse } from "@angular/common/http";
@@ -43,17 +42,31 @@ export class PluginPublisher {
             const REQ_URL = `${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${hasToBe}`;
             const REQ = this.pluginService.togglePublishing(pluginToUpdate.id, hasToBe, null);
 
+            // Init change scope request object
+            const changeScopeRequest = new ChangeScopeRequest(
+                REQ_URL,
+                pluginToUpdate.pluginName,
+                `${hasToBe}`,
+                REQ
+            );
+
             // Track the request if needed
             if (trackScopeChange) {
-                this.changeOrgScopeService.addChangeScopeReq(new ChangeScopeRequest(
-                    REQ_URL,
-                    pluginToUpdate.pluginName,
-                    `${hasToBe}`,
-                    REQ
-                ));
+                // Add request to the list
+                this.changeOrgScopeService.addChangeScopeReq(changeScopeRequest);
+            } else {
+                // Add request to the list
+                changeScopeRequests.push(changeScopeRequest);
             }
         });
-        return this.changeOrgScopeService.executeRequestsInParallel();
+
+        // Execute all tracked requests in parallel with merge operator
+        if (trackScopeChange) {
+            return this.changeOrgScopeService.executeRequestsInParallel();
+        }
+
+        // Execute all in parrallel
+        return Observable.merge(...changeScopeRequests.map((req) => req.request));
     }
 
     /**
@@ -78,17 +91,37 @@ export class PluginPublisher {
         const REQ_URL = `${url}/cloudapi/extensions/ui/${plugin.id}/tenants/${hasToBe}`;
         const REQ = this.pluginService.togglePublishing(plugin.id, hasToBe, body);
 
-        // Track the request if needed
-        if (trackScopeChange) {
-            this.changeOrgScopeService.addChangeScopeReq(new ChangeScopeRequest(
-                REQ_URL,
-                plugin.pluginName ? plugin.pluginName : plugin.id,
-                `${hasToBe}`,
-                REQ
-            ));
+        // Register change scope list
+        let changeScopeRequests: ChangeScopeRequest[];
+
+        // If the requests are not trackable create list for them
+        if (!trackScopeChange) {
+            changeScopeRequests = [];
         }
 
-        return this.changeOrgScopeService.executeRequestsInParallel();
+        // Init change scope request object
+        const changeScopeRequest = new ChangeScopeRequest(
+            REQ_URL,
+            plugin.pluginName,
+            `${hasToBe}`,
+            REQ
+        );
+
+        // Track the request if needed
+        if (trackScopeChange) {
+            this.changeOrgScopeService.addChangeScopeReq(changeScopeRequest);
+        } else {
+            // Add request to the list
+            changeScopeRequests.push(changeScopeRequest);
+        }
+
+        // Execute all tracked requests in parallel with merge operator
+        if (trackScopeChange) {
+            return this.changeOrgScopeService.executeRequestsInParallel();
+        }
+
+        // Execute all in parrallel
+        return Observable.merge(...changeScopeRequests.map((req) => req.request));
     }
 
     /**

@@ -8,8 +8,6 @@ import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
-import { ChangeScopeRequestTo } from "../../interfaces/ChangeScopeRequestTo";
-import { Response } from "@angular/http";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model/uiPluginMetadataResponse";
 
 interface SubjectModalData {
@@ -18,7 +16,8 @@ interface SubjectModalData {
 
 @Component({
     selector: "vcd-plugin-status",
-    templateUrl: "./status.component.html"
+    templateUrl: "./status.component.html",
+    styleUrls: ["./status.component.scss"]
 })
 export class StatusComponent implements OnInit, OnDestroy {
     public _selected: UiPluginMetadataResponse[];

@@ -59,13 +59,20 @@ export class PluginManager {
 
     /**
      * Disable list of plugins.
-     * @param plugins list of plugins
      */
     public disablePlugins(): Observable<UiPluginMetadataResponse[]> {
         const disableProcesses: Observable<UiPluginMetadataResponse>[] = [];
-        this.selectedPlugins.forEach((plugin) => {
+        const slectedPluginsCopy: UiPluginMetadata[] = [
+            ...this.selectedPlugins
+            .map((eachPlugin: UiPluginMetadataResponse) => {
+                return eachPlugin = getPropsWithout(["id", "plugin_status", "resourcePath"], eachPlugin);
+            })
+        ];
+
+        slectedPluginsCopy
+        .forEach((plugin, index) => {
             disableProcesses.push(
-                this.pluginService.disablePlugin(plugin, plugin.id)
+                this.pluginService.disablePlugin(plugin, this.selectedPlugins[index].id)
             );
         });
 
@@ -76,14 +83,22 @@ export class PluginManager {
      * Enable list of plugins.
      */
     public enablePlugins(): Observable<UiPluginMetadataResponse[]> {
-        const enablePorcesses: Observable<UiPluginMetadataResponse>[] = [];
-        this.selectedPlugins.forEach((plugin) => {
-            enablePorcesses.push(
-                this.pluginService.disablePlugin(plugin, plugin.id)
+        const disableProcesses: Observable<UiPluginMetadataResponse>[] = [];
+        const slectedPluginsCopy: UiPluginMetadata[] = [
+            ...this.selectedPlugins
+            .map((eachPlugin: UiPluginMetadataResponse) => {
+                return eachPlugin = getPropsWithout(["id", "plugin_status", "resourcePath"], eachPlugin);
+            })
+        ];
+
+        slectedPluginsCopy
+        .forEach((plugin, index) => {
+            disableProcesses.push(
+                this.pluginService.enablePlugin(plugin, this.selectedPlugins[index].id)
             );
         });
 
-        return Observable.forkJoin(enablePorcesses);
+        return Observable.forkJoin(disableProcesses);
     }
 
     /**
