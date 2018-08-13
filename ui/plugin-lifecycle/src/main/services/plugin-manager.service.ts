@@ -10,6 +10,7 @@ import { AuthTokenHolderService } from "@vcd/sdk/common";
 import { UiPluginMetadataResponse, UiPluginMetadata, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { PluginService } from "./plugin.service";
 import { getPropsWithout } from "../helpers/object-helpers";
+import { HttpResponse } from "@angular/common/http";
 
 @Injectable()
 export class PluginManager {
