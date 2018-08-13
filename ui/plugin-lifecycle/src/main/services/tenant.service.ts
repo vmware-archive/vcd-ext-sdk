@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
+import { Http } from "@angular/http";
 import { Tenant, UiTenantResponse } from "../interfaces/Tenant";
 import { Observable, BehaviorSubject } from "rxjs";
-import { XMLHelper } from "../classes/XMLHelper";
 import { PluginManager } from "./plugin-manager.service";
 import { AuthTokenHolderService } from "@vcd-ui/common";
 import { VcdApiClient } from "@vcd/sdk";
