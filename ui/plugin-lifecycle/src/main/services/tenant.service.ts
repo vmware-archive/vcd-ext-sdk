@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
 import { Tenant, UiTenantResponse } from "../interfaces/Tenant";
 import { Observable, BehaviorSubject } from "rxjs";
 import { PluginManager } from "./plugin-manager.service";
@@ -12,7 +11,6 @@ export class TenantService {
     private _orgsSubject = new BehaviorSubject<Tenant[]>(this.orgs);
 
     constructor(
-        private http: Http,
         private authService: AuthTokenHolderService,
         private pluginManager: PluginManager,
         private client: VcdApiClient
