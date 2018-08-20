@@ -8,7 +8,7 @@ export abstract class RequestTracker<T> {
 
     /**
      * Adds new request into the list.
-     * @param req request which be made
+     * @param req request which will be made
      */
     public addChangeScopeReq(req: T): void {
         this._requests.push(req);

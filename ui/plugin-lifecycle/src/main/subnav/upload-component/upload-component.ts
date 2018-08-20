@@ -2,7 +2,7 @@
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
 import { Component, Inject, OnInit, Input, EventEmitter, Output, ViewChild } from "@angular/core";
-import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
+import { EXTENSION_ASSET_URL } from "@vcd/sdk/common";
 import { PluginManager } from "../../services/plugin-manager.service";
 import { UploadPayload } from "../../interfaces/Plugin";
 import { ZipManager } from "../../services/zip-manager.service";
@@ -11,8 +11,8 @@ import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { Subscription } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
-import { Tenant } from "../../interfaces/Tenant";
 import { TenantService } from "../../services/tenant.service";
+import { QueryResultOrgRecordType } from "@vcd/bindings/vcloud/api/rest/schema_v1_5";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;
@@ -59,7 +59,7 @@ export class UploadComponent implements OnInit {
     // Shows on the sceen when any warning appear
     public alertMessage: string;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
-    public orgs: Tenant[];
+    public orgs: QueryResultOrgRecordType[];
     // Summary to describe what will be applied on upload
     public summary: string;
 
@@ -128,11 +128,11 @@ export class UploadComponent implements OnInit {
                 }
 
                 // Check for plugin duplicatons
-                return this.pluginManager.checkForDuplications(this.uploadPayload.manifest.name);
+                return this.pluginManager.checkForDuplications(this.uploadPayload.manifest);
             })
             .then((duplication) => {
                 if (duplication) {
-                    throw new Error("Plugin with this name already exists, please ensure your plugin name is unique.");
+                    throw new Error("This plugin already exists, please ensure your plugin name, vendor, version is unique.");
                 }
                 this.alertMessage = null;
                 this.canGoNext = true;
@@ -183,7 +183,8 @@ export class UploadComponent implements OnInit {
                 });
 
             }, this.handleUploadError, () => {
-                console.log("UPLOAD COMPLETED!");
+                this.handleUploadSuccess();
+                this.uploadSubs.unsubscribe();
             });
     }
 
@@ -272,13 +273,14 @@ export class UploadComponent implements OnInit {
      * Load all tenants.
      */
     public loadOrgs(): void {
-        this.orgs = this.orgService.orgs;
-        this.watchOrgsSubs = this.orgService.watchOrgs().subscribe(
-            (orgs) => {
+        this.watchOrgsSubs = this.orgService.watchOrgs().subscribe((orgs) => {
                 this.orgs = orgs;
                 this.populateList();
-            }
-        );
+            }, (error) => {
+                console.error(error);
+            }, () => {
+                // Handle complete
+            });
     }
 
     /**
@@ -286,7 +288,7 @@ export class UploadComponent implements OnInit {
      */
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
-        this.orgs.forEach((org: Tenant) => {
+        this.orgs.forEach((org: QueryResultOrgRecordType) => {
             this.listOfOrgsPerPlugin.push({
                 orgName: org.name,
                 plugin: {

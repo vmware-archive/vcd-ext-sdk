@@ -6,7 +6,7 @@ export class ScopeFeedback {
     // Unpublish for all tenants
     private _unpublishForAllTenants = false;
     // Is the scope applied for all tenants
-    private _forAllOrgs = false;
+    private _forSpecificTenants = false;
 
     // List of scopes ex: ['tenant', 'provider']
     private _scope: string[] = [];
@@ -36,13 +36,13 @@ export class ScopeFeedback {
     }
 
     // Get for all tenantss flag
-    get forAllOrgs(): boolean {
-        return this._forAllOrgs;
+    get forSpecificTenants(): boolean {
+        return this._forSpecificTenants;
     }
 
     // Set for all tenants flag
-    set forAllOrgs(val: boolean) {
-        this._forAllOrgs = val;
+    set forSpecificTenants(val: boolean) {
+        this._forSpecificTenants = val;
     }
 
     // Set data which describe the change scope request
@@ -114,7 +114,7 @@ export class ScopeFeedback {
      * Reset all properties.
      */
     public reset(): void {
-        this.forAllOrgs = false;
+        this.forSpecificTenants = true;
         this.publishForAllTenants = false;
         this.unpublishForAllTenants = false;
         this.data = [];

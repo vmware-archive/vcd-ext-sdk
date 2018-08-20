@@ -113,8 +113,8 @@ export class VcdApiClient {
         );
     }
 
-    public createSyncWithObserveResponse<T>(endpoint: string, item: T): Observable<HttpResponse<T>> {
-        return this.http.post<T>(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' });
+    public createSyncWithObserveResponse<T, B>(endpoint: string, body: B): Observable<HttpResponse<T>> {
+        return this.http.post<T>(`${this._baseUrl}/${endpoint}`, body, { observe: 'response' });
     }
 
     public updateSync<T>(endpoint: string, item: T): Observable<T> {

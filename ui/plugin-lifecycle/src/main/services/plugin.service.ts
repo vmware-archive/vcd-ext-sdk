@@ -1,10 +1,8 @@
 import { Injectable } from "@angular/core";
 import { VcdApiClient } from "@vcd/sdk";
 import { Observable } from "rxjs";
-import { UiPluginMetadata, UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
+import { UiPluginMetadata, UiPluginMetadataResponse, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { HttpResponse } from "@angular/common/http";
-import { retryWhen } from "rxjs/operator/retryWhen";
-import { UiPluginTenantsResponse } from "../interfaces/Tenant";
 
 @Injectable()
 export class PluginService {
@@ -18,7 +16,7 @@ export class PluginService {
         return this.client.createSync<T>("cloudapi/extensions/ui", item);
     }
 
-    public deletePlugin(plugin: UiPluginMetadataResponse): Observable<any> {
+    public deletePlugin(plugin: UiPluginMetadataResponse): Observable<void> {
         return this.client.deleteSync(`cloudapi/extensions/ui/${plugin.id}`);
     }
 
@@ -32,12 +30,15 @@ export class PluginService {
         return this.client.updateSync(`cloudapi/extensions/ui/${id}`, plugin);
     }
 
-    public getPluginTenants(id: string): Observable<UiPluginTenantsResponse[]> {
-        return this.client.get<UiPluginTenantsResponse[]>(`cloudapi/extensions/ui/${id}/tenants`);
+    public getPluginTenants(id: string): Observable<EntityReference2[]> {
+        return this.client.get<EntityReference2[]>(`cloudapi/extensions/ui/${id}/tenants`);
     }
 
-    public togglePublishing(pluginID: string, hasToBe: string, body: any): Observable<HttpResponse<any>> {
-        return this.client.createSyncWithObserveResponse(`cloudapi/extensions/ui/${pluginID}/tenants/${hasToBe}`, body);
+    public togglePublishing(pluginID: string, hasToBe: string, body: { name: string }[]): Observable<HttpResponse<EntityReference2[]>> {
+        return this.client.createSyncWithObserveResponse<EntityReference2[], { name: string }[]>(
+            `cloudapi/extensions/ui/${pluginID}/tenants/${hasToBe}`,
+            body
+        );
     }
 
     public changeScope(

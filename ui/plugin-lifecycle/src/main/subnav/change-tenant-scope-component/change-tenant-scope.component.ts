@@ -2,34 +2,34 @@
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
 import { Component, Inject, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
+import { EXTENSION_ASSET_URL } from "@vcd/sdk/common";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
 import { PluginManager } from "../../services/plugin-manager.service";
-import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
 import { Subscription, Observable } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { TenantService } from "../../services/tenant.service";
-import { Tenant, UiPluginTenantsResponse } from "../../interfaces/Tenant";
-import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
+import { UiPluginMetadataResponse, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { PluginService } from "../../services/plugin.service";
 import { difference } from "../../helpers/set-helpers";
+import { QueryResultOrgRecordType } from "@vcd/bindings/vcloud/api/rest/schema_v1_5";
 
 @Component({
-    selector: "vcd-change-org-scope",
-    templateUrl: "./change-org-scope.component.html",
-    styleUrls: ["./change-org-scope.component.scss"]
+    selector: "vcd-change-tenant-scope",
+    templateUrl: "./change-tenant-scope.component.html",
+    styleUrls: ["./change-tenant-scope.component.scss"]
 })
-export class ChangeOrgScope implements OnInit {
+export class ChangeTenantScope implements OnInit {
     private _state = false;
     public feedback: ScopeFeedback = new ScopeFeedback();
-    public showTracker: boolean;
+    // public showTracker: boolean;
     public hasToRefresh = false;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
-    public orgs: Tenant[];
-    public plugins: UiPluginMetadataResponse[];
+    public orgs: QueryResultOrgRecordType[] = [];
+    public plugins: UiPluginMetadataResponse[] = [];
     public alertMessage: string;
     public alertClasses: string;
     public copyOfTheFirstPreSelectedPlugins: Set<ChangeScopeItem>;
+    public fetching: boolean;
 
     public watchSourceDataSub: Subscription;
 
@@ -49,7 +49,7 @@ export class ChangeOrgScope implements OnInit {
 
         if (val === true) {
             // Hide tracker
-            this.showTracker = false;
+            // this.showTracker = false;
             this.loadListOfOrgsPerPlugin();
             this.initialOptionPreSelect();
         }
@@ -62,12 +62,11 @@ export class ChangeOrgScope implements OnInit {
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
         private pluginService: PluginService,
-        private changeOrgScopeService: ChangeOrgScopeService,
         private orgService: TenantService
     ) {}
 
     public ngOnInit(): void {
-        this.showTracker = false;
+        // this.showTracker = false;
         this.alertClasses = "alert-info";
     }
 
@@ -103,14 +102,16 @@ export class ChangeOrgScope implements OnInit {
         this.resetAlertPayload();
 
         this.hasToRefresh = true;
-        this.showTracker = true;
+        // this.showTracker = true;
     }
 
     /**
      * Publish for all tenants in parallel
      */
     public publishForAllTenants(): void {
-        const subs = this.pluginManager.publishPluginForAllTenants(true)
+        this.fetching = true;
+
+        const subs = this.pluginManager.publishPluginForAllTenants(false)
         .map((res, index) => {
             if (index === 0) {
                 this.beforeUpdate();
@@ -118,15 +119,15 @@ export class ChangeOrgScope implements OnInit {
             return res;
         })
         .subscribe((res) => {
-            this.changeOrgScopeService.handleCompletedRequest(res);
         }, (error) => {
-            this.changeOrgScopeService.handleCompletedRequest(error);
+            this.fetching = false;
             this.alertMessage = error.message;
             this.alertClasses = "alert-danger";
         }, () => {
-            subs.unsubscribe();
+            this.fetching = false;
             this.feedback.reset();
             this.preSelect();
+            subs.unsubscribe();
         });
     }
 
@@ -134,7 +135,8 @@ export class ChangeOrgScope implements OnInit {
      * Unpublish for all tenants in parallel
      */
     public unpublishForAllTenants(): void {
-        const subs = this.pluginManager.unpublishPluginForAllTenants(true)
+        this.fetching = true;
+        const subs = this.pluginManager.unpublishPluginForAllTenants(false)
             .map((res, index) => {
                 if (index === 0) {
                     this.beforeUpdate();
@@ -142,15 +144,15 @@ export class ChangeOrgScope implements OnInit {
                 return res;
             })
             .subscribe((res) => {
-                this.changeOrgScopeService.handleCompletedRequest(res);
             }, (error) => {
-                this.changeOrgScopeService.handleCompletedRequest(error);
+                this.fetching = false;
                 this.alertMessage = error.message;
                 this.alertClasses = "alert-danger";
             }, () => {
-                subs.unsubscribe();
+                this.fetching = false;
                 this.feedback.reset();
                 this.preSelect();
+                subs.unsubscribe();
             });
     }
 
@@ -225,20 +227,23 @@ export class ChangeOrgScope implements OnInit {
          * If there is any plugins to be updated, trigger the update requests in parallel
          */
         if (feedbackCopy.data.length > 0) {
+            this.fetching = true;
             this.beforeUpdate();
             const subs = this.pluginManager.handleMixedScope(
                 this.plugins,
                 feedbackCopy,
-                true
+                false
             )
             .subscribe((res) => {
             }, (error) => {
+                this.fetching = false;
                 this.alertMessage = error.message;
                 this.alertClasses = "alert-danger";
             }, () => {
-                subs.unsubscribe();
+                this.fetching = false;
                 this.feedback.reset();
                 this.preSelect();
+                subs.unsubscribe();
             });
             return;
         }
@@ -265,18 +270,8 @@ export class ChangeOrgScope implements OnInit {
      * Load all tenants plugins and watch them for changes.
      */
     public loadListOfOrgsPerPlugin(): void {
-        this.loadOrgs();
         this.loadPlugins();
         this.watchSourceData();
-        this.populateList();
-        this.preSelect();
-    }
-
-    /**
-     * Get all organistaions.
-     */
-    public loadOrgs(): void {
-        this.orgs = this.orgService.orgs;
     }
 
     /**
@@ -291,7 +286,7 @@ export class ChangeOrgScope implements OnInit {
      */
     public watchSourceData(): void {
         // Merge the plugin and tenant observables
-        this.watchSourceDataSub = Observable.merge<UiPluginMetadataResponse[], Tenant[]>(
+        this.watchSourceDataSub = Observable.merge<UiPluginMetadataResponse[], QueryResultOrgRecordType[]>(
             this.pluginManager.watchSelectedPlugins(),
             this.orgService.watchOrgs()
         ).subscribe((data) => {
@@ -306,7 +301,11 @@ export class ChangeOrgScope implements OnInit {
 
             // Assaign tenants list
             if (Object.keys(data[0]).indexOf("displayName") !== -1) {
-                this.orgs = <Tenant[]>data;
+                this.orgs = <QueryResultOrgRecordType[]>data;
+            }
+
+            if (this.orgs.length < 1) {
+                return;
             }
 
             // Populate the list with new data
@@ -314,6 +313,8 @@ export class ChangeOrgScope implements OnInit {
         }, (error) => {
             this.alertMessage = error.message;
             this.alertClasses = "alert-danger";
+        }, () => {
+            // Handle complete
         });
     }
 
@@ -323,11 +324,13 @@ export class ChangeOrgScope implements OnInit {
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
 
-        this.orgs.forEach((org: Tenant) => {
+        this.orgs.forEach((org: QueryResultOrgRecordType) => {
             this.plugins.forEach(plugin => {
                 this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin, action: "publish" });
             });
         });
+
+        this.preSelect();
     }
 
     /**
@@ -336,14 +339,15 @@ export class ChangeOrgScope implements OnInit {
     public preSelect(): void {
         // Reset alert data
         this.resetAlertPayload();
+        this.fetching = true;
 
         // Loop through plugins array
-        this.plugins.forEach((plugin: UiPluginMetadataResponse) => {
+        this.plugins.forEach((plugin: UiPluginMetadataResponse, index: number) => {
             // Get tenants for which plugin is published
-            this.pluginService.getPluginTenants(plugin.id).toPromise()
-            .then((responses: UiPluginTenantsResponse[]) => {
+            this.pluginService.getPluginTenants(plugin.id)
+            .subscribe((responses: EntityReference2[]) => {
                 // Loop through the tenants
-                responses.forEach((res: UiPluginTenantsResponse) => {
+                responses.forEach((res: EntityReference2) => {
                     // Search for tenant plugin pair with this tenant and plugin name
                     const found = this.listOfOrgsPerPlugin.find((item) => {
                         return item.orgName === res.name && item.plugin.pluginName === plugin.pluginName;
@@ -357,12 +361,17 @@ export class ChangeOrgScope implements OnInit {
 
                 // After all requests made, create snapshot of the initial state of the selected datagrid rows
                 this.copyOfTheFirstPreSelectedPlugins = new Set<ChangeScopeItem>([...this.feedback.data]);
-            })
-            .catch((error) => {
+
+                if (index === this.plugins.length - 1) {
+                    this.fetching = false;
+                }
+            }, (error) => {
                 // Handle error
                 console.error(error);
                 this.alertMessage = error.message;
                 this.alertClasses = "alert-danger";
+            }, () => {
+                // Handle complete
             });
         });
     }

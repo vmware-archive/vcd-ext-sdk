@@ -4,9 +4,8 @@ import { Routes, RouterModule } from "@angular/router";
 import { HttpModule } from "@angular/http";
 import { ClarityModule } from "clarity-angular";
 import { Store } from "@ngrx/store";
-import { EXTENSION_ROUTE, ExtensionNavRegistration } from "@vcd-ui/common";
+import { EXTENSION_ROUTE, ExtensionNavRegistration } from "@vcd/sdk/common";
 import { SubnavComponent } from "./subnav/subnav.component";
-import { AboutComponent } from "./subnav/about.component";
 import { StatusComponent } from "./subnav/status-component/status.component";
 import { PluginManager } from "./services/plugin-manager.service";
 import { UploadComponent } from "./subnav/upload-component/upload-component";
@@ -16,11 +15,11 @@ import { ZipManager } from "./services/zip-manager.service";
 import { UploadZipField } from "./subnav/upload-zip-field-component/upload-zip-field.component";
 import { VcdAlert } from "./subnav/alert-component/alert.component";
 import { VcdManifestStackView } from "./subnav/manifest-stack-view-component/manifest-stack-view.component";
-import { ChangeOrgScope } from "./subnav/change-org-scope-component/change-org-scope.component";
-import { ChooseOrgScope } from "./subnav/choose-org-scope-component/choose-org-scope.component";
+import { ChangeTenantScope } from "./subnav/change-tenant-scope-component/change-tenant-scope.component";
+import { ChooseTenantScope } from "./subnav/choose-tenant-scope-component/choose-tenant-scope.component";
 import { TenantService } from "./services/tenant.service";
-import { ChangeOrgScopeTracker } from "./subnav/change-org-scope-tracker-component/change-org-scope-tracker.component";
-import { ChangeOrgScopeService } from "./services/change-org-scope.service";
+import { ChangeTenantScopeTracker } from "./subnav/change-tenant-scope-tracker-component/change-tenant-scope-tracker.component";
+import { ChangeTenantScopeService } from "./services/change-tenant-scope.service";
 import { PluginUploaderService } from "./services/plugin-uploader.service";
 import { PluginPublisher } from "./services/plugin-publisher.service";
 import { CapitalizeFirstPipe } from "./pipes/capitalizefirst/capitalizefirst.pipe";
@@ -38,8 +37,7 @@ const ROUTES: Routes = [
     {
         path: "", component: SubnavComponent, children: [
             { path: "", redirectTo: "plugin-management", pathMatch: "full" },
-            { path: "plugin-management", component: StatusComponent },
-            { path: "branding", component: AboutComponent }
+            { path: "plugin-management", component: StatusComponent }
         ]
     }
 ];
@@ -57,7 +55,6 @@ const ROUTES: Routes = [
     ],
     declarations: [
         CapitalizeFirstPipe,
-        AboutComponent,
         StatusComponent,
         SubnavComponent,
         UploadComponent,
@@ -66,9 +63,9 @@ const ROUTES: Routes = [
         VcdManifestStackView,
         ChangeScope,
         ChooseScope,
-        ChangeOrgScope,
-        ChooseOrgScope,
-        ChangeOrgScopeTracker,
+        ChangeTenantScope,
+        ChooseTenantScope,
+        ChangeTenantScopeTracker,
         LoadingIndicatorComponent,
         ErrorNotifyerComponent
     ],
@@ -78,7 +75,7 @@ const ROUTES: Routes = [
         VcdApiClient,
         PluginService,
         TenantService,
-        ChangeOrgScopeService,
+        ChangeTenantScopeService,
         PluginPublisher,
         PluginUploaderService,
         PluginManager,

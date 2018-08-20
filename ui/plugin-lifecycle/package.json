@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "vcd-sdk-plugin-lifecycle",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -25,9 +25,8 @@
     "@ngrx/core": "1.2.0",
     "@ngrx/effects": "2.0.3",
     "@ngrx/store": "2.2.2",
-    "@vcd-ui/common": "file:vcd-ui/common",
     "@vcd/bindings": "file:../api-client/packages/bindings/dist",
-    "@vcd/http-transfer-service": "file:../../../../http-transfer-service/dist",
+    "@vcd/http-transfer-service": "file:http-transfer-service/dest",
     "@vcd/sdk": "file:../api-client/packages/sdk/dist",
     "@webcomponents/custom-elements": "1.0.0",
     "clarity-angular": "0.10.15",

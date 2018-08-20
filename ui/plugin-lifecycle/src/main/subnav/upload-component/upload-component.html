@@ -44,8 +44,8 @@
                 <clr-wizard-button [type]="'custom-next'">{{ "subnav.upload-plugin.wizard.page-3.next.btn" | translate }}</clr-wizard-button>
             </ng-template>
 
-            <vcd-choose-org-scope [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin" [showDontPublish]="false">
-            </vcd-choose-org-scope>
+            <vcd-choose-tenant-scope [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin" [showDontPublish]="false">
+            </vcd-choose-tenant-scope>
         </clr-wizard-page>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">

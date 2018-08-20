@@ -1,5 +1,5 @@
 import {Component, Inject} from "@angular/core";
-import {EXTENSION_ASSET_URL} from "@vcd-ui/common";
+import {EXTENSION_ASSET_URL} from "@vcd/sdk/common";
 
 @Component({
     selector: "plugin-subnav",
@@ -8,8 +8,7 @@ import {EXTENSION_ASSET_URL} from "@vcd-ui/common";
 })
 export class SubnavComponent {
     navItems: any[] = [
-        {routerLink: "./plugin-management", iconShape: "help-info", labelKey: "subnav.menu.status"},
-        {routerLink: "./branding", iconShape: "helix", labelKey: "subnav.menu.about"}
+        {routerLink: "./plugin-management", iconShape: "help-info", labelKey: "subnav.menu.status"}
     ];
 
     constructor(@Inject(EXTENSION_ASSET_URL) public assetUrl: string) {}

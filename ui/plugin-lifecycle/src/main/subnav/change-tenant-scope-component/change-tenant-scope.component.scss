@@ -8,3 +8,9 @@
         width: calculateRem(960px);
     }
 }
+
+.modal-body {
+    .loader {
+        position: static;
+    }
+}

@@ -2,7 +2,7 @@
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
 import { Component, Inject, OnInit, Output, EventEmitter, ViewChild } from "@angular/core";
-import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
+import { EXTENSION_ASSET_URL } from "@vcd/sdk/common";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;

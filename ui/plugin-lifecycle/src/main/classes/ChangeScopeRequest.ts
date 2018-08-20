@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
-import { Response } from "@angular/http";
 import { HttpResponse } from "@angular/common/http";
+import { EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
 
 export class ChangeScopeRequest {
     // Request url
@@ -12,9 +12,9 @@ export class ChangeScopeRequest {
     // Request action
     action: string;
     // Http request
-    request: Observable<HttpResponse<any>>;
+    request: Observable<HttpResponse<EntityReference2[]>>;
 
-    constructor(reqUrl: string, pluginName: string, action: string, req: Observable<HttpResponse<any>>) {
+    constructor(reqUrl: string, pluginName: string, action: string, req: Observable<HttpResponse<EntityReference2[]>>) {
         this.reqUrl = reqUrl;
         this.pluginName = pluginName;
         this.action = action;

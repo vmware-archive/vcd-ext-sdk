@@ -1,33 +1,32 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { ChangeScopePlugin } from "../interfaces/Plugin";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
-import { ChangeOrgScopeService } from "./change-org-scope.service";
+import { ChangeTenantScopeService } from "./change-tenant-scope.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
-import { AuthTokenHolderService } from "@vcd-ui/common";
-import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
+import { UiPluginMetadataResponse, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { HttpResponse } from "@angular/common/http";
 import { PluginService } from "./plugin.service";
+import { API_ROOT_URL } from "@vcd/sdk/common";
 
 @Injectable()
 export class PluginPublisher {
     constructor(
-        private authService: AuthTokenHolderService,
-        private changeOrgScopeService: ChangeOrgScopeService,
+        @Inject(API_ROOT_URL) private _baseUrl: string = "",
+        private changeOrgScopeService: ChangeTenantScopeService,
         private pluginService: PluginService
     ) {}
 
     /**
-     * Toggle the publish state of a plugin for all organistaions.
+     * Toggle the publish state of a plugin for all organisations.
      * @param plugins list of plugins
-     * @param url the base url where the request will be made
      * @param hasToBe string value which says "published" or "unpublished"
      * @param trackScopeChange determinate will this request be tracked
      */
-    private togglePluginStateForAllTenants(
-        plugins: UiPluginMetadataResponse[], url: string, hasToBe: string, trackScopeChange: boolean = false
-    ): Observable<HttpResponse<any>> {
+    private generatePublishRequestForAllTenants(
+        plugins: UiPluginMetadataResponse[], hasToBe: string, trackScopeChange: boolean = false
+    ): Observable<HttpResponse<EntityReference2[]>> {
         // Register change scope list
         let changeScopeRequests: ChangeScopeRequest[];
 
@@ -39,14 +38,14 @@ export class PluginPublisher {
         // Loop throught the plugins list
         plugins.forEach((pluginToUpdate) => {
             // Create request url
-            const REQ_URL = `${url}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${hasToBe}`;
+            const REQ_URL = `${this._baseUrl}/cloudapi/extensions/ui/${pluginToUpdate.id}/tenants/${hasToBe}`;
             const REQ = this.pluginService.togglePublishing(pluginToUpdate.id, hasToBe, null);
 
             // Init change scope request object
             const changeScopeRequest = new ChangeScopeRequest(
                 REQ_URL,
                 pluginToUpdate.pluginName,
-                `${hasToBe}`,
+                hasToBe,
                 REQ
             );
 
@@ -74,11 +73,13 @@ export class PluginPublisher {
      * @param plugin list of plugins
      * @param changeScopeItems list of elements which describes what to do with specific plugin
      * @param trackScopeChange determinate will this request be tracked
-     * @param url the base url where the request will be made
      * @param hasToBe value which determitate thas is this "publis" or "unpublish" action
      */
-    private togglePluginStateForSpecTenants(
-        plugin: ChangeScopePlugin, changeScopeItems: ChangeScopeItem[], trackScopeChange: boolean, url: string, hasToBe: string
+    private generatePublishRequest(
+        plugin: ChangeScopePlugin,
+        changeScopeItems: ChangeScopeItem[],
+        trackScopeChange: boolean,
+        hasToBe: string
     ) {
         const body: { name: string }[] = [];
 
@@ -88,14 +89,14 @@ export class PluginPublisher {
         });
 
         // Create req url
-        const REQ_URL = `${url}/cloudapi/extensions/ui/${plugin.id}/tenants/${hasToBe}`;
+        const REQ_URL = `${this._baseUrl}/cloudapi/extensions/ui/${plugin.id}/tenants/${hasToBe}`;
         const REQ = this.pluginService.togglePublishing(plugin.id, hasToBe, body);
 
         // Init change scope request object
         const changeScopeRequest = new ChangeScopeRequest(
             REQ_URL,
             plugin.pluginName,
-            `${hasToBe}`,
+            hasToBe,
             REQ
         );
 
@@ -110,21 +111,25 @@ export class PluginPublisher {
     /**
      * Publish the list of plugins for all tenants
      * @param plugins list of plugins
-     * @param url the base url where the request will be made
      * @param trackScopeChange determinate will this request be tracked
      */
-    public publishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): Observable<HttpResponse<any>> {
-        return this.togglePluginStateForAllTenants(plugins, url, "publishAll", trackScopeChange);
+    public publishPluginForAllTenants(
+        plugins: UiPluginMetadataResponse[],
+        trackScopeChange: boolean
+    ): Observable<HttpResponse<EntityReference2[]>> {
+        return this.generatePublishRequestForAllTenants(plugins, "publishAll", trackScopeChange);
     }
 
     /**
      * Unpublish the list of plugins for all tenants
      * @param plugins list of plugins
-     * @param url the base url where the request will be made
      * @param trackScopeChange determinate will this request be tracked
      */
-    public unpublishPluginForAllTenants(plugins: UiPluginMetadataResponse[], url: string, trackScopeChange: boolean): Observable<HttpResponse<any>> {
-        return this.togglePluginStateForAllTenants(plugins, url, "unpublishAll", trackScopeChange);
+    public unpublishPluginForAllTenants(
+        plugins: UiPluginMetadataResponse[],
+        trackScopeChange: boolean
+    ): Observable<HttpResponse<EntityReference2[]>> {
+        return this.generatePublishRequestForAllTenants(plugins, "unpublishAll", trackScopeChange);
     }
 
     /**
@@ -137,9 +142,8 @@ export class PluginPublisher {
     public handleMixedScope(
         plugins: ChangeScopePlugin[],
         scopeFeedback: ScopeFeedback,
-        trackScopeChange: boolean,
-        url: string
-    ): Observable<HttpResponse<any>> {
+        trackScopeChange: boolean
+    ): Observable<HttpResponse<EntityReference2[]>> {
         // Create the result object with the url of the request and the request
         const result: ChangeScopeRequest[] = [];
 
@@ -161,11 +165,11 @@ export class PluginPublisher {
 
             // Add requests into the list if any
             if (toBePublished.length > 0) {
-                result.push(this.togglePluginStateForSpecTenants(selectedPlugin, toBePublished, trackScopeChange, url, "publish"));
+                result.push(this.generatePublishRequest(selectedPlugin, toBePublished, trackScopeChange, "publish"));
             }
 
             if (toBeUnpublishd.length > 0) {
-                result.push(this.togglePluginStateForSpecTenants(selectedPlugin, toBeUnpublishd, trackScopeChange, url, "unpublish"));
+                result.push(this.generatePublishRequest(selectedPlugin, toBeUnpublishd, trackScopeChange, "unpublish"));
             }
         });
 

@@ -3,7 +3,12 @@
         <section class="form-block">
             <div *ngIf="showDontPublish">
                 <div class="radio">
-                    <input type="radio" (click)="onRadioChange($event)" name="option" id="unpublishForAllTenants">
+                    <input
+                        [(ngModel)]="scope"
+                        type="radio"
+                        name="option"
+                        id="unpublishForAllTenants"
+                        value="unpublishForAllTenants">
                     <label for="unpublishForAllTenants">Don't publish</label>
                 </div>
 
@@ -16,7 +21,12 @@
 
             <div>
                 <div class="radio">
-                    <input type="radio" (click)="onRadioChange($event)" name="option" id="publishForAllTenants">
+                    <input
+                        [(ngModel)]="scope"
+                        type="radio"
+                        name="option"
+                        id="publishForAllTenants"
+                        value="publishForAllTenants">
                     <label for="publishForAllTenants">Publish for all tenants</label>
                 </div>
 
@@ -30,16 +40,16 @@
             <div *ngIf="listOfOrgsPerPlugin">
                 <div class="radio">
                     <input
-                    type="radio"
-                    (click)="onRadioChange($event)"
-                    [attr.checked]="!feedback.publishForAllTenants && !feedback.unpublishForAllTenants"
-                    name="option"
-                    id="publish_for_specific">
-                    <label for="publish_for_specific">Publish for specific tenants</label>
+                        [(ngModel)]="scope"
+                        type="radio"
+                        name="option"
+                        id="forSpecificTenants"
+                        value="forSpecificTenants">
+                    <label for="forSpecificTenants">Publish for specific tenants</label>
                 </div>
 
                 <div class="relative list">
-                    <div class="overlay" *ngIf="feedback.publishForAllTenants || feedback.unpublishForAllTenants"></div>
+                    <div class="overlay" *ngIf="scope !== 'forSpecificTenants'"></div>
                     <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
                         <!-- PLACEHOLDER -->
                         <clr-dg-placeholder>We couldn't find any tenants...</clr-dg-placeholder>

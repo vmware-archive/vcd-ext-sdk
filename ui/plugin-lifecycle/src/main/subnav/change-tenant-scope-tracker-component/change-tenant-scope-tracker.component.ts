@@ -4,13 +4,13 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ChangeScopeRequest } from "../../classes/ChangeScopeRequest";
-import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
+import { ChangeTenantScopeService } from "../../services/change-tenant-scope.service";
 
 @Component({
-    selector: "vcd-change-org-scope-tracker",
-    templateUrl: "./change-org-scope-tracker.component.html"
+    selector: "vcd-change-tenant-scope-tracker",
+    templateUrl: "./change-tenant-scope-tracker.component.html"
 })
-export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
+export class ChangeTenantScopeTracker implements OnInit, OnDestroy {
     private _open: boolean;
 
     @Input()
@@ -33,7 +33,7 @@ export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
     public watchChangeScopeReq: Subscription;
 
     constructor(
-        private changeOrgScopeService: ChangeOrgScopeService
+        private changeOrgScopeService: ChangeTenantScopeService
     ) { }
 
     ngOnInit() {}

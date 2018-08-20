@@ -2,12 +2,12 @@
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
-import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
+import { EXTENSION_ASSET_URL } from "@vcd/sdk/common";
 import { PluginManager } from "../../services/plugin-manager.service";
 import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
-import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
+import { ChangeTenantScopeService } from "../../services/change-tenant-scope.service";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model/uiPluginMetadataResponse";
 
 interface SubjectModalData {
@@ -26,7 +26,6 @@ export class StatusComponent implements OnInit, OnDestroy {
     public changeScopeState = false;
     public wantToUpload: boolean;
     public isLoading: boolean;
-    public showTracker = false;
     public openChangeScope = false;
     public errorMessage: string;
     public openErrorNotifyer: boolean;
@@ -42,7 +41,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
-        private changeOrgScopeService: ChangeOrgScopeService
+        private changeOrgScopeService: ChangeTenantScopeService
     ) { }
 
     public ngOnInit() {
@@ -318,95 +317,6 @@ export class StatusComponent implements OnInit, OnDestroy {
      */
     public changeScope() {
         this.openChangeScope = true;
-    }
-
-    /**
-     * Publish the plugins for all tenants.
-     */
-    public publishForAllTenants(): void {
-        const onPublishForAllSub = this.openModal({
-            title: "Publish for all tenants",
-            body: "Are you sure you want to publish the plugins for all tenants?",
-            decline: "No",
-            accept: "Yes",
-            waitToClose: true
-        })
-        .subscribe((modalSubjectData) => {
-            // If user doesn't authorize the action
-            if (modalSubjectData.accept === false) {
-                this.setOpened(false);
-                onPublishForAllSub.unsubscribe();
-                return;
-            }
-
-            // Close modal
-            this.setOpened(false);
-
-            this.errorMessage = null;
-            this.showTracker = true;
-
-            const subscription = this.pluginManager
-                .publishPluginForAllTenants(true)
-                .subscribe((res) => {
-                    this.changeOrgScopeService.handleCompletedRequest(res);
-                }, (error) => {
-                    console.error(error);
-                    this.endLoading();
-                    this.openErrorNotifyer = true;
-                    this.errorMessage = error.message;
-                    // Notify the service if request complete successfully
-                    subscription.unsubscribe();
-                    onPublishForAllSub.unsubscribe();
-                }, () => {
-                    subscription.unsubscribe();
-                    onPublishForAllSub.unsubscribe();
-                });
-            });
-    }
-
-    /**
-     * Unpublish the plugins for all tenants.
-     */
-    public unpublishForAllTenants(): void {
-        const onUnpublishForAllSub = this.openModal({
-            title: "Unpublish for all tenants",
-            body: "Are you sure you want to unpublish the plugins for all tenants?",
-            decline: "No",
-            accept: "Yes",
-            waitToClose: true
-        })
-        .subscribe((modalSubjectData) => {
-            // If user doesn't authorize the action
-            if (modalSubjectData.accept === false) {
-                this.setOpened(false);
-                onUnpublishForAllSub.unsubscribe();
-                return;
-            }
-
-            // Close modal
-            this.setOpened(false);
-
-            this.errorMessage = null;
-            this.showTracker = true;
-
-            const subscription = this.pluginManager
-                // Call unpublish all selected plugins
-                .unpublishPluginForAllTenants(true)
-                .subscribe((res) => {
-                    this.changeOrgScopeService.handleCompletedRequest(res);
-                }, (error) => {
-                    console.error(error);
-                    this.endLoading();
-                    this.openErrorNotifyer = true;
-                    this.errorMessage = error.message;
-                    // Notify the service if request complete successfully
-                    subscription.unsubscribe();
-                    onUnpublishForAllSub.unsubscribe();
-                }, () => {
-                    subscription.unsubscribe();
-                    onUnpublishForAllSub.unsubscribe();
-                });
-            });
     }
 
     /**
