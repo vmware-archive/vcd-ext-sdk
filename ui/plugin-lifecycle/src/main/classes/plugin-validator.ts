@@ -12,13 +12,17 @@ export abstract class PluginValidator {
 
     /**
      * Check for duplications in list of plugins.
-     * @param pluginName name of the plugin.
+     * @param manifest manifest of the plugin.
      * @param plugins the list of plugins in which will be checked for the provided plugin.
      */
-    public static checkForDuplications(pluginName: string, plugins: UiPluginMetadataResponse[]) {
+    public static checkForDuplications(manifest: PluginManifest, plugins: UiPluginMetadataResponse[]) {
         const promise = new Promise<boolean>((resolve, reject) => {
             const search = plugins.find((plugin: UiPluginMetadataResponse) => {
-                return plugin.pluginName === pluginName;
+                return (
+                    plugin.pluginName === manifest.name &&
+                    plugin.vendor === manifest.vendor &&
+                    plugin.version === manifest.version
+                );
             });
 
             if (search) {

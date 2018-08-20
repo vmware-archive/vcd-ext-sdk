@@ -9,7 +9,7 @@ import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { TenantService } from "../../services/tenant.service";
 import { QueryResultOrgRecordType } from "@vcd/bindings/vcloud/api/rest/schema_v1_5";
@@ -212,8 +212,6 @@ export class UploadComponent implements OnInit {
         this.scopeFeedback.reset();
         // Disable next button into the wizard
         this.canGoNext = false;
-        // Reset publish the plugin flag
-        this.publishing = false;
     }
 
     /**

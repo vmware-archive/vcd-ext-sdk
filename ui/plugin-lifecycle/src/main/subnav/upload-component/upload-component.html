@@ -64,18 +64,18 @@
         </clr-wizard-page>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
-                <ng-template clrPageTitle>{{ "subnav.upload-plugin.wizard.page-4.title" | translate }}</ng-template>
-    
-                <ng-template clrPageButtons>
-                        <clr-wizard-button [type]="'custom-cancel'">{{ "subnav.upload-plugin.wizard.page-4.cancel.btn" | translate }}</clr-wizard-button>
-                        <clr-wizard-button [type]="'previous'">{{ "subnav.upload-plugin.wizard.page-4.back.btn" | translate }}</clr-wizard-button>
-                        <clr-wizard-button [type]="'custom-finish'">{{ "subnav.upload-plugin.wizard.page-4.finish.btn" | translate }}</clr-wizard-button>
-                </ng-template>
-    
-                <div class="summary-body">
-                    <h4>{{ "subnav.upload-plugin.wizard.page-4.summary.heading" | translate }}</h4>
-                    {{ summary }}
-                </div>
-            </clr-wizard-page>
+            <ng-template clrPageTitle>{{ "subnav.upload-plugin.wizard.page-4.title" | translate }}</ng-template>
+
+            <ng-template clrPageButtons>
+                <clr-wizard-button [type]="'custom-cancel'">{{ "subnav.upload-plugin.wizard.page-4.cancel.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">{{ "subnav.upload-plugin.wizard.page-4.back.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-finish'">{{ "subnav.upload-plugin.wizard.page-4.finish.btn" | translate }}</clr-wizard-button>
+            </ng-template>
+
+            <div class="summary-body">
+                <h4>{{ "subnav.upload-plugin.wizard.page-4.summary.heading" | translate }}</h4>
+                {{ summary }}
+            </div>
+        </clr-wizard-page>
     </clr-wizard>
 </div>

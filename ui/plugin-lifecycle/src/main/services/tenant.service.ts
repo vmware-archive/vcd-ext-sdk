@@ -1,54 +1,25 @@
 import { Injectable } from "@angular/core";
-import { Tenant, UiTenantResponse } from "../interfaces/Tenant";
 import { Observable, BehaviorSubject } from "rxjs";
-import { PluginManager } from "./plugin-manager.service";
-import { AuthTokenHolderService } from "@vcd-ui/common";
 import { VcdApiClient } from "@vcd/sdk";
+import { Query } from "@vcd/sdk/query";
+import { QueryResultRecordsType, QueryResultOrgRecordType } from "@vcd/bindings/vcloud/api/rest/schema_v1_5";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class TenantService {
-    private _orgs: Tenant[] = [];
-    private _orgsSubject = new BehaviorSubject<Tenant[]>(this.orgs);
+    private _orgsSubject = new BehaviorSubject<QueryResultOrgRecordType[]>([]);
 
     constructor(
-        private authService: AuthTokenHolderService,
-        private pluginManager: PluginManager,
         private client: VcdApiClient
     ) {
         // Load the tenants
-        this.loadOrgs(this.pluginManager.baseUrl);
-    }
-
-    get orgs(): Tenant[] {
-        return this._orgs;
-    }
-
-    set orgs(orgs: Tenant[]) {
-        this._orgs = orgs;
-        this._orgsSubject.next(this.orgs);
-    }
-
-    /**
-     * Add new tenant into the list.
-     * @param org tenant which will be added into the list
-     */
-    private addOrg(org: Tenant) {
-        Object.keys(org).forEach((key) => {
-            try {
-                org[key] = JSON.parse(org[key]);
-            } catch (error) {
-                org[key] = org[key];
-            }
-        });
-
-        this.orgs.push(org);
-        this._orgsSubject.next(this.orgs);
+        this.loadOrgs();
     }
 
     /**
      * Observe the list of tenants.
      */
-    public watchOrgs(): Observable<Tenant[]> {
+    public watchOrgs(): Observable<QueryResultRecordsType[]> {
         return this._orgsSubject.asObservable();
     }
 
@@ -56,28 +27,32 @@ export class TenantService {
      * Refresh the list of tenants.
      */
     public refresh() {
-        this.loadOrgs(this.pluginManager.baseUrl);
+        this.loadOrgs();
     }
 
     /**
      * Make request to take all existing organistaions.
      */
-    private loadOrgs(url: string): void {
-        this.getAllTenants(url, this.authService.token)
-            .then((res: UiTenantResponse) => {
-                this.orgs = res.record;
-            })
-            .catch((err) => {
-                console.error(err);
+    private loadOrgs(): void {
+        const subs = this.getAllTenants()
+            .subscribe(() => {
+                // Handle subscription
+            }, (error) => {
+                console.error(error);
+                subs.unsubscribe();
+            }, () => {
+                subs.unsubscribe();
             });
     }
 
     /**
      * Creates a request to take all tenants.
-     * @param baseUrl the url where the request will be made
-     * @param token the authorization token
      */
-    private getAllTenants(baseUrl: string, token: string): Promise<UiTenantResponse> {
-        return this.client.get<UiTenantResponse>("api/query?type=organization").toPromise();
+    private getAllTenants(): Observable<QueryResultRecordsType> {
+        return this.client.query(Query.Builder.ofType("organization")).pipe(
+            tap((result: QueryResultRecordsType) => {
+                this._orgsSubject.next((result.record as QueryResultOrgRecordType[]));
+            })
+        );
     }
 }

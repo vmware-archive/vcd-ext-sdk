@@ -40,7 +40,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
         private pluginManager: PluginManager,
-        private changeOrgScopeService: ChangeOrgScopeService
+        private changeOrgScopeService: ChangeTenantScopeService
     ) { }
 
     public ngOnInit() {
@@ -330,7 +330,6 @@ export class StatusComponent implements OnInit, OnDestroy {
      */
     public openChangeOrgScope(): void {
         this.changeScopeState = true;
-        this.action = action;
     }
 
     /**

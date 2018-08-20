@@ -88,7 +88,7 @@
 "@vcd/bindings@file:../api-client/packages/bindings/dist":
   version "9.1.0"
 
-"@vcd/http-transfer-service@file:../../../../http-transfer-service/dist":
+"@vcd/http-transfer-service@file:http-transfer-service/dest":
   version "1.0.0"
 
 "@vcd/sdk@file:../api-client/packages/sdk/dist":

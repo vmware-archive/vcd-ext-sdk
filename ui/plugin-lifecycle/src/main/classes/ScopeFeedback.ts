@@ -6,7 +6,7 @@ export class ScopeFeedback {
     // Unpublish for all tenants
     private _unpublishForAllTenants = false;
     // Is the scope applied for all tenants
-    private _forAllOrgs = false;
+    private _forSpecificTenants = false;
 
     // List of scopes ex: ['tenant', 'provider']
     private _scope: string[] = [];
@@ -36,13 +36,13 @@ export class ScopeFeedback {
     }
 
     // Get for all tenantss flag
-    get forAllOrgs(): boolean {
-        return this._forAllOrgs;
+    get forSpecificTenants(): boolean {
+        return this._forSpecificTenants;
     }
 
     // Set for all tenants flag
-    set forAllOrgs(val: boolean) {
-        this._forAllOrgs = val;
+    set forSpecificTenants(val: boolean) {
+        this._forSpecificTenants = val;
     }
 
     // Set data which describe the change scope request
@@ -60,7 +60,19 @@ export class ScopeFeedback {
      * @param item describes the change scope request
      */
     public addNewOrg(item: ChangeScopeItem): void {
-        if (!item) { return; }
+        if (!item) {
+            return;
+        }
+
+        const found = this._data.find((existing) => {
+            return existing.orgName === item.orgName && existing.plugin.pluginName === item.plugin.pluginName;
+        });
+
+        if (found) {
+            console.warn("This change scope item is already in the list.");
+            return;
+        }
+
         this._data.push(item);
     }
 
@@ -79,6 +91,10 @@ export class ScopeFeedback {
      * @param scope scope to be added into the list of scopes
      */
     public addNewScope(scope: string): void {
+        if (this.scope.indexOf(scope) !== -1 ) {
+            return;
+        }
+
         this.scope.push(scope);
     }
 
@@ -87,14 +103,18 @@ export class ScopeFeedback {
      * @param scope scope to be removed from the list
      */
     public removeScope(scope: string): void {
-        this.scope.splice(this.scope.indexOf(scope), 1);
+        if (this.scope.indexOf(scope) === -1 ) {
+            return;
+        }
+
+        this.scope.splice(this.scope.indexOf(scope));
     }
 
     /**
      * Reset all properties.
      */
     public reset(): void {
-        this.forAllOrgs = false;
+        this.forSpecificTenants = true;
         this.publishForAllTenants = false;
         this.unpublishForAllTenants = false;
         this.data = [];

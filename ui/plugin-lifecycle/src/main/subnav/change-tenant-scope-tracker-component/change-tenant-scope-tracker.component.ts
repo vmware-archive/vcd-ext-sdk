@@ -4,6 +4,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ChangeScopeRequest } from "../../classes/ChangeScopeRequest";
+import { ChangeTenantScopeService } from "../../services/change-tenant-scope.service";
 
 @Component({
     selector: "vcd-change-tenant-scope-tracker",
@@ -20,13 +21,20 @@ export class ChangeTenantScopeTracker implements OnInit, OnDestroy {
             }
         }
 
+        if (val === true) {
+            // Get all requests whcih are made
+            this.loadRequests();
+        }
+
         this._open = val;
     }
     @Output() openChange = new EventEmitter<boolean>();
     public requests: ChangeScopeRequest[];
     public watchChangeScopeReq: Subscription;
 
-    constructor() { }
+    constructor(
+        private changeOrgScopeService: ChangeTenantScopeService
+    ) { }
 
     ngOnInit() {}
 
@@ -41,10 +49,20 @@ export class ChangeTenantScopeTracker implements OnInit, OnDestroy {
     }
 
     /**
+     * Load all requests which are made at this moment and watch for new.
+     */
+    public loadRequests(): void {
+        this.watchChangeScopeReq = this.changeOrgScopeService.watchChangeScopeReq().subscribe((data) => {
+            this.requests = data;
+        });
+    }
+
+    /**
      * Close the chage org request tracker modal.
      */
     public onClose(): void {
         this.open = false;
+        this.changeOrgScopeService.clearChangeScopeReq();
         this.openChange.emit(false);
     }
 }
