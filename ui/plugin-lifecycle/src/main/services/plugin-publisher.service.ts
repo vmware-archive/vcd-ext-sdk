@@ -79,7 +79,7 @@ export class PluginPublisher {
      */
     private togglePluginStateForSpecTenants(
         plugin: ChangeScopePlugin, changeScopeItems: ChangeScopeItem[], trackScopeChange: boolean, url: string, hasToBe: string
-    ): Observable<HttpResponse<any>> {
+    ) {
         const body: { name: string }[] = [];
 
         // Assing org to req body
@@ -90,14 +90,6 @@ export class PluginPublisher {
         // Create req url
         const REQ_URL = `${url}/cloudapi/extensions/ui/${plugin.id}/tenants/${hasToBe}`;
         const REQ = this.pluginService.togglePublishing(plugin.id, hasToBe, body);
-
-        // Register change scope list
-        let changeScopeRequests: ChangeScopeRequest[];
-
-        // If the requests are not trackable create list for them
-        if (!trackScopeChange) {
-            changeScopeRequests = [];
-        }
 
         // Init change scope request object
         const changeScopeRequest = new ChangeScopeRequest(
@@ -110,18 +102,9 @@ export class PluginPublisher {
         // Track the request if needed
         if (trackScopeChange) {
             this.changeOrgScopeService.addChangeScopeReq(changeScopeRequest);
-        } else {
-            // Add request to the list
-            changeScopeRequests.push(changeScopeRequest);
         }
 
-        // Execute all tracked requests in parallel with merge operator
-        if (trackScopeChange) {
-            return this.changeOrgScopeService.executeRequestsInParallel();
-        }
-
-        // Execute all in parrallel
-        return Observable.merge(...changeScopeRequests.map((req) => req.request));
+        return changeScopeRequest;
     }
 
     /**
@@ -152,15 +135,18 @@ export class PluginPublisher {
      * @param scopeFeedback contains the data which will be applied on each plugin into the list
      */
     public handleMixedScope(
-        plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean, url: string
+        plugins: ChangeScopePlugin[],
+        scopeFeedback: ScopeFeedback,
+        trackScopeChange: boolean,
+        url: string
     ): Observable<HttpResponse<any>> {
         // Create the result object with the url of the request and the request
-        const result: Observable<HttpResponse<any>>[] = [];
+        const result: ChangeScopeRequest[] = [];
 
-        plugins.forEach((selectedPlugin: ChangeScopePlugin) => {
+        plugins.forEach((selectedPlugin: UiPluginMetadataResponse) => {
             // Extract the data for this plugin only from scope feedback
             const changeScopeItems = scopeFeedback.data.filter((el) => {
-                return selectedPlugin.pluginName === el.plugin;
+                return selectedPlugin.pluginName === el.plugin.pluginName;
             });
 
             // Extract data for publishing
@@ -183,6 +169,6 @@ export class PluginPublisher {
             }
         });
 
-        return Observable.merge(...result);
+        return trackScopeChange ? this.changeOrgScopeService.executeRequestsInParallel() : Observable.merge(...result.map(item => item.request));
     }
 }

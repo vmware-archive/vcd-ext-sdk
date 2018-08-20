@@ -33,3 +33,8 @@ export interface UiTenantResponse {
     type: string;
     vcloudExtension: any[];
 }
+
+export interface UiPluginTenantsResponse {
+    name: string;
+    id: string;
+}

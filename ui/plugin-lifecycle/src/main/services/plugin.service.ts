@@ -3,6 +3,8 @@ import { VcdApiClient } from "@vcd/sdk";
 import { Observable } from "rxjs";
 import { UiPluginMetadata, UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { HttpResponse } from "@angular/common/http";
+import { retryWhen } from "rxjs/operator/retryWhen";
+import { UiPluginTenantsResponse } from "../interfaces/Tenant";
 
 @Injectable()
 export class PluginService {
@@ -28,6 +30,10 @@ export class PluginService {
     public enablePlugin(plugin: UiPluginMetadata, id: string): Observable<UiPluginMetadataResponse> {
         plugin.enabled = true;
         return this.client.updateSync(`cloudapi/extensions/ui/${id}`, plugin);
+    }
+
+    public getPluginTenants(id: string): Observable<UiPluginTenantsResponse[]> {
+        return this.client.get<UiPluginTenantsResponse[]>(`cloudapi/extensions/ui/${id}/tenants`);
     }
 
     public togglePublishing(pluginID: string, hasToBe: string, body: any): Observable<HttpResponse<any>> {

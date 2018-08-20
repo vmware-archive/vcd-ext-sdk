@@ -60,7 +60,19 @@ export class ScopeFeedback {
      * @param item describes the change scope request
      */
     public addNewOrg(item: ChangeScopeItem): void {
-        if (!item) { return; }
+        if (!item) {
+            return;
+        }
+
+        const found = this._data.find((existing) => {
+            return existing.orgName === item.orgName && existing.plugin.pluginName === item.plugin.pluginName;
+        });
+
+        if (found) {
+            console.warn("This change scope item is already in the list.");
+            return;
+        }
+
         this._data.push(item);
     }
 
@@ -79,6 +91,10 @@ export class ScopeFeedback {
      * @param scope scope to be added into the list of scopes
      */
     public addNewScope(scope: string): void {
+        if (this.scope.indexOf(scope) !== -1 ) {
+            return;
+        }
+
         this.scope.push(scope);
     }
 
@@ -87,7 +103,11 @@ export class ScopeFeedback {
      * @param scope scope to be removed from the list
      */
     public removeScope(scope: string): void {
-        this.scope.splice(this.scope.indexOf(scope), 1);
+        if (this.scope.indexOf(scope) === -1 ) {
+            return;
+        }
+
+        this.scope.splice(this.scope.indexOf(scope));
     }
 
     /**

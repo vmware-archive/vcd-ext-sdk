@@ -26,7 +26,6 @@ export class StatusComponent implements OnInit, OnDestroy {
     public changeScopeState = false;
     public wantToUpload: boolean;
     public isLoading: boolean;
-    public action: string;
     public showTracker = false;
     public openChangeScope = false;
     public errorMessage: string;
@@ -308,12 +307,10 @@ export class StatusComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open the modal for org scope changing with selected action.
-     * @param action action which will be applied ( publish / unpublish )
+     * Open the modal for org scope changing.
      */
-    public openChangeOrgScope(action: string): void {
+    public openChangeOrgScope(): void {
         this.changeScopeState = true;
-        this.action = action;
     }
 
     /**

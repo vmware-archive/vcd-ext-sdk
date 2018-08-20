@@ -161,7 +161,11 @@ export class PluginManager {
     /**
      * Publish or unpublish list of plugins.
      */
-    public handleMixedScope(plugins: ChangeScopePlugin[], scopeFeedback: ScopeFeedback, trackScopeChange: boolean): Observable<HttpResponse<any>> {
+    public handleMixedScope(
+        plugins: ChangeScopePlugin[],
+        scopeFeedback: ScopeFeedback,
+        trackScopeChange: boolean
+    ): Observable<HttpResponse<any>> {
         return this.pluginPublisher.handleMixedScope(plugins, scopeFeedback, trackScopeChange, this._baseUrl);
     }
 
@@ -240,7 +244,7 @@ export class PluginManager {
                 })
                 .then(() => {
                     // Publish the plugin if this kind of data is provided
-                    if (scopeFeedback.forAllOrgs) {
+                    if (scopeFeedback.publishForAllTenants) {
                         observer.next(this.pluginPublisher.publishPluginForAllTenants(
                             [PLUGIN],
                             this.baseUrl,

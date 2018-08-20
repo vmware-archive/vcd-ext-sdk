@@ -1,29 +1,45 @@
 <div class="choose-org-scope">
     <form #form="ngForm" novalidate>
         <section class="form-block">
-            <div class="relative">
+            <div *ngIf="showDontPublish">
                 <div class="radio">
-                    <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="true" name="activate" id="forAllOrgs">
-                    <label for="forAllOrgs">Apply for all tenants</label>
+                    <input type="radio" (click)="onRadioChange($event)" name="option" id="unpublishForAllTenants">
+                    <label for="unpublishForAllTenants">Don't publish</label>
                 </div>
 
-                <clr-alert [clrAlertClosable]="false">
-                    <div clr-alert-item class="alert-item">
-                        <span class="alert-text">
-                            Note: If you select this option the plugin will be {{ option }} for all existing and newly created tenants.
-                        </span>
-                    </div>
-                </clr-alert>
+                <div class="description">
+                    <p>
+                        Note: If you select this option the plugin will be unpublished for all existing and newly created tenants.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <div class="radio">
+                    <input type="radio" (click)="onRadioChange($event)" name="option" id="publishForAllTenants">
+                    <label for="publishForAllTenants">Publish for all tenants</label>
+                </div>
+
+                <div class="description">
+                    <p>
+                        Note: If you select this option the plugin will be published for all existing and newly created tenants.
+                    </p>
+                </div>
             </div>
 
             <div *ngIf="listOfOrgsPerPlugin">
                 <div class="radio">
-                    <input type="radio" [(ngModel)]="feedback.forAllOrgs" [value]="false" name="activate" id="forSpecOrgs">
-                    <label for="forSpecOrgs">Apply for specific tenants</label>
+                    <input
+                    type="radio"
+                    (click)="onRadioChange($event)"
+                    [attr.checked]="!feedback.publishForAllTenants && !feedback.unpublishForAllTenants"
+                    name="option"
+                    id="publish_for_specific">
+                    <label for="publish_for_specific">Publish for specific tenants</label>
                 </div>
 
                 <div class="relative list">
-                    <div class="overlay" *ngIf="feedback.forAllOrgs"></div>
+                    <div class="overlay" *ngIf="feedback.publishForAllTenants || feedback.unpublishForAllTenants"></div>
                     <clr-datagrid (clrDgSelectedChange)="setFeedbackData($event)" [clrDgSelected]="feedback.data">
                         <!-- PLACEHOLDER -->
                         <clr-dg-placeholder>We couldn't find any tenants...</clr-dg-placeholder>
@@ -34,7 +50,7 @@
 
                         <clr-dg-row *clrDgItems="let item of listOfOrgsPerPlugin" [clrDgItem]="item">
                             <clr-dg-cell>{{ item.orgName }}</clr-dg-cell>
-                            <clr-dg-cell>{{ item.plugin }}</clr-dg-cell>
+                            <clr-dg-cell>{{ item.plugin.pluginName }}</clr-dg-cell>
                         </clr-dg-row>
                     </clr-datagrid>
                 </div>

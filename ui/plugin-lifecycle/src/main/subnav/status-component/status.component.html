@@ -22,12 +22,7 @@
                         <clr-icon shape="caret down"></clr-icon>
                     </button>
                     <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-                        <label class="dropdown-header">{{ "subnav.status.datagrid.dropdown.heading" | translate }}</label>
-                        <button clrDropdownItem type="button" (click)="publishForAllTenants()">{{ "subnav.status.datagrid.dropdown.publishForAll.btn" | translate }}</button>
-                        <button clrDropdownItem type="button" (click)="unpublishForAllTenants()">{{ "subnav.status.datagrid.dropdown.unPublishForAll.btn" | translate }}</button>
-                        <div class="dropdown-divider"></div>
-                        <button clrDropdownItem type="button" (click)="openChangeOrgScope('publish')">{{ "subnav.status.datagrid.dropdown.publish.btn" | translate }}</button>
-                        <button clrDropdownItem type="button" (click)="openChangeOrgScope('unpublish')">{{ "subnav.status.datagrid.dropdown.unpublish.btn" | translate }}</button>
+                        <button clrDropdownItem type="button" (click)="openChangeOrgScope()">{{ "subnav.status.datagrid.dropdown.publish.btn" | translate }}</button>
                         <div class="dropdown-divider"></div>
                         <button clrDropdownItem type="button" (click)="changeScope()">{{ "subnav.status.datagrid.dropdown.changeScope.btn" | translate }}</button>
                     </clr-dropdown-menu>
@@ -79,7 +74,7 @@
 </div>
 
 <!-- Change org scope -->
-<vcd-change-org-scope [(state)]="changeScopeState" [action]="action"></vcd-change-org-scope>
+<vcd-change-org-scope [(state)]="changeScopeState"></vcd-change-org-scope>
 <!-- Upload new plugin -->
 <vcd-plugin-upload [(open)]="wantToUpload"></vcd-plugin-upload>
 <!-- Trakc org scope change request -->

@@ -11,7 +11,7 @@ import { ChangeOrgScopeService } from "../../services/change-org-scope.service";
     templateUrl: "./change-org-scope-tracker.component.html"
 })
 export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
-    private _open = false;
+    private _open: boolean;
 
     @Input()
     set open(val: boolean) {
@@ -36,9 +36,7 @@ export class ChangeOrgScopeTracker implements OnInit, OnDestroy {
         private changeOrgScopeService: ChangeOrgScopeService
     ) { }
 
-    ngOnInit() {
-        this.loadRequests();
-    }
+    ngOnInit() {}
 
     ngOnDestroy() {
         if (this.watchChangeScopeReq) {

@@ -1,13 +1,21 @@
+$grey: rgb(216, 213, 213);
+
 .relative {
     position: relative;
 }
 
 .overlay {
-    background: rgba(#bbb, 0.5);
+    background: rgba($grey, 0.5);
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     z-index: 10;
+}
+
+.description {
+    p {
+        margin-top: 5px;
+    }
 }

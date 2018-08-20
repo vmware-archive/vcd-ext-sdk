@@ -12,9 +12,14 @@ import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
     styleUrls: ["./choose-org-scope.component.scss"]
 })
 export class ChooseOrgScope implements OnInit {
-    @Input() listOfOrgsPerPlugin: ChangeScopeItem[];
-    @Input() option: string;
+    private _listOfOrgsPerPlugin: ChangeScopeItem[];
+
+    @Input()
+    set listOfOrgsPerPlugin(data: ChangeScopeItem[]) {
+        this._listOfOrgsPerPlugin = data;
+    };
     @Input() feedback: ScopeFeedback;
+    @Input() showDontPublish = true;
     @Output() feedbackChange = new EventEmitter<ScopeFeedback>();
 
     constructor(
@@ -23,25 +28,35 @@ export class ChooseOrgScope implements OnInit {
 
     ngOnInit() {}
 
+    get listOfOrgsPerPlugin(): ChangeScopeItem[] {
+        return this._listOfOrgsPerPlugin;
+    }
+
+    public onRadioChange(data: any): void {
+        const id = data.target.id;
+
+        this.feedback.publishForAllTenants = false;
+        this.feedback.unpublishForAllTenants = false;
+
+        if (id === "publishForAllTenants") {
+            this.feedback.publishForAllTenants = true;
+            this.feedback.unpublishForAllTenants = false;
+        }
+
+        if (id === "unpublishForAllTenants") {
+            this.feedback.unpublishForAllTenants = true;
+            this.feedback.publishForAllTenants = false;
+        }
+
+        this.onChange();
+    }
+
     public onChange(): void {
         this.feedbackChange.emit(this.feedback);
     }
 
-    public setItemValue(data: string, item: ChangeScopeItem): void {
-        if (this.feedback.forAllOrgs) {
-            return;
-        }
-
-        const found = this.listOfOrgsPerPlugin.find((el) => {
-            return el === item;
-        });
-
-        found.action = data;
-        this.onChange();
-    }
-
     public setFeedbackData(data: ChangeScopeItem[]): void {
-        if (this.feedback.forAllOrgs) {
+        if (this.feedback.publishForAllTenants || this.feedback.unpublishForAllTenants) {
             return;
         }
 

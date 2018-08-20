@@ -1,7 +1,7 @@
 /*
  * Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
  */
-import { Component, Inject, OnInit, Input, EventEmitter, Output, ViewChild, OnDestroy } from "@angular/core";
+import { Component, Inject, OnInit, Input, EventEmitter, Output, ViewChild } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd-ui/common";
 import { PluginManager } from "../../services/plugin-manager.service";
 import { UploadPayload } from "../../interfaces/Plugin";
@@ -9,11 +9,10 @@ import { ZipManager } from "../../services/zip-manager.service";
 import { Wizard } from "clarity-angular";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { ScopeFeedback } from "../../classes/ScopeFeedback";
-import { Subscription, Observable } from "rxjs";
+import { Subscription } from "rxjs";
 import { ChangeScopeItem } from "../../interfaces/ChangeScopeItem";
 import { Tenant } from "../../interfaces/Tenant";
 import { TenantService } from "../../services/tenant.service";
-import { Response} from "@angular/http";
 
 interface InputNativeElement {
     nativeElement: HTMLInputElement;
@@ -61,8 +60,6 @@ export class UploadComponent implements OnInit {
     public alertMessage: string;
     public listOfOrgsPerPlugin: ChangeScopeItem[];
     public orgs: Tenant[];
-    // Toggle publish section
-    public publishing: boolean;
     // Summary to describe what will be applied on upload
     public summary: string;
 
@@ -174,7 +171,7 @@ export class UploadComponent implements OnInit {
                 }
 
                 const subs = data.subscribe((res) => {
-                    console.log(res);
+                    // Handle successfull upload
                 }, (error) => {
                     console.error(error);
                     subs.unsubscribe();
@@ -214,8 +211,6 @@ export class UploadComponent implements OnInit {
         this.scopeFeedback.reset();
         // Disable next button into the wizard
         this.canGoNext = false;
-        // Reset publish the plugin flag
-        this.publishing = false;
     }
 
     /**
@@ -258,7 +253,7 @@ export class UploadComponent implements OnInit {
 
             if (this.wizardLarge.isLast) {
                 this.summary = `Upload plugin which is scoped for ${this.scopeFeedback.scope.toString()} and published for
-                ${this.scopeFeedback.forAllOrgs ?
+                ${this.scopeFeedback.publishForAllTenants ?
                     "all tenants." : this.scopeFeedback.data.length > 0 ?
                         this.scopeFeedback.data.length + " tenants." : "no one tenant."}`;
             }
@@ -292,7 +287,17 @@ export class UploadComponent implements OnInit {
     public populateList(): void {
         this.listOfOrgsPerPlugin = [];
         this.orgs.forEach((org: Tenant) => {
-            this.listOfOrgsPerPlugin.push({ orgName: org.name, plugin: this.uploadPayload.manifest.name, action: "publish" });
+            this.listOfOrgsPerPlugin.push({
+                orgName: org.name,
+                plugin: {
+                    pluginName: this.uploadPayload.manifest.name,
+                    vendor: this.uploadPayload.manifest.vendor,
+                    version: this.uploadPayload.manifest.version,
+                    license: this.uploadPayload.manifest.license,
+                    link: this.uploadPayload.manifest.link
+                },
+                action: "publish"
+            });
         });
     }
 }
