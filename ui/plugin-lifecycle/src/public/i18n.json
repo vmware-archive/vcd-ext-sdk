@@ -8,6 +8,7 @@
         "subnav.status.datagrid.disable.btn": "Disable",
         "subnav.status.datagrid.enable.btn": "Enable",
         "subnav.status.datagrid.delete.btn": "Delete",
+        "subnav.status.datagrid.refresh.btn": "Refresh",
         "subnav.status.datagrid.dropdown.btn": "Scope Actions",
         "subnav.status.datagrid.dropdown.heading": "Change Scope",
         "subnav.status.datagrid.dropdown.publishForAll.btn": "Publish For All Tenants",

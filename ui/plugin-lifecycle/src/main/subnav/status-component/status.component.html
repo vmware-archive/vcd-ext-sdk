@@ -5,6 +5,10 @@
     <clr-datagrid [(clrDgSelected)]="selected">
         <clr-dg-action-bar class="clr-dg-action-bar">
             <div class="btn-group last">
+                <button type="button" class="btn btn-sm btn-outline" (click)="onRefresh()">
+                    <clr-icon shape="refresh"></clr-icon>
+                </button>
+
                 <button type="button" class="btn btn-sm btn-outline" (click)="onUpload()">
                     <clr-icon shape="upload-cloud"></clr-icon>
                     {{ "subnav.status.datagrid.upload.btn" | translate }}

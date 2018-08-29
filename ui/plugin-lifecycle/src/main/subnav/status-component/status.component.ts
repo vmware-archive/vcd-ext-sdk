@@ -147,7 +147,26 @@ export class StatusComponent implements OnInit, OnDestroy {
         return PluginValidator.validateDisableEnableAction(this.selected, hasToBe, this.openModal.bind(this));
     }
 
-    // Disable all selected plugins
+    /**
+     * Refresh plugin list
+     */
+    public onRefresh() {
+        this.errorMessage = null;
+        this.loading();
+
+        this.pluginManager.refresh()
+            .then(() => {
+                this.endLoading();
+            })
+            .catch((error) => {
+                this.openErrorNotifyer = true;
+                this.errorMessage = error.message;
+            });
+    }
+
+    /**
+     * Disable all selected plugins
+     */
     public onDisable(): void {
         this.errorMessage = null;
 
@@ -198,7 +217,9 @@ export class StatusComponent implements OnInit, OnDestroy {
         });
     }
 
-    // Enable all selected plugins
+    /**
+     * Enable all selected plugins
+     */
     public onEnable(): void {
         this.errorMessage = null;
 
