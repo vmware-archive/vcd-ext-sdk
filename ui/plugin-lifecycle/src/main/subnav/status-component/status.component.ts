@@ -39,8 +39,7 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
-        private pluginManager: PluginManager,
-        private changeOrgScopeService: ChangeTenantScopeService
+        private pluginManager: PluginManager
     ) { }
 
     public ngOnInit() {
