@@ -19,7 +19,6 @@ import { ChangeTenantScope } from "./subnav/change-tenant-scope-component/change
 import { ChooseTenantScope } from "./subnav/choose-tenant-scope-component/choose-tenant-scope.component";
 import { TenantService } from "./services/tenant.service";
 import { ChangeTenantScopeTracker } from "./subnav/change-tenant-scope-tracker-component/change-tenant-scope-tracker.component";
-import { ChangeTenantScopeService } from "./services/change-tenant-scope.service";
 import { PluginUploaderService } from "./services/plugin-uploader.service";
 import { PluginPublisher } from "./services/plugin-publisher.service";
 import { CapitalizeFirstPipe } from "./pipes/capitalizefirst/capitalizefirst.pipe";
@@ -75,7 +74,6 @@ const ROUTES: Routes = [
         VcdApiClient,
         PluginService,
         TenantService,
-        ChangeTenantScopeService,
         PluginPublisher,
         PluginUploaderService,
         PluginManager,

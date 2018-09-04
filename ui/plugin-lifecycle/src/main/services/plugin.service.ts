@@ -34,8 +34,8 @@ export class PluginService {
         return this.client.get<EntityReference2[]>(`cloudapi/extensions/ui/${id}/tenants`);
     }
 
-    public togglePublishing(pluginID: string, hasToBe: string, body: { name: string }[]): Observable<HttpResponse<EntityReference2[]>> {
-        return this.client.createSyncWithObserveResponse<EntityReference2[], { name: string }[]>(
+    public togglePublishing(pluginID: string, hasToBe: string, body: EntityReference2[]): Observable<EntityReference2[]> {
+        return this.client.createSync<EntityReference2[]>(
             `cloudapi/extensions/ui/${pluginID}/tenants/${hasToBe}`,
             body
         );

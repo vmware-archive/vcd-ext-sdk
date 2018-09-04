@@ -12,9 +12,9 @@ export class ChangeScopeRequest {
     // Request action
     action: string;
     // Http request
-    request: Observable<HttpResponse<EntityReference2[]>>;
+    request: Observable<EntityReference2[]>;
 
-    constructor(reqUrl: string, pluginName: string, action: string, req: Observable<HttpResponse<EntityReference2[]>>) {
+    constructor(reqUrl: string, pluginName: string, action: string, req: Observable<EntityReference2[]>) {
         this.reqUrl = reqUrl;
         this.pluginName = pluginName;
         this.action = action;

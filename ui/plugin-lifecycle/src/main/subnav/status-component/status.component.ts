@@ -7,7 +7,6 @@ import { PluginManager } from "../../services/plugin-manager.service";
 import { Subscription, Observable, Subject } from "rxjs";
 import { ModalData, ModalWindow } from "../../interfaces/Modal";
 import { PluginValidator } from "../../classes/plugin-validator";
-import { ChangeTenantScopeService } from "../../services/change-tenant-scope.service";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model/uiPluginMetadataResponse";
 
 interface SubjectModalData {
@@ -40,8 +39,7 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
-        private pluginManager: PluginManager,
-        private changeOrgScopeService: ChangeTenantScopeService
+        private pluginManager: PluginManager
     ) { }
 
     public ngOnInit() {

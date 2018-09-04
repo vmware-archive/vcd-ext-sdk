@@ -3,7 +3,6 @@ import { PluginManifest, PluginFileDetails } from "../interfaces/Plugin";
 import { PluginValidator } from "../classes/plugin-validator";
 import { UiPluginMetadata } from "@vcd/bindings/vcloud/rest/openapi/model";
 import { VcdApiClient } from "@vcd/sdk";
-import { HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 @Injectable()
@@ -49,14 +48,14 @@ export class PluginUploaderService {
      * @param plugin specific plugin
      * @param url the base url where the request will be made
      */
-    public enablePluginUpload(plugin: { id: string, file: File }): Observable<HttpResponse<void>> {
+    public enablePluginUpload(plugin: { id: string, file: File }): Observable<string> {
         // File size has to be in bytes
         const body: PluginFileDetails = {
             fileName: plugin.file.name,
             size: plugin.file.size
         };
 
-        return this.client.createSyncWithObserveResponse<void, string>(
+        return this.client.getTransferLink<string>(
             `cloudapi/extensions/ui/${plugin.id}/plugin`,
             JSON.stringify(body)
         );

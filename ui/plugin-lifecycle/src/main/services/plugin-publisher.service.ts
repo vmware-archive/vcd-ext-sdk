@@ -2,7 +2,6 @@ import { Injectable, Inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { ChangeScopePlugin } from "../interfaces/Plugin";
 import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
-import { ChangeTenantScopeService } from "./change-tenant-scope.service";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 import { UiPluginMetadataResponse, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
@@ -14,7 +13,6 @@ import { API_ROOT_URL } from "@vcd/sdk/common";
 export class PluginPublisher {
     constructor(
         @Inject(API_ROOT_URL) private _baseUrl: string = "",
-        private changeOrgScopeService: ChangeTenantScopeService,
         private pluginService: PluginService
     ) {}
 
@@ -26,7 +24,7 @@ export class PluginPublisher {
      */
     private generatePublishRequestForAllTenants(
         plugins: UiPluginMetadataResponse[], hasToBe: string, trackScopeChange: boolean = false
-    ): Observable<HttpResponse<EntityReference2[]>> {
+    ): Observable<EntityReference2[]> {
         // Register change scope list
         let changeScopeRequests: ChangeScopeRequest[];
 
@@ -49,20 +47,8 @@ export class PluginPublisher {
                 REQ
             );
 
-            // Track the request if needed
-            if (trackScopeChange) {
-                // Add request to the list
-                this.changeOrgScopeService.addChangeScopeReq(changeScopeRequest);
-            } else {
-                // Add request to the list
-                changeScopeRequests.push(changeScopeRequest);
-            }
+            changeScopeRequests.push(changeScopeRequest);
         });
-
-        // Execute all tracked requests in parallel with merge operator
-        if (trackScopeChange) {
-            return this.changeOrgScopeService.executeRequestsInParallel();
-        }
 
         // Execute all in parrallel
         return Observable.merge(...changeScopeRequests.map((req) => req.request));
@@ -100,11 +86,6 @@ export class PluginPublisher {
             REQ
         );
 
-        // Track the request if needed
-        if (trackScopeChange) {
-            this.changeOrgScopeService.addChangeScopeReq(changeScopeRequest);
-        }
-
         return changeScopeRequest;
     }
 
@@ -116,7 +97,7 @@ export class PluginPublisher {
     public publishPluginForAllTenants(
         plugins: UiPluginMetadataResponse[],
         trackScopeChange: boolean
-    ): Observable<HttpResponse<EntityReference2[]>> {
+    ): Observable<EntityReference2[]> {
         return this.generatePublishRequestForAllTenants(plugins, "publishAll", trackScopeChange);
     }
 
@@ -128,7 +109,7 @@ export class PluginPublisher {
     public unpublishPluginForAllTenants(
         plugins: UiPluginMetadataResponse[],
         trackScopeChange: boolean
-    ): Observable<HttpResponse<EntityReference2[]>> {
+    ): Observable<EntityReference2[]> {
         return this.generatePublishRequestForAllTenants(plugins, "unpublishAll", trackScopeChange);
     }
 
@@ -143,7 +124,7 @@ export class PluginPublisher {
         plugins: ChangeScopePlugin[],
         scopeFeedback: ScopeFeedback,
         trackScopeChange: boolean
-    ): Observable<HttpResponse<EntityReference2[]>> {
+    ): Observable<EntityReference2[]> {
         // Create the result object with the url of the request and the request
         const result: ChangeScopeRequest[] = [];
 
@@ -173,6 +154,6 @@ export class PluginPublisher {
             }
         });
 
-        return trackScopeChange ? this.changeOrgScopeService.executeRequestsInParallel() : Observable.merge(...result.map(item => item.request));
+        return Observable.merge(...result.map(item => item.request));
     }
 }

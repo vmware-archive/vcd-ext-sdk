@@ -139,7 +139,7 @@ export class PluginManager {
      * Publish list of plugins.
      * @param trackScopeChange flag which determines requests like trackable
      */
-    public publishPluginForAllTenants(trackScopeChange: boolean): Observable<HttpResponse<EntityReference2[]>> {
+    public publishPluginForAllTenants(trackScopeChange: boolean): Observable<EntityReference2[]> {
         return this.pluginPublisher.publishPluginForAllTenants(this.selectedPlugins, trackScopeChange);
     }
 
@@ -147,7 +147,7 @@ export class PluginManager {
      * Unpublish list of plugins.
      * @param trackScopeChange flag which determines requests like trackable
      */
-    public unpublishPluginForAllTenants(trackScopeChange: boolean): Observable<HttpResponse<EntityReference2[]>> {
+    public unpublishPluginForAllTenants(trackScopeChange: boolean): Observable<EntityReference2[]> {
         return this.pluginPublisher.unpublishPluginForAllTenants(this.selectedPlugins, trackScopeChange);
     }
 
@@ -158,7 +158,7 @@ export class PluginManager {
         plugins: ChangeScopePlugin[],
         scopeFeedback: ScopeFeedback,
         trackScopeChange: boolean
-    ): Observable<HttpResponse<EntityReference2[]>> {
+    ): Observable<EntityReference2[]> {
         return this.pluginPublisher.handleMixedScope(plugins, scopeFeedback, trackScopeChange);
     }
 
@@ -202,14 +202,14 @@ export class PluginManager {
      * @param payload the data of the plugin
      * @param scopeFeedback the data which describes the scope of the plugin which will be uploaded
      */
-    public uploadPlugin(payload: UploadPayload, scopeFeedback: ScopeFeedback): Observable<Observable<HttpResponse<EntityReference2[]>>> {
+    public uploadPlugin(payload: UploadPayload, scopeFeedback: ScopeFeedback): Observable<Observable<EntityReference2[]>> {
         // Create data used to register it
         const PLUGIN: any = {
             id: null,
             file: null
         };
 
-        const observable = new Observable<Observable<HttpResponse<EntityReference2[]>>>((observer) => {
+        const observable = new Observable<Observable<EntityReference2[]>>((observer) => {
             // Extract useful data from the manifest
             this.pluginUploaderService.proccessManifest(payload.manifest)
                 .then((pluginDesc) => {
@@ -222,9 +222,8 @@ export class PluginManager {
                     // Register the plugin name and size
                     return this.pluginUploaderService.enablePluginUpload(PLUGIN).toPromise();
                 })
-                .then((enableResponse: HttpResponse<void>) => {
+                .then((linkHeader: string) => {
                     // Send transfer link in the reslove where the plugin will be uploaded.
-                    const linkHeader: string = enableResponse.headers.get("Link");
                     const url: string = linkHeader.split(">;")[0];
                     const transferLink = url.slice(1, url.length);
 

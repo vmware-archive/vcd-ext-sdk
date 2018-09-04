@@ -50,7 +50,7 @@ export class ZipManager {
             }
 
             entries.forEach((entrie) => {
-                const validStructure = /^(?!..\/)(((manifest|i18n|).(json)$)|((bundle).(js)$)|([0-9]|[a-z]+\/)([0-9]|[a-z]+).(svg|png|jpg))$/gm
+                const validStructure = /^(?!..\/)(((manifest|i18n|).(json)$)|((bundle).(js)$)|([0-9]|[a-z]+\/)([0-9]|[a-z]+).*[^exe]$)/gm
                     .test(entrie.filename);
 
                 if (!validStructure) {
