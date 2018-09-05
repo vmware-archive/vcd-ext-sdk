@@ -1,0 +1,14 @@
+<div class="alert-container" *ngIf="getAlertMessage()">
+    <div class="alert" [ngClass]="alertClasses">
+        <div class="alert-items">
+            <div class="alert-item static">
+                <div class="alert-icon-wrapper">
+                    <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                </div>
+                <span class="alert-text">
+                    {{ getAlertMessage() }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
