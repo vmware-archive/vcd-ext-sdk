@@ -1,6 +1,6 @@
 <div class="change-org-scope-modal" *ngIf="state">
     <clr-modal [clrModalOpen]="state" [clrModalClosable]="false" [clrModalSize]="'lg'">
-        <h3 class="modal-title">{{ "subnav.status.datagrid.dropdown.publish.btn" | translate }}</h3>
+        <h3 class="modal-title">{{ "lifecycle.status.datagrid.dropdown.publish.btn" | translate }}</h3>
         <div class="modal-body">
             <!-- Alert -->
             <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alertClasses"></vcd-alert>
@@ -14,11 +14,11 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onClose()">
-                {{ "subnav.change-org-scope.close.btn" | translate }}
+                {{ "lifecycle.change-org-scope.close.btn" | translate }}
             </button>
 
             <button type="button" class="btn btn-primary" (click)="onUpdate()">
-                {{ "subnav.change-org-scope.update.btn" | translate }}
+                {{ "lifecycle.change-org-scope.update.btn" | translate }}
             </button>
         </div>
     </clr-modal>

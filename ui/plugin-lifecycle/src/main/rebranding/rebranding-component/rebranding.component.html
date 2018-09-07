@@ -1,0 +1,13 @@
+<div *ngIf="rebrandingForm">
+    <form class="form" [formGroup]="rebrandingForm" [hidden]="submitted">
+        <section class="form-block">
+            <label>{{ "rebranding.title" | translate }}</label>
+
+            <div *ngFor="let field of fields">
+                <vcd-form-field [form]="rebrandingForm" [field]="field"></vcd-form-field>
+            </div>
+
+            <button class="btn btn-primary" type="button" [disabled]="rebrandingForm.invalid" (click)="onSubmit()">{{ "rebranding.btn.apply" | translate}}</button>
+        </section>
+    </form>
+</div>

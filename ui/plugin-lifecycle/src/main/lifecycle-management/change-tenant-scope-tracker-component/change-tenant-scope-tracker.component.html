@@ -1,15 +1,15 @@
 <div class="change-org-scope-tracker" *ngIf="open">
     <clr-modal [clrModalOpen]="open" [clrModalClosable]="false" [clrModalSize]="'lg'">
-        <h3 class="modal-title">{{ "subnav.change-org-scope-tracker.modal.title" | translate }}</h3>
+        <h3 class="modal-title">{{ "lifecycle.change-org-scope-tracker.modal.title" | translate }}</h3>
         <div class="modal-body">
             <clr-datagrid>
                 <!-- PLACEHOLDER -->
-                <clr-dg-placeholder>{{ "subnav.change-org-scope-tracker.org.notFoundMessage" | translate }}</clr-dg-placeholder>
+                <clr-dg-placeholder>{{ "lifecycle.change-org-scope-tracker.org.notFoundMessage" | translate }}</clr-dg-placeholder>
                 <!-- END PLACEHOLDER -->
 
-                <clr-dg-column>{{ "subnav.change-org-scope-tracker.datagrid.column.pluginName" | translate }}</clr-dg-column>
-                <clr-dg-column>{{ "subnav.change-org-scope-tracker.datagrid.column.action" | translate }}</clr-dg-column>
-                <clr-dg-column>{{ "subnav.change-org-scope-tracker.datagrid.column.status" | translate }}</clr-dg-column>
+                <clr-dg-column>{{ "lifecycle.change-org-scope-tracker.datagrid.column.pluginName" | translate }}</clr-dg-column>
+                <clr-dg-column>{{ "lifecycle.change-org-scope-tracker.datagrid.column.action" | translate }}</clr-dg-column>
+                <clr-dg-column>{{ "lifecycle.change-org-scope-tracker.datagrid.column.status" | translate }}</clr-dg-column>
 
                 <clr-dg-row *clrDgItems="let req of requests" [clrDgItem]="req">
                     <clr-dg-cell>{{ req.pluginName }}</clr-dg-cell>
@@ -24,7 +24,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" (click)="onClose()">
-                {{ "subnav.change-org-scope-tracker.modal.footer.close.btn" | translate }}
+                {{ "lifecycle.change-org-scope-tracker.modal.footer.close.btn" | translate }}
             </button>
         </div>
     </clr-modal>
