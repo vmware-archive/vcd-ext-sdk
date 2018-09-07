@@ -1,7 +1,7 @@
 <vcd-loading-indicator [isLoading]="isLoading" [showSpinner]="isLoading" [fixed]="true"></vcd-loading-indicator>
 
 <div class="list-all-plugins">
-    <h1>{{ "subnav.status.heading" | translate }}</h1>
+    <h1>{{ "lifecycle.status.heading" | translate }}</h1>
     <clr-datagrid [(clrDgSelected)]="selected">
         <clr-dg-action-bar class="clr-dg-action-bar">
             <div class="btn-group last">
@@ -11,40 +11,40 @@
 
                 <button type="button" class="btn btn-sm btn-outline" (click)="onUpload()">
                     <clr-icon shape="upload-cloud"></clr-icon>
-                    {{ "subnav.status.datagrid.upload.btn" | translate }}
+                    {{ "lifecycle.status.datagrid.upload.btn" | translate }}
                 </button>
             </div>
 
             <div class="btn-group" *ngIf="selected.length > 0">
-                <button *ngIf="canDisable" type="button" class="btn btn-sm btn-link" (click)="onDisable()">{{ "subnav.status.datagrid.disable.btn" | translate }}</button>
-                <button *ngIf="canEnable" type="button" class="btn btn-sm btn-link" (click)="onEnable()">{{ "subnav.status.datagrid.enable.btn" | translate }}</button>
-                <button type="button" class="btn btn-sm btn-link" (click)="onDelete()">{{ "subnav.status.datagrid.delete.btn" | translate }}</button>
+                <button *ngIf="canDisable" type="button" class="btn btn-sm btn-link" (click)="onDisable()">{{ "lifecycle.status.datagrid.disable.btn" | translate }}</button>
+                <button *ngIf="canEnable" type="button" class="btn btn-sm btn-link" (click)="onEnable()">{{ "lifecycle.status.datagrid.enable.btn" | translate }}</button>
+                <button type="button" class="btn btn-sm btn-link" (click)="onDelete()">{{ "lifecycle.status.datagrid.delete.btn" | translate }}</button>
 
                 <clr-dropdown>
                     <button type="button" class="btn btn-sm btn-link" clrDropdownTrigger>
-                        {{ "subnav.status.datagrid.dropdown.btn" | translate }}
+                        {{ "lifecycle.status.datagrid.dropdown.btn" | translate }}
                         <clr-icon shape="caret down"></clr-icon>
                     </button>
                     <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
-                        <button clrDropdownItem type="button" (click)="openChangeOrgScope()">{{ "subnav.status.datagrid.dropdown.publish.btn" | translate }}</button>
+                        <button clrDropdownItem type="button" (click)="openChangeOrgScope()">{{ "lifecycle.status.datagrid.dropdown.publish.btn" | translate }}</button>
                         <div class="dropdown-divider"></div>
-                        <button clrDropdownItem type="button" (click)="changeScope()">{{ "subnav.status.datagrid.dropdown.changeScope.btn" | translate }}</button>
+                        <button clrDropdownItem type="button" (click)="changeScope()">{{ "lifecycle.status.datagrid.dropdown.changeScope.btn" | translate }}</button>
                     </clr-dropdown-menu>
                 </clr-dropdown>
             </div>
         </clr-dg-action-bar>
 
         <!-- PLACEHOLDER -->
-        <clr-dg-placeholder>{{ "subnav.status.datagrid.notFoundMessage" | translate }}</clr-dg-placeholder>
+        <clr-dg-placeholder>{{ "lifecycle.status.datagrid.notFoundMessage" | translate }}</clr-dg-placeholder>
         <!-- END PLACEHOLDER -->
 
-        <clr-dg-column>{{ "subnav.status.datagrid.column.name" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.vendor" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.version" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.desc" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.tenant_scoped" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.provider_scoped" | translate }}</clr-dg-column>
-        <clr-dg-column>{{ "subnav.status.datagrid.column.enabled" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "lifecycle.status.datagrid.column.name" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "lifecycle.status.datagrid.column.vendor" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "lifecycle.status.datagrid.column.version" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "lifecycle.status.datagrid.column.desc" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "lifecycle.status.datagrid.column.tenant_scoped" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "lifecycle.status.datagrid.column.provider_scoped" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "lifecycle.status.datagrid.column.enabled" | translate }}</clr-dg-column>
 
         <clr-dg-row *clrDgItems="let plugin of plugins" [clrDgItem]="plugin">
             <clr-dg-cell class="pluginName">{{ plugin.pluginName }}</clr-dg-cell>

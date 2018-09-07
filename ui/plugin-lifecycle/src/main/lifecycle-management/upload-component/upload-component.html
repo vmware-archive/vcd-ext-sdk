@@ -3,14 +3,14 @@
     <clr-wizard #wizardlg [(clrWizardOpen)]="open" (clrWizardOnCancel)="onCancel()" clrWizardSize="lg">
         <vcd-loading-indicator [isLoading]="loading" [showSpinner]="loading" [fixed]="true" [loadingTextKey]="'Uploading...'"></vcd-loading-indicator>
 
-        <clr-wizard-title>{{ "subnav.upload-plugin.wizard.title" | translate }}</clr-wizard-title>
+        <clr-wizard-title>{{ "lifecycle.upload-plugin.wizard.title" | translate }}</clr-wizard-title>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
-            <ng-template clrPageTitle>{{ "subnav.upload-plugin.wizard.page-1.title" | translate }}</ng-template>
+            <ng-template clrPageTitle>{{ "lifecycle.upload-plugin.wizard.page-1.title" | translate }}</ng-template>
 
             <ng-template clrPageButtons>
-                <clr-wizard-button [type]="'custom-cancel'">{{ "subnav.upload-plugin.wizard.page-1.cancel.btn" | translate }}</clr-wizard-button>
-                <clr-wizard-button *ngIf="canGoNext" [type]="'custom-next'">{{ "subnav.upload-plugin.wizard.page-1.next.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-cancel'">{{ "lifecycle.upload-plugin.wizard.page-1.cancel.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button *ngIf="canGoNext" [type]="'custom-next'">{{ "lifecycle.upload-plugin.wizard.page-1.next.btn" | translate }}</clr-wizard-button>
             </ng-template>
 
             <!-- Form -->
@@ -24,24 +24,24 @@
         </clr-wizard-page>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
-            <ng-template clrPageTitle>{{ "subnav.upload-plugin.wizard.page-2.title" | translate }}</ng-template>
+            <ng-template clrPageTitle>{{ "lifecycle.upload-plugin.wizard.page-2.title" | translate }}</ng-template>
 
             <ng-template clrPageButtons>
-                <clr-wizard-button [type]="'custom-cancel'">{{ "subnav.upload-plugin.wizard.page-2.cancel.btn" | translate }}</clr-wizard-button>
-                <clr-wizard-button [type]="'previous'">{{ "subnav.upload-plugin.wizard.page-2.back.btn" | translate }}</clr-wizard-button>
-                <clr-wizard-button [type]="'custom-next'">{{ "subnav.upload-plugin.wizard.page-2.next.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-cancel'">{{ "lifecycle.upload-plugin.wizard.page-2.cancel.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">{{ "lifecycle.upload-plugin.wizard.page-2.back.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-next'">{{ "lifecycle.upload-plugin.wizard.page-2.next.btn" | translate }}</clr-wizard-button>
             </ng-template>
 
             <vcd-choose-scope *ngIf="uploadPayload.manifest" [(feedback)]="scopeFeedback"></vcd-choose-scope>
         </clr-wizard-page>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)" *ngIf="scopeFeedback.scope.indexOf('tenant') !== -1">
-            <ng-template clrPageTitle>{{ "subnav.upload-plugin.wizard.page-3.title" | translate }}</ng-template>
+            <ng-template clrPageTitle>{{ "lifecycle.upload-plugin.wizard.page-3.title" | translate }}</ng-template>
 
             <ng-template clrPageButtons>
-                <clr-wizard-button [type]="'custom-cancel'">{{ "subnav.upload-plugin.wizard.page-3.cancel.btn" | translate }}</clr-wizard-button>
-                <clr-wizard-button [type]="'previous'">{{ "subnav.upload-plugin.wizard.page-3.back.btn" | translate }}</clr-wizard-button>
-                <clr-wizard-button [type]="'custom-next'">{{ "subnav.upload-plugin.wizard.page-3.next.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-cancel'">{{ "lifecycle.upload-plugin.wizard.page-3.cancel.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">{{ "lifecycle.upload-plugin.wizard.page-3.back.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-next'">{{ "lifecycle.upload-plugin.wizard.page-3.next.btn" | translate }}</clr-wizard-button>
             </ng-template>
 
             <vcd-choose-tenant-scope [(feedback)]="scopeFeedback" [listOfOrgsPerPlugin]="listOfOrgsPerPlugin" [showDontPublish]="false">
@@ -49,16 +49,16 @@
         </clr-wizard-page>
 
         <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
-            <ng-template clrPageTitle>{{ "subnav.upload-plugin.wizard.page-4.title" | translate }}</ng-template>
+            <ng-template clrPageTitle>{{ "lifecycle.upload-plugin.wizard.page-4.title" | translate }}</ng-template>
 
             <ng-template clrPageButtons>
-                <clr-wizard-button [type]="'custom-cancel'">{{ "subnav.upload-plugin.wizard.page-4.cancel.btn" | translate }}</clr-wizard-button>
-                <clr-wizard-button [type]="'previous'">{{ "subnav.upload-plugin.wizard.page-4.back.btn" | translate }}</clr-wizard-button>
-                <clr-wizard-button [type]="'custom-finish'">{{ "subnav.upload-plugin.wizard.page-4.finish.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-cancel'">{{ "lifecycle.upload-plugin.wizard.page-4.cancel.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">{{ "lifecycle.upload-plugin.wizard.page-4.back.btn" | translate }}</clr-wizard-button>
+                <clr-wizard-button [type]="'custom-finish'">{{ "lifecycle.upload-plugin.wizard.page-4.finish.btn" | translate }}</clr-wizard-button>
             </ng-template>
 
             <div class="summary-body">
-                <h4>{{ "subnav.upload-plugin.wizard.page-4.summary.heading" | translate }}</h4>
+                <h4>{{ "lifecycle.upload-plugin.wizard.page-4.summary.heading" | translate }}</h4>
                 {{ summary }}
             </div>
         </clr-wizard-page>

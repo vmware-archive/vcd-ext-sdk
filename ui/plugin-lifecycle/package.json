@@ -29,6 +29,7 @@
     "@vcd/http-transfer-service": "file:http-transfer-service/dest",
     "@vcd/sdk": "file:../api-client/packages/sdk/dist",
     "@webcomponents/custom-elements": "1.0.0",
+    "angular4-color-picker": "1.4.2",
     "clarity-angular": "0.10.15",
     "clarity-icons": "0.10.15",
     "clarity-ui": "0.10.15",
