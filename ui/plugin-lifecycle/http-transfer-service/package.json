@@ -1,0 +1,27 @@
+{
+  "name": "@vcd/http-transfer-service",
+  "version": "1.0.0",
+  "scripts": {
+    "clean": "rimraf build && rimraf dest",
+    "ngc": "ngc",
+    "copy-metadata": "cpy package.dist.json dest --rename=package.json",
+    "build": "yarn run clean && yarn run ngc && ncp build/ dest/ && yarn run copy-metadata"
+  },
+  "author": "VMware",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "@angular/common": "4.3.0",
+    "@angular/compiler": "4.3.0",
+    "@angular/compiler-cli": "4.3.0",
+    "@angular/core": "4.3.0",
+    "@angular/platform-browser": "4.3.0",
+    "@ngrx/core": "1.2.0",
+    "@ngrx/store": "2.2.2",
+    "cpy-cli": "2.0.0",
+    "ncp": "2.0.0",
+    "rimraf": "2.6.2",
+    "rxjs": "5.5.2",
+    "typescript": "2.4.2",
+    "zone.js": "0.8.4"
+  }
+}

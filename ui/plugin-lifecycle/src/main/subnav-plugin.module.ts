@@ -8,7 +8,6 @@ import { EXTENSION_ROUTE, ExtensionNavRegistration } from "@vcd/sdk/common";
 import { SubnavComponent } from "./subnav/subnav.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { VcdHttpTransferServiceModule } from "@vcd/http-transfer-service";
 import { VcdSdkModule } from "@vcd/sdk";
 import { PluginModule } from "@vcd/sdk/core";
 import { TranslateService } from "@vcd/sdk/i18n";
@@ -33,7 +32,6 @@ const ROUTES: Routes = [
         FormsModule,
         HttpClientModule,
         VcdSdkModule,
-        VcdHttpTransferServiceModule,
         LifecycleManagement,
         RebrandingPluginModule,
         RouterModule.forChild(ROUTES)

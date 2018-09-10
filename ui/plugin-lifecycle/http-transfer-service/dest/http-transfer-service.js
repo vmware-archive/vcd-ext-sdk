@@ -1,12 +1,8 @@
 "use strict";
 /**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
  * Generated bundle index. Do not edit.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./index");
 exports.transferServiceFactory = index_1.transferServiceFactory;
 exports.VcdHttpTransferServiceModule = index_1.VcdHttpTransferServiceModule;

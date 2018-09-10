@@ -30,6 +30,8 @@ export declare class HttpTransferService {
      *
      * @param uploaded Uploaded bytes
      * @param total Total bytes of files
+     *
+     * @returns number in range 0 - 100
      */
     private getProgress(uploaded, total);
     /**
@@ -47,11 +49,14 @@ export declare class HttpTransferService {
      * @param blob
      * @param url
      * @param headers
+     *
+     * @returns An observable that completes when chunk is uploaded.
      */
     private uploadChunk(blob, url, headers);
     constructor(httpClient: HttpClient, chunkSize: number, parallelRequests: number);
     /**
      * Flag that indicates weather service is uploading files.
+     * @returns {boolean}
      */
     readonly isUploading: boolean;
     /**
