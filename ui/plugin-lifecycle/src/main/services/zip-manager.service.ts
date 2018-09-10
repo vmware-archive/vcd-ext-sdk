@@ -21,7 +21,6 @@ export class ZipManager {
             manifest.getData(new zip.TextWriter(), function(text: string) {
                 // text contains the entry data as a String
                 resolve(text);
-
               }, function(current: number, total: number) {
                 // onprogress callback
               });

@@ -1,0 +1,8 @@
+<form #uploadForm="ngForm">
+    <input #pluginZip clrInput type="file" accept="application/zip" (change)="onChange()"
+        name="fileDir" id="fileDir" class="inputfile" />
+    <label for="fileDir" class="btn btn-sm btn-outline">
+        <clr-icon shape="upload"></clr-icon>
+        {{ "lifecycle.upload-zip-field-component.input.file.label"| translate }}
+    </label>
+</form>

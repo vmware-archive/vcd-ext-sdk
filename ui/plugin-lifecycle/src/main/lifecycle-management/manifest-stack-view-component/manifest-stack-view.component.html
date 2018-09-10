@@ -1,0 +1,74 @@
+<div class="manifest">
+    <vcd-loading-indicator class="loader" [isLoading]="parsing" [showSpinner]="parsing"></vcd-loading-indicator>
+
+    <clr-stack-view class="stackManifest">
+        <clr-stack-header>{{ "lifecycle.manifest-stack-view.stack-view.header" | translate }}</clr-stack-header>
+
+        <clr-stack-block [clrSbExpandable]="false">
+            <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.file" | translate }}</clr-stack-label>
+            <clr-stack-content>{{ uploadPayload.fileName }}</clr-stack-content>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.urn" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.urn : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.name" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.name : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.containerVersion" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.containerVersion : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.version" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.version : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.scope" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.scope : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.permissions" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.permissions.length === 0 ? "[]" : uploadPayload.manifest.permissions
+                    : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.description" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.description ? uploadPayload.manifest.description : "--/--"
+                    : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.vendor" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.vendor : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.license" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.license : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.link" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.link : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.module" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.module : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+
+            <clr-stack-block>
+                <clr-stack-label>{{ "lifecycle.manifest-stack-view.stack-view.label.route" | translate }}</clr-stack-label>
+                <clr-stack-content>{{ uploadPayload.manifest ? uploadPayload.manifest.route : "--/--" }}</clr-stack-content>
+            </clr-stack-block>
+        </clr-stack-block>
+    </clr-stack-view>
+</div>

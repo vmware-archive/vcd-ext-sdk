@@ -1,0 +1,10 @@
+<div class="tag-list" [ngStyle]="customStyles">
+    <div *ngIf="tags.length > 0" class="tags-container">
+        <div *ngFor="let tag of tags; let i = index" class="tag" [id]="'tag_' + index">
+            <p class="p8">{{ tag }}</p>
+            <clr-icon (click)="removeTag(tag)" class="close-btn" shape="times"></clr-icon>
+        </div>
+    </div>
+
+    <input #input [attr.placeholder]="placeholder" name="tag" class="clr-input" type="text" (keyup.enter)="addTag($event)" />
+</div>

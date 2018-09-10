@@ -1,0 +1,71 @@
+<div [formGroup]="form">
+    <div [ngSwitch]="field.controlType">
+        <!-- TEXTBOX -->
+        <div class="form-group" *ngSwitchCase="'textbox'">
+            <label [attr.for]="field.key">{{ field.label }}</label>
+            <label [attr.for]="field.key" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm" [class.invalid]="form.get(field.key).invalid
+                    && (form.get(field.key).dirty || form.get(field.key).touched)">
+                <input [id]="field.key" [type]="field.type" [formControlName]="field.key">
+                <span class="tooltip-content">
+                    {{ field.errorMessage }}
+                </span>
+            </label>
+        </div>
+        <!-- END TEXTBOX -->
+
+        <!-- FILEBOX -->
+        <div class="form-group" *ngSwitchCase="'filebox'">
+            <label [attr.for]="field.key">{{ field.label }}</label>
+            <label [attr.for]="field.key" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm" [class.invalid]="form.get(field.key).invalid
+                    && (form.get(field.key).dirty || form.get(field.key).touched)">
+                <input [id]="field.key" [type]="field.type" [formControlName]="field.key" class="inputfile">
+                <label [attr.for]="field.key" class="btn btn-sm btn-outline">
+                    <clr-icon shape="upload"></clr-icon>
+                    Select File:
+                </label>
+                <label [attr.for]="field.key">
+                    {{ form.get(field.key).value }}
+                </label>
+                <span class="tooltip-content">
+                    {{ field.errorMessage }}
+                </span>
+            </label>
+        </div>
+        <!-- END FILEBOX -->
+
+        <!-- COLORPICKER -->
+        <div class="form-group" *ngSwitchCase="'colorPicker'">
+            <label [attr.for]="field.key">{{ field.label }}</label>
+            <label [attr.for]="field.key" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm" [class.invalid]="form.get(field.key).invalid">
+                <input [attr.id]="field.key" [type]="field.type" [formControlName]="field.key" [colorPicker]="form.get(field.key).value"
+                    (colorPickerChange)="form.get(field.key).setValue($event)" [style.background]="form.get(field.key).value"
+                    [value]="form.get(field.key).value">
+                <span class="tooltip-content">
+                    {{ field.errorMessage }}
+                </span>
+            </label>
+        </div>
+        <!-- END COLORPICKER -->
+
+        <!-- SELECT -->
+        <div class="form-group" *ngSwitchCase="'dropdown'">
+            <label [attr.for]="field.key">{{ field.label }}</label>
+            <div class="select">
+                <select [id]="field.key" [formControlName]="field.key" [value]="field.value">
+                    <option *ngFor="let option of field.options" [value]="option.key">{{ option.value }}</option>
+                </select>
+            </div>
+        </div>
+        <!-- END SELECT -->
+
+        <!-- TAGLIST -->
+        <div class="form-group" *ngSwitchCase="'taglist'">
+            <label [attr.for]="field.key">{{ field.label }}</label>
+            
+            <vcd-taglist></vcd-taglist>
+
+            <input [id]="field.key" [type]="field.type" [formControlName]="field.key" [value]="field.value">
+        </div>
+        <!-- TAGLIST -->
+    </div>
+</div>
