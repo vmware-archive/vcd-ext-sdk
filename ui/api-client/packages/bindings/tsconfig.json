@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "module": "es6",
-    "target": "es6",
+    "module": "es2015",
+    "target": "es5",
     "lib": ["es2015", "dom"],
     "declaration": true,
     "outDir": "./build",
-    "strict": true
+    "strict": true,
+    "moduleResolution": "node"
   },
   "include": [
     "./target/generated-typescript-bindings/**/*"
