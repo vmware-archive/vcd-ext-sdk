@@ -221,7 +221,7 @@ $clr-btn-default-hover-bg-color: hsla(0, 0%, 100%, 0.1); // hover-background-col
 $clr-btn-default-hover-color: #57c7ea; // hover-color
 $clr-btn-default-box-shadow-color: $clr-black; // active-box-shadow-color
 $clr-btn-default-checked-color: $clr-white; // checked-color
-$clr-btn-default-disabled-color: $clr-btn-disabled-font-color;                  // disabled-color
+$clr-btn-default-disabled-color: $clr-btn-outline-disabled-font-color;  
 $clr-btn-default-disabled-border-color: $clr-btn-disabled-border-color;             // disabled-border-color
 
 // Default button
@@ -340,6 +340,7 @@ $clr-datagrid-popover-bg-color: #22343c;
 $clr-datagrid-action-toggle: $clr-datagrid-font-color;
 $clr-datagrid-popover-border-color: $clr-black;
 $clr-datagrid-action-popover-hover-color: $clr-datagrid-row-hover;
+$clr-datagrid-loading-background: rgba(0, 0, 0, 0.5);
 // END: Datagrid
 
 /*********
@@ -359,7 +360,7 @@ $clr-dropdown-bg-active-color: $clr-global-selection-color;
 $clr-dropdown-bg-hover-color: $clr-global-hover-bg-color;
 $clr-dropdown-font-color: #adbbc4;
 $clr-dropdown-selection-color: #324f61;
-$clr-dropdown-box-shadow: rgba(clr-getColor(dark), 0.25);
+$clr-dropdown-box-shadow: rgba(0, 0, 0, 0.5);
 $clr-dropdown-divider-color: $clr-dropdown-border-color;
 $clr-dropdown-header-color: #ADBBC4;
 // END: Dropdown overrides
@@ -382,6 +383,8 @@ $clr-dropdown-header-color: #ADBBC4;
  * - ../button/_toggles.clarity.scss
  */
 $clr-input-text-color: #e9ecef;
+$clr-select-option-font-color: $clr-black;
+$clr-multiselect-option-font-color: $clr-input-text-color;
 
 $clr-textarea-border-color: #000000;
 $clr-textarea-bg-color: #17242b;
@@ -448,6 +451,7 @@ $clr-header-2-bg-color: #165266;
 $clr-header-3-bg-color: #1a4c72;
 $clr-header-4-bg-color: #5c3552;
 $clr-header-5-bg-color: #3e436a;
+$clr-header-6-bg-color: #0f171c;
 // END Header overrides
 
 /*****************
@@ -538,7 +542,7 @@ $clr-sidenav-border-color: #152127;
 $clr-sidenav-link-hover-color: $clr-global-selection-color;
 
 $clr-subnav-bgColor: #17242b;
-$clr-nav-shadow: 0 -1px 0 $gray-light-midtone inset;
+$clr-nav-shadow: 0 -1px 0 #485764 inset;
 // END Nav
 
 /**************
@@ -633,7 +637,7 @@ $clr-table-borderstyle: $clr-table-borderwidth solid $clr-table-border-color;
  *
  * Usage: ../layout/nav/_nav.clarity.scss
  */
-$clr-nav-box-shadow-color: $gray-light-midtone;
+$clr-nav-box-shadow-color: #485764;
 $clr-nav-active-box-shadow-color: #49afd9;
 $clr-nav-link-active-color: $clr-white;
 $clr-nav-link-color: #adbbc4;
