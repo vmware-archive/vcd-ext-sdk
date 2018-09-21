@@ -1,8 +1,7 @@
 // rollup.config.js
 import angular from 'rollup-plugin-angular';
-import typescript from 'rollup-plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 import sass from 'node-sass';
 import tsc from 'typescript';
 
@@ -31,19 +30,19 @@ export default {
         'clarity-angular',
         'reselect'
     ],
+    onwarn (warning, warn) {
+        if (warning.code === 'THIS_IS_UNDEFINED') return;
+        // Use default for everything else
+        console.warn(warning);
+    },
     plugins: [
-        angular({
-                preprocessors: {
-                    style: scss => {
-                        return sass.renderSync({ data: scss }).css;
-                        return cssmin.minify(css).styles;
-                    }
-                }
-        }),
-        typescript({typescript: tsc}),
+        angular(),
         resolve({
-          only: [ '@vcd/bindings', '@vcd/sdk' ]
+            modulesOnly: true
         }),
-        commonjs()
+        typescript({
+            clean: true,
+            typescript: tsc
+        })
     ]
 }

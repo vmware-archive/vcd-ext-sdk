@@ -32,6 +32,11 @@ gulp.task('build', function () {
       'clarity-angular',
       'reselect'
     ],
+    onwarn (warning, warn) {
+      if (warning.code === 'THIS_IS_UNDEFINED') return;
+      // Use default for everything else
+      console.warn(warning);
+    },
     plugins: [
       angular({
         preprocessors: {
@@ -41,11 +46,9 @@ gulp.task('build', function () {
           }
         }
       }),
+      resolve(),
+      commonjs(),
       typescript({ typescript: tsc }),
-      resolve({
-        only: [ '@vcd/bindings', '@vcd/sdk', '@vcd/http-transfer-service' ]
-      }),
-      commonjs()
     ]
   })
     .then(bundle => {
