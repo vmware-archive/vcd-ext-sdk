@@ -8,8 +8,8 @@
   },
   "devDependencies": {
     "bootstrap": "4.0.0-alpha.5",
-    "clarity-icons": "0.10.17",
-    "clarity-ui": "0.10.17",
+    "clarity-icons": "0.10.26",
+    "clarity-ui": "0.10.26",
     "clean-css-cli": "4.1.11",
     "node-sass": "4.8.3",
     "yargs": "^11.0.0"
