@@ -23,6 +23,15 @@ export class ModalWindow {
         this._waitToClose = false;
     }
 
+    public setModalData(opts: ModalData) {
+        this.opened = opts.opened || null;
+        this.title = opts.title || null;
+        this.body = opts.body || null;
+        this.decline = opts.decline || null;
+        this.accept = opts.accept || null;
+        this.waitToClose = opts.waitToClose || false;
+    }
+
     get opened(): boolean {
         return this._opened;
     }

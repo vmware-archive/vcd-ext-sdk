@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { VcdApiClient } from "@vcd/sdk";
 import { Observable } from "rxjs";
 import { UiPluginMetadata, UiPluginMetadataResponse, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
-import { HttpResponse } from "@angular/common/http";
 
 @Injectable()
 export class PluginService {

@@ -33,9 +33,9 @@ gulp.task('build', function () {
       'reselect'
     ],
     onwarn (warning, warn) {
-      if (warning.code === 'THIS_IS_UNDEFINED') return;
+      if (warning.code === 'THIS_IS_UNDEFINED') return
       // Use default for everything else
-      console.warn(warning);
+      console.warn(warning)
     },
     plugins: [
       angular({
@@ -46,9 +46,9 @@ gulp.task('build', function () {
           }
         }
       }),
-      resolve(),
-      commonjs(),
       typescript({ typescript: tsc }),
+      resolve(),
+      commonjs()
     ]
   })
     .then(bundle => {

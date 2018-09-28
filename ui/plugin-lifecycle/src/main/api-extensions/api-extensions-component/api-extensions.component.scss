@@ -8,21 +8,24 @@ $colors: (
 }
 
 @mixin ellipsis ($max-width) {
-    display: inline-block;
     max-width: $max-width;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.clr-dg-action-bar {
-    z-index: 1;
+.list-all-api-extensions {
+    height: 100%;
+
+    .datagrid-host {
+        max-width: 100%;
+        height: 100%;
+    }
 }
 
 clr-dg-cell {
-    &.pluginName,
-    &.description {
-        @include ellipsis(none);
+    &.api_ext_cell.href.datagrid-cell .ellipsis{
+        @include ellipsis(500px);
     }
 
     .success {

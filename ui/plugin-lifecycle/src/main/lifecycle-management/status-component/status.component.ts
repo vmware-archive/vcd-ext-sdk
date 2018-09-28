@@ -4,10 +4,10 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { EXTENSION_ASSET_URL } from "@vcd/sdk/common";
 import { PluginManager } from "../../services/plugin-manager.service";
-import { Subscription, Observable, Subject } from "rxjs";
-import { ModalData, ModalWindow } from "../../interfaces/Modal";
+import { Subscription } from "rxjs";
 import { PluginValidator } from "../../classes/plugin-validator";
 import { UiPluginMetadataResponse } from "@vcd/bindings/vcloud/rest/openapi/model/uiPluginMetadataResponse";
+import { ActionVerifierService } from "../../common-vcd/action-verifier.service";
 
 interface SubjectModalData {
     accept: boolean;
@@ -21,7 +21,6 @@ interface SubjectModalData {
 export class StatusComponent implements OnInit, OnDestroy {
     public _selected: UiPluginMetadataResponse[];
     public plugins: UiPluginMetadataResponse[];
-    public modal: ModalData;
     public changeScopeState = false;
     public wantToUpload: boolean;
     public isLoading: boolean;
@@ -35,16 +34,14 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     public watchPluginListSub: Subscription;
 
-    public modalSubject = new Subject<SubjectModalData>();
-
     constructor(
         @Inject(EXTENSION_ASSET_URL) public assetUrl: string,
-        private pluginManager: PluginManager
+        private pluginManager: PluginManager,
+        private action: ActionVerifierService
     ) { }
 
     public ngOnInit() {
         this.selected = [];
-        this.modal = new ModalWindow();
         this.watchPluginsList();
         this.plugins = this.pluginManager.getPlugins();
         this.wantToUpload = false;
@@ -97,40 +94,6 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.canDisable = true;
     }
 
-    public getOpened(): boolean {
-        return this.modal.opened;
-    }
-
-    public setOpened(val: boolean): void {
-        this.modal.waitToClose = false;
-        this.modal.opened = val;
-    }
-
-    /**
-     * The method will notify all listers for this action.
-     * @param accept value to be emitted to all listeners.
-     */
-    public emitAndClose(accept: boolean): void {
-        if (!this.modal.waitToClose) {
-            this.setOpened(false);
-        }
-        this.modalSubject.next({ accept });
-    }
-
-    /**
-     * Open modal with spcified options.
-     */
-    public openModal(options: ModalData): Observable<SubjectModalData> {
-        this.setOpened(true);
-        this.modal.title = options.title || null;
-        this.modal.body = options.body || null;
-        this.modal.decline = options.decline || null;
-        this.modal.accept = options.accept || null;
-        this.modal.waitToClose = options.waitToClose || false;
-
-        return this.modalSubject.asObservable();
-    }
-
     /**
      * Observe the plugin list in plugin manager service
      */
@@ -142,7 +105,7 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     // Validate enable or disable action
     public validateAction(hasToBe: boolean): Promise<void> {
-        return PluginValidator.validateDisableEnableAction(this.selected, hasToBe, this.openModal.bind(this));
+        return PluginValidator.validateDisableEnableAction(this.selected, hasToBe, this.action.openModal.bind(this.action));
     }
 
     /**
@@ -168,7 +131,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public onDisable(): void {
         this.errorMessage = null;
 
-        const onDisableSub = this.openModal({
+        const onDisableSub = this.action.openModal({
             title: "Disable",
             body: "Are you sure you want to disable the plugins?",
             decline: "No",
@@ -178,13 +141,13 @@ export class StatusComponent implements OnInit, OnDestroy {
         .subscribe((modalSubjectData) => {
             // If user doesn't authorize the action
             if (modalSubjectData.accept === false) {
-                this.setOpened(false);
+                this.action.closeModal();
                 onDisableSub.unsubscribe();
                 return;
             }
 
             // Close modal
-            this.setOpened(false);
+            this.action.closeModal();
             // Clear subscriptions
             onDisableSub.unsubscribe();
 
@@ -221,7 +184,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     public onEnable(): void {
         this.errorMessage = null;
 
-        const onEnableSub = this.openModal({
+        const onEnableSub = this.action.openModal({
             title: "Enable",
             body: "Are you sure you want to enable the plugins?",
             decline: "No",
@@ -231,13 +194,13 @@ export class StatusComponent implements OnInit, OnDestroy {
         .subscribe((modalSubjectData) => {
             // If user doesn't authorize the action
             if (modalSubjectData.accept === false) {
-                this.setOpened(false);
+                this.action.closeModal();
                 onEnableSub.unsubscribe();
                 return;
             }
 
             // Close modal
-            this.setOpened(false);
+            this.action.closeModal();
             // Clear subscriptions
             onEnableSub.unsubscribe();
 
@@ -278,7 +241,7 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.errorMessage = null;
         let onDeleteSub: Subscription;
         // Open modal to notify the user
-        onDeleteSub = this.openModal({
+        onDeleteSub = this.action.openModal({
             title: "Delete",
             body: "Are you sure you want to delete the plugins?",
             decline: "No",
@@ -288,12 +251,12 @@ export class StatusComponent implements OnInit, OnDestroy {
             .subscribe((modalSubjectData: SubjectModalData) => {
                 // If user doesn't authorize the action
                 if (modalSubjectData.accept === false) {
-                    this.setOpened(false);
+                    this.action.closeModal();
                     onDeleteSub.unsubscribe();
                     return;
                 }
 
-                this.setOpened(false);
+                this.action.closeModal();
                 onDeleteSub.unsubscribe();
                 this.loading();
 

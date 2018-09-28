@@ -15,12 +15,15 @@ import { LifecycleManagement } from "./lifecycle-management/lifecycle-management
 import { RebrandingPluginModule } from "./rebranding/rebranding-plugin.module";
 import { StatusComponent } from "./lifecycle-management/status-component/status.component";
 import { RebrandingComponent } from "./rebranding/rebranding-component/rebranding.component";
+import { ApiExtensionsComponent } from "./api-extensions/api-extensions-component/api-extensions.component";
+import { ApiExtensionsModule } from "./api-extensions/api-extensions.module";
 
 const ROUTES: Routes = [
     { path: "", redirectTo: "plugin-management", pathMatch: "full" },
     { path: "", component: SubnavComponent, children: [
         { path: "plugin-management", component: StatusComponent },
-        { path: "vcd-rebranding", component: RebrandingComponent }
+        { path: "vcd-rebranding", component: RebrandingComponent },
+        { path: "vcd-api-extensions", component: ApiExtensionsComponent }
     ] }
 ];
 
@@ -34,6 +37,7 @@ const ROUTES: Routes = [
         VcdSdkModule,
         LifecycleManagement,
         RebrandingPluginModule,
+        ApiExtensionsModule,
         RouterModule.forChild(ROUTES)
     ],
     declarations: [

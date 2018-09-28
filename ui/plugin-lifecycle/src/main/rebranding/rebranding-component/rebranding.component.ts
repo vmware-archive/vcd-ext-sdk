@@ -36,7 +36,9 @@ export class RebrandingComponent implements OnInit, OnDestroy {
 
             const sub = this.tagListService.getTags().subscribe((tags: string[]) => {
                 const cusotmLinks = this.rebrandingForm.get("customLinks");
-                cusotmLinks ? cusotmLinks.setValue(`${tags.toLocaleString()},`) : null;
+                if (cusotmLinks) {
+                    cusotmLinks.setValue(`${tags.toLocaleString()},`);
+                }
             });
             this.subs.add(sub);
         });
@@ -54,7 +56,7 @@ export class RebrandingComponent implements OnInit, OnDestroy {
             customLinks = <string[]>this.rebrandingForm.get("customLinks").value.split(",");
             customLinks.splice(customLinks.length - 1, 1);
         }
-        
+
         const sub = Observable.merge(
             this.rebrandingService.putTemeData({
                 portalName: this.rebrandingForm.get("portalName").value,

@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { FieldBase } from "../../classes/dynamic-fields/field-base";
 
 @Component({
-    selector: 'vcd-form-field',
-    templateUrl: './form-field.component.html'
+    selector: "vcd-form-field",
+    templateUrl: "./form-field.component.html"
 })
 export class FormFieldComponent {
     @Input() field: FieldBase<any>;

@@ -53,29 +53,20 @@
             <clr-dg-cell class="description">{{ plugin.description }}</clr-dg-cell>
             <clr-dg-cell>{{ plugin.tenant_scoped }}</clr-dg-cell>
             <clr-dg-cell>{{ plugin.provider_scoped }}</clr-dg-cell>
-            <clr-dg-cell>{{ plugin.enabled }}</clr-dg-cell>
+            <clr-dg-cell>
+                <div class="success" *ngIf="plugin.enabled === true">
+                    <clr-icon shape="success-standard"></clr-icon>
+                </div>
+                
+                <div class="error" *ngIf="plugin.enabled === false">
+                    <clr-icon shape="error-standard"></clr-icon>
+                </div>
+            </clr-dg-cell>
         </clr-dg-row>
     </clr-datagrid>
 </div>
 
-<div class="plugins-modal">
-    <clr-modal [(clrModalOpen)]="modal.opened" [clrModalClosable]="false">
-        <vcd-alert [alertMessage]="alertMessage" [alertClasses]="alert-info"></vcd-alert>
-
-        <h3 class="modal-title">{{ modal.title }}</h3>
-        <div class="modal-body">
-            <p *ngIf="modal.body">{{ modal.body }}</p>
-        </div>
-        <div class="modal-footer">
-            <button *ngIf="modal.decline" type="button" class="btn btn-primary" (click)="emitAndClose(false)">
-                {{ modal.decline }}
-            </button>
-            <button *ngIf="modal.accept" type="button" class="btn btn-primary" (click)="emitAndClose(true)">
-                {{ modal.accept }}
-            </button>
-        </div>
-    </clr-modal>
-</div>
+<vcd-action-verifier></vcd-action-verifier>
 
 <!-- Change tenant scope -->
 <vcd-change-tenant-scope [(state)]="changeScopeState"></vcd-change-tenant-scope>

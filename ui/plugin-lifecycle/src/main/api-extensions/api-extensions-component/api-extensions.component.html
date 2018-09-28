@@ -1,0 +1,72 @@
+<vcd-action-verifier></vcd-action-verifier>
+<vcd-loading-indicator [isLoading]="isLoading" [showSpinner]="isLoading" [fixed]="true"></vcd-loading-indicator>
+
+<div class="list-all-api-extensions">
+    <h1>{{ "api_extensions.status.heading" | translate }}</h1>
+
+    <clr-datagrid [(clrDgSelected)]="selected" (clrDgRefresh)="navigate($event)" [clrDgLoading]="dgLoading">
+        <clr-dg-action-bar class="clr-dg-action-bar">
+            <div class="btn-group last">
+                <button type="button" class="btn btn-sm btn-outline" (click)="onRefresh()">
+                    <clr-icon shape="refresh"></clr-icon>
+                </button>
+            </div>
+
+            <div class="btn-group" *ngIf="selected.length > 0">
+                <button *ngIf="canEnable" type="button" class="btn btn-sm btn-link" (click)="onEnable()">
+                    {{ "api_extensions.status.datagrid.enable.btn" | translate }}
+                </button>
+
+                <button *ngIf="canDisable" type="button" class="btn btn-sm btn-link" (click)="onDisable()">
+                    {{ "api_extensions.status.datagrid.disable.btn" | translate }}
+                </button>
+
+                <button [disabled]="canNotDelete" type="button" class="btn btn-sm btn-link" (click)="onDelete()">
+                    {{ "api_extensions.status.datagrid.delete.btn" | translate }}
+                </button>
+            </div>
+        </clr-dg-action-bar>
+
+        <!-- PLACEHOLDER -->
+        <clr-dg-placeholder>{{ "api_extensions.status.datagrid.notFoundMessage" | translate }}</clr-dg-placeholder>
+        <!-- END PLACEHOLDER -->
+
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.enabled" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.exchange" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.isAuthorizationEnabled" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.name" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.namespace" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.priority" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.routingKey" | translate }}</clr-dg-column>
+        <clr-dg-column>{{ "api_extensions.status.datagrid.column.href" | translate }}</clr-dg-column>
+
+        <clr-dg-row *ngFor="let api_extension of api_extensions" [clrDgItem]="api_extension">
+            <clr-dg-cell class="api_ext_cell enabled">
+                <div class="success" *ngIf="api_extension.enabled === true">
+                    <clr-icon shape="success-standard"></clr-icon>
+                </div>
+
+                <div class="error" *ngIf="api_extension.enabled === false">
+                    <clr-icon shape="error-standard"></clr-icon>
+                </div>
+            </clr-dg-cell>
+            <clr-dg-cell class="api_ext_cell exchange">{{ api_extension.exchange }}</clr-dg-cell>
+            <clr-dg-cell class="api_ext_cell isAuthorizationEnabled">{{ api_extension.isAuthorizationEnabled }}</clr-dg-cell>
+            <clr-dg-cell class="api_ext_cell name">{{ api_extension.name }}</clr-dg-cell>
+            <clr-dg-cell class="api_ext_cell namespace">{{ api_extension.namespace }}</clr-dg-cell>
+            <clr-dg-cell class="api_ext_cell priority">{{ api_extension.priority }}</clr-dg-cell>
+            <clr-dg-cell class="api_ext_cell routingKey">{{ api_extension.routingKey }}</clr-dg-cell>
+            <clr-dg-cell class="api_ext_cell href">
+                <div class="ellipsis">
+                    {{ api_extension.href }}
+                </div>
+            </clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+            {{ pagination.firstItem + 1}} - {{pagination.lastItem + 1 }}
+            of {{ total }} API extensions
+            <clr-dg-pagination #pagination [clrDgTotalItems]="total" [clrDgPageSize]="pageSize"></clr-dg-pagination>
+        </clr-dg-footer>
+    </clr-datagrid>
+</div>

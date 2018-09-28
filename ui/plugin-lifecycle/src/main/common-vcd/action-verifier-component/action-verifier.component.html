@@ -1,0 +1,17 @@
+<div class="action-verifier-modal">
+    <clr-modal [(clrModalOpen)]="modal.opened" [clrModalClosable]="false">
+        <!--<vcd-alert [alertMessage]="alertMessage" [alertClasses]="alert-info"></vcd-alert>-->
+        <h3 class="modal-title">{{ modal.title }}</h3>
+        <div class="modal-body">
+            <p *ngIf="modal.body">{{ modal.body }}</p>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="modal.decline" type="button" class="btn btn-primary" (click)="emitAndClose(false)">
+                {{ modal.decline }}
+            </button>
+            <button *ngIf="modal.accept" type="button" class="btn btn-primary" (click)="emitAndClose(true)">
+                {{ modal.accept }}
+            </button>
+        </div>
+    </clr-modal>
+</div>

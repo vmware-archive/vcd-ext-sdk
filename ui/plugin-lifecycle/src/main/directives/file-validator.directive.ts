@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidatorFn } from "@angular/forms";
 
 const fileTypes = new Map<string, RegExp>();
 fileTypes.set("png", /.(png)$/);
@@ -7,6 +7,6 @@ fileTypes.set("png", /.(png)$/);
 export function fileType(fileType: string): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
         const forbidden = fileTypes.get(fileType).test(control.value);
-        return forbidden ? null : { 'validatedFile': { value: control.value } };
+        return forbidden ? null : { "validatedFile": { value: control.value } };
     };
 }

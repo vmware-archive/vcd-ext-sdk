@@ -5,7 +5,6 @@ import { ChangeScopeRequest } from "../classes/ChangeScopeRequest";
 import { ScopeFeedback } from "../classes/ScopeFeedback";
 import { ChangeScopeItem } from "../interfaces/ChangeScopeItem";
 import { UiPluginMetadataResponse, EntityReference2 } from "@vcd/bindings/vcloud/rest/openapi/model";
-import { HttpResponse } from "@angular/common/http";
 import { PluginService } from "./plugin.service";
 import { API_ROOT_URL } from "@vcd/sdk/common";
 
