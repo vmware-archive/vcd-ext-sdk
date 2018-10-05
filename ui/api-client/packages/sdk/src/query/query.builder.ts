@@ -8,6 +8,7 @@ export namespace Query {
         private _pageSize: number = 25;
         private _fields: string[];
         private _filter: string;
+        private _sort: { field: string, reverse?: boolean }[];
 
         private constructor() { }
 
@@ -42,6 +43,11 @@ export namespace Query {
             return this;
         }
 
+        public sort(...sort: { field: string, reverse?: boolean }[]): Builder {
+            this._sort = sort;
+            return this;
+        }
+
         public get(): string {
             let query: string = `?type=${this._type}&format=${this._format}&links=${this._links}&pageSize=${this._pageSize}`;
             if (this._fields && this._fields.length > 0) {
@@ -50,6 +56,12 @@ export namespace Query {
 
             if (this._filter) {
                 query += `&filter=${this._filter}`;
+            }
+
+            if (this._sort) {
+                this._sort.forEach(s => {
+                    query += `&${s.reverse ? 'sortDesc' : 'sortAsc'}=${s.field}`;
+                })
             }
 
             return query;
