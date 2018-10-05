@@ -113,7 +113,7 @@ export namespace Filter {
          * @param conditionN any additional conditions
          * @returns an evaluatable filter condition
          */
-        and(condition1: CompleteCondition, condition2: CompleteCondition, ...conditionN: CompleteCondition[]): CompleteCondition;
+        and(condition1: CompleteCondition, condition2: CompleteCondition, conditionN?: CompleteCondition[]): CompleteCondition;
 
         /**
          * Create a disjunction (OR) condition from existing conditions.
@@ -123,7 +123,7 @@ export namespace Filter {
          * @param conditionN any additional conditions
          * @returns an evaluatable filter condition
          */
-        or(condition1: CompleteCondition, condition2: CompleteCondition, ...conditionN: CompleteCondition[]): CompleteCondition;
+        or(condition1: CompleteCondition, condition2: CompleteCondition, conditionN?: CompleteCondition[]): CompleteCondition;
     }
 
     /**
@@ -170,14 +170,14 @@ export namespace Filter {
         }
 
         public and(): PartialCondition;
-        public and(condition1: CompleteCondition, condition2: CompleteCondition, ...conditionN: CompleteCondition[]): CompleteCondition;
-        public and(condition1?: CompleteCondition, condition2?: CompleteCondition, ...conditionN: CompleteCondition[]): PartialCondition | CompleteCondition {
+        public and(condition1: CompleteCondition, condition2: CompleteCondition, conditionN?: CompleteCondition[]): CompleteCondition;
+        public and(condition1?: CompleteCondition, condition2?: CompleteCondition, conditionN?: CompleteCondition[]): PartialCondition | CompleteCondition {
             if (!condition1) {
                 return this.simpleAnd();
             }
 
             this.result += "(" + (<BuilderChain> condition1).buildPartial() + Operators.AND + (<BuilderChain> condition2).buildPartial();
-            if (conditionN.length) {
+            if (conditionN && conditionN.length) {
                 conditionN.forEach((condition) => {
                     this.result += Operators.AND + (<BuilderChain> condition).buildPartial();
                 });
@@ -204,14 +204,14 @@ export namespace Filter {
         }
 
         public or(): PartialCondition;
-        public or(condition1: CompleteCondition, condition2: CompleteCondition, ...conditionN: CompleteCondition[]): CompleteCondition;
-        public or(condition1?: CompleteCondition, condition2?: CompleteCondition, ...conditionN: CompleteCondition[]): PartialCondition | CompleteCondition {
+        public or(condition1: CompleteCondition, condition2: CompleteCondition, conditionN?: CompleteCondition[]): CompleteCondition;
+        public or(condition1?: CompleteCondition, condition2?: CompleteCondition, conditionN?: CompleteCondition[]): PartialCondition | CompleteCondition {
             if (!condition1) {
                 return this.simpleOr();
             }
 
             this.result += "(" + (<BuilderChain> condition1).buildPartial() + Operators.OR + (<BuilderChain> condition2).buildPartial();
-            if (conditionN.length) {
+            if (conditionN && conditionN.length) {
                 conditionN.forEach((condition) => {
                     this.result += Operators.OR + (<BuilderChain> condition).buildPartial();
                 });
@@ -334,8 +334,8 @@ export namespace Filter {
          * @param conditionN any additional conditions
          * @returns an evaluatable filter condition
          */
-        and(condition1: CompleteCondition, condition2: CompleteCondition, ...conditionN: CompleteCondition[]): CompleteCondition {
-            return new BuilderChain().and.apply(this, arguments);
+        and(condition1: CompleteCondition, condition2: CompleteCondition, conditionN?: CompleteCondition[]): CompleteCondition {
+            return new BuilderChain().and(condition1, condition2, conditionN);
         }
 
         /**
@@ -346,8 +346,8 @@ export namespace Filter {
          * @param conditionN any additional conditions
          * @returns an evaluatable filter condition
          */
-        or(condition1: CompleteCondition, condition2: CompleteCondition, ...conditionN: CompleteCondition[]): CompleteCondition {
-            return new BuilderChain().or.apply(this, arguments);
+        or(condition1: CompleteCondition, condition2: CompleteCondition, conditionN?: CompleteCondition[]): CompleteCondition {
+            return new BuilderChain().or(condition1, condition2, conditionN);
         }
     }
 }
