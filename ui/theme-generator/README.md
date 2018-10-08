@@ -1,8 +1,7 @@
 # VCD UI Theme Generator #
 This is a utility for creating new themes (CSS files) that are compatible with the vCloud Director user interfaces by leveraging the theme support built into [Clarity](https://github.com/vmware/clarity) v0.10.17* and above, and by prescribing patterns to override styles not directly modifiable through Clarity's theme support.
 
-> **Note: version 0.10.17 of Clarity is not used in any currently released version of
-> vCloud Director.  This is very much an early access utility.**
+> **Note: This utility creates themes that are compatible with vCloud Director version 9.5 and above.  Custom themes are not supported in versions < 9.5.**
 
 ## Overview ##
 The goal of this utility is to provide an easy way for providers to brand their vCD user interface.  The most common ways to promote a visual brand are through the use of a color palette and through images/logos.  Using variables in a visual framework to define colors, and overriding those variables is a popular solution for customization in many UI libraries today, and it is a technique that the Clarity library has now adopted.
