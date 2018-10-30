@@ -1,0 +1,20 @@
+<!--* vcloud-director-ui-extension-sample-about-page
+    *  SPDX-License-Identifier: BSD-2-Clause
+    *  Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
+    *-->
+<h3>{{name}}</h3>
+<p>{{description}}</p>
+<vcd-add-dashboard-graph-modal #addModal>
+</vcd-add-dashboard-graph-modal>
+<div class="row">
+    <vcd-dashboard-graph *ngFor="let graphDefinition of graphDefinitions; let i = index"
+        [class]="cssClassFor(graphDefinition)"
+        [graphDefinition]="graphDefinition"
+        (onRemove)="onGraphRemoved(i)">
+    </vcd-dashboard-graph>
+</div>
+<div class="row">
+    <button class="btn btn-sm btn-link" (click)="onAddGraphClicked()">
+       Add
+    </button>
+</div>

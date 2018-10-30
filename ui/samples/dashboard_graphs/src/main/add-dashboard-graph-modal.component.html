@@ -1,0 +1,35 @@
+<clr-modal [(clrModalOpen)]="opened">
+    <h3 class="modal-title">Add Dashboard Graph</h3>
+    <div class="modal-body">
+        <form [formGroup]="formGroup">
+            <div class="form-group">
+                <label for="sizeField">Size</label>
+                <div class="select">
+                    <select id="sizeField" formControlName="size">
+                        <option *ngFor="let size of sizes" [value]="size.value">{{size.label}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="typeField">Type</label>
+                <div class="select">
+                    <select id="typeField" formControlName="type">
+                        <option *ngFor="let type of types" [value]="type.value">{{type.label}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="metricsField">Measured Metrics</label>
+                <div class="select">
+                    <select id="metricsField" formControlName="metrics" multiple>
+                        <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="onCancelClicked()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSaveClicked()">Ok</button>
+    </div>
+</clr-modal>
