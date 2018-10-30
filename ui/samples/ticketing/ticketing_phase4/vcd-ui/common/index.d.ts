@@ -4,6 +4,7 @@
 
 import {OpaqueToken} from '@angular/core';
 import {Action} from "@ngrx/store";
+import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
 
 /**
  * Wire in as a string.  Gives the root URL for API access (for example, the load balancer URL
@@ -86,4 +87,85 @@ export declare abstract class AuthTokenHolderService {
      * The authentication token.
      */
     abstract token: string;
+}
+
+/**
+ * Import this to access the global I18n system.
+ */
+export declare class I18nModule {   
+}
+
+/**
+ * Basic translations.
+ */
+export interface Translations {
+    [key: string]: string;
+}
+
+/**
+ * A set of translations.
+ */
+export interface TranslationSet {
+    [locale: string]: Translations;
+}
+
+/**
+ * Inject this to access the global I18n system.
+ */
+export declare abstract class TranslationService {   
+    /**
+     * Options to format Date.
+     * @type {{year: string; month: string; day: string}}
+     */
+    protected readonly defaultDateFormat: DateTimeFormatOptions;
+
+    /**
+     * Options to format Time.
+     * @type {{hour: string; minute: string; second: string; hour12: boolean}}
+     */
+    protected readonly defaultTimeFormat: DateTimeFormatOptions;
+
+    /**
+     * Options to format Date and Time.
+     */
+    protected readonly defaultDateTimeFormat: DateTimeFormatOptions;
+
+    /**
+     * Register translations (used by modules)
+     * @param translations
+     */
+    abstract registerTranslations(set: TranslationSet): void;
+
+    /**
+     * Translate a key with params.
+     * @param key translation key
+     * @param params array of substitutions.
+     * @return translated string.
+     */
+    abstract translate(key: string, params?: any[]): string;
+
+    /**
+     * Format a date with current locale.
+     * @param date date
+     * @param options to specify the format of the date string.
+     * @return formatted date.
+     */
+    abstract formatDate(date: Date, options?: Object): string;
+
+    /**
+     * Format a time with current locale.
+     * @param date date
+     * @param options to specify the format of the time string.
+     * @return formatted time.
+     */
+    abstract formatTime(date: Date, options?: Object): string;
+
+    /**
+     * Format a date and time with current locale.
+     * @param date date
+     * @param options to specify the format of the date and time string.
+     * @return formatted date and time.
+     */
+    abstract formatDateTime(date: Date, options?: Object): string;
+
 }

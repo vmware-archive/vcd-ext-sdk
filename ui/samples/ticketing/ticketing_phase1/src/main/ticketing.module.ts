@@ -26,6 +26,7 @@ import {ROUTES} from './ticketing.routes';
 export class TicketingModule {
     constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
         const registration: ExtensionNavRegistration = {
+            icon: "view-list",
             path: extensionRoute,
             nameCode: 'nav.ticketing',
             descriptionCode: 'nav.ticketing.description'

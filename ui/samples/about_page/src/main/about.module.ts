@@ -25,6 +25,7 @@ import {ROUTES} from "./about.routes";
 export class AboutModule {
     constructor(private appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string) {
         const registration: ExtensionNavRegistration = {
+            icon: "cog",
             path: extensionRoute,
             nameCode: "nav.about",
             descriptionCode: "nav.about.description"
