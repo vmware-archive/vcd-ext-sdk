@@ -6,8 +6,7 @@ import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {Inject, NgModule} from "@angular/core";
 import {RouterModule} from "@angular/router";
-import {Store} from "@ngrx/store";
-import {VcdSdkModule, VcdApiClient, common} from "@vcd/sdk";
+import {VcdSdkModule, VcdApiClient} from "@vcd/sdk";
 import {ClarityModule} from "clarity-angular";
 import {ROUTES} from "./dashboard-graphs.routes";
 import {DashboardGraphsComponent} from "./dashboard-graphs.component";
@@ -41,6 +40,6 @@ import {DashboardGraphsSettingsService} from "./dashboard-graphs-settings.servic
     ]
 })
 export class DashboardGraphsModule {
-    constructor(private appStore: Store<any>, @Inject(common.EXTENSION_ROUTE) extensionRoute: string) {
+    constructor() {
     }
 }

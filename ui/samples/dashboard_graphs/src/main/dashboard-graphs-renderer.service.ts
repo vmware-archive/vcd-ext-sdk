@@ -1,23 +1,43 @@
+/** vcloud-director-ui-extension-sample-dashboard-graphs
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *  Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
+ */
 import {common} from "@vcd/sdk";
 import {Inject} from "@angular/core";
 import {vcloud} from "@vcd/bindings";
 import {VcdApiClient} from "@vcd/sdk";
-import {DashboardGraphDefinition, DashboardGraphMetric, DashboardGraphSample} from "./dashboard-graphs.model";
+import {DashboardGraphDefinition, DashboardGraphMetric, DashboardGraphSample, metricHumanNames} from "./dashboard-graphs.model";
 import {DashboardGraphsSamplerService} from "./dashboard-graphs-sampler.service";
 import {Chart} from "chart.js";
 
+/**
+ * Atomic increasing counter for graph renderer registrations.
+ */
 let maxId: number = 0;
 
+/**
+ * Internal structure that tracks registered graphs to render.
+ */
 interface DashboardGraphsRendererRegistration {
 	id: number;
 	definition: DashboardGraphDefinition;
 	chart: Chart;
 }
 
+/**
+ * Service that handles the rendering of all graphs.
+ */
 export class DashboardGraphsRendererService {
 	
+    /**
+     * All registered graphs.
+     */
 	private registrations: DashboardGraphsRendererRegistration[] = [];
 
+    /**
+     * Disable chart animations, inject the sampler service, and listen for sample changes.  Whenever samples
+     * change, re-render every registered graph.
+     */
     constructor(@Inject(DashboardGraphsSamplerService) private graphSamplerService: DashboardGraphsSamplerService) {
         Chart.defaults.global.animation.duration = 0;
         this.graphSamplerService.samplesChanged.subscribe(() => {
@@ -25,12 +45,18 @@ export class DashboardGraphsRendererService {
         });
     }
 
+    /**
+     * Register a graph given its target element and definition.  Returns a unique registration ID for unregistering.
+     */
     public registerGraph(target: HTMLCanvasElement, definition: DashboardGraphDefinition) {
     	const registration = this.createGraph(target, definition, this.graphSamplerService.samples);
     	this.registrations.push(registration);
     	return registration.id;
     }
 
+    /**
+     * Unregister a graph given its unique registration ID.
+     */
     public unregisterGraph(id: number) {
         const index = this.registrations.findIndex((registration) => registration.id == id);
         if (index) {
@@ -38,6 +64,11 @@ export class DashboardGraphsRendererService {
         }
     }
 
+    /**
+     * Create a graph given its target element, definition, and all historical samples.  Delegates to related methods.
+     * Returns registration.
+     * A good target for inheritance - exercise left to the reader :-)
+     */
     private createGraph(target: HTMLCanvasElement, definition: DashboardGraphDefinition, samples: DashboardGraphSample[]) {
 		switch (definition.type) {
 			case "bar":
@@ -48,6 +79,10 @@ export class DashboardGraphsRendererService {
 		}
     }
 
+    /**
+     * Update a graph given its registration and all historical samples.  Delegates to related methods.
+     * A good target for inheritance - exercise left to the reader :-)
+     */
 	private updateGraph(registration: DashboardGraphsRendererRegistration, samples: DashboardGraphSample[]) {
 		switch (registration.definition.type) {
 			case "bar":
@@ -60,6 +95,9 @@ export class DashboardGraphsRendererService {
 		}
 	}
 
+    /**
+     * Create a bar graph given its target element, definition, and all historical samples.  Return a registration.
+     */
     private createBarGraph(target: HTMLCanvasElement, definition: DashboardGraphDefinition, samples: DashboardGraphSample[]) {
     	const id = maxId++;
     	const data = this.createBarData(definition, samples);
@@ -75,6 +113,9 @@ export class DashboardGraphsRendererService {
 		return {id, definition, chart};
     }
 
+    /**
+     * Create a line graph given its target element, definition, and all historical samples.  Return a registration.
+     */
     private createLineGraph(target: HTMLCanvasElement, definition: DashboardGraphDefinition, samples: DashboardGraphSample[]) {
     	const id = maxId++;
     	const data = this.createLineData(definition, samples);
@@ -101,7 +142,7 @@ export class DashboardGraphsRendererService {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: "Value at Given Time",
+                            labelString: "Value",
                         }
                     }]
                 }
@@ -111,42 +152,54 @@ export class DashboardGraphsRendererService {
     	return {id, definition, chart};
     }
 
+    /**
+     * Update a bar graph given its registration and all historical samples.
+     */
     private updateBarGraph(registration: DashboardGraphsRendererRegistration, samples: DashboardGraphSample[]) {
     	const data = this.createBarData(registration.definition, samples);
     	registration.chart.data = data;
     	registration.chart.update();
     }
 
+    /**
+     * Update a line graph given its registration and all historical samples.
+     */
     private updateLineGraph(registration: DashboardGraphsRendererRegistration, samples: DashboardGraphSample[]) {
         const data = this.createLineData(registration.definition, samples);
     	registration.chart.data = data;
     	registration.chart.update();
     }
 
+    /**
+     * Synthesize a bar graph's data given its definition and all historical samples.
+     */
     private createBarData(definition: DashboardGraphDefinition, samples: DashboardGraphSample[]) {
     	if (!samples.length) {
         	return {
 	    		type: "horizontalBar",
-	    		labels: definition.metric,
+	    		labels: definition.metrics,
 	            data: {}
 	    	}
     	}
 
     	const latestSample = samples[samples.length - 1];
     	return {
-            labels: definition.metric,
+            labels: definition.metrics.map((metric) => metricHumanNames[metric]),
             datasets: [{
                label: "Current Value",
-               data: definition.metric.map((metric) => latestSample[metric])
+               data: definition.metrics.map((metric) => latestSample[metric])
             }]
     	}
     }
 
+    /**
+     * Synthesize a line graph's data given its definition and all historical samples.
+     */
     private createLineData(definition: DashboardGraphDefinition, samples: DashboardGraphSample[]) {
     	return {
             labels: samples.map((sample) => <any>sample.timestamp),    
-            datasets: definition.metric.map((metric) => ({
-                label: metric,
+            datasets: definition.metrics.map((metric) => ({
+                label: metricHumanNames[metric],
                 data: samples.map((sample) => sample[metric])
             }))
     	}

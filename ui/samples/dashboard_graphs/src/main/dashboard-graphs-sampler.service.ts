@@ -1,22 +1,58 @@
+/** vcloud-director-ui-extension-sample-dashboard-graphs
+ *  SPDX-License-Identifier: BSD-2-Clause
+ *  Copyright 2018 VMware, Inc. All rights reserved. VMware Confidential
+ */
 import {Subject} from "rxjs";
 import {common} from "@vcd/sdk";
 import {Inject} from "@angular/core";
 import {vcloud} from "@vcd/bindings";
 import {VcdApiClient} from "@vcd/sdk";
 import {DashboardGraphDefinition, DashboardGraphMetric, DashboardGraphSample} from "./dashboard-graphs.model";
+import OrgVdcRollupType = vcloud.api.rest.schema_v1_5.OrgVdcRollupType;
 
-type OrgVdcRollupType = vcloud.api.rest.schema_v1_5.OrgVdcRollupType;
-
+/**
+ * How many seconds to wait before getting another sample.
+ * This could be a setting...  exercise left to the reader. :-)
+ */
 const refreshPeriodSeconds = 5;
+
+/**
+ * How many samples to keep in memory.
+ * This could be a setting...  exercise left to the reader. :-)
+ */
 const historyMax = 10;
 
+/**
+ * This service automatically fetches samples at an interval and maintains a set
+ * number of them.  It has an Osbervable that will emit whenever a new set of samples
+ * are available.
+ */
 export class DashboardGraphsSamplerService {
 	
+    /**
+     * This will contain the URL to fetch the sample from.
+     */
     private rollupUrl: string;
+
+    /**
+     * This contains all historical samples.
+     */
     private _samples: DashboardGraphSample[] = [];
+
+    /**
+     * Triggered when new samples are available.
+     */
     private _samplesChanged = new Subject<void>();
+
+    /**
+     * Emits when new samples are available.
+     */
     readonly samplesChanged = this._samplesChanged.asObservable();
 
+    /**
+     * Inject the API client, and use it to find the organization from the session.
+     * Once found, synthesize the vdcRollup URL and start the fetch loop.
+     */
     constructor(@Inject(VcdApiClient) private vcdApiClient: VcdApiClient) {
         vcdApiClient.session.subscribe((session) => {
             const orgLink = session.link
@@ -38,10 +74,17 @@ export class DashboardGraphsSamplerService {
         });
     }
 
+    /**
+     * Return the available samples.
+     */
     get samples(): DashboardGraphSample[] {
         return this._samples;
     }
 
+    /**
+     * Fetch the rollup data and create a new sample.
+     * Then delay and call self again.
+     */
     private getNextSample() {
     	this.vcdApiClient.get<OrgVdcRollupType>(this.rollupUrl)
     	    .toPromise()
@@ -68,6 +111,9 @@ export class DashboardGraphsSamplerService {
     	    });
     }
 
+    /**
+     * Helper to get current CPU usage.
+     */
     private getCpuUsage(rollup: OrgVdcRollupType) {
         if (rollup.allocationPoolVdcSummary && rollup.allocationPoolVdcSummary.cpuConsumptionMhz) {
             return rollup.allocationPoolVdcSummary.cpuConsumptionMhz;
@@ -79,6 +125,9 @@ export class DashboardGraphsSamplerService {
         return 0;
     }
 
+    /**
+     * Helper to get current memory usage.
+     */
     private getMemUsage(rollup: OrgVdcRollupType) {
         if (rollup.allocationPoolVdcSummary && rollup.allocationPoolVdcSummary.memoryConsumptionMB) {
             return rollup.allocationPoolVdcSummary.memoryConsumptionMB;
@@ -90,6 +139,9 @@ export class DashboardGraphsSamplerService {
         return 0;
     }
 
+    /**
+     * Helper to get current storage usage.
+     */
     private getStorageUsage(rollup: OrgVdcRollupType) {
         if (rollup.allocationPoolVdcSummary && rollup.allocationPoolVdcSummary.storageConsumptionMB) {
             return rollup.allocationPoolVdcSummary.storageConsumptionMB;

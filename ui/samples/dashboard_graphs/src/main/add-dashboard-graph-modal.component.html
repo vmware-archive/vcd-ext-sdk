@@ -6,9 +6,7 @@
                 <label for="sizeField">Size</label>
                 <div class="select">
                     <select id="sizeField" formControlName="size">
-                        <option value="sm">Small</option>
-                        <option value="md">Medium</option>
-                        <option value="lg">Large</option>
+                        <option *ngFor="let size of sizes" [value]="size.value">{{size.label}}</option>
                     </select>
                 </div>
             </div>
@@ -16,21 +14,15 @@
                 <label for="typeField">Type</label>
                 <div class="select">
                     <select id="typeField" formControlName="type">
-                        <option value="bar">Bar chart (latest sample only)</option>
-                        <option value="line">Line chart (previosu ten samples)</option>
+                        <option *ngFor="let type of types" [value]="type.value">{{type.label}}</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
-                <label for="metricField">Measured Metrics</label>
+                <label for="metricsField">Measured Metrics</label>
                 <div class="select">
-                    <select id="metricField" formControlName="metric" multiple>
-                        <option value="orgCount">Organization Count</option>
-                        <option value="vmCount">VM Count</option>
-                        <option value="vappCount">vApp Count</option>
-                        <option value="cpuUsage">CPU Usage (MHz)</option>
-                        <option value="memUsage">Memory Usage (MiB)</option>
-                        <option value="storageUsage">Storage Usage (MiB)</option>
+                    <select id="metricsField" formControlName="metrics" multiple>
+                        <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
                     </select>
                 </div>
             </div>

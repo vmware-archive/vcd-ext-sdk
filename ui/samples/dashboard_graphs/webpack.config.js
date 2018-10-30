@@ -1,9 +1,9 @@
-// This is the webpack configuration used for the dev server.
+// This is the webpack configuration used for creating plugins.
 const webpack = require("webpack");
 const path = require("path");
 const Happypack = require('happypack');
 
-// All paths are relative to the `content/core` directory
+// All paths are relative to the `webpack.config.js` directory
 const basePath = path.resolve(__dirname);
 
 // Create the configuration for the dev-server
@@ -17,38 +17,41 @@ module.exports = {
     // Use the 'source-map' plugin if source-maps are enabled
     devtool: 'source-map',
 
-    // Use the selected entry-points
-    entry: {
-        bundle: path.resolve(basePath, "src", "main", "index.ts")
-    },
-
-    // Declare everything the container provides as external
-    externals: [
-        /^rxjs(\/.+)?$/,
-        /^@angular\/.+$/,
-        /^@ngrx\/.+$/,
-        {
-          'clarity-angular': 'clarity-angular',
-          'reselect': 'reselect'
-        }
-    ],
-
-    // Write all bundles to `dist/[name].js` as a library
+    // Write all output to `dist/[name].js` as an AMD library
     output: {
         filename: "[name].js",
         libraryTarget: "amd",
         path: path.join(basePath, "dist")
     },
 
-    // Automatically resolve typescript first, then Javascript.
-    // Note - this does not affect the node_modules, as they are in the separate DLL.
+    // Create 'bundle.js' from 'src/main/index.ts'
+    entry: {
+        bundle: path.resolve(basePath, "src", "main", "index.ts")
+    },
+
+    // Declare everything the container provides as external.
+    // Because this is an AMD bundle, they will be resolved via AMD.
+    externals: [
+        /^rxjs(\/.+)?$/,
+        /^@angular\/.+$/,
+        /^@clr\/.+$/,
+        /^@ngrx\/.+$/,
+        /^@vcd\/common$/,
+        /^@vcd-ui\/common$/,
+        {
+          'clarity-angular': 'clarity-angular',
+          'reselect': 'reselect'
+        }
+    ],
+
+    // Resolve typescript first, then Javascript.
     resolve: {
         extensions: [".ts", ".js"]
     },
 
     module: {
         rules: [
-            // Build typescript files, using a cache (really useful for subsequent builds).
+            // Build typescript files using a cache (really useful for subsequent builds).
             // Use the `tsconfig.json` settings.
             //
             // TS files are pre-processed by the `angular2-template-loader` which will inline
@@ -101,7 +104,6 @@ module.exports = {
             // Apply PostCSS (using an external config - HappyPack requires this) to any CSS file,
             // load it using the css-loader (which is a bit smarter than raw files), before
             // converting it to a string for inclusion in the components directly.
-            // Sourcemaps are enabled optionally based on the env variable above.
             loaders: [
                 "exports-loader?module.exports.toString()",
                 {
@@ -116,7 +118,7 @@ module.exports = {
                     options: {
                         ident: "postcss",
                         config: {
-                            path: path.join(basePath, "config", "postcss.config.js")
+                            path: path.join(basePath, "postcss.config.js")
                         }
                     }
                 }
@@ -131,7 +133,6 @@ module.exports = {
             // external config - HappyPack requires this) to any SCSS/SASS file.
             // Then load this output CSS using the css-loader (which is a bit smarter than raw files),
             // before converting it to a string for inclusion in the components directly.
-            // Sourcemaps are enabled optionally based on the env variable above.
             loaders: [
                 "exports-loader?module.exports.toString()",
                 {
@@ -146,7 +147,7 @@ module.exports = {
                     options: {
                         ident: "postcss",
                         config: {
-                            path: path.join(basePath, "config", "postcss.config.js")
+                            path: path.join(basePath, "postcss.config.js")
                         }
                     }
                 },
@@ -172,9 +173,5 @@ module.exports = {
 
         // Show progress.
         new webpack.ProgressPlugin()
-    ],
-
-    optimization: {
-        minimize: false, // <---- disables uglify.
-    }
+    ]
 }

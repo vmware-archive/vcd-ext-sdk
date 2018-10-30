@@ -1,15 +1,18 @@
-# Sample vCD Portal Extension - About Page
-This is a vCD Portal Extension displaying a sample About Page.
+# Sample vCD Dashboard Extension - Graphs
+This is a vCD Dashboard Extension allowing a user to display personalised graphs.
 
 ## Overview ##
-This sample code was created as part of the following whitepaper: [Extending VMware vCloud Director User Interface Using Portal Extensibility](https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/vcat/vmware-extending-vcloud-director-user-interface-using-portal-extensibility.pdf).
+With this sample extension enabled the dashboard will have the ability to add graphs.
+The configured graphs will be stored in the browser storage.
 
 ## Getting Started ##
 
 ### Prerequisites ###
 It is recommended that developers be familiar with Angular 4 coding (including modules and component resolution), and have the appropriate tooling installed.  This assumes Yarn as the package manager.
 
-An installation of vCloud Director version 9.1.0 is required to test the plugin.
+An installation of the vCloud Director Wellington released is required to test the plugin.
+
+Please note that this release is not publicly available in any form.
 
 ### Build and Install ###
 Follow the directions listed in the [Seed README.md](../../vcd-plugin-seed/README.md) for building and installing.
