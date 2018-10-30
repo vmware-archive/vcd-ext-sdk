@@ -16,10 +16,10 @@ export class TicketService {
     return Observable.of<Ticket[]>(TICKETS);
   }
 
-  createTicket(description: string): Observable<Ticket[]> {
+  createTicket(description: string): Observable<Ticket> {
     this.ticketID += 1
-    return Observable.of<Ticket[]>({
-      "ticket_id": this.ticketID,
+    return Observable.of<Ticket>({
+      "ticket_id": this.ticketID.toString(),
       "ticket_msg": description,
       "status": "Open"
     });

@@ -16,16 +16,16 @@ export class TicketService {
     return Observable.of<Ticket[]>(TICKETS);
   }
 
-  createTicket(description: string): Observable<Ticket[]> {
+  createTicket(description: string): Observable<Ticket> {
     this.ticketID += 1
-    return Observable.of<Ticket[]>({
-      "ticket_id": this.ticketID,
+    return Observable.of<Ticket>({
+      "ticket_id": this.ticketID.toString(),
       "ticket_msg": description,
       "status": "Open"
     });
   }
 
-  deleteTicket(ticket_id): Observable<Ticket[]> {
+  deleteTicket(ticket_id: string): Observable<Ticket[]> {
     for (let i=0; i<TICKETS.length; i++) {
       if (TICKETS[i].ticket_id == ticket_id)
       {
