@@ -1,0 +1,21 @@
+ {
+    "urn": "vmware:vcloud:dashboard-graph",
+    "name": "Dashboard graph extension",
+    "containerVersion": "9.5.0",
+    "version": "0.0.1",
+    "scope": ["tenant"],
+    "permissions": [],
+    "description": "An example dashboard extension",
+    "vendor": "VMware",
+    "license": "SPDX-License-Identifier: BSD-2-Clause; Copyright (C) VMware 2018.  All rights reserved.",
+    "link": "http://www.vmware.com/support",
+    "module": "DashboardGraphsModule",
+    "route": "dashboard-graph",
+    "extensionPoints": [{
+        "urn": "vmware:vcloud:dashboard-graphs",
+        "type": "dashboard-section",
+        "name": "Dsahboard Graphs Extension",
+        "description": "Example extension that adds customisable graphs to the dashbaord",
+	    "component": "DashboardGraphsComponent"
+    }]
+}

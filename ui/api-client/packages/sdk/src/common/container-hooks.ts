@@ -2,7 +2,7 @@
  * This is the currently supported - albeit very minimal - public SDK.
  */
 
-import {OpaqueToken, NgModule} from '@angular/core';
+import {OpaqueToken, InjectionToken, NgModule} from '@angular/core';
 
 // Bind straight into the hooks provided by the container.
 if (!window["System"] || !window["System"]["registry"] || !window["System"]["registry"]["get"]) {
@@ -55,6 +55,42 @@ export const EXTENSION_ROUTE: OpaqueToken = containerHooks.EXTENSION_ROUTE;
  * Wire in as a boolean.  True if running under the SDK, false if running in production.
  */
 export const SDK_MODE: OpaqueToken = containerHooks.SDK_MODE;
+
+/**
+ * Wire in as an ExtensionPointManifest type.  Provided to components/services used by extension points.
+ */
+export const EXTENSION_POINT_MANIFEST: InjectionToken<ExtensionPointManifest> = containerHooks.EXTENSION_POINT_MANIFEST;
+
+/**
+ * Supported extension point types.
+ */
+export type ExtensionPointType = "dashboard-section";
+
+/**
+ * This defines a formal extension point.  An extension point is a declarative way for an extension manifest
+ * to describe how the VCD application behaviour is extended or modified by the extension.
+ */
+export interface ExtensionPointManifest {
+    /**
+     * Universally unique URN that identifies this Extension Point.  It is suggested to preprend the extension's URN.
+     */
+    readonly urn: string;
+
+    /**
+     * The type of Extension Point being defined from a supported list.  This list will increase over time.
+     */
+    readonly type: ExtensionPointType;
+
+    /**
+     * The name of the Extension Point, intended for display in extension management interfaces.
+     */
+    readonly name: string;
+
+    /**
+     * An overview of the Extension Point, intended for display in extension management interfaces.
+     */
+    readonly description: string;
+}
 
 /**
  * Payload for registering a navigation menu entry.

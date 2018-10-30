@@ -1,0 +1,43 @@
+<clr-modal [(clrModalOpen)]="opened">
+    <h3 class="modal-title">Add Dashboard Graph</h3>
+    <div class="modal-body">
+        <form [formGroup]="formGroup">
+            <div class="form-group">
+                <label for="sizeField">Size</label>
+                <div class="select">
+                    <select id="sizeField" formControlName="size">
+                        <option value="sm">Small</option>
+                        <option value="md">Medium</option>
+                        <option value="lg">Large</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="typeField">Type</label>
+                <div class="select">
+                    <select id="typeField" formControlName="type">
+                        <option value="bar">Bar chart (latest sample only)</option>
+                        <option value="line">Line chart (previosu ten samples)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="metricField">Measured Metrics</label>
+                <div class="select">
+                    <select id="metricField" formControlName="metric" multiple>
+                        <option value="orgCount">Organization Count</option>
+                        <option value="vmCount">VM Count</option>
+                        <option value="vappCount">vApp Count</option>
+                        <option value="cpuUsage">CPU Usage (MHz)</option>
+                        <option value="memUsage">Memory Usage (MiB)</option>
+                        <option value="storageUsage">Storage Usage (MiB)</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="onCancelClicked()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSaveClicked()">Ok</button>
+    </div>
+</clr-modal>
