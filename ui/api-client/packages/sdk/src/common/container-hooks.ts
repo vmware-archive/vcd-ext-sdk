@@ -64,11 +64,6 @@ export interface ExtensionNavRegistration {
      * The router path to navigate to when selected.
      */
     path: string;
-    /**
-     * The name of the clarity icon to use. If Clarity doesn't support it, it must be added.
-     * See https://vmware.github.io/clarity/documentation/iconography
-     */
-    icon: string;
 
     /**
      * i18 key for name of extension, to be used as text for links
