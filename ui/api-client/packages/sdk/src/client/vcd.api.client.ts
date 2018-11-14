@@ -1,13 +1,14 @@
-import { Injectable, Injector, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HTTP_INTERCEPTORS, HttpInterceptor, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Injectable, Inject, Optional } from '@angular/core';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map, concatMap } from 'rxjs/operators';
 
-import { LoggingInterceptor, RequestHeadersInterceptor } from './http-interceptors';
 import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType, EntityReferenceType, EntityType, TaskType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
-import { Query } from './query';
-import { AuthTokenHolderService, API_ROOT_URL } from './common';
+import { Query } from '../query/index';
+import { AuthTokenHolderService, API_ROOT_URL } from '../common/index';
+import {ApiResultService} from "./api.result.service";
+import {VcdHttpClient} from "./vcd.http.client";
 
 export type Navigable = ResourceType | { link?: LinkType[] }
 
@@ -26,13 +27,13 @@ export class VcdApiClient {
         return this._version;
     }
 
-    private interceptors: HttpInterceptor[];
-
     private _session: BehaviorSubject<SessionType> = new BehaviorSubject<SessionType>(null);
     private _sessionObservable: Observable<SessionType> = this._session.asObservable().skipWhile(session => !session);
 
-    constructor(private http: HttpClient, private authToken: AuthTokenHolderService, @Inject(API_ROOT_URL) @Optional() private apiRootUrl: string = '', private injector: Injector) {
-        this.interceptors = injector.get(HTTP_INTERCEPTORS);
+    constructor(@Optional() apiResultService: ApiResultService,
+                private http: VcdHttpClient,
+                private authToken: AuthTokenHolderService,
+                @Inject(API_ROOT_URL) @Optional() private apiRootUrl: string = '') {
         this._baseUrl = apiRootUrl;
         this.setAuthentication(this.authToken.token).subscribe();
     }
@@ -54,8 +55,7 @@ export class VcdApiClient {
      * @returns the session associated with the authentication token
      */
     public setAuthentication(authentication: string): Observable<SessionType> {
-        this.setAuthenticationOnInterceptor(authentication);
-
+        this.http.requestHeadersInterceptor.authentication = authentication;
         return this.http.get<SessionType>(`${this._baseUrl}/api/session`, {observe: 'response'})
             .pipe(
                 map(this.extractSessionType),
@@ -66,12 +66,7 @@ export class VcdApiClient {
     }
 
     public enableLogging(): VcdApiClient {
-        for (let interceptor of this.interceptors) {
-            if (interceptor instanceof LoggingInterceptor) {
-                (interceptor as LoggingInterceptor).enabled = true;
-                break;
-            }
-        }
+        this.http.loggingInterceptor.enabled = true;
 
         return this;
     }
@@ -90,7 +85,7 @@ export class VcdApiClient {
         return this.http.post<SessionType>(`${this._baseUrl}/api/sessions`, null, { observe: 'response', headers: new HttpHeaders({ 'Authorization': `Basic ${authString}` }) })
             .pipe(
                 tap((response: HttpResponse<any>) =>
-                    this.setAuthenticationOnInterceptor(`${response.headers.get('x-vmware-vcloud-token-type')} ${response.headers.get('x-vmware-vcloud-access-token')}`)
+                    this.http.requestHeadersInterceptor.authentication = `${response.headers.get('x-vmware-vcloud-token-type')} ${response.headers.get('x-vmware-vcloud-access-token')}`
                 ),
                 map(this.extractSessionType),
                 tap(session => {
@@ -351,16 +346,6 @@ export class VcdApiClient {
 
     public getLocation(session: SessionType): AuthorizedLocationType {
         return session.authorizedLocations.location.find(location => location.locationId == session.locationId);
-    }
-
-
-    private setAuthenticationOnInterceptor(authentication: string): void {
-        for (let interceptor of this.interceptors) {
-            if (interceptor instanceof RequestHeadersInterceptor) {
-                (interceptor as RequestHeadersInterceptor).authentication = authentication;
-                break;
-            }
-        }
     }
 
     private extractSessionType(response: HttpResponse<any>): SessionType {
