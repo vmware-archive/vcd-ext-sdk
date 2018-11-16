@@ -6,7 +6,7 @@ import {
 
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
-import { ApiResultService, ApiResult } from '../api.result.service';
+import { ApiResultService, ApiResult } from './api.result.service';
 
 @Injectable()
 export class LoggingInterceptor implements HttpInterceptor {
