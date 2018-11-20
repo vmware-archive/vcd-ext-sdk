@@ -1,4 +1,5 @@
 import {HttpBackend, HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
+import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {LoggingInterceptor} from "./logging.interceptor";
 import {RequestHeadersInterceptor} from "./request.headers.interceptor";
@@ -21,7 +22,8 @@ class VcdHttpInterceptorHandler implements HttpHandler {
  * Extension consumers should inject this.
  * @see HttpClient
  */
-export class VcdHttpClient extends HttpClient {
+ @Injectable()
+ export class VcdHttpClient extends HttpClient {
     /**
      * Provide access to the logging interceptor for enabling/disabling and configuring.
      */
