@@ -2,6 +2,7 @@
 const webpack = require("webpack");
 const path = require("path");
 const Happypack = require('happypack');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 // All paths are relative to the `webpack.config.js` directory
 const basePath = path.resolve(__dirname);
@@ -172,6 +173,17 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
 
         // Show progress.
-        new webpack.ProgressPlugin()
-    ]
+        new webpack.ProgressPlugin(),
+    ],
+
+    // Configure minimizer to not interfere with DI as much as possible
+    optimization: {
+        minimizer: [
+            new UglifyJSPlugin({
+                uglifyOptions: {
+                   keep_fnames: true
+                }
+            })
+	]
+    }
 }

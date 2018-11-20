@@ -8,17 +8,19 @@ import * as common from './common';
 import * as core from './core';
 import * as i18n from './i18n';
 
-export {
-  client,
-  common,
-  core,
-  i18n,
-  query
-};
-
 // These exports, for legacy reasons, are exposed at the top level.
-const {VcdApiClient, ApiResultService} = client;
-export {VcdApiClient, ApiResultService};
+import VcdApiClient = client.VcdApiClient;
+import ApiResultService = client.ApiResultService;
+
+export {
+   client,
+   common,
+   core,
+   i18n,
+   query,
+   VcdApiClient,
+   ApiResultService
+};
 
 /**
  * Extensions should import this module.  They can then wire in SDK components as desired.
