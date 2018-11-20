@@ -9,6 +9,7 @@ import { Query } from '../query/index';
 import { AuthTokenHolderService, API_ROOT_URL } from '../common/index';
 import {ApiResultService} from "./api.result.service";
 import {VcdHttpClient} from "./vcd.http.client";
+import {VcdTransferClient} from "./vcd.transfer.client";
 
 export type Navigable = ResourceType | { link?: LinkType[] }
 
@@ -109,8 +110,16 @@ export class VcdApiClient {
 
     public getTransferLink<T>(endpoint: string, item: T): Observable<string> {
         return this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).map((res: HttpResponse<Object>) => {
-            return res.headers.get("Link");
+            const linkHeader = res.headers.get("Link");
+            const firstBracket = linkHeader.indexOf("<");
+            const secondBracket = linkHeader.indexOf(">", firstBracket);
+            return linkHeader.substring(firstBracket + 1, secondBracket);
         });
+    }
+
+    public startTransfer<T>(endpoint: string, item: T): Observable<VcdTransferClient> {
+        return this.getTransferLink(endpoint, item)
+            .map((transferUrl) => new VcdTransferClient(this.http, transferUrl));
     }
 
     public updateSync<T>(endpoint: string, item: T): Observable<T> {
