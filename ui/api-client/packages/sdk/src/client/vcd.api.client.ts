@@ -7,9 +7,11 @@ import { tap, map, concatMap } from 'rxjs/operators';
 import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType, EntityReferenceType, EntityType, TaskType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
 import { Query } from '../query/index';
 import { AuthTokenHolderService, API_ROOT_URL } from '../common/index';
-import {ApiResultService} from "./api.result.service";
 import {VcdHttpClient} from "./vcd.http.client";
+import {VcdTransferClient} from "./vcd.transfer.client";
 
+export const TRANSFER_LINK_REL = "upload:default";
+export type WithLinks = { link?: LinkType[] };
 export type Navigable = ResourceType | { link?: LinkType[] }
 
 /**
@@ -107,10 +109,23 @@ export class VcdApiClient {
         );
     }
 
-    public getTransferLink<T>(endpoint: string, item: T): Observable<string> {
-        return this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).map((res: HttpResponse<Object>) => {
-            return res.headers.get("Link");
-        });
+    public getTransferLink<T>(endpoint: string, item: T, transferRel: string = TRANSFER_LINK_REL): Observable<string> {
+        return this.http
+            .post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' })
+            .map((res: HttpResponse<T & WithLinks>) => {
+                const links: LinkType[] = res.body.link || [];
+                const link = links
+                    .find((link) => link.rel == transferRel);
+                if (!link) {
+                    throw new Error(`Response from ${endpoint} did not contain a transfer link`);
+                }
+                return link.href;
+            });
+    }
+
+    public startTransfer<T>(endpoint: string, item: T, transferRel: string = TRANSFER_LINK_REL): Observable<VcdTransferClient> {
+        return this.getTransferLink(endpoint, item, transferRel)
+            .map((transferUrl) => new VcdTransferClient(this.http, transferUrl));
     }
 
     public updateSync<T>(endpoint: string, item: T): Observable<T> {
