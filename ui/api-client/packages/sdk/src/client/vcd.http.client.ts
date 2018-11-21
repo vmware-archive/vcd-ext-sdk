@@ -1,6 +1,7 @@
 import {HttpBackend, HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
+import {HateoasHeaderInterceptor} from "./hateoas.header.interceptor";
 import {LoggingInterceptor} from "./logging.interceptor";
 import {RequestHeadersInterceptor} from "./request.headers.interceptor";
 
@@ -35,15 +36,23 @@ class VcdHttpInterceptorHandler implements HttpHandler {
     readonly requestHeadersInterceptor: RequestHeadersInterceptor;
 
     /**
+     * Provide access to the HATEAOS header interceptor for enabling/disabling and configuring.
+     */
+    readonly hateoasHeadersInterceptor: HateoasHeaderInterceptor;
+
+    /**
      * Create an HttpClient with the logging and header interceptors in the chain.
      * @param httpBackend backend (likely injected from HttpClientModule)
+     * @param hateoasHeaderInterceptor the hateoas header interceptor
      * @param loggingInterceptor the logging interceptor
      * @param requestHeadersInterceptor the request header interceptor
      */
     constructor(httpBackend: HttpBackend,
+                hateoasHeaderInterceptor: HateoasHeaderInterceptor,
                 loggingInterceptor: LoggingInterceptor,
                 requestHeadersInterceptor: RequestHeadersInterceptor) {
         const interceptors: HttpInterceptor[] = [
+            hateoasHeaderInterceptor,
             loggingInterceptor,
             requestHeadersInterceptor
         ];
@@ -54,5 +63,6 @@ class VcdHttpInterceptorHandler implements HttpHandler {
         super(chain);
         this.loggingInterceptor = loggingInterceptor;
         this.requestHeadersInterceptor = requestHeadersInterceptor;
+        this.hateoasHeadersInterceptor = hateoasHeaderInterceptor;
     }
 }

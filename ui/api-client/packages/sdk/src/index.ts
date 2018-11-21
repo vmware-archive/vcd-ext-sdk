@@ -30,6 +30,7 @@ export {
   declarations: [i18n.TranslatePipe],
   exports: [i18n.TranslatePipe],
   providers: [
+      client.HateoasHeaderInterceptor,
       client.RequestHeadersInterceptor,
       client.LoggingInterceptor,
       client.VcdHttpClient,
