@@ -23,12 +23,12 @@ The vCloud Director UI plugin system allows for integration of custom modules di
 Currently, the only supported extension point is in the top level navigation.  However a strong internal strategy for pluggability ensures that future releases of vCloud Director will offer significant additions to the number and scope of extension points.
 
 ## Getting Started ##
-This seed project works with version 9.1.0 of vCloud Director.
+This seed project works with version 9.1.0.2 and above of vCloud Director.  This specific version of 9.1 is required because it contains a patch to allow Angular's `HttpClient` class to be used.
 
 ### Prerequisites ###
 It is recommended that developers be familiar with Angular 4 coding (including modules and component resolution), and have the appropriate tooling installed.  This document assumes Yarn as the package manager.
 
-An installation of vCloud Director version 9.1.0 is required to test the plugin.
+An installation of vCloud Director version 9.1.0.2 is required to test the plugin.
 
 ### Build ###
 ```bash
