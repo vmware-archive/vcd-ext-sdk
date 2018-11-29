@@ -9,15 +9,18 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
-import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlAttribute;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.TypeUtils;
 
 public class TypescriptClass extends TypescriptFile {
+    
     private Class<?> parent;
     private boolean isAbstract;
+
 
     TypescriptClass(final Class<?> clazz) {
         setClazz(clazz);
@@ -57,7 +60,10 @@ public class TypescriptClass extends TypescriptFile {
             }
         }
 
-        addField(field.getName(), mapper.getTypeName(actualType) + ((isArray) ? "[]" : ""));
+        final XmlAttribute xmlAttribute = field.getAnnotation(XmlAttribute.class);
+        final String typeScriptFieldName = xmlAttribute == null || xmlAttribute.name().equals("##default") ? 
+        		field.getName() : xmlAttribute.name();
+        addField(typeScriptFieldName, mapper.getTypeName(actualType) + ((isArray) ? "[]" : ""));
         if (!mapper.isBuiltInType(actualType) && !actualType.getTypeName().startsWith("java")) {
             addImport(clazz, (Class <?>) actualType);
         }
