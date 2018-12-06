@@ -37,6 +37,7 @@ class VcdHttpInterceptorHandler implements HttpHandler {
     /**
      * Create an HttpClient with the logging and header interceptors in the chain.
      * @param httpBackend backend (likely injected from HttpClientModule)
+     * @param hateoasHeaderInterceptor the hateoas header interceptor
      * @param loggingInterceptor the logging interceptor
      * @param requestHeadersInterceptor the request header interceptor
      */

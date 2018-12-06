@@ -7,10 +7,73 @@ import { tap, map, concatMap } from 'rxjs/operators';
 import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType, EntityReferenceType, EntityType, TaskType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
 import { Query } from '../query/index';
 import { AuthTokenHolderService, API_ROOT_URL } from '../common/index';
-import {ApiResultService} from "./api.result.service";
 import {VcdHttpClient} from "./vcd.http.client";
+import {VcdTransferClient} from "./vcd.transfer.client";
 
+export const TRANSFER_LINK_REL = "upload:default";
 export type Navigable = ResourceType | { link?: LinkType[] }
+
+export const HATEOAS_HEADER = "Link";
+
+/**
+ * Parse out Link headers using a very lazily implemented pull parser
+ * @param {string} header '<url1>;name1="value1",name2="value2",<url2>;name3="value3,value4"'
+ * @returns {LinkType[]} parsed link headers
+ */
+function parseHeaderHateoasLinks(header: string): LinkType[] {
+    const headerFieldMappings: {[key: string]: keyof LinkType} = {
+        href: "href",
+        model: "type",
+        title: "id",
+        rel: "rel"
+    };
+    let tokenIndex: number = -1;
+
+    function peek(token: string) {
+        return header.indexOf(token, tokenIndex + 1);
+    }
+
+    function next(token: string) {
+        const nextIndex = peek(token);
+        if (nextIndex == -1) {
+            throw new Error(JSON.stringify({header, token, tokenIndex}));
+        }
+        tokenIndex = nextIndex;
+        return tokenIndex;
+    }
+
+    const results: LinkType[] = [];
+    while (peek("<") > -1) {
+        try {
+            const hrefStart = next("<");
+            const hrefEnd = next(">");
+            const href = header.substring(hrefStart + 1, hrefEnd);
+            const result: LinkType = {href, type: null, id: null, rel: null, vCloudExtension: []};
+            let comma = peek(",");
+            let semicolon = peek(";");
+            while ((semicolon > -1 && comma > -1 && semicolon < comma) || (semicolon > -1 && comma == -1)) {
+                const nameStart = next(";");
+                const nameEnd = next("=");
+                const name = header.substring(nameStart + 1, nameEnd).trim().toLowerCase();
+                const valueStart = next('"');
+                const valueEnd = next('"');
+                const value = header.substring(valueStart + 1, valueEnd);
+                const mappedName = headerFieldMappings[name];
+                if (mappedName) {
+                    result[mappedName] = decodeURIComponent(value);
+                }
+                comma = peek(",");
+                semicolon = peek(";");
+            }
+            results.push(result);
+        } catch (error) {  // We will try the next one...
+            console.log(error);
+        }
+    }
+
+    return results;
+}
+
 
 /**
  * A basic client for interacting with the vCloud Director APIs.
@@ -107,10 +170,26 @@ export class VcdApiClient {
         );
     }
 
-    public getTransferLink<T>(endpoint: string, item: T): Observable<string> {
-        return this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).map((res: HttpResponse<Object>) => {
-            return res.headers.get("Link");
-        });
+    public getTransferLink<T>(endpoint: string, item: T, transferRel: string = TRANSFER_LINK_REL): Observable<string> {
+        return this.http
+            .post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' })
+            .map((res: HttpResponse<T & Navigable>) => {
+                const headerLinks: LinkType[] = res.headers.has(HATEOAS_HEADER)
+                    ? parseHeaderHateoasLinks(res.headers.get(HATEOAS_HEADER))
+                    : [];
+                const links: LinkType[] = res.body.link || [];
+                const link = [...headerLinks, ...links]
+                    .find((link) => link.rel == transferRel);
+                if (!link) {
+                    throw new Error(`Response from ${endpoint} did not contain a transfer link`);
+                }
+                return link.href;
+            });
+    }
+
+    public startTransfer<T>(endpoint: string, item: T, transferRel: string = TRANSFER_LINK_REL): Observable<VcdTransferClient> {
+        return this.getTransferLink(endpoint, item, transferRel)
+            .map((transferUrl) => new VcdTransferClient(this.http, transferUrl));
     }
 
     public updateSync<T>(endpoint: string, item: T): Observable<T> {
