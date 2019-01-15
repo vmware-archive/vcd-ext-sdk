@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- api-extension-template-vcloud-director
+ vcd-typescript-api-client
  Copyright 2018 VMware, Inc.
  SPDX-License-Identifier: BSD-2-Clause
 -->
@@ -11,9 +11,41 @@
   <artifactId>vcd-typescript-api-client</artifactId>
   <packaging>jar</packaging>
   <version>1.0.0</version>
+  <dependencies>
+    <dependency>
+      <groupId>com.vmware.vcloud</groupId>
+      <artifactId>openapi-schemas</artifactId>
+      <version>9.1.0</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.vmware.vcloud</groupId>
+                  <artifactId>openapi-schemas</artifactId>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.basedir}/openapi-specs</outputDirectory>
+              <excludes>META-INF/**</excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <configuration>
@@ -38,7 +70,7 @@
         </executions>
         <configuration>
           <output>${basedir}/packages/bindings/target/generated-typescript-bindings</output>
-          <inputSpec>${project.basedir}/../../java/api-schemas/openapi-schemas/src/main/resources/schemas/vcloud-openapi-schemas.yaml</inputSpec>
+          <inputSpec>${project.basedir}/openapi-specs/schemas/vcloud-openapi-schemas.yaml</inputSpec>
           <language>typescript-angular</language>
           <generateApis>false</generateApis>
           <generateModelTests>false</generateModelTests>

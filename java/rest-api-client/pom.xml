@@ -7,7 +7,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>rest-api-client</artifactId>
-  <version>9.1.0</version>
+  <version>${product.version}</version>
   <parent>
     <groupId>com.vmware.vcloud</groupId>
     <artifactId>api-schemas-parent</artifactId>
@@ -19,27 +19,12 @@
   <dependencies>
     <dependency>
       <groupId>com.vmware.vcloud</groupId>
-      <artifactId>extensibility-api-schemas</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vmware.vcloud</groupId>
-      <artifactId>extensibility-api-bindings</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vmware.vcloud</groupId>
-      <artifactId>rest-api-schemas</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vmware.vcloud</groupId>
-      <artifactId>rest-api-bindings</artifactId>
+      <artifactId>vcd-api-bindings-java</artifactId>
+      <version>${product.version}</version>
     </dependency>
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-frontend-jaxrs</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
@@ -56,18 +41,6 @@
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcpkix-jdk15on</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-jaxrs</artifactId>
     </dependency>
   </dependencies>
   <build>
