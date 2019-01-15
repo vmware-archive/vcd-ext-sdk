@@ -91,8 +91,9 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.34.tgz#a94d9f3767fe45f211e09e49af598bb84822280c"
   integrity sha512-alypNiaAEd0RBGXoWehJ2gchPYCITmw4CYBoB5nDlji8l8on7FsklfdfIs4DDmgpKLSX3OF3ha6SV+0W7cTzUA==
 
-"@vcd/bindings@./../bindings/dist":
+"@vcd/bindings@9.1.0":
   version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@vcd/bindings/-/bindings-9.1.0.tgz#6ba3e643b6a07c92d37302429351e7aa7fe54603"
 
 abbrev@1:
   version "1.1.1"

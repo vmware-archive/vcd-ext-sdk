@@ -5,7 +5,7 @@
   "license": "BSD-2-Clause",
   "private": true,
   "scripts": {
-    "bootstrap": "run-s prepare:bindings build:bindings prepare:sdk test:sdk build:sdk",
+    "bootstrap": "run-s prepare:sdk test:sdk build:sdk",
     "prepare:bindings": "yarn --cwd ./packages/bindings",
     "prepare:sdk": "yarn --cwd ./packages/sdk",
     "build:bindings": "yarn --cwd ./packages/bindings run build",
