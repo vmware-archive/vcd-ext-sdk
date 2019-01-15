@@ -85,7 +85,7 @@
       <plugin>
         <groupId>com.vmware.vcloud</groupId>
         <artifactId>vcd-bindings-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>0.9.1</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -109,7 +109,7 @@
         <dependencies>
           <dependency>
             <groupId>com.vmware.vcloud</groupId>
-            <artifactId>rest-api-bindings</artifactId>
+            <artifactId>vcd-api-bindings-java</artifactId>
             <version>9.1.0</version>
           </dependency>
         </dependencies>
