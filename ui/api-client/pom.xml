@@ -11,41 +11,9 @@
   <artifactId>vcd-typescript-api-client</artifactId>
   <packaging>jar</packaging>
   <version>1.0.0</version>
-  <dependencies>
-    <dependency>
-      <groupId>com.vmware.vcloud</groupId>
-      <artifactId>vcd-openapi-schemas</artifactId>
-      <version>9.1.0</version>
-    </dependency>
-  </dependencies>
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.vmware.vcloud</groupId>
-                  <artifactId>vcd-openapi-schemas</artifactId>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.basedir}/openapi-specs</outputDirectory>
-              <excludes>META-INF/**</excludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <configuration>
@@ -54,32 +22,6 @@
               <directory>${basedir}/packages/bindings/target/generated-typescript-bindings</directory>
             </fileset>
           </filesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>io.swagger</groupId>
-        <artifactId>swagger-codegen-maven-plugin</artifactId>
-        <version>2.3.1</version>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <output>${basedir}/packages/bindings/target/generated-typescript-bindings</output>
-          <inputSpec>${project.basedir}/openapi-specs/schemas/vcloud-openapi-schemas.yaml</inputSpec>
-          <language>typescript-angular</language>
-          <generateApis>false</generateApis>
-          <generateModelTests>false</generateModelTests>
-          <generateModelDocumentation>false</generateModelDocumentation>
-          <generateSupportingFiles>false</generateSupportingFiles>
-          <modelPackage>vcloud.rest.openapi.model</modelPackage>
-          <configOptions>
-            <modelPropertyNaming>original</modelPropertyNaming>
-          </configOptions>
         </configuration>
       </plugin>
       <plugin>
