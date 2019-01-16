@@ -34,6 +34,19 @@
       <url>http://www.opensource.org/licenses/BSD-2-Clause</url>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <id>sjones-vcd</id>
+      <name>Steve Jones</name>
+      <organization>VMware, Inc.</organization>
+      <organizationUrl>http://www.vmware.com</organizationUrl>
+    </developer>
+  </developers>
+  <url>https://github.com/vmware/vcd-ext-sdk</url>
+  <scm>
+    <connection>https://github.com/vmware/vcd-ext-sdk.git</connection>
+    <url>https://github.com/vmware/vcd-ext-sdk</url>
+  </scm>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -246,6 +259,26 @@
   </build>
   <profiles>
     <profile>
+      <id>allow-snapshots</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <repositories>
+        <repository>
+          <id>snapshots-repo</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases><enabled>false</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>snapshots-repo</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases><enabled>false</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    <profile>
       <id>devMode</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -255,5 +288,66 @@
         <downloadJavadocs>true</downloadJavadocs>
       </properties>
     </profile>
+    <profile>
+      <id>release</id>
+        <build>
+          <plugins>
+            <!--
+             Maven Release Plugin
+             To release this project, follow the instructions in RELEASING.md
+            -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <version>2.5.3</version>
+            </plugin>
+
+          <!--
+            Sign the components using GPG, so that they can be deployed to Sonatype
+          -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!--
+           Nexus-specific deployment plugin
+          -->
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <stagingProfileId>863e26d72b942f</stagingProfileId>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
+
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 </project>

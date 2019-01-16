@@ -14,4 +14,10 @@ script:
   - yarn
   - yarn bootstrap
   
-  
+deploy:
+  provider: script
+  script: cd $TRAVIS_BUILD_DIR && base build-resources/travis-release.sh
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
