@@ -52,7 +52,7 @@
           <dependency>
             <groupId>com.vmware.vcloud</groupId>
             <artifactId>vcd-api-bindings-java</artifactId>
-            <version>9.1.0</version>
+            <version>9.1.1</version>
           </dependency>
         </dependencies>
       </plugin>

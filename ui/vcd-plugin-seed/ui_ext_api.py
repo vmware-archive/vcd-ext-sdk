@@ -93,7 +93,7 @@ class UiPlugin:
         if self.current_ui_extension.get('plugin_status', None) == 'ready':
             return self.deleteUiExtensionPlugin(eid)
         else:
-            print 'Unable to delete plugin for %s' % eid
+            print ("Unable to delete plugin for ", eid)
             return None
 
     def walkUiExtensions(self):
