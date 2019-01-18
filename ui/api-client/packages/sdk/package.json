@@ -1,6 +1,6 @@
 {
   "name": "@vcd/sdk",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "scripts": {
     "clean": "rimraf build && rimraf dist",
     "ngc": "ngc",

@@ -1,14 +1,12 @@
 {
   "name": "@vcd/all",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "author": "VMware",
   "license": "BSD-2-Clause",
   "private": true,
   "scripts": {
     "bootstrap": "run-s prepare:sdk test:sdk build:sdk",
-    "prepare:bindings": "yarn --cwd ./packages/bindings",
     "prepare:sdk": "yarn --cwd ./packages/sdk",
-    "build:bindings": "yarn --cwd ./packages/bindings run build",
     "build:sdk": "yarn --cwd ./packages/sdk run build",
     "test:sdk": "yarn --cwd ./packages/sdk run test"
   },
