@@ -25,7 +25,7 @@
     "@ngrx/core": "1.2.0",
     "@ngrx/effects": "2.0.3",
     "@ngrx/store": "2.2.2",
-    "@vcd/bindings": "file:../api-client/packages/bindings/dist",
+    "@vcd/bindings": "9.1.1",
     "@vcd/http-transfer-service": "file:http-transfer-service/dest",
     "@vcd/sdk": "file:../api-client/packages/sdk/dist",
     "@webcomponents/custom-elements": "1.0.0",

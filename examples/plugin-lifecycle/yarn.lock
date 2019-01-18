@@ -76,8 +76,9 @@
   version "7.0.12"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.12.tgz#ae5f67a19c15f752148004db07cbbb372e69efc9"
 
-"@vcd/bindings@file:../api-client/packages/bindings/dist":
-  version "9.1.0"
+"@vcd/bindings@9.1.1":
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/@vcd/bindings/-/bindings-9.1.1.tgz#04d3ce14c6d5e151de93059626c14f828a45baa3"
 
 "@vcd/http-transfer-service@file:http-transfer-service/dest":
   version "1.0.0"

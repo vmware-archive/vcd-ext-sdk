@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- api-extension-template-vcloud-director
+ vcd-typescript-api-client
  Copyright 2018 VMware, Inc.
  SPDX-License-Identifier: BSD-2-Clause
 -->
@@ -25,35 +25,9 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>io.swagger</groupId>
-        <artifactId>swagger-codegen-maven-plugin</artifactId>
-        <version>2.3.1</version>
-        <executions>
-          <execution>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <output>${basedir}/packages/bindings/target/generated-typescript-bindings</output>
-          <inputSpec>${project.basedir}/../../java/api-schemas/openapi-schemas/src/main/resources/schemas/vcloud-openapi-schemas.yaml</inputSpec>
-          <language>typescript-angular</language>
-          <generateApis>false</generateApis>
-          <generateModelTests>false</generateModelTests>
-          <generateModelDocumentation>false</generateModelDocumentation>
-          <generateSupportingFiles>false</generateSupportingFiles>
-          <modelPackage>vcloud.rest.openapi.model</modelPackage>
-          <configOptions>
-            <modelPropertyNaming>original</modelPropertyNaming>
-          </configOptions>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>com.vmware.vcloud</groupId>
         <artifactId>vcd-bindings-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>0.9.1</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -77,8 +51,8 @@
         <dependencies>
           <dependency>
             <groupId>com.vmware.vcloud</groupId>
-            <artifactId>rest-api-bindings</artifactId>
-            <version>9.1.0</version>
+            <artifactId>vcd-api-bindings-java</artifactId>
+            <version>9.1.1</version>
           </dependency>
         </dependencies>
       </plugin>

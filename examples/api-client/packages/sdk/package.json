@@ -1,6 +1,6 @@
 {
   "name": "@vcd/sdk",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "scripts": {
     "clean": "rimraf build && rimraf dist",
     "ngc": "ngc",
@@ -12,7 +12,7 @@
   "author": "VMware",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "@vcd/bindings": "./../bindings/dist"
+    "@vcd/bindings": "9.1.1"
   },
   "devDependencies": {
     "@angular/common": "4.3.0",
