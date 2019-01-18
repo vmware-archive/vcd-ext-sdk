@@ -7,8 +7,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.vmware.vcloud</groupId>
-  <artifactId>vcd-ext-sdk</artifactId>
-  <version>1.0.0</version>
+  <artifactId>vcd-ext-sdk-parent</artifactId>
+  <version>0.9.0</version>
   <packaging>pom</packaging>
   <name>${project.artifactId} :: vCloud Director Extension SDKs</name>
   <description>A collection of libraries for interacting with the extensibility features of vCloud Director.  Also includes some sample application that showcase best practices for extension building</description>
@@ -17,7 +17,7 @@
     <url>http://www.vmware.com/</url>
   </organization>
   <modules>
-    <module>rest-api-client</module>
+    <module>vcd-api-client-java</module>
     <!-- <module>object-extensibility-app</module> -->
   </modules>
   <prerequisites>
@@ -51,8 +51,8 @@
     <dependencies>
       <dependency>
         <groupId>com.vmware.vcloud</groupId>
-        <artifactId>rest-api-client</artifactId>
-        <version>${product.version}</version>
+        <artifactId>vcd-api-client-java</artifactId>
+        <version>${version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
