@@ -29,4 +29,4 @@ fi
 mvn -Prelease --settings ../build-resources/travis-settings.xml deploy
 
 cd ../ui/api-client/packages/sdk
-cp .npmrc.dist .npmrc && npm publish dist --access public
+cp .npmrc.dist .npmrc && npm publish dist --access public --dry-run

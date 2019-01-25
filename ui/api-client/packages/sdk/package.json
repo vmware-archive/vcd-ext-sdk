@@ -7,7 +7,7 @@
     "test": "karma start --single",
     "test-watch": "karma start --auto-watch --no-single-run --browsers Chrome",
     "copy-metadata": "cpy package.dist.json dist --rename=package.json",
-    "build": "yarn run clean && yarn run ngc && ncp package.json build/ && ncp build/ dist/  && yarn run copy-metadata"
+    "build": "yarn run clean && yarn run ngc && ncp build/ dist/  && yarn run copy-metadata"
   },
   "author": "VMware",
   "license": "BSD-2-Clause",
