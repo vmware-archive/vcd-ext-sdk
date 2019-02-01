@@ -22,10 +22,18 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let headers = this.setAcceptHeader(req);
-        headers = headers.set('Content-Type', req.url.indexOf('cloudapi') > -1 ? 'application/json' : 'application/*+json');
+        let headers = req.headers;
+
+        if (!headers.has("Accept")) {
+            headers = this.setAcceptHeader(headers);
+        }
+
+        if (!headers.has("Content-Type")) {
+            headers = this.setContentTypeHeader(headers, req.url);
+        }
+
         if (this._authentication) {
-            headers = headers.set(this._authenticationHeader, `${this._authentication}`);
+            headers = headers.set(this._authenticationHeader, this._authentication);
         }
 
         const customReq: HttpRequest<any> = req.clone({
@@ -35,9 +43,9 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
         return next.handle(customReq);
     }
 
-    private setAcceptHeader(request: HttpRequest<any>): HttpHeaders {
-        const value = request.headers.get('_multisite');
-        const headers = request.headers.delete('_multisite');
+    private setAcceptHeader(headers: HttpHeaders): HttpHeaders {
+        const value = headers.get('_multisite');
+        headers = headers.delete('_multisite');
 
         return headers.set(
             'Accept', [
@@ -45,5 +53,13 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
                 `application/json;version=${this._version}${value ? `;multisite=${value}` : ''}`
             ]
         );
+    }
+
+    private setContentTypeHeader(headers: HttpHeaders, url: string): HttpHeaders {
+        if (url.indexOf("cloudapi") > -1) {
+            return headers.set('Content-Type', 'application/json');
+        } else {
+            return headers.set('Content-Type', 'application/*+json');
+        }
     }
 }
