@@ -9,7 +9,7 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
         this._enabled = _enabled;
     }
 
-    private _version: string = '31.0';
+    private _version: string = '30.0';
     set version(_version: string) {
         this._version = _version;
     }
