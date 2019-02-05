@@ -5,10 +5,11 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map, concatMap } from 'rxjs/operators';
 
 import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType, EntityReferenceType, EntityType, TaskType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
+import { SupportedVersionsType } from '@vcd/bindings/vcloud/api/rest/schema/versioning';
 import { Query } from '../query/index';
 import { AuthTokenHolderService, API_ROOT_URL } from '../common/index';
-import {VcdHttpClient} from "./vcd.http.client";
-import {VcdTransferClient} from "./vcd.transfer.client";
+import { VcdHttpClient } from "./vcd.http.client";
+import { VcdTransferClient } from "./vcd.transfer.client";
 
 export const TRANSFER_LINK_REL = "upload:default";
 export type Navigable = ResourceType | { link?: LinkType[] }
@@ -74,35 +75,59 @@ function parseHeaderHateoasLinks(header: string): LinkType[] {
     return results;
 }
 
-
 /**
  * A basic client for interacting with the vCloud Director APIs.
  */
 @Injectable()
 export class VcdApiClient {
-    private _baseUrl: string = '';
+    /** The default list of API versions (from most preferred to least) that the SDK supports. */
+    static readonly CANDIDATE_VERSIONS: string[] = ['32.0', '31.0', '30.0'];
+
     set baseUrl(_baseUrl: string) {
         this._baseUrl = _baseUrl;
     }
 
-    private _version: string = '';
     get version(): string {
-        return this._version;
+        return this.http.requestHeadersInterceptor.version;
     }
 
     private _session: BehaviorSubject<SessionType> = new BehaviorSubject<SessionType>(null);
     private _sessionObservable: Observable<SessionType> = this._session.asObservable().skipWhile(session => !session);
+    private _negotiateVersion: Observable<string>;
+    private _getSession: Observable<SessionType>;
 
     constructor(private http: VcdHttpClient,
                 private authToken: AuthTokenHolderService,
-                @Inject(API_ROOT_URL) @Optional() private apiRootUrl: string = '') {
-        this._baseUrl = apiRootUrl;
-        this.setAuthentication(this.authToken.token).subscribe();
+                @Inject(API_ROOT_URL) @Optional() private _baseUrl: string = '') {
+        this._negotiateVersion = this.http.get<SupportedVersionsType>(`${this._baseUrl}/api/versions`).pipe(
+            map(versions => this.negotiateVersion(versions)),
+            tap(version => this.setVersion(version))
+        ).publishReplay(1).refCount();
+
+        this._getSession = this.setAuthentication(this.authToken.token).publishReplay(1).refCount();
     }
 
-    public setVersion(version: string): VcdApiClient {
-        this._version = version;
+    private negotiateVersion(serverVersions: SupportedVersionsType): string {
+        const supportedVersions: string[] = serverVersions.versionInfo.map(versionInfo => versionInfo.version);
+        const negotiatedVersions: string[] = VcdApiClient.CANDIDATE_VERSIONS.filter(cv => supportedVersions.some(sv => cv === sv));
 
+        if (negotiatedVersions.length == 0) {
+            throw new Error(`The vCloud Director server does not support any API versions
+                used by this API client. Client candidate versions: ${VcdApiClient.CANDIDATE_VERSIONS};
+                vCloud Director supported versions: ${supportedVersions}`);
+        }
+
+        return negotiatedVersions[0];
+    }
+
+    private validateRequestContext(): Observable<SessionType> {
+        return (this.version ? Observable.of(this.version) : this._negotiateVersion).pipe(
+            concatMap(() => this._getSession)
+        );
+    }
+
+    public setVersion(_version: string): VcdApiClient {
+        this.http.requestHeadersInterceptor.version = _version;
         return this;
     }
 
@@ -118,12 +143,9 @@ export class VcdApiClient {
      */
     public setAuthentication(authentication: string): Observable<SessionType> {
         this.http.requestHeadersInterceptor.authentication = authentication;
-        return this.http.get<SessionType>(`${this._baseUrl}/api/session`, {observe: 'response'})
-            .pipe(
-                map(this.extractSessionType),
-                tap(session => {
-                    this._session.next(session);
-                })
+        return this.http.get<SessionType>(`${this._baseUrl}/api/session`, {observe: 'response'}).pipe(
+                map(response => this.extractSessionType(response)),
+                tap(session => this._session.next(session))
             );
     }
 
@@ -150,22 +172,25 @@ export class VcdApiClient {
                     this.http.requestHeadersInterceptor.authentication = `${response.headers.get('x-vmware-vcloud-token-type')} ${response.headers.get('x-vmware-vcloud-access-token')}`
                 ),
                 map(this.extractSessionType),
-                tap(session => {
-                    this._session.next(session);
-                })
+                tap(session => this._session.next(session))
             );
     }
 
     public get<T>(endpoint: string): Observable<T> {
-        return this.http.get<T>(`${this._baseUrl}/${endpoint}`);
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.get<T>(`${this._baseUrl}/${endpoint}`))
+        );
     }
 
     public createSync<T>(endpoint: string, item: T): Observable<T> {
-        return this.http.post<T>(`${this._baseUrl}/${endpoint}`, item);
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.post<T>(`${this._baseUrl}/${endpoint}`, item))
+        )
     }
 
     public createAsync<T>(endpoint: string, item: T): Observable<TaskType> {
-        return this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).pipe(
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' })),
             concatMap(response => this.mapResponseToTask(response, 'POST'))
         );
     }
@@ -193,21 +218,27 @@ export class VcdApiClient {
     }
 
     public updateSync<T>(endpoint: string, item: T): Observable<T> {
-        return this.http.put<T>(`${this._baseUrl}/${endpoint}`, item);
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.put<T>(`${this._baseUrl}/${endpoint}`, item))
+        );
     }
 
     public updateAsync<T>(endpoint: string, item: T): Observable<TaskType> {
-        return this.http.put(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' }).pipe(
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.put(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' })),
             concatMap(response => this.mapResponseToTask(response, 'PUT'))
         );
     }
 
     public deleteSync(endpoint: string): Observable<void> {
-        return this.http.delete<void>(`${this._baseUrl}/${endpoint}`);
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.delete<void>(`${this._baseUrl}/${endpoint}`))
+        );
     }
 
     public deleteAsync(endpoint: string): Observable<TaskType> {
-        return this.http.delete(`${this._baseUrl}/${endpoint}`, { observe: 'response' }).pipe(
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.delete(`${this._baseUrl}/${endpoint}`, { observe: 'response' })),
             concatMap(response => this.mapResponseToTask(response, 'DELETE'))
         );
     }
@@ -230,13 +261,16 @@ export class VcdApiClient {
             this.http.get<EntityType>(`${this._baseUrl}/api/entity/${entityRefOrUrn}`) :
             this.http.get<EntityType>(`${this._baseUrl}/api/entity/urn:vcloud:${entityRefOrUrn.type}:${entityRefOrUrn.id}`);
 
-        return entityResolver.pipe(
+        return this.validateRequestContext().pipe(
+            concatMap(() => entityResolver),
             concatMap(entity => this.http.get<T>(`${entity.link[0].href}`))
         );
     }
 
     public updateTask(task: TaskType): Observable<TaskType> {
-        return this.http.get<TaskType>(task.href);
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.get<TaskType>(task.href))
+        );
     }
 
     public isTaskComplete(task: TaskType): boolean {
@@ -249,7 +283,9 @@ export class VcdApiClient {
             return Observable.throw(`No 'remove' link for specified resource.`);
         }
 
-        return this.http.delete<TaskType>(link.href);
+        return this.validateRequestContext().pipe(
+            concatMap(() => this.http.delete<TaskType>(link.href))
+        );
     }
 
     /**
@@ -389,9 +425,10 @@ export class VcdApiClient {
     }
 
     private getQueryPage<T>(href: string, multisite?: any): Observable<QueryResultRecordsType> {
-        this.lastPage
-        return !multisite ? this.http.get<T>(href) :
-            this.http.get<T>(href, { headers: new HttpHeaders({ '_multisite': this.parseMultisiteValue(multisite) }) });
+        return this.validateRequestContext().pipe(
+            concatMap(() => !multisite ? this.http.get<T>(href) :
+                    this.http.get<T>(href, { headers: new HttpHeaders({ '_multisite': this.parseMultisiteValue(multisite) }) }))
+        );
     }
 
     private findLink(item: Navigable, rel: string, type: string): LinkType {
@@ -407,19 +444,21 @@ export class VcdApiClient {
     }
 
     public get session(): Observable<SessionType> {
-        return this._sessionObservable;
+        return this.validateRequestContext().pipe(
+            concatMap(() => this._sessionObservable)
+        );
     }
 
     public get username(): Observable<string> {
-        return this._sessionObservable.map(session => session.user);
+        return this.session.map(session => session.user);
     }
 
     public get organization(): Observable<string> {
-        return this._sessionObservable.map(session => session.org);
+        return this.session.map(session => session.org);
     }
 
     public get location(): Observable<AuthorizedLocationType> {
-        return this._sessionObservable.map(session => session.authorizedLocations.location.find(location => location.locationId == session.locationId));
+        return this.session.map(session => session.authorizedLocations.location.find(location => location.locationId == session.locationId));
     }
 
     public getLocation(session: SessionType): AuthorizedLocationType {
