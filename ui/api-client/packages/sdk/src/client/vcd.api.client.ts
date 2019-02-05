@@ -425,7 +425,6 @@ export class VcdApiClient {
     }
 
     private getQueryPage<T>(href: string, multisite?: any): Observable<QueryResultRecordsType> {
-        this.lastPage
         return this.validateRequestContext().pipe(
             concatMap(() => !multisite ? this.http.get<T>(href) :
                     this.http.get<T>(href, { headers: new HttpHeaders({ '_multisite': this.parseMultisiteValue(multisite) }) }))
@@ -445,19 +444,21 @@ export class VcdApiClient {
     }
 
     public get session(): Observable<SessionType> {
-        return this._sessionObservable;
+        return this.validateRequestContext().pipe(
+            concatMap(() => this._sessionObservable)
+        );
     }
 
     public get username(): Observable<string> {
-        return this._sessionObservable.map(session => session.user);
+        return this.session.map(session => session.user);
     }
 
     public get organization(): Observable<string> {
-        return this._sessionObservable.map(session => session.org);
+        return this.session.map(session => session.org);
     }
 
     public get location(): Observable<AuthorizedLocationType> {
-        return this._sessionObservable.map(session => session.authorizedLocations.location.find(location => location.locationId == session.locationId));
+        return this.session.map(session => session.authorizedLocations.location.find(location => location.locationId == session.locationId));
     }
 
     public getLocation(session: SessionType): AuthorizedLocationType {
