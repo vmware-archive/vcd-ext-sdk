@@ -100,4 +100,4 @@ export interface AuthTokenHolderService {
     token: string;
 }
 
-export const AuthTokenHolderService: {} = containerHooks.AuthTokenHolderService;
+export const AuthTokenHolderService: {token: string} = containerHooks.AuthTokenHolderService;

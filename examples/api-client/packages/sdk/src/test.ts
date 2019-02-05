@@ -39,6 +39,19 @@ TestBed.initTestEnvironment(
     platformBrowserDynamicTesting([])
 );
 
+// Mock representation of SystemJS registry needed for testing VcdApiClient
+window["System"] = {
+    registry: {}
+};
+window["System"]["registry"]["get"] = function(s: string): any { 
+    return {
+        API_ROOT_URL: "rootUrl",
+        AuthTokenHolderService: {
+            token: "authToken"
+        }
+    };
+};
+
 // load all specs in ./src
 declare const require: any;
 const context = require.context("./", true, /\.spec\.ts$/);
