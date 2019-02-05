@@ -87,9 +87,8 @@ export class VcdApiClient {
         this._baseUrl = _baseUrl;
     }
 
-    private _version: string = '';
     get version(): string {
-        return this._version;
+        return this.http.requestHeadersInterceptor.version;
     }
 
     private _session: BehaviorSubject<SessionType> = new BehaviorSubject<SessionType>(null);
@@ -101,22 +100,24 @@ export class VcdApiClient {
                 private authToken: AuthTokenHolderService,
                 @Inject(API_ROOT_URL) @Optional() private _baseUrl: string = '') {
         this._negotiateVersion = this.http.get<SupportedVersionsType>(`${this._baseUrl}/api/versions`).pipe(
-            map(versions => {
-                const supportedVersions: string[] = versions.versionInfo.map(versionInfo => versionInfo.version);
-                const negotiatedVersions: string[] = VcdApiClient.CANDIDATE_VERSIONS.filter(cv => supportedVersions.some(sv => cv === sv));
-
-                if (negotiatedVersions.length == 0) {
-                    throw new Error(`The vCloud Director server does not support any API versions
-                        used by this API client. Client candidate versions: ${VcdApiClient.CANDIDATE_VERSIONS};
-                        vCloud Director supported versions: ${supportedVersions}`);
-                }
-
-                return negotiatedVersions[0];
-            }),
+            map(versions => this.negotiateVersion(versions)),
             tap(version => this.setVersion(version))
         ).publishReplay(1).refCount();
 
         this._getSession = this.setAuthentication(this.authToken.token).publishReplay(1).refCount();
+    }
+
+    private negotiateVersion(serverVersions: SupportedVersionsType): string {
+        const supportedVersions: string[] = serverVersions.versionInfo.map(versionInfo => versionInfo.version);
+        const negotiatedVersions: string[] = VcdApiClient.CANDIDATE_VERSIONS.filter(cv => supportedVersions.some(sv => cv === sv));
+
+        if (negotiatedVersions.length == 0) {
+            throw new Error(`The vCloud Director server does not support any API versions
+                used by this API client. Client candidate versions: ${VcdApiClient.CANDIDATE_VERSIONS};
+                vCloud Director supported versions: ${supportedVersions}`);
+        }
+
+        return negotiatedVersions[0];
     }
 
     private validateRequestContext(): Observable<SessionType> {
@@ -125,10 +126,8 @@ export class VcdApiClient {
         );
     }
 
-    public setVersion(version: string): VcdApiClient {
-        this._version = version;
-        this.http.requestHeadersInterceptor.version = version;
-
+    public setVersion(_version: string): VcdApiClient {
+        this.http.requestHeadersInterceptor.version = _version;
         return this;
     }
 
@@ -146,9 +145,7 @@ export class VcdApiClient {
         this.http.requestHeadersInterceptor.authentication = authentication;
         return this.http.get<SessionType>(`${this._baseUrl}/api/session`, {observe: 'response'}).pipe(
                 map(response => this.extractSessionType(response)),
-                tap(session => {
-                    this._session.next(session);
-                })
+                tap(session => this._session.next(session))
             );
     }
 
@@ -175,9 +172,7 @@ export class VcdApiClient {
                     this.http.requestHeadersInterceptor.authentication = `${response.headers.get('x-vmware-vcloud-token-type')} ${response.headers.get('x-vmware-vcloud-access-token')}`
                 ),
                 map(this.extractSessionType),
-                tap(session => {
-                    this._session.next(session);
-                })
+                tap(session => this._session.next(session))
             );
     }
 
@@ -432,10 +427,8 @@ export class VcdApiClient {
     private getQueryPage<T>(href: string, multisite?: any): Observable<QueryResultRecordsType> {
         this.lastPage
         return this.validateRequestContext().pipe(
-            concatMap(() => {
-                return !multisite ? this.http.get<T>(href) : 
-                    this.http.get<T>(href, { headers: new HttpHeaders({ '_multisite': this.parseMultisiteValue(multisite) }) });
-            })
+            concatMap(() => !multisite ? this.http.get<T>(href) :
+                    this.http.get<T>(href, { headers: new HttpHeaders({ '_multisite': this.parseMultisiteValue(multisite) }) }))
         );
     }
 
