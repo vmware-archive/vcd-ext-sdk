@@ -36,6 +36,8 @@ import { map } from 'rxjs/operators';
  */
 @Injectable()
 export class ResponseNormalizationInterceptor implements HttpInterceptor {
+  private static readonly QUERY_RESULT_TYPE = "com.vmware.vcloud.api.rest.schema_v1_5.QueryResultRecordsType";
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       map(response => {
@@ -44,7 +46,7 @@ export class ResponseNormalizationInterceptor implements HttpInterceptor {
         // returning the same JSON payload as API versions >= 31.0.
         if (response instanceof HttpResponse && response.body && response.body.value && response.body.declaredType && response.body.scope) {
           const body = response.body.value;
-          if (response.body.declaredType == "com.vmware.vcloud.api.rest.schema_v1_5.QueryResultRecordsType") {
+          if (response.body.declaredType == ResponseNormalizationInterceptor.QUERY_RESULT_TYPE) {
             body.record = body.record.map(record => record.value);
           }
 
