@@ -6,6 +6,7 @@ import {RequestHeadersInterceptor} from "./request.headers.interceptor";
 import {VcdHttpClient} from "./vcd.http.client";
 import {TransferProgress, TransferResult, VcdTransferClient} from "./vcd.transfer.client";
 import "jasmine-ajax";
+import { ResponseNormalizationInterceptor } from "./response.normalization.interceptor";
 
 const TEST_BLOB = (function (base64: string): Blob {
     var binaryString = atob(base64);
@@ -50,6 +51,7 @@ describe("TransferClient", () => {
             providers: [
                 LoggingInterceptor,
                 RequestHeadersInterceptor,
+                ResponseNormalizationInterceptor,
                 VcdHttpClient
             ]
         });

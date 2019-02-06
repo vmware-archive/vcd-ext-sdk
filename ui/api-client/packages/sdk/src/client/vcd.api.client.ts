@@ -143,8 +143,7 @@ export class VcdApiClient {
      */
     public setAuthentication(authentication: string): Observable<SessionType> {
         this.http.requestHeadersInterceptor.authentication = authentication;
-        return this.http.get<SessionType>(`${this._baseUrl}/api/session`, {observe: 'response'}).pipe(
-                map(response => this.extractSessionType(response)),
+        return this.http.get<SessionType>(`${this._baseUrl}/api/session`).pipe(
                 tap(session => this._session.next(session))
             );
     }
@@ -171,7 +170,7 @@ export class VcdApiClient {
                 tap((response: HttpResponse<any>) =>
                     this.http.requestHeadersInterceptor.authentication = `${response.headers.get('x-vmware-vcloud-token-type')} ${response.headers.get('x-vmware-vcloud-access-token')}`
                 ),
-                map(this.extractSessionType),
+                map(response => response.body),
                 tap(session => this._session.next(session))
             );
     }
@@ -463,13 +462,5 @@ export class VcdApiClient {
 
     public getLocation(session: SessionType): AuthorizedLocationType {
         return session.authorizedLocations.location.find(location => location.locationId == session.locationId);
-    }
-
-    private extractSessionType(response: HttpResponse<any>): SessionType {
-        if (response.body.value) {
-            return response.body.value as SessionType;
-        } else {
-            return response.body as SessionType;
-        }
     }
 }
