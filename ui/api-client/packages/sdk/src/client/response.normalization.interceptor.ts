@@ -43,7 +43,12 @@ export class ResponseNormalizationInterceptor implements HttpInterceptor {
         // response header for 'version=30.0' proved to be an unreliable condition in at least one case;
         // returning the same JSON payload as API versions >= 31.0.
         if (response instanceof HttpResponse && response.body && response.body.value && response.body.declaredType && response.body.scope) {
-          return response.clone({ body: response.body.value });
+          const body = response.body.value;
+          if (response.body.declaredType == "com.vmware.vcloud.api.rest.schema_v1_5.QueryResultRecordsType") {
+            body.record = body.record.map(record => record.value);
+          }
+
+          return response.clone({ body: body });
         }
 
         return response;
