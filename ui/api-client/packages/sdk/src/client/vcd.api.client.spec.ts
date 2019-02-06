@@ -8,6 +8,7 @@ import { AuthTokenHolderService, API_ROOT_URL } from "../common";
 import { SupportedVersionsType } from "@vcd/bindings/vcloud/api/rest/schema/versioning";
 import { SessionType, TaskType, EntityReferenceType, QueryResultRecordsType } from "@vcd/bindings/vcloud/api/rest/schema_v1_5";
 import { Query } from "../query";
+import { ResponseNormalizationInterceptor } from "./response.normalization.interceptor";
 
 // verifies that the GET api/versions endpoint is called exactly once, and returns the provided response
 function handleVersionNegotiation(versionResponse: SupportedVersionsType, httpMock: HttpTestingController): void {
@@ -40,6 +41,7 @@ describe("API client pre-request validation", () => {
             providers: [
                 LoggingInterceptor,
                 RequestHeadersInterceptor,
+                ResponseNormalizationInterceptor,
                 VcdHttpClient
             ]
         });

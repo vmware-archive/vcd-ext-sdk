@@ -32,6 +32,7 @@ export {
   providers: [
       client.RequestHeadersInterceptor,
       client.LoggingInterceptor,
+      client.ResponseNormalizationInterceptor,
       client.VcdHttpClient,
       client.VcdApiClient,
 
