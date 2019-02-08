@@ -3,11 +3,13 @@
   "version": "0.9.0",
   "scripts": {
     "clean": "rimraf build && rimraf dist",
-    "ngc": "ngc",
     "test": "karma start --single",
     "test-watch": "karma start --auto-watch --no-single-run --browsers Chrome",
     "copy-metadata": "cpy package.dist.json dist --rename=package.json",
-    "build": "yarn run clean && yarn run ngc && ncp build/ dist/ && yarn run copy-metadata"
+    "build": "yarn run clean && ngc && ncp build/ dist/ && yarn run copy-metadata",
+    "mvn:compile": "ngc -p ./tsconfig.mvn.json",
+    "mvn:prepare-package": "ncp target/build/ target/dist/ && cpy package.dist.json target/dist --rename=package.json",
+    "mvn:deploy": "cpy .npmrc.dist . --rename=.npmrc && npm publish target/dist --access public --dry-run && rimraf .npmrc"
   },
   "author": "VMware",
   "license": "BSD-2-Clause",
