@@ -201,7 +201,7 @@ export class VcdApiClient {
                 const headerLinks: LinkType[] = res.headers.has(HATEOAS_HEADER)
                     ? parseHeaderHateoasLinks(res.headers.get(HATEOAS_HEADER))
                     : [];
-                const links: LinkType[] = res.body.link || [];
+                const links: LinkType[] = res.body ? (res.body.link || []) : [];
                 const link = [...headerLinks, ...links]
                     .find((link) => link.rel == transferRel);
                 if (!link) {
