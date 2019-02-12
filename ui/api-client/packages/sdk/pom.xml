@@ -50,6 +50,16 @@
             </configuration>
           </execution>
           <execution>
+            <id>SDK unit tests</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>test</phase>
+            <configuration>
+              <arguments>run mvn:test</arguments>
+            </configuration>
+          </execution>
+          <execution>
             <id>create NPM package</id>
             <goals>
               <goal>npm</goal>
