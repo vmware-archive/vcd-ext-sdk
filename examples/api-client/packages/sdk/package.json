@@ -10,7 +10,7 @@
     "mvn:compile": "ngc -p ./tsconfig.mvn.json",
     "mvn:test": "karma start --single",
     "mvn:prepare-package": "ncp target/build/ target/dist/ && cpy package.dist.json target/dist --rename=package.json",
-    "mvn:deploy": "cpy .npmrc.dist . --rename=.npmrc && npm publish target/dist --access public --dry-run && rimraf .npmrc"
+    "mvn:deploy": "cpy .npmrc.dist . --rename=.npmrc && npm publish target/dist --access public && rimraf .npmrc"
   },
   "author": "VMware",
   "license": "BSD-2-Clause",
