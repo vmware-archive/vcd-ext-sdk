@@ -53,7 +53,7 @@ The end result of running these commands is a `plugin.zip` file in the `dist/` d
 
 ### Viewing the Plugin
 Once the plugin has been successfully registered and uploaded, there should be a new menu option in vCloud Director's top-level navigation menu:
-![Seed plugin navigation](/assets/ui-plugins/seed-plugin-navigation.png)
+![Seed plugin navigation](../assets/ui-plugins/seed-plugin-navigation.png)
 
 Selecting the 'Seed Plugin' menu option will route the UI to the plugin content"
-![Seed plugin simple module](/assets/ui-plugins/seed-plugin-simple.png)
+![Seed plugin simple module](../assets/ui-plugins/seed-plugin-simple.png)
