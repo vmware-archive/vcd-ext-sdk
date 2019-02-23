@@ -24,7 +24,7 @@ url: "https://github.com/vmware/vcd-ext-sdk" # the base hostname & protocol for 
 # Build settings
 markdown: kramdown
 permalink: pretty
-theme: just-the-docs
+remote_theme: pmarsceill/just-the-docs
 color_scheme: "dark"
 search_enabled: true
 aux_links:
