@@ -27,7 +27,7 @@
     "@ngrx/store": "2.2.2",
     "@vcd/bindings": "9.1.1",
     "@vcd/http-transfer-service": "file:http-transfer-service/dest",
-    "@vcd/sdk": "file:../api-client/packages/sdk/dist",
+    "@vcd/sdk": "0.9.0",
     "@webcomponents/custom-elements": "1.0.0",
     "clarity-angular": "0.10.15",
     "clarity-icons": "0.10.15",
