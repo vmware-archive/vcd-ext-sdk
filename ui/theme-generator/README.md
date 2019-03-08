@@ -87,3 +87,88 @@ The `_selectors.scss` file is for style overrides that can't be constrained to c
     }
 }
 ```
+
+## Using the Theme ##
+Once you have generated a theme you need to register it with vCloud Director. To do so you: 
+
+### Create new Theme: ### 
+POST a JSON body to /cloudapi/branding/themes 
+
+(https://{vCD_FQDN}/docs/#api-Branding-createBrandingTheme) 
+
+Example body: 
+```
+{ 
+ "name": "CloudProviders", 
+ "themeType": "Custom" 
+} 
+```
+
+### Create Theme Content: ### 
+POST a JSON body to /cloudapi/branding/themes/<NAME>/contents 
+
+(https://{vCD_FQDN}/docs/#api-Branding-uploadBrandingThemeContents) 
+
+Example body: 
+```
+{ 
+ "fileName": "testtheme.css", 
+ "size": 446925 
+} 
+```
+
+In the return HEADER there will be a “Link” that will be used to post the CSS file. Example: 
+
+Link →<https://{vCD_FQDN}/transfer/<UUID>/testtheme.css>;rel="upload:default";type="application/octet-stream" 
+
+### Upload Theme CSS ### 
+To upload the custom CSS file: 
+
+PUT the CSS file to the “Link” that was retrieved from the Create Theme Content step. Make sure you define Content-Type and Content-Length.  
+
+### Verity CSS Upload ###  
+To verify that you CSS was uploaded properly you can do a GET call to: /cloudapi/branding/themes/<NAME>/css 
+
+Make sure you set your Accept header to “text/css” 
+
+### Activate Theme ### 
+Once the Theme has been uploaded it can be set as active by calling the /cloudapi/branding call and setting the theme to the <NAME>: 
+
+To modify PUT a body of JSON to /cloudapi/branding 
+(https://{vCD_FQDN}/docs/#api-Branding-putSystemBranding) 
+
+Example body: 
+```
+{ 
+    "portalName": "Cloud Provider", 
+    "portalColor": "#7e1414", 
+    "selectedTheme": { 
+        "themeType": "Custom", 
+        "name": " CloudProviders " 
+    }, 
+    "customLinks": [ 
+        { 
+            "name": "help", 
+            "menuItemType": "override", 
+            "url": null 
+        }, 
+        { 
+
+            "name": "about", 
+            "menuItemType": "override", 
+            "url": null 
+        }, 
+        { 
+            "name": "vmrc", 
+            "menuItemType": "override", 
+            "url": null 
+        } 
+    ] 
+} 
+
+
+
+
+
+
+
