@@ -117,9 +117,10 @@ Example body:
 } 
 ```
 
-In the return HEADER there will be a “Link” that will be used to post the CSS file. Example: 
+In the return HEADER there will be a “Link” that will be used to post the CSS file. 
 
-**Link →<https://{vCD_FQDN}/transfer/<UUID>/testtheme.css>;rel="upload:default";type="application/octet-stream"** 
+Example: 
+*Link →<https://{vCD_FQDN}/transfer/<UUID>/testtheme.css>;rel="upload:default";type="application/octet-stream"*
 
 ### Upload Theme CSS ### 
 To upload the custom CSS file: 
