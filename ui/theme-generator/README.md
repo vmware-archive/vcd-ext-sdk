@@ -135,6 +135,7 @@ Make sure you set your Accept header to “text/css”
 Once the Theme has been uploaded it can be set as active by calling the /cloudapi/branding call and setting the theme to the <NAME>: 
 
 To modify PUT a body of JSON to */cloudapi/branding* 
+
 Documentation can be found: (https://{vCD_FQDN}/docs/#api-Branding-putSystemBranding) 
 
 Example body: 
