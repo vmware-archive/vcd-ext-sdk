@@ -94,7 +94,7 @@ Once you have generated a theme you need to register it with vCloud Director. To
 ### Create new Theme: ### 
 POST a JSON body to */cloudapi/branding/themes*
 
-Documentation can be found: (https://{vCD_FQDN}/docs/#api-Branding-createBrandingTheme) 
+Documentation can be found: *(https://{vCD_FQDN}/docs/#api-Branding-createBrandingTheme)* 
 
 Example body: 
 ```
@@ -107,7 +107,7 @@ Example body:
 ### Create Theme Content: ### 
 POST a JSON body to */cloudapi/branding/themes/<NAME>/contents* 
 
-Documentation can be found: (https://{vCD_FQDN}/docs/#api-Branding-uploadBrandingThemeContents) 
+Documentation can be found: *(https://{vCD_FQDN}/docs/#api-Branding-uploadBrandingThemeContents)* 
 
 Example body: 
 ```
@@ -136,7 +136,7 @@ Once the Theme has been uploaded it can be set as active by calling the /cloudap
 
 To modify PUT a body of JSON to */cloudapi/branding* 
 
-Documentation can be found: (https://{vCD_FQDN}/docs/#api-Branding-putSystemBranding) 
+Documentation can be found: *(https://{vCD_FQDN}/docs/#api-Branding-putSystemBranding)*
 
 Example body: 
 ```
@@ -166,10 +166,4 @@ Example body:
         } 
     ] 
 } 
-
-
-
-
-
-
-
+```
