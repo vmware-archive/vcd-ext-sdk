@@ -16,6 +16,11 @@
   <description>Sample App demonstrating object extensibility project</description>
   <packaging>jar</packaging>
   <dependencies>
+     <dependency>
+       <groupId>com.vmware.vcloud</groupId>
+       <artifactId>vcd-extensibility-bindings-java</artifactId>
+       <version>${product.version}</version>
+     </dependency>
     <dependency>
       <groupId>com.vmware.vcloud</groupId>
       <artifactId>object-extensibility-amqp</artifactId>

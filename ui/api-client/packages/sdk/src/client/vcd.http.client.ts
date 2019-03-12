@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {LoggingInterceptor} from "./logging.interceptor";
 import {RequestHeadersInterceptor} from "./request.headers.interceptor";
+import {ResponseNormalizationInterceptor} from "./response.normalization.interceptor";
 
 /**
  * Angular's HttpInterceptorHandler is not publicly exposed.  This is a clone of it.
@@ -43,10 +44,12 @@ class VcdHttpInterceptorHandler implements HttpHandler {
      */
     constructor(httpBackend: HttpBackend,
                 loggingInterceptor: LoggingInterceptor,
-                requestHeadersInterceptor: RequestHeadersInterceptor) {
+                requestHeadersInterceptor: RequestHeadersInterceptor,
+                responseNormalizationInterceptor: ResponseNormalizationInterceptor) {
         const interceptors: HttpInterceptor[] = [
             loggingInterceptor,
-            requestHeadersInterceptor
+            requestHeadersInterceptor,
+            responseNormalizationInterceptor
         ];
         const chain = interceptors.reduceRight(
             (next, interceptor) => new VcdHttpInterceptorHandler(next, interceptor),

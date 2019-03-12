@@ -1,6 +1,6 @@
 {
   "name": "@vcd/sdk",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "Typescript bindings for the vCloud Director API",
   "author": "VMware",
   "license": "BSD-2-Clause",
@@ -12,7 +12,7 @@
     "@angular/http": "4.4.4",
     "@ngrx/core": "1.2.0",
     "@ngrx/store": "2.2.2",
-    "@vcd/bindings": "9.1.0",
+    "@vcd/bindings": ">=9.1.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.4"
   }

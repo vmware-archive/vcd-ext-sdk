@@ -7,8 +7,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.vmware.vcloud</groupId>
-  <artifactId>vcd-ext-sdk</artifactId>
-  <version>1.0.0</version>
+  <artifactId>vcd-ext-sdk-parent</artifactId>
+  <version>0.9.0</version>
   <packaging>pom</packaging>
   <name>${project.artifactId} :: vCloud Director Extension SDKs</name>
   <description>A collection of libraries for interacting with the extensibility features of vCloud Director.  Also includes some sample application that showcase best practices for extension building</description>
@@ -17,8 +17,8 @@
     <url>http://www.vmware.com/</url>
   </organization>
   <modules>
-    <module>api-schemas</module>
-    <module>object-extensibility-app</module>
+    <module>vcd-api-client-java</module>
+    <!-- <module>object-extensibility-app</module> -->
   </modules>
   <prerequisites>
     <maven>3.3.9</maven>
@@ -27,9 +27,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <product.version>9.1.0</product.version>
-    <checkstyle.includes>**/pom.xml,**/*.java,**/*.xml,**/*.xsd</checkstyle.includes>
-    <checkstyle.excludes>**/target/**/*,**/external/xml.xsd,**/ovf1.1/dsp8027_1.1.0.xsd,**/ovf1.1/dsp8023_1.1.0.xsd,**/ovf1.1/common.xsd,**/CIM_ResourceAllocationSettingData.xsd,**/CIM_VirtualSystemSettingData.xsd</checkstyle.excludes>
-    <checkstyle.resourceIncludes/>
   </properties>
   <licenses>
     <license>
@@ -37,12 +34,25 @@
       <url>http://www.opensource.org/licenses/BSD-2-Clause</url>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <id>sjones-vcd</id>
+      <name>Steve Jones</name>
+      <organization>VMware, Inc.</organization>
+      <organizationUrl>http://www.vmware.com</organizationUrl>
+    </developer>
+  </developers>
+  <url>https://github.com/vmware/vcd-ext-sdk</url>
+  <scm>
+    <connection>https://github.com/vmware/vcd-ext-sdk.git</connection>
+    <url>https://github.com/vmware/vcd-ext-sdk</url>
+  </scm>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>com.vmware.vcloud</groupId>
-        <artifactId>rest-api-client</artifactId>
-        <version>${product.version}</version>
+        <artifactId>vcd-api-client-java</artifactId>
+        <version>${version}</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -77,28 +87,28 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.0.0</version>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
         <executions>
           <execution>
-            <id>validate</id>
-            <phase>validate</phase>
-            <configuration>
-              <configLocation>src/main/checkstyle/checkstyle.xml</configLocation>
-              <encoding>UTF-8</encoding>
-              <consoleOutput>true</consoleOutput>
-              <failsOnError>true</failsOnError>
-              <linkXRef>false</linkXRef>
-              <!--
-              <excludes>**/target/**/*,**/dsp8023_1.1.0.xsd,**/ovf1.1/common.xsd,**/CIM_ResourceAllocationSettingData.xsd,**/CIM_VirtualSystemSettingData.xsd</excludes>
-              <includes>**/*.java,**/pom.xml,**/*.xsd</includes>
-              <resourceIncludes>**/*.xsd</resourceIncludes>-->
-              <sourceDirectories>${project.basedir}</sourceDirectories>
-              <testSourceDirectories/>
-            </configuration>
+            <id>attach-sources</id>
             <goals>
-              <goal>check</goal>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.1</version>
+        <configuration>
+          <failOnError>false</failOnError>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
             </goals>
           </execution>
         </executions>
@@ -256,19 +266,6 @@
                 </pluginExecution>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <versionRange>[2.17,)</versionRange>
-                    <goals>
-                      <goal>check</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>xml-maven-plugin</artifactId>
                     <versionRange>[1.0,)</versionRange>
@@ -289,6 +286,26 @@
   </build>
   <profiles>
     <profile>
+      <id>allow-snapshots</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <repositories>
+        <repository>
+          <id>snapshots-repo</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases><enabled>false</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>snapshots-repo</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases><enabled>false</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    <profile>
       <id>devMode</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -298,5 +315,66 @@
         <downloadJavadocs>true</downloadJavadocs>
       </properties>
     </profile>
+    <profile>
+      <id>release</id>
+        <build>
+          <plugins>
+            <!--
+             Maven Release Plugin
+             To release this project, follow the instructions in RELEASING.md
+            -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <version>2.5.3</version>
+            </plugin>
+
+          <!--
+            Sign the components using GPG, so that they can be deployed to Sonatype
+          -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!--
+           Nexus-specific deployment plugin
+          -->
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <stagingProfileId>863e26d72b942f</stagingProfileId>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
+
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 </project>

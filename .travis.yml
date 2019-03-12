@@ -9,9 +9,13 @@ install: true
 script:
   - cd java
   - mvn install -B -V
-  - cd ../ui/api-client
-  - mvn generate-sources -B -V
-  - yarn
-  - yarn bootstrap
+  - cd ../ui/api-client/packages/sdk
+  - mvn install
   
-  
+deploy:
+  provider: script
+  script: cd $TRAVIS_BUILD_DIR && bash build-resources/travis-release.sh
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
