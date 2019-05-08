@@ -1,3 +1,5 @@
+> **NOTE**: This vcd-plugin-seed has been deprecated. There is a new plugin seed project published in the [vmware-samples](https://github.com/vmware-samples/vcd-ext-samples/tree/plugin-seed-9.1) repository. This vmware-sample repository is the currently preferred starting point for plugin authors and it has a few benefits over the plugin seed contained in this vcd-ext-sdk repository, including consumption of `@vcd/sdk` and `@vcd/bindings` packages from a public NPM repository, and an improved build process leveraging NPM and Webpack.
+
 # VCD UI Plugin Seed #
 This is a seed project for building plugins for the vCloud Director UI using Angular 4 and [Clarity](https://github.com/vmware/clarity).
 
