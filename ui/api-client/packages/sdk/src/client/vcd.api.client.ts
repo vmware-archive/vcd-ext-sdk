@@ -1,4 +1,4 @@
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, Inject, Optional, Injector } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -7,7 +7,7 @@ import { tap, map, concatMap } from 'rxjs/operators';
 import { SessionType, QueryResultRecordsType, AuthorizedLocationType, ResourceType, LinkType, EntityReferenceType, EntityType, TaskType } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
 import { SupportedVersionsType } from '@vcd/bindings/vcloud/api/rest/schema/versioning';
 import { Query } from '../query/index';
-import { AuthTokenHolderService, API_ROOT_URL } from '../common/index';
+import { AuthTokenHolderService, API_ROOT_URL, SESSION_SCOPE, SESSION_ORG_ID } from '../common/index';
 import { VcdHttpClient } from "./vcd.http.client";
 import { VcdTransferClient } from "./vcd.transfer.client";
 
@@ -95,16 +95,17 @@ export class VcdApiClient {
     private _sessionObservable: Observable<SessionType> = this._session.asObservable().skipWhile(session => !session);
     private _negotiateVersion: Observable<string>;
     private _getSession: Observable<SessionType>;
+    private _baseUrl: string;
 
     constructor(private http: VcdHttpClient,
-                private authToken: AuthTokenHolderService,
-                @Inject(API_ROOT_URL) @Optional() private _baseUrl: string = '') {
+                private injector: Injector) {
+        this._baseUrl = this.injector.get(API_ROOT_URL);
         this._negotiateVersion = this.http.get<SupportedVersionsType>(`${this._baseUrl}/api/versions`).pipe(
             map(versions => this.negotiateVersion(versions)),
             tap(version => this.setVersion(version))
         ).publishReplay(1).refCount();
 
-        this._getSession = this.setAuthentication(this.authToken.token).publishReplay(1).refCount();
+        this._getSession = this.setAuthentication(this.injector.get(AuthTokenHolderService).token).publishReplay(1).refCount();
     }
 
     private negotiateVersion(serverVersions: SupportedVersionsType): string {
@@ -132,6 +133,21 @@ export class VcdApiClient {
     }
 
     /**
+     * Allows a provider user to execute API requests in the scope of a specific tenant.
+     *
+     * This scoping is available to query-based API calls and to bulk GET calls in the
+     * /cloudapi space.
+     *
+     * @param actAs an entityRef of the tenant (organization) to scope subsequent calls to in
+     *  the VcdApiClient, or null/no parameter to remove tenant-specific scoping
+     * @returns the current VcdApiClient instance (for chaining)
+     */
+    public actAs(actAs: EntityReferenceType = null): VcdApiClient {
+        this.http.requestHeadersInterceptor.actAs = !actAs ? null : actAs.id;
+        return this;
+    }
+
+    /**
      * Sets the authentication token to use for the VcdApiClient.
      *
      * After setting the token, the client will get the current session
@@ -144,6 +160,12 @@ export class VcdApiClient {
     public setAuthentication(authentication: string): Observable<SessionType> {
         this.http.requestHeadersInterceptor.authentication = authentication;
         return this.http.get<SessionType>(`${this._baseUrl}/api/session`).pipe(
+                tap(session => {
+                    // automatically set actAs for provider in tenant scope
+                    if (session.org == 'System' && this.injector.get(SESSION_SCOPE) == 'tenant') {
+                        this.actAs({id: this.injector.get(SESSION_ORG_ID)})
+                    }
+                }),
                 tap(session => this._session.next(session))
             );
     }

@@ -4,11 +4,14 @@ import { LoggingInterceptor } from "./logging.interceptor";
 import { RequestHeadersInterceptor } from "./request.headers.interceptor";
 import { VcdApiClient } from "./vcd.api.client";
 import { VcdHttpClient } from "./vcd.http.client";
-import { AuthTokenHolderService, API_ROOT_URL } from "../common";
+import { AuthTokenHolderService, API_ROOT_URL, SESSION_SCOPE, SESSION_ORG_ID } from "../common";
 import { SupportedVersionsType } from "@vcd/bindings/vcloud/api/rest/schema/versioning";
 import { SessionType, TaskType, EntityReferenceType, QueryResultRecordsType } from "@vcd/bindings/vcloud/api/rest/schema_v1_5";
 import { Query } from "../query";
 import { ResponseNormalizationInterceptor } from "./response.normalization.interceptor";
+import { HttpRequest } from "@angular/common/http";
+import { ReflectiveInjector } from "@angular/core";
+import { concatMap } from "rxjs/operators";
 
 // verifies that the GET api/versions endpoint is called exactly once, and returns the provided response
 function handleVersionNegotiation(versionResponse: SupportedVersionsType, httpMock: HttpTestingController): void {
@@ -18,10 +21,15 @@ function handleVersionNegotiation(versionResponse: SupportedVersionsType, httpMo
 }
 
 // verifies that the GET api/session endpoint is called exactly once, and returns a mock SessionType response
-function handleSessionLoad(httpMock: HttpTestingController): void {
+function handleSessionLoad(httpMock: HttpTestingController, provider: boolean = false): void {
     const req: TestRequest[] = httpMock.match("rootUrl/api/session");
     expect(req.length).toBe(1);
-    req[0].flush(<SessionType> {});
+    let session = <SessionType> {};
+    if (provider) {
+        session.org = 'System';
+    }
+
+    req[0].flush(session);
 }
 
 const MOCK_TASK: TaskType = {
@@ -32,6 +40,7 @@ const MOCK_TASK: TaskType = {
 describe("API client pre-request validation", () => {
     let httpClient: VcdHttpClient;
     let httpMock: HttpTestingController;
+    let apiClient: VcdApiClient;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -48,6 +57,10 @@ describe("API client pre-request validation", () => {
 
         httpClient = TestBed.get(VcdHttpClient);
         httpMock = TestBed.get(HttpTestingController);
+        const injector = ReflectiveInjector.resolveAndCreate([VcdHttpClient,
+            {provide: AuthTokenHolderService, useValue: { token: "authToken" }},
+            {provide: API_ROOT_URL, useValue: "rootUrl"}])
+        apiClient = new VcdApiClient(httpClient, injector);
     }));
 
     afterEach(() => {
@@ -59,9 +72,8 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.get("api/test").subscribe(() => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.get("api/test").subscribe(() => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
         });
 
         handleVersionNegotiation(supportedVersions, httpMock);
@@ -74,9 +86,8 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.slice(1).map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.get("api/test").subscribe(() => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[1]);
+        apiClient.get("api/test").subscribe(() => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[1]);
         })
 
         handleVersionNegotiation(supportedVersions, httpMock);
@@ -89,8 +100,7 @@ describe("API client pre-request validation", () => {
             versionInfo: [{ version: "15.0", mediaTypeMapping: [], deprecated: false }]
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.get("api/test").subscribe(() => {
+        apiClient.get("api/test").subscribe(() => {
             fail('expected error');
         }, (error) => {
             expect(error);
@@ -104,13 +114,12 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.get("api/test").subscribe(() => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.get("api/test").subscribe(() => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
         })
 
-        client.get("api/test").subscribe(() => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.get("api/test").subscribe(() => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
         })
 
         handleVersionNegotiation(supportedVersions, httpMock);
@@ -119,10 +128,9 @@ describe("API client pre-request validation", () => {
     });
 
     it("verifies that explicit version request should bypass negotiation", () => {
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.setVersion("30.0");
-        client.get("api/test").subscribe(() => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS["30.0"]);
+        apiClient.setVersion("30.0");
+        apiClient.get("api/test").subscribe(() => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS["30.0"]);
         });
 
         httpMock.expectNone("rootUrl/api/versions");
@@ -135,9 +143,8 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.createAsync("api/test", {}).subscribe(result => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.createAsync("api/test", {}).subscribe(result => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
             expect(result.id).toBe(MOCK_TASK.id);
         });
 
@@ -151,10 +158,9 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
         const entity = <EntityReferenceType>{ id: "12345", name: "test", type: "application/vnd.vmware.vcloud.test+json"};
-        client.createSync<EntityReferenceType>("api/test", entity).subscribe(result => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.createSync<EntityReferenceType>("api/test", entity).subscribe(result => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
             expect(result.id).toBe(entity.id);
         });
 
@@ -168,9 +174,8 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.deleteAsync("api/test").subscribe(result => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.deleteAsync("api/test").subscribe(result => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
             expect(result.id).toBe(MOCK_TASK.id);
         });
 
@@ -184,9 +189,8 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.deleteSync("api/test").subscribe(result => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.deleteSync("api/test").subscribe(result => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
         });
 
         handleVersionNegotiation(supportedVersions, httpMock);
@@ -199,9 +203,8 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
-        client.updateAsync("api/test", {}).subscribe(result => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.updateAsync("api/test", {}).subscribe(result => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
             expect(result.id).toBe(MOCK_TASK.id);
         });
 
@@ -215,10 +218,9 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
         const entity = <EntityReferenceType>{ id: "12345", name: "test", type: "application/vnd.vmware.vcloud.test+json"};
-        client.updateSync<EntityReferenceType>("api/test", entity).subscribe(result => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.updateSync<EntityReferenceType>("api/test", entity).subscribe(result => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
             expect(result.id).toBe(entity.id);
         });
 
@@ -232,15 +234,155 @@ describe("API client pre-request validation", () => {
             versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
         };
 
-        const client = new VcdApiClient(httpClient, AuthTokenHolderService, API_ROOT_URL.toString());
         const mockResult: QueryResultRecordsType = {page: 1, total: 25, record: []}
-        client.query(Query.Builder.ofType("test")).subscribe(result => {
-            expect(client.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
+        apiClient.query(Query.Builder.ofType("test")).subscribe(result => {
+            expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
             expect(result.total).toBe(mockResult.total);
         });
 
         handleVersionNegotiation(supportedVersions, httpMock);
         handleSessionLoad(httpMock);
         httpMock.expectOne("rootUrl/api/query?type=test&format=idrecords&links=true&pageSize=25").flush(mockResult);
+    });
+});
+
+describe("Provider in tenant scope actAs scoping", () => {
+    let httpClient: VcdHttpClient;
+    let httpMock: HttpTestingController;
+    let apiClient: VcdApiClient;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                HttpClientTestingModule
+            ],
+            providers: [
+                LoggingInterceptor,
+                RequestHeadersInterceptor,
+                ResponseNormalizationInterceptor,
+                VcdHttpClient
+            ]
+        });
+
+        httpClient = TestBed.get(VcdHttpClient);
+        httpMock = TestBed.get(HttpTestingController);
+        const injector = ReflectiveInjector.resolveAndCreate([VcdHttpClient,
+            {provide: AuthTokenHolderService, useValue: { token: "authToken" }},
+            {provide: API_ROOT_URL, useValue: "rootUrl"},
+            {provide: SESSION_SCOPE, useValue: "tenant"},
+            {provide: SESSION_ORG_ID, useValue: "a1b2c3d4e5f6"}])
+        apiClient = new VcdApiClient(httpClient, injector);
+    }));
+
+    afterEach(() => {
+        httpMock.verify();
+    });
+
+    it("is enabled by default", () => {
+        const supportedVersions: SupportedVersionsType = {
+            versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
+        };
+
+        const mockResult: QueryResultRecordsType = {page: 1, total: 25, record: []}
+        apiClient.query(Query.Builder.ofType("test")).subscribe();
+
+        handleVersionNegotiation(supportedVersions, httpMock);
+        handleSessionLoad(httpMock, true);
+        httpMock.expectOne((request: HttpRequest<any>) => {
+            return request.url == "rootUrl/api/query?type=test&format=idrecords&links=true&pageSize=25"
+              && request.headers.get('X-VMWARE-VCLOUD-TENANT-CONTEXT') == 'a1b2c3d4e5f6'
+        }).flush(mockResult);
+    });
+
+    it("can be overridden", () => {
+        const supportedVersions: SupportedVersionsType = {
+            versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
+        };
+
+        const mockResult: QueryResultRecordsType = {page: 1, total: 25, record: []}
+        apiClient.session.pipe(
+            concatMap(() => {
+                apiClient.actAs();
+                return apiClient.query(Query.Builder.ofType("test"))
+            })
+        ).subscribe();
+
+        handleVersionNegotiation(supportedVersions, httpMock);
+        handleSessionLoad(httpMock, true);
+
+        httpMock.expectOne((request: HttpRequest<any>) => {
+            return request.url == "rootUrl/api/query?type=test&format=idrecords&links=true&pageSize=25"
+              && !request.headers.has('X-VMWARE-VCLOUD-TENANT-CONTEXT')
+        }).flush(mockResult);
+    });
+});
+
+describe("Provider in provider scope actAs scoping", () => {
+    let httpClient: VcdHttpClient;
+    let httpMock: HttpTestingController;
+    let apiClient: VcdApiClient;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                HttpClientTestingModule
+            ],
+            providers: [
+                LoggingInterceptor,
+                RequestHeadersInterceptor,
+                ResponseNormalizationInterceptor,
+                VcdHttpClient
+            ]
+        });
+
+        httpClient = TestBed.get(VcdHttpClient);
+        httpMock = TestBed.get(HttpTestingController);
+        const injector = ReflectiveInjector.resolveAndCreate([VcdHttpClient,
+            {provide: AuthTokenHolderService, useValue: { token: "authToken" }},
+            {provide: API_ROOT_URL, useValue: "rootUrl"},
+            {provide: SESSION_SCOPE, useValue: "provider"},
+            {provide: SESSION_ORG_ID, useValue: "a1b2c3d4e5f6"}])
+        apiClient = new VcdApiClient(httpClient, injector);
+    }));
+
+    afterEach(() => {
+        httpMock.verify();
+    });
+
+    it("is disabled by default", () => {
+        const supportedVersions: SupportedVersionsType = {
+            versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
+        };
+
+        const mockResult: QueryResultRecordsType = {page: 1, total: 25, record: []}
+        apiClient.query(Query.Builder.ofType("test")).subscribe();
+
+        handleVersionNegotiation(supportedVersions, httpMock);
+        handleSessionLoad(httpMock, true);
+        httpMock.expectOne((request: HttpRequest<any>) => {
+            return request.url == "rootUrl/api/query?type=test&format=idrecords&links=true&pageSize=25"
+              && !request.headers.has('X-VMWARE-VCLOUD-TENANT-CONTEXT')
+        }).flush(mockResult);
+    });
+
+    it("can be overridden", () => {
+        const supportedVersions: SupportedVersionsType = {
+            versionInfo: VcdApiClient.CANDIDATE_VERSIONS.map(v => ({ version: v, mediaTypeMapping: [], deprecated: false }))
+        };
+
+        const mockResult: QueryResultRecordsType = {page: 1, total: 25, record: []}
+        apiClient.session.pipe(
+            concatMap(() => {
+                apiClient.actAs({id: "f6e5d4c3b2a1" });
+                return apiClient.query(Query.Builder.ofType("test"))
+            })
+        ).subscribe();
+
+        handleVersionNegotiation(supportedVersions, httpMock);
+        handleSessionLoad(httpMock, true);
+        httpMock.expectOne((request: HttpRequest<any>) => {
+            return request.url == "rootUrl/api/query?type=test&format=idrecords&links=true&pageSize=25"
+              && request.headers.get('X-VMWARE-VCLOUD-TENANT-CONTEXT') == "f6e5d4c3b2a1"
+        }).flush(mockResult);
     });
 });
