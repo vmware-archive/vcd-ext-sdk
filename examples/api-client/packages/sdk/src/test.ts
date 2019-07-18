@@ -45,10 +45,12 @@ window["System"] = {
 };
 window["System"]["registry"]["get"] = function(s: string): any { 
     return {
-        API_ROOT_URL: "rootUrl",
+        API_ROOT_URL: "$API_ROOT_URL",
         AuthTokenHolderService: {
-            token: "authToken"
-        }
+            token: "$token"
+        },
+        SESSION_ORG_ID: "$SESSION_ORG_ID",
+        SESSION_SCOPE: "$SESSION_SCOPE"
     };
 };
 
