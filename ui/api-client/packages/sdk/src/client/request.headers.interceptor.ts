@@ -9,6 +9,11 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
         this._enabled = _enabled;
     }
 
+    private _actAs: string;
+    set actAs(_actAs: string) {
+        this._actAs = _actAs;
+    }
+
     private _version: string = '';
     get version(): string {
         return this._version;
@@ -37,6 +42,10 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
 
         if (this._authentication) {
             headers = headers.set(this._authenticationHeader, this._authentication);
+        }
+
+        if (this._actAs) {
+            headers = headers.set("X-VMWARE-VCLOUD-TENANT-CONTEXT", this._actAs);
         }
 
         const customReq: HttpRequest<any> = req.clone({

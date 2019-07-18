@@ -42,6 +42,12 @@ export const SESSION_SCOPE: OpaqueToken = containerHooks.SESSION_SCOPE;
 export const SESSION_ORGANIZATION: OpaqueToken = containerHooks.SESSION_ORGANIZATION;
 
 /**
+ * Wire in as a string.  Gives the UUID identifier of the current tenant
+ * organization that the VCD-UI is being used for.
+ */
+export const SESSION_ORG_ID: OpaqueToken = containerHooks.SESSION_ORG_ID;
+
+/**
  * Wire in as a string.  Gives the full root path for module assets (e.g. images, scripts, text files)
  */
 export const EXTENSION_ASSET_URL: OpaqueToken = containerHooks.EXTENSION_ASSET_URL;
