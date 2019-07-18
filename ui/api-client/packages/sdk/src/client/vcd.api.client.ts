@@ -1,4 +1,4 @@
-import { Injectable, Inject, Optional, Injector } from '@angular/core';
+import { Injectable, Inject, Optional, Injector, Type } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -105,7 +105,8 @@ export class VcdApiClient {
             tap(version => this.setVersion(version))
         ).publishReplay(1).refCount();
 
-        this._getSession = this.setAuthentication(this.injector.get(AuthTokenHolderService).token).publishReplay(1).refCount();
+        const tokenHolder: AuthTokenHolderService = this.injector.get(AuthTokenHolderService, { token: "" });
+        this._getSession = this.setAuthentication(tokenHolder.token).publishReplay(1).refCount();
     }
 
     private negotiateVersion(serverVersions: SupportedVersionsType): string {
