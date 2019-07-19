@@ -80,7 +80,7 @@ export class TranslateService {
 
         return !result ? `#${key}#` : result.replace(/{([0-9]+)}/g, (_, ...n) => {
             const idx = parseInt(n[0]);
-            if (args && args[idx]) {
+            if (args && typeof args[idx] !== 'undefined') {
                 return args[idx];
             }
 
