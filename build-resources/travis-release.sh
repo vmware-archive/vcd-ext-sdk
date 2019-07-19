@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-#  This script will upload release versions to Maven Central and NPM.
+#  This script will upload release versions to Maven Central.
 #
 
 cd java
@@ -25,7 +25,5 @@ else
 
 fi
 
-# Push to Sonatype/Maven Central and NPM
+# Push to Sonatype/Maven Central
 mvn -Prelease --settings ../build-resources/travis-settings.xml deploy
-cd ../ui/api-client/packages/sdk
-mvn -Prelease deploy
