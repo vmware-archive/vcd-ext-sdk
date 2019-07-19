@@ -90,7 +90,7 @@ export class TranslateService {
 
     public get(key: string, ...args: any[]): Observable<string | any> {
         if (!this.pending) {
-            return Observable.of(this.getParsedResult(key, args));
+            return Observable.of(this.getParsedResult(key, ...args));
         }
 
         return Observable.create((observer: Observer<string>) => {
@@ -102,7 +102,7 @@ export class TranslateService {
                 observer.error(error);
             };
             this.translation$.subscribe(result => {
-                result = this.getParsedResult(key, args);
+                result = this.getParsedResult(key, ...args);
                 onComplete(result);
             }, onError);
         });
