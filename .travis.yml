@@ -1,21 +1,24 @@
-language: java
-jdk:
-  - oraclejdk8
-before_install:
-  - nvm use v8.9.1
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.7.0
-  - "export PATH=$HOME/.yarn/bin:$PATH"
-install: true
-script:
-  - cd java
-  - mvn install -B -V
-  - cd ../ui/api-client/packages/sdk
-  - mvn install
-  
-deploy:
-  provider: script
-  script: cd $TRAVIS_BUILD_DIR && bash build-resources/travis-release.sh
-  skip_cleanup: true
-  on:
-    tags: true
-    branch: master
+matrix:
+  include:
+    - language: java
+      jdk:
+        - oraclejdk8
+      before_install:
+        - cd java
+      script:
+        - mvn install -B -V
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: cd $TRAVIS_BUILD_DIR && bash build-resources/travis-release.sh
+    - language: node_js
+      node_js:
+        - "lts/*"
+      before_install:
+        - cd ui/api-client/packages/sdk
+      script:
+        - npm run build
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: npm run deploy
