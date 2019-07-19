@@ -15,7 +15,7 @@ matrix:
       node_js:
         - "lts/*"
       before_install:
-        - cd ui/api-client/packages/sdk
+        - cd typescript/api-client/packages/sdk
       script:
         - npm run build
       deploy:
