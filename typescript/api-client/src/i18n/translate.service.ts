@@ -80,7 +80,7 @@ export class TranslateService {
 
         return !result ? `#${key}#` : result.replace(/{([0-9]+)}/g, (_, ...n) => {
             const idx = parseInt(n[0]);
-            if (args && args[idx]) {
+            if (args && typeof args[idx] !== 'undefined') {
                 return args[idx];
             }
 
@@ -90,7 +90,7 @@ export class TranslateService {
 
     public get(key: string, ...args: any[]): Observable<string | any> {
         if (!this.pending) {
-            return Observable.of(this.getParsedResult(key, args));
+            return Observable.of(this.getParsedResult(key, ...args));
         }
 
         return Observable.create((observer: Observer<string>) => {
@@ -102,7 +102,7 @@ export class TranslateService {
                 observer.error(error);
             };
             this.translation$.subscribe(result => {
-                result = this.getParsedResult(key, args);
+                result = this.getParsedResult(key, ...args);
                 onComplete(result);
             }, onError);
         });
