@@ -1,3 +1,4 @@
+dist: trusty
 matrix:
   include:
     - language: java
