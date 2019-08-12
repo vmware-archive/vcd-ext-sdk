@@ -1,13 +1,13 @@
 {
   "name": "@vcd/sdk",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "scripts": {
     "clean": "rimraf build && rimraf dist",
     "copy-metadata": "cpy package.dist.json dist --rename=package.json",
     "build": "npm run clean && ngc && ncp build/ dist/ && npm run copy-metadata",
     "test": "karma start --single",
     "test-watch": "karma start --auto-watch --no-single-run --browsers Chrome",
-    "deploy": "cpy .npmrc.dist . --rename=.npmrc && npm publish dist --access public --dry-run && rimraf .npmrc"
+    "deploy": "cpy .npmrc.dist . --rename=.npmrc && npm publish dist --access public && rimraf .npmrc"
   },
   "author": "VMware",
   "license": "BSD-2-Clause",
