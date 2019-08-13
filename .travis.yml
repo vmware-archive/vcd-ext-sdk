@@ -1,3 +1,4 @@
+dist: trusty
 matrix:
   include:
     - language: java
@@ -11,6 +12,8 @@ matrix:
         provider: script
         skip_cleanup: true
         script: cd $TRAVIS_BUILD_DIR && bash build-resources/travis-release.sh
+        tags: true
+        branch: master
     - language: node_js
       node_js:
         - "lts/*"
@@ -22,3 +25,5 @@ matrix:
         provider: script
         skip_cleanup: true
         script: npm run deploy
+        tags: true
+        branch: master

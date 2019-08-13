@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.vmware.vcloud</groupId>
   <artifactId>vcd-ext-sdk-parent</artifactId>
-  <version>0.9.0</version>
+  <version>0.10.0</version>
   <packaging>pom</packaging>
   <name>${project.artifactId} :: vCloud Director Extension SDKs</name>
   <description>A collection of libraries for interacting with the extensibility features of vCloud Director.  Also includes some sample application that showcase best practices for extension building</description>
