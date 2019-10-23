@@ -8,11 +8,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.vmware.vcloud</groupId>
   <artifactId>object-extensibility-parent</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <parent>
     <groupId>com.vmware.vcloud</groupId>
     <artifactId>vcd-ext-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
   <packaging>pom</packaging>
   <name>${project.artifactId} :: vCD Object Extensibility libraries</name>
@@ -23,7 +23,7 @@
     <module>object-extensibility-app</module>
   </modules>
   <properties>
-    <object-extensibility.version>1.0.0</object-extensibility.version>
+    <object-extensibility.version>1.0.1</object-extensibility.version>
     <cxf.version>3.1.6</cxf.version>
     <guava.version>19.0</guava.version>
     <jackson-mapper.version>1.9.2</jackson-mapper.version>

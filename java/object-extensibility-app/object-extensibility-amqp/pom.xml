@@ -9,7 +9,7 @@
   <parent>
     <groupId>com.vmware.vcloud</groupId>
     <artifactId>object-extensibility-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
   <artifactId>object-extensibility-amqp</artifactId>
   <name>${project.artifactId} :: Extension AMQP library</name>
