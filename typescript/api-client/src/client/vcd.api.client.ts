@@ -164,7 +164,12 @@ export class VcdApiClient {
                 tap(session => {
                     // automatically set actAs for provider in tenant scope
                     if (session.org == 'System' && this.injector.get(SESSION_SCOPE) == 'tenant') {
-                        this.actAs({id: this.injector.get(SESSION_ORG_ID)})
+                        // Automatic actAs only works in versions >=9.5
+                        try {
+                            this.actAs({id: this.injector.get(SESSION_ORG_ID)});
+                        } catch(e) {
+                            console.warn('No SESSION_ORG_ID set in container. Automatic actAs is disabled.');
+                        }
                     }
                 }),
                 tap(session => this._session.next(session))
