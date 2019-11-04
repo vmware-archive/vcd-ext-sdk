@@ -1,6 +1,6 @@
 {
   "name": "@vcd/sdk",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "scripts": {
     "clean": "rimraf build && rimraf dist",
     "copy-metadata": "cpy package.dist.json dist --rename=package.json",
