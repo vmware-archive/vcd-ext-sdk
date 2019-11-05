@@ -11,7 +11,7 @@
   <parent>
     <groupId>com.vmware.vcloud</groupId>
     <artifactId>vcd-ext-sdk-parent</artifactId>
-    <version>0.10.0</version>
+    <version>0.11.0</version>
   </parent>
   <packaging>jar</packaging>
   <name>${project.artifactId} :: vCloud Director REST Client</name>
