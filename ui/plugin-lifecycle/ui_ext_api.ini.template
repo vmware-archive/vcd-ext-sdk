@@ -1,7 +1,0 @@
-#Copy this file to ui_ext_api.ini and update the configuration settings
-
-[DEFAULT]
-vcduri=https://vcd-01a.corp.local
-username=administrator
-organization=System
-password=PASSWORD
