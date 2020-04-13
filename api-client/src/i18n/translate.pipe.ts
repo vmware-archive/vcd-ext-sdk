@@ -29,10 +29,10 @@ export class TranslatePipe implements PipeTransform {
         return this.value;
     }
 
-    private updateValue(key: string, ...args: any[]): void {
-        this.translate.get(key, args).subscribe(result => {
+    private updateValue(key: string, args: any[]): void {
+        this.translate.get(key, ...args).subscribe(result => {
             this.value = result;
             this.changeDetector.markForCheck();
         });
-      }
+    }
 }
