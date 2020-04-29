@@ -1,0 +1,13 @@
+{
+  "name": "@vcd/sdk",
+  "version": "0.12.0",
+  "peerDependencies": {
+    "@angular/common": "8.2.14",
+    "@angular/core": "8.2.14",
+    "@ngrx/core": "1.2.0",
+    "@ngrx/store": "2.2.2",
+    "@vcd/bindings": "9.1.1",
+    "rxjs-compat": "6.5.5",
+    "zip-webpack-plugin": "3.0.0"
+  }
+}
