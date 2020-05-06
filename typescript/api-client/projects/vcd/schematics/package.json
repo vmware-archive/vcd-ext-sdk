@@ -1,0 +1,15 @@
+{
+  "name": "@vcd/schematics",
+  "version": "0.0.1",
+  "description": "Generate vCloud Director UI plugin specific version",
+  "keywords": [
+    "schematics"
+  ],
+  "author": "VMware, Inc.",
+  "license": "BSD-2",
+  "schematics": "./schematics/collection.json",
+  "peerDependencies": {
+    "@angular-devkit/core": "7.3.8",
+    "@angular-devkit/schematics": "7.3.8"
+  }
+}

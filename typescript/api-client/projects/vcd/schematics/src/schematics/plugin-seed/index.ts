@@ -8,7 +8,7 @@ export function pluginSeed(_options: Schema): Rule {
   return (_tree: Tree, _context: SchematicContext) => {
     const { vcdVersion } = _options;
 
-    const sourceTemplates = url(`../../templates/${vcdVersion}`);
+    const sourceTemplates = url(`./templates/${vcdVersion}`);
     const sourceParametrizedTemplates = apply(sourceTemplates, [
       template({
         ..._options,

@@ -1,0 +1,10 @@
+{
+    "type": "object",
+    "properties": {
+        "modulePath": {
+            "type": "string",
+            "description": "Path to module like loadChildren",
+            "default": ""
+        }
+    }
+}
