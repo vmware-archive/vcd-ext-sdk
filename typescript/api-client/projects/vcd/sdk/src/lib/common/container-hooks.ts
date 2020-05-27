@@ -18,6 +18,8 @@ if (!containerHooks) {
     throw new Error('VCD UI container hooks not present in SystemJS registry');
 }
 
+export const TRANSLATIONS_SET: InjectionToken<any> = containerHooks.TRANSLATIONS_SET;
+
 /**
  * Wire in as a string.  Gives the root URL for API access (for example, the load balancer URL
  * or the single-cell URL).
