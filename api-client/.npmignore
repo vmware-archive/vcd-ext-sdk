@@ -1,2 +1,2 @@
 # Ignores TypeScript files, but keeps definitions.
-!*.d.ts
+./projects/vcd/schematics/!*.d.ts

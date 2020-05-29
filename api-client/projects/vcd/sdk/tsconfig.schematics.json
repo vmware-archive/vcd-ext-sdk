@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
+    "baseUrl": "./",
     "lib": [
       "es2018",
       "dom"
@@ -17,7 +17,7 @@
     "rootDir": "src/",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "strictNullChecks": true,
     "target": "es6",
     "types": [
@@ -26,10 +26,9 @@
     ]
   },
   "include": [
-    "src/**/*"
+    "./src/lib/schematics/**/*"
   ],
   "exclude": [
-    "src/*/files/**/*",
-    "templates/**/*"
+    "./src/lib/schematics/*/templates/**/*",
   ]
 }

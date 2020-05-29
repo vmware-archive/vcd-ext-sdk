@@ -49,10 +49,7 @@
           "options": {
             "tsConfig": "projects/vcd/plugin-builders/tsconfig.lib.json",
             "project": "projects/vcd/plugin-builders/ng-package.json"
-          },
-          "assets": [
-            "projects/vcd/plugin-builders/builders.json"
-          ]
+          }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -60,6 +57,33 @@
             "tsConfig": [
               "projects/vcd/plugin-builders/tsconfig.lib.json",
               "projects/vcd/plugin-builders/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@vcd/schematics": {
+      "projectType": "library",
+      "root": "projects/vcd/schematics",
+      "sourceRoot": "projects/vcd/schematics/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/vcd/schematics/tsconfig.lib.json",
+            "project": "projects/vcd/schematics/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/vcd/schematics/tsconfig.lib.json",
+              "projects/vcd/schematics/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
