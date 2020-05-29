@@ -5,6 +5,9 @@
 The @vcd/plugin-builders package contains an angular builder which you can use to bundle any module in your app in standard vCloud Director UI Plugin.  
 
 ## How to use it?
+
+> **Note:** This version of the plugin builder is supported by angular 7.3.8^.
+
 1. Download the package
 ```bash
 npm i @vcd/plugin-builders
@@ -62,11 +65,7 @@ cd vcd-ext-sdk/typescript/api-client
 # install project dependencies
 npm i
 
-# build library
-npm run build
-
-# build plugin builders package
-cd projects/vcd/plugin-builders
+# build libraries
 npm run build
 ```
 

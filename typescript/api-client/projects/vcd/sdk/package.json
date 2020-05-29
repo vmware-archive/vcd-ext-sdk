@@ -1,12 +1,15 @@
 {
   "name": "@vcd/sdk",
   "version": "0.11.0",
+  "schematics": "./schematics/collection.json",
   "peerDependencies": {
     "@angular/common": "4.4.4 || 8.2.14",
     "@angular/core": "4.4.4 || 8.2.14",
     "@ngrx/core": "1.2.0",
     "@ngrx/store": "2.2.2",
     "@vcd/bindings": "9.1.1",
-    "rxjs-compat": "6.5.5"
+    "rxjs-compat": "6.5.5",
+    "@angular-devkit/schematics": "7.3.8",
+    "@schematics/angular": "9.1.4"
   }
 }

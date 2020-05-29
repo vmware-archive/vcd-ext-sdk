@@ -25,8 +25,17 @@
       "@vcd/sdk/*": [
         "dist/vcd/sdk/*"
       ],
+      "@vcd/plugin-builders": [
+        "dist/vcd/plugin-builders"
+      ],
       "@vcd/plugin-builders/*": [
         "dist/vcd/plugin-builders/*"
+      ],
+      "@vcd/schematics": [
+        "dist/vcd/schematics"
+      ],
+      "@vcd/schematics/*": [
+        "dist/vcd/schematics/*"
       ]
     }
   },

@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "properties": {
+        "skipModuleImport": {
+            "type": "boolean"
+        },
+        "moduleName": {
+            "type": "string",
+            "default": "VcdSdkModule",
+            "x-prompt": "What is the name of the module which you want to import?"
+        },
+        "importInModule": {
+            "type": "string",
+            "description": "Enter the relative path to the module.",
+            "optional": true,
+            "x-prompt": "In which module do you want to import it? (Optional)"
+        }
+    }
+}
