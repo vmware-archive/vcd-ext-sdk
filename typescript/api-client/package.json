@@ -11,16 +11,16 @@
     "sdk:build": "tsc -p ./projects/vcd/sdk/tsconfig.schematics.json",
     "sdk:build:prod": "npm run sdk:build && npm run sdk:copy:schemas",
     "sdk:copy:schemas": "cp -R ./projects/vcd/sdk/src/lib/schematics ./dist/vcd/sdk",
-    
+
     "plugin-builders:build": "tsc --build ./projects/vcd/plugin-builders/tsconfig.json && npm run plugin-builders:cpy:schema && npm run plugin-builders:cpy:builders",
     "plugin-builders:cpy:schema": "cp ./projects/vcd/plugin-builders/src/lib/base/schema.json ./dist/vcd/plugin-builders",
     "plugin-builders:cpy:builders": "cp ./projects/vcd/plugin-builders/builders.json ./dist/vcd/plugin-builders",
     "plugin-builders:install:dev:dep": "cd ./projects/vcd/plugin-builders && npm i && cd ../../",
-    
+
     "schematics:build": "tsc -p ./projects/vcd/schematics/tsconfig.json",
     "schematics:build:prod": "npm run schematics:build && npm run schematics:copy:schemas",
     "schematics:copy:schemas": "cp -R ./projects/vcd/schematics/src/schematics ./dist/vcd/schematics",
-
+    
     "test": "ng test",
     "lint": "ng lint",
     "deploy": "cp .npmrc.dist . --rename=.npmrc && npm publish ./dist/vcd/sdk --access public && rimraf .npmrc"

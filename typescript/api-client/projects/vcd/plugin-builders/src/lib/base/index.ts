@@ -67,15 +67,7 @@ export default class PluginBuilder extends BrowserBuilder {
     this.entryPointPath = config.entry.main[0];
     let [modulePath, moduleName] = this.options.modulePath.split('#');
     modulePath = modulePath.substr(0, modulePath.indexOf(".ts"));
-    const factoryPath = `${
-      modulePath.includes('.') ? modulePath : `${modulePath}/${modulePath}`
-    }.ngfactory`;
-    const entryPointContents = `
-       export * from '${modulePath}';
-       export * from '${factoryPath}';
-       import { ${moduleName}NgFactory } from '${factoryPath}';
-       export default ${moduleName}NgFactory;
-    `;
+    const entryPointContents = `export * from '${modulePath}';`;
     this.patchEntryPoint(entryPointContents);
 
     config.output.filename = `bundle.js`;
