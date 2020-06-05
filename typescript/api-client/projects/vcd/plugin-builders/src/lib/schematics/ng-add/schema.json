@@ -1,0 +1,10 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "properties": {
+        "projectName": {
+            "type": "string",
+            "default": "cloud-director-container",
+            "x-prompt": "What is the name of your project?"
+        }
+    }
+}
