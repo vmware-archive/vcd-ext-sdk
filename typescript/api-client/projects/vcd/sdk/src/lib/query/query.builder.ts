@@ -14,6 +14,10 @@ export namespace Query {
 
         private constructor() { }
 
+        public static getBuilder(): Builder {
+            return new Builder();
+        }
+
         public static ofType(type: string): Builder {
             const qb = new Builder();
             qb._type = type;
@@ -51,7 +55,9 @@ export namespace Query {
         }
 
         public get(): string {
-            let query = `?type=${this._type}&format=${this._format}&links=${this._links}&pageSize=${this._pageSize}`;
+            const type = this._type ? `?type=${this._type}` : "?";
+
+            let query = `${type}&format=${this._format}&links=${this._links}&pageSize=${this._pageSize}`;
             if (this._fields && this._fields.length > 0) {
                 query += `&fields=${this._fields.join(',')}`;
             }
