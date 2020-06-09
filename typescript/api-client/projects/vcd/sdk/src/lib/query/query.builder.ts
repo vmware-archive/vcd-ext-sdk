@@ -14,6 +14,10 @@ export namespace Query {
 
         private constructor() { }
 
+        public static getBuilder(): Builder {
+            return new Builder();
+        }
+
         public static ofType(type: string): Builder {
             const qb = new Builder();
             qb._type = type;
@@ -55,6 +59,22 @@ export namespace Query {
             if (this._fields && this._fields.length > 0) {
                 query += `&fields=${this._fields.join(',')}`;
             }
+
+            if (this._filter) {
+                query += `&filter=${this._filter}`;
+            }
+
+            if (this._sort) {
+                this._sort.forEach(s => {
+                    query += `&${s.reverse ? 'sortDesc' : 'sortAsc'}=${s.field}`;
+                });
+            }
+
+            return query;
+        }
+
+        public getCloudAPI(): string {
+            let query = `?pageSize=${this._pageSize}`;
 
             if (this._filter) {
                 query += `&filter=${this._filter}`;

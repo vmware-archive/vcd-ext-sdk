@@ -237,6 +237,19 @@ export class VcdApiClient {
         );
     }
 
+    public list<T>(endpoint: string, queryBuilder?: Query.Builder, multisite?: boolean | AuthorizedLocationType[]) {
+        let url = `${this._baseUrl}/${endpoint}`;
+
+        if (queryBuilder) {
+            url = `${url}${queryBuilder.getCloudAPI()}`
+        }
+
+        return this.validateRequestContext().pipe(
+            concatMap(() => !multisite ? this.http.get<T>(url)
+            : this.http.get<T>(url, { headers: new HttpHeaders({ _multisite: this.parseMultisiteValue(multisite) }) }))
+        );
+    }
+
     public createSync<T>(endpoint: string, item: T): Observable<T> {
         return this.validateRequestContext().pipe(
             concatMap(() => this.http.post<T>(`${this._baseUrl}/${endpoint}`, item))
