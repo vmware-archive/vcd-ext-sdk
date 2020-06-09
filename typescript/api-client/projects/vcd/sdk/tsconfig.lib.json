@@ -1,10 +1,10 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../../out-tsc/lib",
+    "outDir": "../../../dist/vcd/sdk",
     "target": "es2015",
     "declaration": true,
-    "inlineSources": true,
+    "sourceMap": false,
     "types": [],
     "lib": [
       "dom",
@@ -21,6 +21,7 @@
     "enableResourceInlining": true
   },
   "exclude": [
+    "src/schematics",
     "src/test.ts",
     "**/*.spec.ts"
   ]

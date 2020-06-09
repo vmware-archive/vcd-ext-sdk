@@ -9,8 +9,9 @@
     "build:schematics": "ng build @vcd/schematics && npm run schematics:build:prod",
 
     "sdk:build": "tsc -p ./projects/vcd/sdk/tsconfig.schematics.json",
-    "sdk:build:prod": "npm run sdk:build && npm run sdk:copy:schemas",
-    "sdk:copy:schemas": "cp -R ./projects/vcd/sdk/src/lib/schematics ./dist/vcd/sdk",
+    "sdk:build:backwards:compat": "tsc -p ./projects/vcd/sdk/tsconfig.lib.json",
+    "sdk:build:prod": "npm run sdk:build && npm run sdk:build:backwards:compat && npm run sdk:copy:schemas",
+    "sdk:copy:schemas": "cp -R ./projects/vcd/sdk/src/schematics ./dist/vcd/sdk",
     
     "plugin-builders:build": "tsc --build ./projects/vcd/plugin-builders/tsconfig.json && npm run plugin-builders:cpy:schema && npm run plugin-builders:cpy:builders",
     "plugin-builders:cpy:schema": "cp ./projects/vcd/plugin-builders/src/lib/base/schema.json ./dist/vcd/plugin-builders",

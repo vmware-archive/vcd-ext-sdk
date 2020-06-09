@@ -2,8 +2,8 @@
  * Public API Surface of sdk
  */
 
-export * from './lib/index';
-export * from './lib/client';
-export * from './lib/common';
-export * from './lib/core';
-export * from './lib/query';
+export * from './index';
+export * from './client';
+export * from './common';
+export * from './core';
+export * from './query';
