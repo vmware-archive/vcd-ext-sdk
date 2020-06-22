@@ -2,6 +2,13 @@
   "name": "@vcd/sdk",
   "version": "0.11.0",
   "schematics": "./schematics/collection.json",
+  "browser": {
+    "./client": "./esm5/client/index.js",
+    "./common": "./esm5/common/index.js",
+    "./core": "./esm5/core/index.js",
+    "./query": "./esm5/query/index.js"
+  },
+  "module": "esm5/vcd-sdk.js",
   "peerDependencies": {
     "@angular/common": "4.4.4 || 8.2.14",
     "@angular/core": "4.4.4 || 8.2.14",

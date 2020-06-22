@@ -1,15 +1,16 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../../out-tsc/lib",
-    "target": "es2015",
+    "outDir": "../../../dist/vcd/sdk",
+    "target": "ES5",
+    "module": "ES2015",
     "declaration": true,
-    "inlineSources": true,
+    "sourceMap": false,
     "types": [],
     "lib": [
       "dom",
       "es2018"
-    ]
+    ],
   },
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,
@@ -21,6 +22,7 @@
     "enableResourceInlining": true
   },
   "exclude": [
+    "src/schematics",
     "src/test.ts",
     "**/*.spec.ts"
   ]

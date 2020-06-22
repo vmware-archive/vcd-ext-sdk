@@ -26,9 +26,9 @@
     ]
   },
   "include": [
-    "./src/lib/schematics/**/*"
+    "./src/schematics/**/*"
   ],
   "exclude": [
-    "./src/lib/schematics/*/templates/**/*",
+    "./src/schematics/*/templates/**/*",
   ]
 }
