@@ -2,6 +2,7 @@
   "name": "@vcd/plugin-builders",
   "version": "0.0.1",
   "builders": "builders.json",
+  "schematics": "./schematics/collection.json",
   "dependencies": {
     "zip-webpack-plugin": "3.0.0"
   },

@@ -12,16 +12,18 @@
     "sdk:build:prod": "npm run sdk:build && npm run sdk:copy:schemas && npm run sdk:fix:backwards:compatability",
     "sdk:copy:schemas": "cp -R ./projects/vcd/sdk/src/schematics ./dist/vcd/sdk",
     "sdk:fix:backwards:compatability": "node ./helpers/update_packagejson.js",
-    
-    "plugin-builders:build": "tsc --build ./projects/vcd/plugin-builders/tsconfig.json && npm run plugin-builders:cpy:schema && npm run plugin-builders:cpy:builders",
+
+    "plugin-builders:build:schematics": "tsc -p ./projects/vcd/plugin-builders/tsconfig.schematics.json",
+    "plugin-builders:copy:schemas": "cp -R ./projects/vcd/plugin-builders/src/lib/schematics ./dist/vcd/plugin-builders",
+    "plugin-builders:build": "tsc --build ./projects/vcd/plugin-builders/tsconfig.json && npm run plugin-builders:cpy:schema && npm run plugin-builders:cpy:builders && npm run plugin-builders:build:schematics && npm run plugin-builders:copy:schemas",
     "plugin-builders:cpy:schema": "cp ./projects/vcd/plugin-builders/src/lib/base/schema.json ./dist/vcd/plugin-builders",
     "plugin-builders:cpy:builders": "cp ./projects/vcd/plugin-builders/builders.json ./dist/vcd/plugin-builders",
     "plugin-builders:install:dev:dep": "cd ./projects/vcd/plugin-builders && npm i && cd ../../",
-    
+
     "schematics:build": "tsc -p ./projects/vcd/schematics/tsconfig.json",
     "schematics:build:prod": "npm run schematics:build && npm run schematics:copy:schemas",
     "schematics:copy:schemas": "cp -R ./projects/vcd/schematics/src/schematics ./dist/vcd/schematics",
-
+    
     "test": "ng test",
     "lint": "ng lint",
     "deploy": "cp .npmrc.dist . --rename=.npmrc && npm publish ./dist/vcd/sdk --access public && rimraf .npmrc"
