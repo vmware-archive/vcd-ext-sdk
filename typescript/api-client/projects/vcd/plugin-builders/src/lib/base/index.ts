@@ -67,15 +67,7 @@ export default class PluginBuilder extends BrowserBuilder {
     this.entryPointPath = config.entry.main[0];
     let [modulePath, moduleName] = this.options.modulePath.split('#');
     modulePath = modulePath.substr(0, modulePath.indexOf(".ts"));
-    const factoryPath = `${
-      modulePath.includes('.') ? modulePath : `${modulePath}/${modulePath}`
-    }.ngfactory`;
-    const entryPointContents = `
-       export * from '${modulePath}';
-       export * from '${factoryPath}';
-       import { ${moduleName}NgFactory } from '${factoryPath}';
-       export default ${moduleName}NgFactory;
-    `;
+    const entryPointContents = `export * from '${modulePath}';`;
     this.patchEntryPoint(entryPointContents);
 
     config.output.filename = `bundle.js`;
@@ -93,7 +85,10 @@ export default class PluginBuilder extends BrowserBuilder {
 
     // Zip the result
     config.plugins.push(
-      new ZipPlugin({filename: 'plugin.zip'}),
+      new ZipPlugin({
+        filename: 'plugin.zip',
+        exclude: [/\.html$/]
+      }),
     );
 
     return config;
@@ -104,6 +99,8 @@ export default class PluginBuilder extends BrowserBuilder {
   ): Observable<BuildEvent> {
     this.options = builderConfig.options;
     this.options.fileReplacements = this.options.fileReplacements && this.options.fileReplacements.length ? this.options.fileReplacements : [];
+    this.options.styles = this.options.styles && this.options.styles.length ? this.options.styles : [];
+    this.options.scripts = this.options.scripts && this.options.scripts.length ? this.options.scripts : [];
     // I don't want to write it in my scripts every time so I keep it here
     builderConfig.options.deleteOutputPath = false;
 

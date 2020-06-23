@@ -77,8 +77,15 @@ async function commandBuilder(
 
     // Zip the result
     config.plugins.push(
-      new ZipPlugin({filename: 'plugin.zip'}),
+      new ZipPlugin({
+        filename: 'plugin.zip',
+        exclude: [/\.html$/]
+      }),
     );
+
+    options.fileReplacements = options.fileReplacements && options.fileReplacements.length ? options.fileReplacements : [];
+    options.styles = options.styles && options.styles.length ? options.styles : [];
+    options.scripts = options.scripts && options.scripts.length ? options.scripts : [];
 
     // Trigger the angular browser builder
     return executeBrowserBuilder(options, context, {
