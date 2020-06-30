@@ -1,3 +1,10 @@
+/**
+ * This new version of the builder shims the basics which
+ * has to be covered in future, additinal work is expected.
+ * Most of the functionallity which has to be implemented here is
+ * well described in the base plugin builder.
+ */
+
 // Angular builder
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
 import { buildBrowserWebpackConfigFromContext } from '@angular-devkit/build-angular/src/browser';

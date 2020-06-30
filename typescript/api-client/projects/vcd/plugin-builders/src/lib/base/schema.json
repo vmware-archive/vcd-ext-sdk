@@ -1,10 +1,29 @@
 {
     "type": "object",
     "properties": {
+        "vcdVersion": {
+            "type": "string",
+            "description": "Based on the vCloud Director version some features will be turned on or off.",
+            "default": ""
+        },
         "modulePath": {
             "type": "string",
             "description": "Path to module like loadChildren",
             "default": ""
+        },
+        "externalLibs": {
+            "type": "array",
+            "description": "The list of the libraries which will be provided by the vCloud Director Core UI. The list of strings will be converted to Regular Expression, defined by the JS. (The input supports strings only)",
+            "default": []
+        },
+        "librariesConfig": {
+            "type": "object",
+            "description": "In this section you can define your libs name, version and scope (provided - Provided by the UI, runtime - If the library is bootstrapped already from somebody else use it, else request and bootstrap your library and also make it avaiable for other plugins, self - Use your specific version no matter what)."
+        },
+        "ignoreDefaultExternals": {
+            "type": "boolean",
+            "description": "By setting this value to 'true' you will disable the default list of external libraries, and you have to provide your own in 'externalLibs' list.",
+            "default": false
         }
     }
 }

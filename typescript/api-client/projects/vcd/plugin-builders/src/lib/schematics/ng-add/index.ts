@@ -36,6 +36,7 @@ function updateAngularJson(options: Schema): Rule {
         "polyfills": "src/polyfills.ts",
         "tsConfig": "src/tsconfig.app.json",
         "assets": [
+          // Attention! Order matters, 1st you have to define the folder which contains your manifest json file.
           { "glob": "**/*", "input": "./src/path/to/your/assets/folder", "output": "/" }
         ],
         "optimization": true,

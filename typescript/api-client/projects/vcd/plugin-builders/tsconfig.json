@@ -8,7 +8,7 @@
       "target": "es6",
       "skipLibCheck": true
     },
-    "files": [
-      "./src/lib/base/index.ts"
+    "include": [
+      "./src/lib/base/**/*.ts"
     ]
 }
