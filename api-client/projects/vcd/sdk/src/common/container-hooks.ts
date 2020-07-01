@@ -49,8 +49,12 @@ export const SESSION_ORG_ID: InjectionToken<string> = containerHooks.SESSION_ORG
 
 /**
  * Wire in as a string.  Gives the full root path for module assets (e.g. images, scripts, text files)
+ * 
+ * ATTENTION!
+ * Add || new InjectionToken to workaround the Angular security mechanics which prevent use of injection tokens
+ * which potentially are not defiend. The same fix can be applied for the rest tokens if needed.
  */
-export const EXTENSION_ASSET_URL: InjectionToken<string> = containerHooks.EXTENSION_ASSET_URL;
+export const EXTENSION_ASSET_URL: InjectionToken<string> = containerHooks.EXTENSION_ASSET_URL || new InjectionToken("EXTENSION_ASSET_URL");
 
 /**
  * Wire in as a string.  Gives the Angular 2 route that the module is registered under.

@@ -6,6 +6,7 @@ import * as client from './client';
 import * as query from './query';
 import * as common from './common';
 import * as core from './core';
+import * as i18n from './i18n';
 
 // These exports, for legacy reasons, are exposed at the top level.
 import VcdApiClient = client.VcdApiClient;
@@ -15,9 +16,10 @@ export {
   client,
   common,
   core,
+  i18n,
   query,
   VcdApiClient,
-  ApiResultService
+  ApiResultService,
 };
 
 /**
@@ -28,7 +30,11 @@ export {
     HttpClientModule,
     CommonModule,
   ],
+  declarations: [i18n.TranslatePipe],
+  exports: [i18n.TranslatePipe],
   providers: [
+    i18n.TranslateService,
+    i18n.TranslationLoader,
     client.RequestHeadersInterceptor,
     client.LoggingInterceptor,
     client.ResponseNormalizationInterceptor,
