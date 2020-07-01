@@ -6,7 +6,8 @@
     "./client": "./esm5/client/index.js",
     "./common": "./esm5/common/index.js",
     "./core": "./esm5/core/index.js",
-    "./query": "./esm5/query/index.js"
+    "./query": "./esm5/query/index.js",
+    "./i18n": "./esm5/i18n/index.js"
   },
   "module": "esm5/vcd-sdk.js",
   "peerDependencies": {
