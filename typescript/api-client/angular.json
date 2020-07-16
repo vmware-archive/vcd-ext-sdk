@@ -22,6 +22,11 @@
             "main": "projects/vcd/sdk/src/test.ts",
             "tsConfig": "projects/vcd/sdk/tsconfig.spec.json",
             "karmaConfig": "projects/vcd/sdk/karma.conf.js"
+          },
+          "configurations": {
+            "test-ci": {
+              "karmaConfig": "projects/vcd/sdk/karma.conf.ci.js"
+            }
           }
         },
         "lint": {
