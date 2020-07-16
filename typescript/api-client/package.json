@@ -25,6 +25,7 @@
     "schematics:copy:schemas": "cp -R ./projects/vcd/schematics/src/schematics ./dist/vcd/schematics",
     
     "test": "ng test",
+    "test-ci": "ng test --configuration=test-ci",
     "lint": "ng lint",
     "deploy": "cp .npmrc.dist . --rename=.npmrc && npm publish ./dist/vcd/sdk --access public && rimraf .npmrc"
   },
