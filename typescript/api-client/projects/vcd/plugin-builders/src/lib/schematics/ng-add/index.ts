@@ -33,7 +33,6 @@ function updateAngularJson(options: Schema): Rule {
         "outputPath": "dist/",
         "index": "src/index.html",
         "main": "src/<CREATE_EMPTY_FILE>.ts",
-        "polyfills": "src/polyfills.ts",
         "tsConfig": "src/tsconfig.app.json",
         "assets": [
           { "glob": "**/*", "input": "./src/path/to/your/assets/folder", "output": "/" }
