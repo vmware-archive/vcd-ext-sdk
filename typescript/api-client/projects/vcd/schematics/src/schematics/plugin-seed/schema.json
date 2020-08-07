@@ -18,10 +18,25 @@
                 "index": 0
             },
             "x-prompt": "For which vCloud Director version?"
+        },
+        "module": {
+            "description": "The name of the main module for the plugin",
+            "type": "string",
+            "minLength": 1,
+            "default": "Main",
+            "x-prompt": "What is the main plugin module?"
+        },
+        "vendor": {
+            "description": "The vendor of the plugin",
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What is the name of the plugin vendor?"
         }
     },
     "required": [
         "name",
-        "vcdVersion"
+        "vcdVersion",
+        "module",
+        "vendor"
     ]
 }
