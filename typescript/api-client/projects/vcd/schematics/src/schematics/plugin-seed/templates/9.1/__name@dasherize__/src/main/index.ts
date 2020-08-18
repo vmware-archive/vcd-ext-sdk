@@ -1,2 +1,2 @@
-export {SimplePluginModule} from "./simple-plugin.module";
+export {<%= classify(module) %>Module} from "./<%= dasherize(module) %>.module";
 export {SubnavPluginModule} from "./subnav-plugin.module";
