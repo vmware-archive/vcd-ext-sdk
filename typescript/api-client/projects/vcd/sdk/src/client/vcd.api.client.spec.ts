@@ -235,7 +235,7 @@ describe('API client pre-request validation', () => {
         };
 
         const mockResult: QueryResultRecordsType = {page: 1, total: 25, record: []};
-        apiClient.query(Query.Builder.ofType('test')).subscribe(result => {
+        apiClient.query(Query.Builder.ofType('test')).subscribe((result: QueryResultRecordsType) => {
             expect(apiClient.version).toBe(VcdApiClient.CANDIDATE_VERSIONS[0]);
             expect(result.total).toBe(mockResult.total);
         });

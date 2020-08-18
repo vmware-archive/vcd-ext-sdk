@@ -5,7 +5,6 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, map, concatMap, publishReplay, refCount, skipWhile } from 'rxjs/operators';
 
 import { SessionType,
-    QueryResultRecordsType,
     AuthorizedLocationType,
     ResourceType, LinkType,
     EntityReferenceType,
@@ -30,7 +29,13 @@ export const HATEOAS_HEADER = 'Link';
  * @param header '<url1>;name1="value1",name2="value2",<url2>;name3="value3,value4"'
  * @returns parsed link headers
  */
-function parseHeaderHateoasLinks(header: string): LinkType[] {
+export function parseHeaderHateoasLinks(header: string): LinkType[] {
+    const results: LinkType[] = [];
+
+    if (!header) {
+        return results;
+    }
+
     const headerFieldMappings: {[key: string]: keyof LinkType} = {
         href: 'href',
         model: 'type',
@@ -52,7 +57,6 @@ function parseHeaderHateoasLinks(header: string): LinkType[] {
         return tokenIndex;
     }
 
-    const results: LinkType[] = [];
     while (peek('<') > -1) {
         try {
             const hrefStart = next('<');
@@ -369,7 +373,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns a query result for the specified query
      */
-    public query<T>(builder: Query.Builder, multisite?: boolean): Observable<QueryResultRecordsType>;
+    public query<T>(builder: Query.Builder, multisite?: boolean): Observable<T>;
     /**
      * Queries the vCloud Director API based on the specified Query.Builder instance.
      *
@@ -378,8 +382,8 @@ export class VcdApiClient {
      * @returns a query result for the specified query
      */
     // tslint:disable-next-line:unified-signatures
-    public query<T>(builder: Query.Builder, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
-    public query<T>(builder: Query.Builder, multisite?: any): Observable<QueryResultRecordsType> {
+    public query<T>(builder: Query.Builder, multisite?: AuthorizedLocationType[]): Observable<T>;
+    public query<T>(builder: Query.Builder, multisite?: any): Observable<T> {
         return this.getQueryPage(`${this._baseUrl}/api/query${builder.get()}`, multisite);
     }
 
@@ -390,7 +394,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the first page of the query
      */
-    public firstPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    public firstPage<T>(result: T, multisite?: boolean): Observable<T>;
     /**
      * Queries the vCloud Director API for the first page of the provided result set.
      *
@@ -399,9 +403,9 @@ export class VcdApiClient {
      * @returns the records for the first page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public firstPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
-    public firstPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const link: LinkType = this.findLink(result, 'firstPage', result.type);
+    public firstPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
+    public firstPage<T>(result: T, multisite?: any): Observable<T> {
+        const link: LinkType = this.findLink(result, 'firstPage', (result as ResourceType).type);
         if (!link) {
             return Observable.throw(`No 'firstPage' link for specified query.`);
         }
@@ -409,8 +413,8 @@ export class VcdApiClient {
         return this.getQueryPage(link.href, multisite);
     }
 
-    public hasFirstPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'firstPage', result.type);
+    public hasFirstPage<T>(result: T): boolean {
+        return !!this.findLink(result, 'firstPage', (result as ResourceType).type);
     }
 
     /**
@@ -420,7 +424,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the previous page of the query
      */
-    public previousPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    public previousPage<T>(result: T, multisite?: boolean): Observable<T>;
     /**
      * Queries the vCloud Director API for the previous page of the provided result set.
      *
@@ -429,9 +433,9 @@ export class VcdApiClient {
      * @returns the records for the previous page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public previousPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
-    public previousPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const link: LinkType = this.findLink(result, 'previousPage', result.type);
+    public previousPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
+    public previousPage<T>(result: T, multisite?: any): Observable<T> {
+        const link: LinkType = this.findLink(result, 'previousPage', (result as ResourceType).type);
         if (!link) {
             return Observable.throw(`No 'previousPage' link for specified query.`);
         }
@@ -439,8 +443,8 @@ export class VcdApiClient {
         return this.getQueryPage(link.href, multisite);
     }
 
-    public hasPreviousPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'previousPage', result.type);
+    public hasPreviousPage<T>(result: T): boolean {
+        return !!this.findLink(result, 'previousPage', (result as ResourceType).type);
     }
 
     /**
@@ -450,7 +454,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the next page of the query
      */
-    public nextPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    public nextPage<T>(result: T, multisite?: boolean): Observable<T>;
     /**
      * Queries the vCloud Director API for the next page of the provided result set.
      *
@@ -459,18 +463,18 @@ export class VcdApiClient {
      * @returns the records for the next page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public nextPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
-    public nextPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const link: LinkType = this.findLink(result, 'nextPage', result.type);
+    public nextPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
+    public nextPage<T>(result: T, multisite?: any): Observable<T> {
+        const link: LinkType = this.findLink(result, 'nextPage', (result as ResourceType).type);
         if (!link) {
             return Observable.throw(`No 'nextPage' link for specified query.`);
         }
 
-        return this.getQueryPage(link.href, multisite);
+        return this.getQueryPage<T>(link.href, multisite);
     }
 
-    public hasNextPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'nextPage', result.type);
+    public hasNextPage<T>(result: T): boolean {
+        return !!this.findLink(result, 'nextPage', (result as ResourceType).type);
     }
 
     /**
@@ -480,7 +484,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the last page of the query
      */
-    public lastPage<T>(result: QueryResultRecordsType, multisite?: boolean): Observable<QueryResultRecordsType>;
+    public lastPage<T>(result: T, multisite?: boolean): Observable<T>;
     /**
      * Queries the vCloud Director API for the last page of the provided result set.
      *
@@ -489,9 +493,9 @@ export class VcdApiClient {
      * @returns the records for the last page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public lastPage<T>(result: QueryResultRecordsType, multisite?: AuthorizedLocationType[]): Observable<QueryResultRecordsType>;
-    public lastPage<T>(result: QueryResultRecordsType, multisite?: any): Observable<QueryResultRecordsType> {
-        const link: LinkType = this.findLink(result, 'lastPage', result.type);
+    public lastPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
+    public lastPage<T>(result: T, multisite?: any): Observable<T> {
+        const link: LinkType = this.findLink(result, 'lastPage', (result as ResourceType).type);
         if (!link) {
             return Observable.throw(`No 'lastPage' link for specified query.`);
         }
@@ -499,11 +503,11 @@ export class VcdApiClient {
         return this.getQueryPage(link.href, multisite);
     }
 
-    public hasLastPage(result: QueryResultRecordsType): boolean {
-        return !!this.findLink(result, 'lastPage', result.type);
+    public hasLastPage<T>(result: T): boolean {
+        return !!this.findLink(result, 'lastPage', (result as ResourceType).type);
     }
 
-    private getQueryPage<T>(href: string, multisite?: any): Observable<QueryResultRecordsType> {
+    private getQueryPage<T>(href: string, multisite?: any): Observable<T> {
         return this.validateRequestContext().pipe(
             concatMap(() => !multisite ? this.http.get<T>(href) :
                     this.http.get<T>(href, { headers: new HttpHeaders({ _multisite: this.parseMultisiteValue(multisite) }) }))
@@ -515,7 +519,13 @@ export class VcdApiClient {
             return undefined;
         }
 
-        return item.link.find(link => link.rel === rel && link.type === type);
+        return item.link.find((link) => {
+            if (type) {
+                return link.rel.includes(rel) && link.type === type;
+            }
+
+            return link.rel.includes(rel);
+        });
     }
 
     private parseMultisiteValue(multisite: boolean | AuthorizedLocationType[]): string {
