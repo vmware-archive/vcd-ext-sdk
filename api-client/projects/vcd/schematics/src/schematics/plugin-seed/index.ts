@@ -67,7 +67,7 @@ function updateAngularJson(options: Schema): Rule {
       lazyModules = [];
     }
 
-    const moduleToAdd = `${PLUGINS_CONTAINING_FOLDER}/${options.name}/src/main/subnav-plugin.module`;
+    const moduleToAdd = `${PLUGINS_CONTAINING_FOLDER}/${options.name}/src/main/${strings.dasherize(options.module)}.module`;
 
     if (lazyModules.indexOf(moduleToAdd) === -1) {
       lazyModules.push(moduleToAdd);
@@ -88,7 +88,7 @@ function updatePluginRegistrations(options: Schema): Rule {
     }
 
     const changes: Change[] = [
-      addNewPlugin(options.name, pluginConfig)
+      addNewPlugin(options, pluginConfig)
     ];
     
     const recorder = tree.beginUpdate(`${PLUGINS_CONTAINING_FOLDER}/index.ts`);
@@ -105,7 +105,7 @@ function updatePluginRegistrations(options: Schema): Rule {
   }
 }
 
-function addNewPlugin(folderName: string, pluginConfig: SourceFile) {
+function addNewPlugin(options: Schema, pluginConfig: SourceFile) {
   const arr = getSourceNodes(pluginConfig).filter((node) => {
     return node.kind === SyntaxKind.CloseBracketToken
   });
@@ -115,7 +115,7 @@ function addNewPlugin(folderName: string, pluginConfig: SourceFile) {
   return new InsertChange(
     `${PLUGINS_CONTAINING_FOLDER}/index.ts`,
     lastPluginItem,
-    `\tnew PluginRegistration("src/plugins/${folderName}/src", "main/subnav-plugin.module#SubnavPluginModule", "Seed Plugin"),\n`)
+    `\tnew PluginRegistration("src/plugins/${strings.dasherize(options.name)}/src", "main/${strings.dasherize(options.module)}.module#${strings.classify(options.module)}Module", "${strings.classify(options.name)}"),\n`)
 }
 
 function isVulcan(version: string) {

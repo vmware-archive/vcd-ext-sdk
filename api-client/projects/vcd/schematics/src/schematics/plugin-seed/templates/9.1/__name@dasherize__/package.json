@@ -1,5 +1,5 @@
 {
-  "name": "plugin-seed",
+  "name": "<%= classify(name) %>",
   "version": "1.0.0",
   "description": "VCD UI Stub Extension",
   "scripts": {
