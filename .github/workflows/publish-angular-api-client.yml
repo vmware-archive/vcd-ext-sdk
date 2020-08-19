@@ -8,29 +8,24 @@ on:
     types: [prereleased, released]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - run: npm build
-
   test-publish-npm-packages:
-    needs: [build]
+    defaults:
+      run:
+        working-directory: './api-client/'
     runs-on: ubuntu-latest
     env:
       EVENT_CONTEXT: ${{ toJson(github.event) }}
     strategy:
       matrix:
-        packages: ['dist/vcd/sdk', 'dist/vcd/schematics', 'dist/vcd/plugin-builders']
+        packages: ['sdk', 'schematics', 'plugin-builders']
     steps:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: echo "$EVENT_CONTEXT"
-      - run: npm publish ${{ matrix.packages }} --dry-run
+      - run: npm ci
+      - run: npm run build:${{ matrix.packages }} --if-present
+      - run: npm publish dist/vcd/${{ matrix.packages }} --dry-run
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
