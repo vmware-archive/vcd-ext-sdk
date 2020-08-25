@@ -9,7 +9,7 @@ on:
 
 jobs:
   test-publish-npm-packages:
-    if: ${{ github.event.action == "prereleased" && startsWith(github.event.release.target_commitish, "angular-") }}
+    if: ${{ github.event.action == 'prereleased' && startsWith(github.event.release.target_commitish, 'angular-') }}
     defaults:
       run:
         working-directory: './api-client/'
@@ -30,7 +30,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
   publish-npm-packages:
-    if: ${{ github.event.action == "released" && startsWith(github.event.release.target_commitish, "angular-") }}
+    if: ${{ github.event.action == 'released' && startsWith(github.event.release.target_commitish, 'angular-') }}
     defaults:
       run:
         working-directory: './api-client/'
