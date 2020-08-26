@@ -94,7 +94,7 @@ export function parseHeaderHateoasLinks(header: string): LinkType[] {
 @Injectable()
 export class VcdApiClient {
     /** The default list of API versions (from most preferred to least) that the SDK supports. */
-    static readonly CANDIDATE_VERSIONS: string[] = ['32.0', '31.0', '30.0'];
+    static readonly CANDIDATE_VERSIONS: string[] = ['35.0', '34.0', '33.0', '32.0', '31.0', '30.0'];
 
     set baseUrl(_baseUrl: string) {
         this._baseUrl = _baseUrl;
