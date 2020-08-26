@@ -25,7 +25,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run build:${{ matrix.packages }} --if-present
-      - run: npm publish dist/vcd/${{ matrix.packages }} --dry-run
+      - run: npm publish dist/vcd/${{ matrix.packages }} --dry-run --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
   publish-npm-packages:
@@ -45,6 +45,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run build:${{ matrix.packages }} --if-present
-      - run: npm publish dist/vcd/${{ matrix.packages }}
+      - run: npm publish dist/vcd/${{ matrix.packages }} --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
