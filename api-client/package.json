@@ -1,6 +1,6 @@
 {
   "name": "api-client",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "scripts": {
     "ng": "ng",
     "build": "npm run build:sdk && npm run build:schematics && npm run build:plugin-builders",
@@ -23,7 +23,7 @@
     "schematics:build": "tsc -p ./projects/vcd/schematics/tsconfig.json",
     "schematics:build:prod": "npm run schematics:build && npm run schematics:copy:schemas",
     "schematics:copy:schemas": "cp -R ./projects/vcd/schematics/src/schematics ./dist/vcd/schematics",
-    
+
     "test": "ng test",
     "test-ci": "ng test --configuration=test-ci",
     "lint": "ng lint",
