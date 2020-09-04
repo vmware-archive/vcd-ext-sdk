@@ -98,5 +98,5 @@ ng run `your-project`:`your-plugin-builder-config`
 npm i @vcd/schematics
 # Run the plugin seed schematic
 # Note: only version 9.1 is supported for now
-ng g @vcd/schematics:plugn-seed --name=`your_plugin_name` --vcdVersion=`9.1`
+ng g @vcd/schematics:plugin-seed --name='your_plugin_name' --vcdVersion='9.1'
 ```
