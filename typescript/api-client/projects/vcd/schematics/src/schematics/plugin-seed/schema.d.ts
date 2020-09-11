@@ -3,4 +3,5 @@ export interface Schema {
     vcdVersion: string;
     module: string;
     vendor: string;
+    pluginBuildersVersion: string;
 }

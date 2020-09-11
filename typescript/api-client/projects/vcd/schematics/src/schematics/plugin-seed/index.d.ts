@@ -1,3 +1,17 @@
-import { Rule } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, FileEntry } from '@angular-devkit/schematics';
 import { Schema } from "./schema";
+import { SourceFile } from "@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript";
+import { InsertChange } from "@schematics/angular/utility/change";
 export declare function pluginSeed(options: Schema): Rule;
+export declare function createDirectoryAndFiles(options: Schema): Rule;
+export declare function updateAngularJson(options: Schema): Rule;
+export declare function updatePluginRegistrations(options: Schema): Rule;
+export declare function addNewPlugin(options: Schema, pluginConfig: SourceFile): InsertChange;
+export declare function installPluginBuilders(options: Schema): Rule;
+export declare function triggerInstallTask(packageJsonRaw: FileEntry | null, options: Schema, context: SchematicContext): import("@angular-devkit/schematics").TaskId | undefined;
+export declare function isVulcan(version: string): boolean;
+export declare function isWellingtonOrXendi(version: string): boolean;
+export declare function getUIPluginMainFolderPath(pluginName: string): string;
+export declare function getUIPluginPublicFolderPath(pluginName: string): string;
+export declare function dasherizeModuleFileName(moduleName: string): string;
+export declare function classifyModulName(moduleName: string): string;

@@ -31,6 +31,13 @@
             "type": "string",
             "minLength": 1,
             "x-prompt": "What is the name of the plugin vendor?"
+        },
+        "pluginBuildersVersion": {
+            "description": "Version of @vcd/plugin-builders",
+            "type": "string",
+            "minLength": 5,
+            "default": "0.12.0",
+            "x-prompt": "What plugin builders version you want to ues?"
         }
     },
     "required": [
