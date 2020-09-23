@@ -27,7 +27,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "setup-dev": "npm link"
   },
   "types": "lib/index.d.ts"
 }

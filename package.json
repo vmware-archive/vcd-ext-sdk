@@ -14,7 +14,8 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "test-ci": "lerna run test-ci",
-    "publish": "lerna publish --no-private"
+    "publish": "lerna publish --no-private",
+    "setup-dev": "lerna run setup-dev"
   },
   "name": "vcd-ext-sdk"
 }

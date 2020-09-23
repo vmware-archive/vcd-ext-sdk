@@ -57,7 +57,8 @@
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
-    "build": "tsc"
+    "build": "tsc",
+    "setup-dev": "npm link"
   },
   "types": "lib/index.d.ts"
 }

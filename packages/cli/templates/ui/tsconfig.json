@@ -6,6 +6,7 @@
         "moduleResolution": "node",
         "lib": ["es2015", "dom"],
         "sourceMap": true,
+        "declaration": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "removeComments": false,
@@ -13,7 +14,8 @@
         "suppressImplicitAnyIndexErrors": true,
         "typeRoots": [
             "./node_modules/@types"
-        ]
+        ],
+        "baseUrl": "./"
     },
     "exclude": [
         "node_modules",
