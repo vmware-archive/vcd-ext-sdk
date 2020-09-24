@@ -1,7 +1,7 @@
 {
   "name": "@vcd/node-client",
   "description": "VMware Cloud Director Client bindings for NodeJS",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "mslavov@vmware.com",
   "dependencies": {
     "@types/bluebird": "*",

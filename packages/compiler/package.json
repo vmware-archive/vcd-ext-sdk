@@ -1,7 +1,7 @@
 {
   "name": "@vcd/ext-compiler",
   "description": "VMware Cloud Director Extension Compiler",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "author": "mslavov@vmware.com",
   "dependencies": {
     "glob": "^7.1.3",
