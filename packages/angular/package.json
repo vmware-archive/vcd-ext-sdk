@@ -1,5 +1,5 @@
 {
-  "name": "api-client",
+  "name": "@vcd/angular-sdk",
   "version": "0.12.0",
   "scripts": {
     "ng": "ng",
@@ -11,7 +11,7 @@
     "sdk:build": "tsc -p ./projects/vcd/sdk/tsconfig.schematics.json",
     "sdk:build:prod": "npm run sdk:build && npm run sdk:copy:schemas && npm run sdk:fix:backwards:compatability",
     "sdk:copy:schemas": "cp -R ./projects/vcd/sdk/src/schematics ./dist/vcd/sdk",
-    "sdk:fix:backwards:compatability": "node ./helpers/update_packagejson.js",
+    "sdk:fix:backwards:compatability": "node ./scripts/update_packagejson.js",
 
     "plugin-builders:build:schematics": "tsc -p ./projects/vcd/plugin-builders/tsconfig.schematics.json",
     "plugin-builders:copy:schemas": "cp -R ./projects/vcd/plugin-builders/src/lib/schematics ./dist/vcd/plugin-builders",
