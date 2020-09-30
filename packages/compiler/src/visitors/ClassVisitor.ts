@@ -3,7 +3,10 @@ import VisitorContext from '../VisitorContext';
 import TypeVisitor from './TypeVisitor';
 import InterfaceVisitor from './InterfaceVisitor';
 
+const TAGS: string[] = ["definedEntityType", "definedEntityInterface"];
+
 export default class ClassVisitor {
+
 
     constructor(private context: VisitorContext) { }
 
@@ -14,8 +17,14 @@ export default class ClassVisitor {
         );
     }
 
+    private isExtensibilityType(node: ts.Node): boolean {
+        return ts.getJSDocTags(node).some(jsDocTag => {
+            return TAGS.indexOf(jsDocTag.tagName ? jsDocTag.tagName.escapedText.toString() : "") > -1
+        })
+    }
+
     visit(node: ts.Node) {
-        if (!this.isNodeExported(node as ts.Declaration)) {
+        if (!this.isNodeExported(node as ts.Declaration) || !this.isExtensibilityType(node)) {
             return;
         }
         if (ts.isClassDeclaration(node) && node.name) {
