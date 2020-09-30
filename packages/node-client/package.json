@@ -1,7 +1,7 @@
 {
   "name": "@vcd/node-client",
   "description": "VMware Cloud Director Client bindings for NodeJS",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "mslavov@vmware.com",
   "dependencies": {
     "@types/bluebird": "*",
@@ -27,8 +27,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "setup-dev": "npm link"
+    "build": "tsc"
   },
   "types": "lib/index.d.ts"
 }
