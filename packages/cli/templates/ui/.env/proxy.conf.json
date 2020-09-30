@@ -1,0 +1,14 @@
+{
+    "/api/*": {
+        "target": "https://<insert your VCD endpoint here>",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/cloudapi/*": {
+        "target": "https://<insert your VCD endpoint here>",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    }
+}

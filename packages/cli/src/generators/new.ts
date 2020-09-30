@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as camelcase from 'camelcase'
 import Generator = require("yeoman-generator");
 
 export default class New extends Generator {
@@ -6,10 +7,12 @@ export default class New extends Generator {
     version: any;
     answers: any;
     components: any = {};
+    nameCamelCase: string;
 
     constructor(args: any, opts: any) {
         super(args, opts);
         this.name = opts.name;
+        this.nameCamelCase = camelcase(this.name, { pascalCase: true})
         this.version = opts.version || '1.0.0';
         this.description = opts.description || '';
         this.answers = {};
@@ -44,7 +47,12 @@ export default class New extends Generator {
         this.destinationRoot(path.resolve(this.name))
         process.chdir(this.destinationRoot())
         this.sourceRoot(path.join(__dirname, '../../templates'))
-        this.fs.copyTpl(this.templatePath('new'), this.destinationPath(), this)
+        this.fs.copyTpl(
+            this.templatePath('new'),
+            this.destinationPath(),
+            this,
+            undefined,
+            { globOptions: { dot: true }})
         this.answers.components.forEach((component: string) => {
             this.components[component] = {
                 name: `${this.name}-${component}`,
@@ -53,7 +61,12 @@ export default class New extends Generator {
                 vendor: this.answers.vendor,
             }
             this.sourceRoot(path.join(__dirname, '../../templates'))
-            this.fs.copyTpl(this.templatePath(component), this.destinationPath('packages', component), this)
+            this.fs.copyTpl(
+                this.templatePath(component),
+                this.destinationPath('packages', component),
+                this,
+                undefined,
+                { globOptions: { dot: true }})
         });
     }
 
