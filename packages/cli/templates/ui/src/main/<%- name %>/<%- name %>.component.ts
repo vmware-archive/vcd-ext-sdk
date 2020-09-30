@@ -5,12 +5,12 @@ import { Query } from "@vcd/sdk/query";
 import { Observable } from "rxjs";
 
 @Component({
-    selector: "plugin-simple",
-    templateUrl: "./simple.component.html",
-    styleUrls: ['./simple.component.scss'],
+    selector: "<%- name %>-plugin",
+    templateUrl: "./<%- name %>.component.html",
+    styleUrls: ['./<%- name %>.component.scss'],
     host: {'class': 'content-container'}
 })
-export class SimpleComponent implements OnInit {
+export class <%- nameCamelCase %>Component implements OnInit {
     username: Observable<string>;
     tenant: Observable<string>;
 

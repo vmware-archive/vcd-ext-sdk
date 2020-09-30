@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "autoscale-ui": {
+    "<%- components.ui.name %>": {
       "projectType": "library",
       "root": "",
       "sourceRoot": "src",
@@ -12,7 +12,7 @@
         "build": {
           "builder": "@vcd/plugin-builders:plugin-builder",
           "options": {
-            "modulePath": "src/main/simple-plugin.module.ts#SimplePluginModule",
+            "modulePath": "src/main/<%- name %>.module.ts#<%- nameCamelCase %>PluginModule",
             "outputPath": "dist/",
             "index": "src/index.html",
             "main": "src/plugin.main.ts",
@@ -33,6 +33,58 @@
             "extractLicenses": false,
             "vendorChunk": false,
             "buildOptimizer": false
+          }
+        },
+        "build-emulator": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/emulator",
+            "index": "node_modules/@vcd/ui-emulator/src/index.html",
+            "main": "node_modules/@vcd/ui-emulator/src/main.ts",
+            "polyfills": "node_modules/@vcd/ui-emulator/src/polyfills.ts",
+            "tsConfig": "tsconfig.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/public/assets"
+            ],
+            "styles": [
+              "node_modules/@clr/icons/clr-icons.min.css",
+              "node_modules/@clr/ui/clr-ui.min.css",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
+              "node_modules/@clr/icons/clr-icons.min.js",
+              "node_modules/systemjs/dist/system.src.js"
+            ],
+            "lazyModules": [
+              "src/main/<%- name %>.module"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "<%- components.ui.name %>:build-emulator",
+            "proxyConfig": ".env/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "<%- components.ui.name %>:build-emulator:production"
+            }
           }
         },
         "test": {
@@ -58,5 +110,5 @@
       }
     }
   },
-  "defaultProject": "autoscale-ui"
+  "defaultProject": "<%- components.ui.name %>"
 }

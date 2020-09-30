@@ -12,13 +12,16 @@
         "removeComments": false,
         "noImplicitAny": true,
         "suppressImplicitAnyIndexErrors": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
         "typeRoots": [
             "./node_modules/@types"
         ],
         "baseUrl": "./"
     },
-    "exclude": [
-        "node_modules",
-        "dist"
+    "include": [
+        "src/**/*.ts",
+        "src/.env/*.json",
+        "node_modules/@vcd/ui-emulator/src/**/*.ts"
     ]
 }

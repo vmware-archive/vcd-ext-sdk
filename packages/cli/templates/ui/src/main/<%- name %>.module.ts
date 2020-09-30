@@ -6,11 +6,11 @@ import { VcdApiClient, VcdSdkModule } from "@vcd/sdk";
 import { ExtensionNavRegistration, EXTENSION_ROUTE } from "@vcd/sdk/common";
 import { PluginModule } from "@vcd/sdk/core";
 import { TranslateService } from "@vcd/sdk/i18n";
-import { ClarityModule } from "clarity-angular";
-import { SimpleComponent } from "./simple/simple.component";
+import { ClarityModule } from "@clr/angular";
+import { <%- nameCamelCase %>Component } from "./<%- name %>/<%- name %>.component";
 
 const ROUTES: Routes = [
-    { path: "", component: SimpleComponent }
+    { path: "", component: <%- nameCamelCase %>Component }
 ];
 
 @NgModule({
@@ -21,13 +21,13 @@ const ROUTES: Routes = [
         RouterModule.forChild(ROUTES)
     ],
     declarations: [
-        SimpleComponent
+        <%- nameCamelCase %>Component
     ],
-    bootstrap: [SimpleComponent],
+    bootstrap: [<%- nameCamelCase %>Component],
     exports: [],
     providers: [VcdApiClient]
 })
-export class SimplePluginModule extends PluginModule {
+export class <%- nameCamelCase %>PluginModule extends PluginModule {
     constructor(appStore: Store<any>, @Inject(EXTENSION_ROUTE) extensionRoute: string, translate: TranslateService) {
         super(appStore, translate);
         this.registerExtension(<ExtensionNavRegistration>{

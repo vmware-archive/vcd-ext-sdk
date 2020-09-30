@@ -1,14 +1,14 @@
 {
-    "urn": "vmware:vcloud:plugin:seed",
-    "name": "Simple plugin",
-    "containerVersion": "9.1.0",
-    "version": "1.0.0",
+    "urn": "vmware:vcloud:plugin:<%- name %>",
+    "name": "<%- nameCamelCase %> plugin",
+    "containerVersion": "10.2.0",
+    "version": "<%- components.ui.version %>",
     "scope": ["service-provider", "tenant"],
     "permissions": [],
-    "description": "An example plugin.",
-    "vendor": "VMware",
-    "license": "Copyright (C) VMware 2017-2018.  All rights reserved.",
+    "description": "<%- nameCamelCase %> Plugin",
+    "vendor": "<%- components.ui.vendor %>",
+    "license": "BSD-2-Clause",
     "link": "http://www.vmware.com/support",
-    "module": "SimplePluginModule",
-    "route": "plugin"
+    "module": "<%- nameCamelCase %>PluginModule",
+    "route": "<%- name %>"
 }

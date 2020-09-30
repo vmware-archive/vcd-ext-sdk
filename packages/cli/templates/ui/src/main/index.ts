@@ -1,2 +1,1 @@
-export {SimplePluginModule} from "./simple-plugin.module";
-export {SubnavPluginModule} from "./subnav-plugin.module";
+export { <%- nameCamelCase %>PluginModule } from "./<%- name %>.module";
