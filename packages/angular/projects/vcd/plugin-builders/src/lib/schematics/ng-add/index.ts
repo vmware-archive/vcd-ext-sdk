@@ -3,6 +3,7 @@ import {
   getWorkspace, updateWorkspace,
 } from '@schematics/angular/utility/config';
 import { Schema } from './schema';
+import { strings } from "@angular-devkit/core";
 
 export function ngAdd(options: Schema): Rule {
   return chain([
@@ -10,7 +11,7 @@ export function ngAdd(options: Schema): Rule {
   ]);
 }
 
-function updateAngularJson(options: Schema): Rule {
+export function updateAngularJson(options: Schema): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspaceConfig = getWorkspace(tree);
 
@@ -26,16 +27,16 @@ function updateAngularJson(options: Schema): Rule {
       throw new SchematicsException('Could not find Angular architect configuration in your workspace');
     }
 
-    (workspaceConfig.projects as any)[options.projectName].architect["builder-config-example"] = {
+    (workspaceConfig.projects as any)[options.projectName].architect[`${parsePluginName(options.pluginName)}-builder`] = {
       "builder": "@vcd/plugin-builders:plugin-builder",
       "options": {
-        "modulePath": "src/path/to/your/plugin/plugin-example.module.ts#PluginModuleName",
+        "modulePath": `${options.pluginMainFolderPath}`,
         "outputPath": "dist/",
         "index": "src/index.html",
-        "main": "src/<CREATE_EMPTY_FILE>.ts",
+        "main": "src/plugins.main.ts",
         "tsConfig": "src/tsconfig.app.json",
         "assets": [
-          { "glob": "**/*", "input": "./src/path/to/your/assets/folder", "output": "/" }
+          { "glob": "**/*", "input": `${options.pluginPublicFolderPath}`, "output": "/" }
         ],
         "optimization": true,
         "outputHashing": "all",
@@ -49,6 +50,11 @@ function updateAngularJson(options: Schema): Rule {
       }
     };
 
+    context.logger.info(`✅️ Builder Configured! Run "ng run ${options.projectName}:${parsePluginName(options.pluginName)}-builder" to build your UI Plugin!`);
     return updateWorkspace(workspaceConfig)(tree, context as any) as any;
   }
+}
+
+export function parsePluginName(name: string) {
+  return strings.dasherize(name);
 }

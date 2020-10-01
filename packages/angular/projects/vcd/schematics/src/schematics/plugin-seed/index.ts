@@ -1,4 +1,4 @@
-import { Rule, SchematicContext, Tree, url, apply, template, mergeWith, chain, noop, SchematicsException, move } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, Tree, url, apply, template, mergeWith, chain, noop, SchematicsException, move, FileEntry } from '@angular-devkit/schematics';
 import { Schema } from "./schema";
 import { strings } from "@angular-devkit/core";
 import {
@@ -10,6 +10,7 @@ import { getSourceFile } from "../utils";
 import { getSourceNodes } from "@schematics/angular/utility/ast-utils";
 import { SyntaxKind, SourceFile } from "@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript";
 import { Change, InsertChange } from "@schematics/angular/utility/change";
+import { NodePackageInstallTask, RunSchematicTask } from "@angular-devkit/schematics/tasks";
 
 const PROJECT_NAME = "cloud-director-container";
 const PLUGINS_CONTAINING_FOLDER = "src/plugins";
@@ -19,12 +20,13 @@ export function pluginSeed(options: Schema): Rule {
     createDirectoryAndFiles(options),
     isVulcan(options.vcdVersion) ? noop() : isWellingtonOrXendi(options.vcdVersion) ? updateAngularJson(options) : noop(),
     isVulcan(options.vcdVersion) ? noop() : isWellingtonOrXendi(options.vcdVersion) ? updatePluginRegistrations(options) : noop(),
+    isVulcan(options.vcdVersion) ? noop() : isWellingtonOrXendi(options.vcdVersion) ? installPluginBuilders(options) : noop(),
   ]);
 }
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
-function createDirectoryAndFiles(options: Schema): Rule {
+export function createDirectoryAndFiles(options: Schema): Rule {
   return (_tree: Tree, _context: SchematicContext) => {
     const { vcdVersion } = options;
     let temp = vcdVersion;
@@ -45,7 +47,7 @@ function createDirectoryAndFiles(options: Schema): Rule {
   };
 }
 
-function updateAngularJson(options: Schema): Rule {
+export function updateAngularJson(options: Schema): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspaceConfig = getWorkspace(tree);
 
@@ -67,7 +69,7 @@ function updateAngularJson(options: Schema): Rule {
       lazyModules = [];
     }
 
-    const moduleToAdd = `${PLUGINS_CONTAINING_FOLDER}/${options.name}/src/main/${strings.dasherize(options.module)}.module`;
+    const moduleToAdd = `${getUIPluginMainFolderPath(strings.dasherize(options.name))}/${dasherizeModuleFileName(options.module)}`;
 
     if (lazyModules.indexOf(moduleToAdd) === -1) {
       lazyModules.push(moduleToAdd);
@@ -79,7 +81,7 @@ function updateAngularJson(options: Schema): Rule {
   }
 }
 
-function updatePluginRegistrations(options: Schema): Rule {
+export function updatePluginRegistrations(options: Schema): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     const pluginConfig = getSourceFile(tree, `${PLUGINS_CONTAINING_FOLDER}/index.ts`);
 
@@ -105,7 +107,7 @@ function updatePluginRegistrations(options: Schema): Rule {
   }
 }
 
-function addNewPlugin(options: Schema, pluginConfig: SourceFile) {
+export function addNewPlugin(options: Schema, pluginConfig: SourceFile) {
   const arr = getSourceNodes(pluginConfig).filter((node) => {
     return node.kind === SyntaxKind.CloseBracketToken
   });
@@ -115,13 +117,82 @@ function addNewPlugin(options: Schema, pluginConfig: SourceFile) {
   return new InsertChange(
     `${PLUGINS_CONTAINING_FOLDER}/index.ts`,
     lastPluginItem,
-    `\tnew PluginRegistration("src/plugins/${strings.dasherize(options.name)}/src", "main/${strings.dasherize(options.module)}.module#${strings.classify(options.module)}Module", "${strings.classify(options.name)}"),\n`)
+    `\tnew PluginRegistration("src/plugins/${strings.dasherize(options.name)}/src", "main/${dasherizeModuleFileName(options.module)}#${classifyModulName(options.module)}", "${strings.classify(options.name)}"),\n`)
 }
 
-function isVulcan(version: string) {
+export function installPluginBuilders(options: Schema): Rule {
+  return chain([
+    // Install @vcd/plugin-builders
+    (tree: Tree, context: SchematicContext) => {
+      const packageJsonRaw = tree.get("./package.json");
+
+      const installTask = triggerInstallTask(packageJsonRaw, options, context);
+
+      context.addTask(new RunSchematicTask("@vcd/plugin-builders", "ng-add", {
+        projectName: PROJECT_NAME,
+        pluginName: strings.dasherize(options.name),
+        pluginMainFolderPath: `${getUIPluginMainFolderPath(strings.dasherize(options.name))}/${dasherizeModuleFileName(options.module)}.ts#${classifyModulName(options.module)}`,
+        pluginPublicFolderPath: `./${getUIPluginPublicFolderPath(strings.dasherize(options.name))}`,
+      }), installTask ? [installTask] : []);
+
+      return tree
+    },
+  ]);
+}
+
+export function triggerInstallTask(packageJsonRaw: FileEntry | null, options: Schema, context: SchematicContext) {
+  let packageJson: {
+    dependencies?: {
+      [dep: string]: string;
+    };
+    devDependencies?: {
+      [dep: string]: string;
+    }
+  } = {};
+
+  if (packageJsonRaw) {
+    packageJson = JSON.parse(packageJsonRaw.content.toString("utf-8"));
+  }
+
+  if (packageJson.dependencies) {
+    if (packageJson.dependencies["@vcd/plugin-builders"] && packageJson.dependencies["@vcd/plugin-builders"].includes(options.pluginBuildersVersion)) {
+      return;
+    }
+  }
+
+  if (packageJson.devDependencies) {
+    if (packageJson.devDependencies["@vcd/plugin-builders"] && packageJson.devDependencies["@vcd/plugin-builders"].includes(options.pluginBuildersVersion)) {
+      return;
+    }
+  }
+
+  return context.addTask(new NodePackageInstallTask({
+    packageManager: "npm",
+    packageName: `@vcd/plugin-builders@${options.pluginBuildersVersion}`,
+    quiet: false,
+  }));
+}
+
+export function isVulcan(version: string) {
   return version === "9.1";
 }
 
-function isWellingtonOrXendi(version: string) {
+export function isWellingtonOrXendi(version: string) {
   return version === "9.7" || version === "10.0";
+}
+
+export function getUIPluginMainFolderPath(pluginName: string) {
+  return `${PLUGINS_CONTAINING_FOLDER}/${pluginName}/src/main`;
+}
+
+export function getUIPluginPublicFolderPath(pluginName: string) {
+  return `${PLUGINS_CONTAINING_FOLDER}/${pluginName}/src/public`;  
+}
+
+export function dasherizeModuleFileName(moduleName: string) {
+  return `${strings.dasherize(moduleName)}.module`
+}
+
+export function classifyModulName(moduleName: string) {
+  return `${strings.classify(moduleName)}Module`
 }

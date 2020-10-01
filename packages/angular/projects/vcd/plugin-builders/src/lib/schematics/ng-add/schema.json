@@ -5,6 +5,21 @@
             "type": "string",
             "default": "cloud-director-container",
             "x-prompt": "What is the name of your project?"
+        },
+        "pluginName": {
+            "type": "string",
+            "default": "my-new-plugin",
+            "x-prompt": "What is your plugin main folder name?"
+        },
+        "pluginMainFolderPath": {
+            "type": "string",
+            "default": "src/plugins/my-new-plugin/src/main/my-new-plugin.ts#MyNewPluginModule",
+            "x-prompt": "What is your plugin main folder path?"
+        },
+        "pluginPublicFolderPath": {
+            "type": "string",
+            "default": "src/plugins/my-new-plugin/src/public",
+            "x-prompt": "What is your plugin public folder path?"
         }
     }
 }
