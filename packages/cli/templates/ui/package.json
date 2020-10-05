@@ -5,7 +5,9 @@
   "scripts": {
     "clean": "rimraf dist",
     "lint": "ng lint",
-    "build": "ng build"
+    "build": "ng build",
+    "serve": "vcd-ext serve",
+    "ng:serve": "ng serve"
   },
   "license": "BSD-3-Clause",
   "dependencies": {
@@ -41,6 +43,7 @@
     "@angular/language-service": "^6.1.0",
     "@types/jasmine": "2.5.47",
     "@types/node": "7.0.12",
+    "@vcd/ext-cli": "~0.0.1",
     "@vcd/plugin-builders": "^0.12.0",
     "@vcd/ui-emulator": "~0.0.1",
     "angular2-template-loader": "0.6.2",

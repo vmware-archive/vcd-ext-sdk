@@ -57,9 +57,13 @@ export function findHomeDir(): string | null {
 
 export class CloudDirectorConfig {
     private constructor(
-        private basePath: string,
+        public basePath: string,
         private authentication: api.Authentication
     ) { }
+
+    public get token(): string {
+        return this.authentication['authorizationKey'];
+    }
 
     public makeApiClient<T extends ApiType>(apiClientType: ApiConstructor<T>) {
         const apiClient = new apiClientType(this.basePath);
