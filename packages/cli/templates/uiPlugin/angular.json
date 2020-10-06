@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "<%- components.ui.name %>": {
+    "<%- components.uiPlugin.name %>": {
       "projectType": "library",
       "root": "",
       "sourceRoot": "src",
@@ -42,7 +42,7 @@
             "index": "node_modules/@vcd/ui-emulator/src/index.html",
             "main": "node_modules/@vcd/ui-emulator/src/main.ts",
             "polyfills": "node_modules/@vcd/ui-emulator/src/polyfills.ts",
-            "tsConfig": "tsconfig.json",
+            "tsConfig": "tsconfig.emulator.json",
             "assets": [
               "src/favicon.ico",
               "src/public/assets"
@@ -78,12 +78,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "<%- components.ui.name %>:build-emulator",
+            "browserTarget": "<%- components.uiPlugin.name %>:build-emulator",
             "proxyConfig": ".env/proxy.conf.runtime.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "<%- components.ui.name %>:build-emulator:production"
+              "browserTarget": "<%- components.uiPlugin.name %>:build-emulator:production"
             }
           }
         },
@@ -110,5 +110,5 @@
       }
     }
   },
-  "defaultProject": "<%- components.ui.name %>"
+  "defaultProject": "<%- components.uiPlugin.name %>"
 }

@@ -5,16 +5,17 @@ import * as AdmZip from 'adm-zip';
 
 import Command, { flags } from '@oclif/command'
 import { CarePackage} from '../care';
+import { load } from '@oclif/config';
 
 const DIST_FOLDER_NAME = 'dist'
 
-const getDefaultName = (root: string) => {
+const loadPackageJson = (root: string) => {
     let pjsonPath = path.resolve(root, "package.json");
     if (!fs.existsSync(pjsonPath)) {
         throw new Error("Missing package.json");
     }
     let fileContent = fs.readFileSync(pjsonPath).toString();
-    return `${JSON.parse(fileContent).name}.care`;
+    return JSON.parse(fileContent);
 }
 
 export default class Pack extends Command {
@@ -37,14 +38,18 @@ export default class Pack extends Command {
         const { args } = this.parse(Pack)
 
         const carePackage = CarePackage.load()
+        const pjson = loadPackageJson(carePackage.packageRoot)
         const dist = path.join(carePackage.packageRoot, DIST_FOLDER_NAME)
-        const name = args.name || getDefaultName(carePackage.packageRoot)
+        const name = args.name || `${pjson.name}.care`;
         
         if (!fs.existsSync(dist)) {
             fs.mkdirSync(dist, { recursive: true })
         }
         const zip = new AdmZip();
-        const content = JSON.stringify(carePackage.manifest);
+        const manifest = carePackage.manifest;
+        manifest.name = manifest.name || pjson.name;
+        manifest.version = manifest.version || pjson.version;
+        const content = JSON.stringify(manifest);
         zip.addFile('manifest.json', Buffer.alloc(content.length, content))
         carePackage.elements.forEach(ele => {
             globSync(path.join(carePackage.packageRoot, ele.base, ele.outDir, ele.files))

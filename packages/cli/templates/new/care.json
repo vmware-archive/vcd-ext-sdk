@@ -1,0 +1,5 @@
+{
+    "vendor": "<%- vendor %>",
+    "specVersion": "0.0.1",
+    "elements": <%- JSON.stringify(elements, 2, null) %>
+}

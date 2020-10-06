@@ -65,20 +65,21 @@ export default class Serve extends Command {
         }
 
         const rootDir = path.join(process.cwd(), ".env"); //Extract as optional parameter?
+        const environmnet = this.loadJsonConfig(rootDir, "environment.json") || DEFAULT_ENV_CONTENT
+        const proxyConfig = this.loadJsonConfig(rootDir, "proxy.conf.json") || DEFAULT_PROXY_CONTENT
         try {
             const config = CloudDirectorConfig.fromDefault()
-            const environmnet = this.loadJsonConfig(rootDir, "environment.json") || DEFAULT_ENV_CONTENT
             environmnet.credentials = {
                 token: config.token
             }
-            this.storeJsonConfig(rootDir, "environment.runtime.json", environmnet)
-            const proxyConfig = this.loadJsonConfig(rootDir, "proxy.conf.json") || DEFAULT_PROXY_CONTENT
             Object.keys(proxyConfig).forEach(key => {
                 proxyConfig[key].target = new URL(config.basePath).origin
             })
-            this.storeJsonConfig(rootDir, "proxy.conf.runtime.json", proxyConfig)    
         } catch (e) {
             this.log("Error configuring environment.", e)
+        } finally {
+            this.storeJsonConfig(rootDir, "environment.runtime.json", environmnet)
+            this.storeJsonConfig(rootDir, "proxy.conf.runtime.json", proxyConfig)
         }
         spawn('npm', ['run', 'ng:serve'], { stdio: "inherit" })
     }
