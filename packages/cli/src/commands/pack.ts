@@ -1,0 +1,61 @@
+import * as fs from "fs";
+import * as path from "path";
+import { sync as globSync } from "glob";
+import * as AdmZip from 'adm-zip';
+
+import Command, { flags } from '@oclif/command'
+import { CarePackage} from '../care';
+
+const DIST_FOLDER_NAME = 'dist'
+
+const getDefaultName = (root: string) => {
+    let pjsonPath = path.resolve(root, "package.json");
+    if (!fs.existsSync(pjsonPath)) {
+        throw new Error("Missing package.json");
+    }
+    let fileContent = fs.readFileSync(pjsonPath).toString();
+    return `${JSON.parse(fileContent).name}.care`;
+}
+
+export default class Pack extends Command {
+    type: string = 'pack';
+
+    static description = 'Packages the contents of the solution project into a CARE package'
+
+    static examples = [
+        `$ vcd-ext pack
+`,
+    ]
+
+    static flags = {
+        help: flags.help({ char: 'h' }),
+    }
+
+    static args = [{ name: 'name', required: false }]
+
+    async run() {
+        const { args } = this.parse(Pack)
+
+        const carePackage = CarePackage.load()
+        const dist = path.join(carePackage.packageRoot, DIST_FOLDER_NAME)
+        const name = args.name || getDefaultName(carePackage.packageRoot)
+        
+        if (!fs.existsSync(dist)) {
+            fs.mkdirSync(dist, { recursive: true })
+        }
+        const zip = new AdmZip();
+        const content = JSON.stringify(carePackage.manifest);
+        zip.addFile('manifest.json', Buffer.alloc(content.length, content))
+        carePackage.elements.forEach(ele => {
+            globSync(path.join(carePackage.packageRoot, ele.base, ele.outDir, ele.files))
+                .forEach(file => {
+                    var relativePath = path.dirname(
+                        path.relative(
+                            path.join(carePackage.packageRoot, ele.base, ele.outDir), file)
+                    );
+                    zip.addLocalFile(file, path.join(ele.base, relativePath))
+                })
+        })
+        zip.writeZip(path.join(dist, name))
+    }
+}

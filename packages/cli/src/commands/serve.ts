@@ -4,6 +4,7 @@ import { spawn } from 'child_process';
 
 import Command, { flags } from '@oclif/command'
 import { CloudDirectorConfig } from '@vcd/node-client'
+import { CarePackage, ElementType } from '../care';
 
 const DEFAULT_ENV_CONTENT = {
     "production": false,
@@ -57,6 +58,12 @@ export default class Serve extends Command {
     }
 
     async run() {
+        const carePackage = CarePackage.load()
+        const currentElement = carePackage.getElementAt(process.cwd())
+        if (!currentElement || currentElement.type !== ElementType.uiPlugin) {
+            throw new Error("Serve command can be triggred only in the context of 'uiPlugin' subcomponent")
+        }
+
         const rootDir = path.join(process.cwd(), ".env"); //Extract as optional parameter?
         try {
             const config = CloudDirectorConfig.fromDefault()
