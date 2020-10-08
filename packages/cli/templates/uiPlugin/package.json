@@ -1,7 +1,7 @@
 {
-  "name": "<%- components.ui.name %>",
-  "version": "<%- components.ui.version %>",
-  "description": "<%- components.ui.description %>",
+  "name": "<%- components.uiPlugin.name %>",
+  "version": "<%- components.uiPlugin.version %>",
+  "description": "<%- components.uiPlugin.description %>",
   "scripts": {
     "clean": "rimraf dist",
     "lint": "ng lint",

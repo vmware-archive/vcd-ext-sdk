@@ -19,12 +19,14 @@
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "@vcd/ext-cli": "~0.0.0"
   },
   "dependencies": {},
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
+    "package": "vcd-ext pack",
     "publish": "lerna publish",
     "deploy": "lerna run deploy"
   }

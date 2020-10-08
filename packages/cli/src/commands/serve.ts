@@ -4,6 +4,7 @@ import { spawn } from 'child_process';
 
 import Command, { flags } from '@oclif/command'
 import { CloudDirectorConfig } from '@vcd/node-client'
+import { CarePackage, ElementType } from '../care';
 
 const DEFAULT_ENV_CONTENT = {
     "production": false,
@@ -57,21 +58,28 @@ export default class Serve extends Command {
     }
 
     async run() {
+        const carePackage = CarePackage.load()
+        const currentElement = carePackage.getElementAt(process.cwd())
+        if (!currentElement || currentElement.type !== ElementType.uiPlugin) {
+            throw new Error("Serve command can be triggred only in the context of 'uiPlugin' subcomponent")
+        }
+
         const rootDir = path.join(process.cwd(), ".env"); //Extract as optional parameter?
+        const environmnet = this.loadJsonConfig(rootDir, "environment.json") || DEFAULT_ENV_CONTENT
+        const proxyConfig = this.loadJsonConfig(rootDir, "proxy.conf.json") || DEFAULT_PROXY_CONTENT
         try {
             const config = CloudDirectorConfig.fromDefault()
-            const environmnet = this.loadJsonConfig(rootDir, "environment.json") || DEFAULT_ENV_CONTENT
             environmnet.credentials = {
                 token: config.token
             }
-            this.storeJsonConfig(rootDir, "environment.runtime.json", environmnet)
-            const proxyConfig = this.loadJsonConfig(rootDir, "proxy.conf.json") || DEFAULT_PROXY_CONTENT
             Object.keys(proxyConfig).forEach(key => {
                 proxyConfig[key].target = new URL(config.basePath).origin
             })
-            this.storeJsonConfig(rootDir, "proxy.conf.runtime.json", proxyConfig)    
         } catch (e) {
             this.log("Error configuring environment.", e)
+        } finally {
+            this.storeJsonConfig(rootDir, "environment.runtime.json", environmnet)
+            this.storeJsonConfig(rootDir, "proxy.conf.runtime.json", proxyConfig)
         }
         spawn('npm', ['run', 'ng:serve'], { stdio: "inherit" })
     }
