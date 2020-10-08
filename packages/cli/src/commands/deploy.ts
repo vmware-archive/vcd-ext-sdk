@@ -45,15 +45,15 @@ export default class Deploy extends Command {
         try {
             const apiConfig = CloudDirectorConfig.fromDefault()
             this.debug(`Creating from default config ${apiConfig}`)
-            return new Deployer(apiConfig, flags.force).deploy(carePackage)
+            return await new Deployer(apiConfig, flags.force).deploy(carePackage)
         } catch (e) {
             this.debug('Error deploying', e)
             throw e
         } finally {
-            // if (isUnzipped) {
-            //     rimraf(carePackage.packageRoot, (e) => 
-            //         this.debug(`Finished removing tmp folder ${carePackage.packageRoot}`, e))
-            // }
+            if (isUnzipped) {
+                rimraf(carePackage.packageRoot, (e) => 
+                    this.debug(`Finished removing tmp folder ${carePackage.packageRoot}`, e))
+            }
         }
     }
 }
