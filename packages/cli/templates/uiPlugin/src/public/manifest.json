@@ -7,8 +7,8 @@
     "permissions": [],
     "description": "<%- nameCamelCase %> Plugin",
     "vendor": "<%- components.uiPlugin.vendor %>",
-    "license": "BSD-2-Clause",
-    "link": "http://www.vmware.com/support",
-    "module": "<%- nameCamelCase %>PluginModule",
+    "license": "<your_license>",
+    "link": "<your_link>",
+    "module": "Description for <%- nameCamelCase %>PluginModule",
     "route": "<%- name %>"
 }

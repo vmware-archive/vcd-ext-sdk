@@ -19,7 +19,7 @@ $ npm install -g @vcd/ext-cli
 $ vcd-ext COMMAND
 running command...
 $ vcd-ext (-v|--version|version)
-@vcd/ext-cli/0.0.1 darwin-x64 node-v13.7.0
+@vcd/ext-cli/0.0.5 darwin-x64 node-v12.18.4
 $ vcd-ext --help [COMMAND]
 USAGE
   $ vcd-ext COMMAND
@@ -29,10 +29,12 @@ USAGE
 # Commands
 <!-- commands -->
 * [`vcd-ext build`](#vcd-ext-build)
-* [`vcd-ext deploy`](#vcd-ext-deploy)
+* [`vcd-ext deploy [NAME]`](#vcd-ext-deploy-name)
 * [`vcd-ext help [COMMAND]`](#vcd-ext-help-command)
 * [`vcd-ext login [ALIAS] [BASEPATH] [USERNAME] [PASSWORD]`](#vcd-ext-login-alias-basepath-username-password)
 * [`vcd-ext new [NAME]`](#vcd-ext-new-name)
+* [`vcd-ext pack [NAME]`](#vcd-ext-pack-name)
+* [`vcd-ext serve`](#vcd-ext-serve)
 
 ## `vcd-ext build`
 
@@ -49,20 +51,21 @@ EXAMPLE
   $ vcd-ext build
 ```
 
-## `vcd-ext deploy`
+## `vcd-ext deploy [NAME]`
 
 Deploys extensibility entities to previously logged in vCD instance
 
 ```
 USAGE
-  $ vcd-ext deploy
+  $ vcd-ext deploy [NAME]
 
 OPTIONS
   -f, --force
   -h, --help   show CLI help
 
-EXAMPLE
+EXAMPLES
   $ vcd-ext deploy
+  $ vcd-ext deploy mysolution.care
 ```
 
 ## `vcd-ext help [COMMAND]`
@@ -110,5 +113,36 @@ OPTIONS
 
 EXAMPLE
   $ vcd-ext new ticketing
+```
+
+## `vcd-ext pack [NAME]`
+
+Packages the contents of the solution project into a CARE package
+
+```
+USAGE
+  $ vcd-ext pack [NAME]
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLES
+  $ vcd-ext pack
+  $ vcd-ext pack mypackagename.zip
+```
+
+## `vcd-ext serve`
+
+Serves an emulated environmnet
+
+```
+USAGE
+  $ vcd-ext serve
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLE
+  $ vcd-ext serve
 ```
 <!-- commandsstop -->
