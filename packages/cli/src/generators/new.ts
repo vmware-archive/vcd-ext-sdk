@@ -14,7 +14,7 @@ export default class New extends Generator {
     constructor(args: any, opts: any) {
         super(args, opts);
         this.name = opts.name;
-        this.nameCamelCase = camelcase(this.name, { pascalCase: true})
+        this.nameCamelCase = camelcase(this.name, { pascalCase: true })
         this.version = opts.version || '1.0.0';
         this.description = opts.description || '';
         this.answers = {};
@@ -23,38 +23,49 @@ export default class New extends Generator {
     async prompting() {
         this.answers = await this.prompt([
             {
+                type: "input",
+                name: "name",
+                message: "Your solution name",
+                default: this.name
+            }, {
+                type: 'input',
+                name: 'version',
+                message: 'Specify first version',
+                default: '0.0.1'
+            }, {
+                type: 'input',
+                name: 'vendor',
+                message: 'Specify vendor name',
+            }, {
+                type: 'input',
+                name: 'link',
+                message: 'Specify vendor link',
+                default: "http://example.com"
+            }, {
+                type: 'input',
+                name: 'license',
+                message: 'Specify solution license',
+                default: "BSD-2-Clause",
+            }, {
                 type: 'checkbox',
                 name: 'components',
                 message: 'Select extensibility components',
                 choices: [
-                    {name: 'UI Plugin', value: 'uiPlugin'},
-                    {name: 'Defined Entities', value: 'types'}
+                    { name: 'UI Plugin', value: 'uiPlugin' },
+                    { name: 'Defined Entities', value: 'types' }
                 ],
-            },
-            {
+            }, {
                 type: 'input',
                 name: 'uiPluginName',
                 when: (answers) => answers.components.find((component: string) => component === 'uiPlugin'),
                 default: "ui",
                 message: 'Specify UI Plugin component name',
-            },
-            {
+            }, {
                 type: 'input',
                 name: 'typesName',
                 when: (answers) => answers.components.find((component: string) => component === 'types'),
                 default: "types",
                 message: 'Specify Defined Entities component name',
-            },
-            {
-                type: 'input',
-                name: 'vendor',
-                message: 'Specify vendor name',
-            },
-            {
-                type: 'input',
-                name: 'version',
-                message: 'Specify version',
-                default: '0.0.1'
             }
         ]);
     }
@@ -70,12 +81,14 @@ export default class New extends Generator {
             }
         })
         this.vendor = this.answers.vendor;
+        this.name = this.answers.name;
+        this.nameCamelCase = camelcase(this.name, { pascalCase: true })
         this.fs.copyTpl(
             this.templatePath('new'),
             this.destinationPath(),
             this,
             undefined,
-            { globOptions: { dot: true }})
+            { globOptions: { dot: true } })
         this.answers.components.forEach((component: string) => {
             this.components[component] = {
                 name: `${this.name}-${this.answers[`${component}Name`]}`,
@@ -89,7 +102,7 @@ export default class New extends Generator {
                 this.destinationPath('packages', this.answers[`${component}Name`]),
                 this,
                 undefined,
-                { globOptions: { dot: true }})
+                { globOptions: { dot: true } })
         });
     }
 

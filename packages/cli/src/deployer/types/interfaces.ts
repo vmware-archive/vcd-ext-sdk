@@ -71,4 +71,18 @@ export class InterfacesDeployer extends BaseTypesDeployer {
             return this.behApi.addInterfaceBehavior(beh, intId).catch(e => log(e))
         }))
     }
+    fileFilter(file: string): boolean {
+        return file.indexOf('interfaces/') > -1
+    }
+
+    async clean(location: string) {
+        this.log("Starting clean up")
+        return this.traverse(location, this.fileFilter, this.cleanVisitor.bind(this))
+    }
+
+    async deploy(location: string) {
+        this.log("Starting deployment")
+        return this.traverse(location, this.fileFilter, this.deployVisitor.bind(this))
+    }
+
 }

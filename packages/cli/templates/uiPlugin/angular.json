@@ -29,7 +29,7 @@
             "sourceMap": false,
             "extractCss": false,
             "namedChunks": false,
-            "aot": false,
+            "aot": true,
             "extractLicenses": false,
             "vendorChunk": false,
             "buildOptimizer": false
@@ -45,7 +45,11 @@
             "tsConfig": "tsconfig.emulator.json",
             "assets": [
               "src/favicon.ico",
-              "src/public/assets"
+              {
+                "glob": "**/*",
+                "input": "./src/public",
+                "output": "/src/public"
+              }
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",

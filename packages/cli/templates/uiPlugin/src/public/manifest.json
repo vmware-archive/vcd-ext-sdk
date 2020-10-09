@@ -7,8 +7,8 @@
     "permissions": [],
     "description": "<%- nameCamelCase %> Plugin",
     "vendor": "<%- components.uiPlugin.vendor %>",
-    "license": "<your_license>",
-    "link": "<your_link>",
+    "license": "<%- answers.license %>",
+    "link": "<%- answers.link %>",
     "module": "Description for <%- nameCamelCase %>PluginModule",
     "route": "<%- name %>"
 }
