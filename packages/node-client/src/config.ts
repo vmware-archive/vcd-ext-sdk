@@ -5,6 +5,7 @@ import * as api from './api';
 import { BasicAuth, CloudDirectorAuthentication } from './auth';
 import * as mqtt from "mqtt";
 import * as WS from 'ws';
+import { TransferClient } from "./transfer";
 
 
 const log = debug('vcd:api-client')
@@ -70,6 +71,10 @@ export class CloudDirectorConfig {
         apiClient.setDefaultAuthentication(this.authentication);
 
         return apiClient;
+    }
+
+    public makeTransferClient(url: string) {
+        return new TransferClient(url, this.authentication['authorizationKey']);
     }
 
     public makeMQTTClient(onConnect: (client: mqtt.MqttClient) => void) {

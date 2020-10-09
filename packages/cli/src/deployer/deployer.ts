@@ -1,34 +1,40 @@
+import * as path from 'path';
+import * as debug from 'debug';
+
 import { CloudDirectorConfig } from '@vcd/node-client';
-import { TypesDeployer } from './types';
-import { InterfacesDeployer } from './interfaces';
-import { ObjectDeployer } from './ObjectDeployer';
+import { TypesComponentDeployer } from './types';
+import { ComponentDeployer } from './ComponentDeployer';
+import { CarePackage, CarePackageSource, Element } from '../care';
+import { UIPluginComponentDeployer } from './uiPlugin';
+
+const log = debug('vcd:ext:deployer')
 
 export class Deployer {
-    objectDeployers: ObjectDeployer[]
+    objectDeployers: {[componentType: string]: ComponentDeployer}
 
-    constructor(private apiConfig: CloudDirectorConfig, private force: boolean, private debug: (...args: any[]) => void) {
-        this.objectDeployers = [
-            new InterfacesDeployer(this.apiConfig, process.cwd(), debug),
-            new TypesDeployer(this.apiConfig, process.cwd(), debug)
-        ]
+    constructor(private apiConfig: CloudDirectorConfig, private force: boolean) {
+        this.objectDeployers = {
+            types: new TypesComponentDeployer(this.apiConfig),
+            uiPlugin: new UIPluginComponentDeployer(this.apiConfig)
+        }
     }
 
-    async deploy() {
+    async deploy(carePackage: CarePackage | CarePackageSource) {
         process.on('unhandledRejection', (reason, p) => {
-            this.debug('Unhandled Rejection at: Promise', p, 'reason:', reason);
+            log('Unhandled Rejection at: Promise', p, 'reason:', reason);
             // application specific logging, throwing an error, or other logic here
         });
 
         if (this.force) {
-            this.debug("Force option set to true. Cleaning up...")
-            await this.objectDeployers.reverse().reduce(async (prevPromise, od) => {
+            log("Force option set to true. Cleaning up...")
+            await carePackage.elements.reverse().reduce(async (prevPromise, ele) => {
                 await prevPromise;
-                return od.clean().catch(e => this.debug(e))
-            }, Promise.resolve()).catch(e => this.debug(e))
+                return this.objectDeployers[ele.type].clean(path.join(carePackage.packageRoot, ele.location)).catch(e => log(e))
+            }, Promise.resolve()).catch(e => log(e))
         }
-        return this.objectDeployers.reduce(async (prevPromise, od) => {
-            await prevPromise
-            return od.deploy().catch(e => this.debug(e))
-        }, Promise.resolve()).catch(e => this.debug(e))
+        return (carePackage.elements as Element[]).reduce(async (prevPromise: Promise<any>, ele: Element) => {
+            await prevPromise;
+            return this.objectDeployers[ele.type].deploy(path.join(carePackage.packageRoot, ele.location)).catch(e => log(e))
+        }, Promise.resolve()).catch(e => log(e))
     }
 }

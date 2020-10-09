@@ -4538,8 +4538,8 @@ export namespace UploadMetadataResponse {
 export class UploadSpec {
     'fileName': string;
     'size': number;
-    'checksum': string;
-    'checksumAlgo': UploadSpec.ChecksumAlgoEnum;
+    'checksum'?: string;
+    'checksumAlgo'?: UploadSpec.ChecksumAlgoEnum;
 }
 
 export namespace UploadSpec {

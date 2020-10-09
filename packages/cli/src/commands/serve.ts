@@ -58,7 +58,7 @@ export default class Serve extends Command {
     }
 
     async run() {
-        const carePackage = CarePackage.load()
+        const carePackage = CarePackage.loadFromSource()
         const currentElement = carePackage.getElementAt(process.cwd())
         if (!currentElement || currentElement.type !== ElementType.uiPlugin) {
             throw new Error("Serve command can be triggred only in the context of 'uiPlugin' subcomponent")
@@ -70,7 +70,7 @@ export default class Serve extends Command {
         try {
             const config = CloudDirectorConfig.fromDefault()
             environmnet.credentials = {
-                token: config.token
+                token: `Bearer ${config.token}`
             }
             Object.keys(proxyConfig).forEach(key => {
                 proxyConfig[key].target = new URL(config.basePath).origin

@@ -5,7 +5,6 @@ import * as AdmZip from 'adm-zip';
 
 import Command, { flags } from '@oclif/command'
 import { CarePackage} from '../care';
-import { load } from '@oclif/config';
 
 const DIST_FOLDER_NAME = 'dist'
 
@@ -24,8 +23,8 @@ export default class Pack extends Command {
     static description = 'Packages the contents of the solution project into a CARE package'
 
     static examples = [
-        `$ vcd-ext pack
-`,
+        `$ vcd-ext pack`,
+        `$ vcd-ext pack mypackagename.zip`,
     ]
 
     static flags = {
@@ -37,7 +36,7 @@ export default class Pack extends Command {
     async run() {
         const { args } = this.parse(Pack)
 
-        const carePackage = CarePackage.load()
+        const carePackage = CarePackage.loadFromSource()
         const pjson = loadPackageJson(carePackage.packageRoot)
         const dist = path.join(carePackage.packageRoot, DIST_FOLDER_NAME)
         const name = args.name || `${pjson.name}.care`;
@@ -46,9 +45,7 @@ export default class Pack extends Command {
             fs.mkdirSync(dist, { recursive: true })
         }
         const zip = new AdmZip();
-        const manifest = carePackage.manifest;
-        manifest.name = manifest.name || pjson.name;
-        manifest.version = manifest.version || pjson.version;
+        const manifest = carePackage.toPackage(pjson.name, pjson.version).manifest;
         const content = JSON.stringify(manifest);
         zip.addFile('manifest.json', Buffer.alloc(content.length, content))
         carePackage.elements.forEach(ele => {

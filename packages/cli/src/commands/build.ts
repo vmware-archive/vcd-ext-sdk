@@ -17,7 +17,7 @@ export default class Build extends Command {
     }
 
     async run() {
-        const carePackage = CarePackage.load()
+        const carePackage = CarePackage.loadFromSource()
         const currentElement = carePackage.getElementAt(process.cwd())
         if (!currentElement || currentElement.type !== ElementType.types) {
             throw new Error("Build command can be triggred only in the context of 'types' subcomponent")
