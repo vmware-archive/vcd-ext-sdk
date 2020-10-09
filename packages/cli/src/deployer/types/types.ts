@@ -2,7 +2,7 @@ import * as debug from 'debug';
 import { CloudDirectorConfig, DefinedEntityTypeApi, DefinedInterfaceBehaviorsApi, BehaviorAccess, BehaviorAccesses } from '@vcd/node-client';
 import { BaseTypesDeployer } from './base';
 
-const log = debug('vcd:ext:deployer:interfaces')
+const log = debug('vcd:ext:deployer:types')
 
 export class TypesDeployer extends BaseTypesDeployer {
     detApi: DefinedEntityTypeApi
@@ -13,7 +13,6 @@ export class TypesDeployer extends BaseTypesDeployer {
         this.detApi = this.apiConfig.makeApiClient(DefinedEntityTypeApi)
         this.behApi = this.apiConfig.makeApiClient(DefinedInterfaceBehaviorsApi)
     }
-
 
     protected log(...args: any) {
         log(args)
@@ -51,4 +50,18 @@ export class TypesDeployer extends BaseTypesDeployer {
         }
         return Promise.resolve();
     }
+    fileFilter(file: string): boolean {
+        return file.indexOf('types/') > -1
+    }
+
+    async clean(location: string) {
+        this.log("Starting clean up")
+        return this.traverse(location, this.fileFilter, this.cleanVisitor.bind(this))
+    }
+
+    async deploy(location: string) {
+        this.log("Starting deployment")
+        return this.traverse(location, this.fileFilter, this.deployVisitor.bind(this))
+    }
+
 }

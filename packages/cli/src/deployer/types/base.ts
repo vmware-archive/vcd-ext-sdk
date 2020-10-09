@@ -9,12 +9,12 @@ const getIdComponent = (det: any): string => {
 export abstract class BaseTypesDeployer implements ComponentDeployer {
 
     protected abstract async getServerEntities(): Promise<any>;
-    protected abstract async cleanVisitor(det: any, existingDet?: any): Promise<any>;
-    protected abstract async deployVisitor(det: any, existingDet?: any): Promise<any>;
+    public abstract async clean(location: string): Promise<any>;
+    public abstract async deploy(location: string): Promise<any>;
     protected abstract log(...args: any): void;
 
-    private async traverse(location: string, visitor: (det: any, existingDet?: any) => Promise<any>) {
-        const files = globSync(location)
+    protected async traverse(location: string, fileFilter: (file: string) => boolean, visitor: (det: any, existingDet?: any) => Promise<any>) {
+        const files = globSync(location).filter(fileFilter)
         const serverEntities = await this.getServerEntities()
         const existingDets = serverEntities.body.values
             .reduce((prev: any, curr: any) => {
@@ -30,15 +30,5 @@ export abstract class BaseTypesDeployer implements ComponentDeployer {
                 return visitor(det, existingDet).catch(e => this.log(e))
             })
         )
-    }
-
-    async clean(location: string) {
-        this.log("Starting clean up")
-        return this.traverse(location, this.cleanVisitor)
-    }
-
-    async deploy(location: string) {
-        this.log("Starting deployment")
-        return this.traverse(location, this.deployVisitor)
     }
 }

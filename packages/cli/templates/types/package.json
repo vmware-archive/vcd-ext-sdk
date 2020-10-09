@@ -12,9 +12,9 @@
     "deploy": "vcd-ext deploy"
   },
   "author": "vCloud Directory Extensions CLI",
-  "license": "ISC",
+  "license": "<%- answers.license %>",
   "devDependencies": {
-    "@vcd/ext-cli": "~0.0.0",
+    "@vcd/ext-cli": "0.0.6",
     "typescript": "~3.6.3"
   },
   "dependencies": {},
