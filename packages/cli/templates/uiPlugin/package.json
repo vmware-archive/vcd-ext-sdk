@@ -7,7 +7,8 @@
     "lint": "ng lint",
     "build": "ng build",
     "serve": "vcd-ext serve",
-    "ng:serve": "ng serve"
+    "ng:serve": "ng serve",
+    "deploy": "vcd-ext deploy --only=<%- components.types.name %>"
   },
   "license": "<%- answers.license %>",
   "dependencies": {
@@ -49,7 +50,7 @@
     "@types/jasmine": "2.8.8",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "8.9.4",
-    "@vcd/ext-cli": "0.0.5",
+    "@vcd/ext-cli": "0.0.7",
     "@vcd/plugin-builders": "0.12.1",
     "@vcd/ui-emulator": "0.0.5",
     "codelyzer": "4.3.0",

@@ -22,6 +22,7 @@ export default class Deploy extends Command {
     static flags = {
         help: flags.help({ char: 'h' }),
         force: flags.boolean({ char: 'f', default: false }),
+        only: flags.string({ required: false, default: "" })
     }
 
     static args = [{ name: 'name', required: false }]
@@ -42,10 +43,11 @@ export default class Deploy extends Command {
         }
         this.debug(`Loaded CARE package root: ${carePackage.packageRoot}`)
         this.debug(`Elements: ${JSON.stringify(carePackage.elements, null, 2)}`)
+        const only = flags.only ? flags.only.split(",") : null;
         try {
             const apiConfig = CloudDirectorConfig.fromDefault()
             this.debug(`Creating from default config ${apiConfig}`)
-            return await new Deployer(apiConfig, flags.force).deploy(carePackage)
+            return await new Deployer(apiConfig, flags.force, only).deploy(carePackage)
         } catch (e) {
             this.debug('Error deploying', e)
             throw e

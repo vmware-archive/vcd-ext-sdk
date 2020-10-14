@@ -1,18 +1,20 @@
 {
   "name": "@vcd/ext-compiler",
   "description": "VMware Cloud Director Extension Compiler",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "mslavov@vmware.com",
   "dependencies": {
     "glob": "^7.1.3",
-    "ts-json-schema-generator": "^0.53.0",
+    "ts-json-schema-generator": "^0.76.1",
+    "debug": "^4.1.1",
     "tslib": "^1.10.0"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.5",
     "@types/glob": "^5.0.36",
     "@types/node": "^10.14.20",
     "ts-node": "^8.4.1",
-    "typescript": "~3.6.3"
+    "typescript": "~4.0.3"
   },
   "engines": {
     "node": ">=8.0.0"

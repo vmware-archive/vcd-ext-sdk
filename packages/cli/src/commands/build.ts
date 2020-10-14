@@ -14,6 +14,7 @@ export default class Build extends Command {
 
     static flags = {
         help: flags.help({ char: 'h' }),
+        additionalProperties: flags.boolean({ required: false })
     }
 
     async run() {
