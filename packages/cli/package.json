@@ -1,7 +1,7 @@
 {
   "name": "@vcd/ext-cli",
   "description": "CLI tool for working with Cloud Director extensions",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "mslavov@vmware.com",
   "bin": {
     "vcd-ext": "./bin/run"

@@ -9,13 +9,13 @@
   ],
   "scripts": {
     "build": "vcd-ext build",
-    "deploy": "vcd-ext deploy --only=<%- components.types.name %>"
+    "deploy": "vcd-ext deploy --only=<%- components.types.componentName %>"
   },
   "author": "vCloud Directory Extensions CLI",
   "license": "<%- answers.license %>",
   "devDependencies": {
-    "@vcd/ext-cli": "0.0.7",
-    "typescript": "~3.6.3"
+    "@vcd/ext-cli": "0.0.8",
+    "typescript": "~4.0.3"
   },
   "dependencies": {},
   "files": [

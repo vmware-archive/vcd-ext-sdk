@@ -92,6 +92,7 @@ export default class New extends Generator {
         this.answers.components.forEach((component: string) => {
             this.components[component] = {
                 name: `${this.name}-${this.answers[`${component}Name`]}`,
+                componentName: this.answers[`${component}Name`],
                 version: this.answers.version,
                 description: this.description,
                 vendor: this.answers.vendor,

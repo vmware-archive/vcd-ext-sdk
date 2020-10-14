@@ -43,7 +43,7 @@ export default class Deploy extends Command {
         }
         this.debug(`Loaded CARE package root: ${carePackage.packageRoot}`)
         this.debug(`Elements: ${JSON.stringify(carePackage.elements, null, 2)}`)
-        const only = flags.only ? flags.only.split(",") : null;
+        const only = flags.only ? flags.only.split(",").map(p => p.trim()) : null;
         try {
             const apiConfig = CloudDirectorConfig.fromDefault()
             this.debug(`Creating from default config ${apiConfig}`)
