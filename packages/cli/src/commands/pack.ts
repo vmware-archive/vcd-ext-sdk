@@ -20,7 +20,7 @@ const loadPackageJson = (root: string) => {
 export default class Pack extends Command {
     type: string = 'pack';
 
-    static description = 'Packages the contents of the solution project into a CARE package'
+    static description = 'Packages the contents of the solution project into a CARE package. File name can be provided as optional parameter.'
 
     static examples = [
         `$ vcd-ext pack`,
@@ -28,10 +28,10 @@ export default class Pack extends Command {
     ]
 
     static flags = {
-        help: flags.help({ char: 'h' }),
+        help: flags.help({ char: 'h', description: "Provides usage for the current command." }),
     }
 
-    static args = [{ name: 'name', required: false }]
+    static args = [{ name: 'name', required: false, description: "Optional archive name" }]
 
     async run() {
         const { args } = this.parse(Pack)

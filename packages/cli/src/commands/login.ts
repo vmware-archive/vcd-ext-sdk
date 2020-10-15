@@ -12,14 +12,14 @@ export default class Login extends Command {
     ]
 
     static flags = {
-        help: flags.help({ char: 'h' }),
+        help: flags.help({ char: 'h', description: "Provides usage for the current command." }),
     }
 
     static args = [
-        { name: 'alias' },
-        { name: 'basePath'},
-        { name: 'username'},
-        { name: 'password'}
+        { name: 'alias', description: "Alias for stroing the session token" },
+        { name: 'basePath', description: "Cloud director URL https://<host>[:<port>]/cloudapi" },
+        { name: 'username', description: "Username in the form of <user>[@<tenant>]. If @<tenant> is omitted System tenant will be used." },
+        { name: 'password', description: "Password for the user"}
     ]
 
     async run() {

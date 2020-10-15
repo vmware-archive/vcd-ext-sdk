@@ -22,8 +22,8 @@ const toPluginMetadata = (manifest: any) => {
         enabled: true,
         version: manifest.version,
         vendor: manifest.vendor,
-        provider_scoped: manifest.scope.indexOf("provider") >= 0,
-        tenant_scoped: manifest.scope.indexOf("tenant") >= 0
+        provider_scoped: manifest.scope.join(';').indexOf("provider") >= 0,
+        tenant_scoped: manifest.scope.join(';').indexOf("tenant") >= 0
     }
 }
 

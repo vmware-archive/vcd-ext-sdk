@@ -13,8 +13,8 @@ export default class Build extends Command {
     ]
 
     static flags = {
-        help: flags.help({ char: 'h' }),
-        additionalProperties: flags.boolean({ required: false })
+        help: flags.help({ char: 'h', description: "Provides usage for the current command" }),
+        additionalProperties: flags.boolean({ required: false, description: "Controls whether or not additionalProperties will be allowed or not." })
     }
 
     async run() {

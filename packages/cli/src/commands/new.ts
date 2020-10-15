@@ -4,7 +4,7 @@ import ScaffoldingBaseCommand from '../ScaffoldingBaseCommand'
 export default class New extends ScaffoldingBaseCommand {
     type: string = 'new';
 
-    static description = 'create new project'
+    static description = 'Creates a new project in the folder provided as a name'
 
     static examples = [
         `$ vcd-ext new ticketing
@@ -12,10 +12,10 @@ export default class New extends ScaffoldingBaseCommand {
     ]
 
     static flags = {
-        help: flags.help({ char: 'h' }),
+        help: flags.help({ char: 'h', description: "Provides usage for the current command." }),
     }
 
-    static args = [{ name: 'name' }]
+    static args = [{ name: 'name', description: "Project name" }]
 
     async run() {
         const { args } = this.parse(New)
