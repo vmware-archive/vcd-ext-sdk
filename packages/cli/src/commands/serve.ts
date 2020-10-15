@@ -38,7 +38,7 @@ export default class Serve extends Command {
     ]
 
     static flags = {
-        help: flags.help({ char: 'h' }),
+        help: flags.help({ char: 'h', description: "Provides usage for the current command." }),
     }
 
     static args = []

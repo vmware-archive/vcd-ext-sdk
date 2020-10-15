@@ -19,7 +19,7 @@ $ npm install -g @vcd/ext-cli
 $ vcd-ext COMMAND
 running command...
 $ vcd-ext (-v|--version|version)
-@vcd/ext-cli/0.0.6 darwin-x64 node-v12.18.4
+@vcd/ext-cli/0.0.9 darwin-x64 node-v12.18.4
 $ vcd-ext --help [COMMAND]
 USAGE
   $ vcd-ext COMMAND
@@ -45,7 +45,8 @@ USAGE
   $ vcd-ext build
 
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help              Provides usage for the current command
+  --additionalProperties  Controls whether or not additionalProperties will be allowed or not.
 
 EXAMPLE
   $ vcd-ext build
@@ -53,15 +54,16 @@ EXAMPLE
 
 ## `vcd-ext deploy [NAME]`
 
-Deploys extensibility entities to previously logged in vCD instance
+Deploys extensibility entities to previously logged in vCD instance. If a file is provided it deployes from the file, otherwise it needs to be run in the context of a solution projects.
 
 ```
 USAGE
   $ vcd-ext deploy [NAME]
 
 OPTIONS
-  -f, --force
-  -h, --help   show CLI help
+  -f, --force  If provided it will first try to remove all objects if present and recreated them.
+  -h, --help   Provides usage for the current command.
+  --only=only  Comma separated list of subcomponent names to be deployed. If not provided it deployes all subcomponents.
 
 EXAMPLES
   $ vcd-ext deploy
@@ -93,8 +95,14 @@ Logs into Cloud Director and stores the session
 USAGE
   $ vcd-ext login [ALIAS] [BASEPATH] [USERNAME] [PASSWORD]
 
+ARGUMENTS
+  ALIAS     Alias for stroing the session token
+  BASEPATH  Cloud director URL https://<host>[:<port>]/cloudapi
+  USERNAME  Username in the form of <user>[@<tenant>]. If @<tenant> is omitted System tenant will be used.
+  PASSWORD  Password for the user
+
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help  Provides usage for the current command.
 
 EXAMPLE
   $ vcd-ext login <alias> <basePath> <username> <password>
@@ -102,14 +110,17 @@ EXAMPLE
 
 ## `vcd-ext new [NAME]`
 
-create new project
+Creates a new project in the folder provided as a name
 
 ```
 USAGE
   $ vcd-ext new [NAME]
 
+ARGUMENTS
+  NAME  Project name
+
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help  Provides usage for the current command.
 
 EXAMPLE
   $ vcd-ext new ticketing
@@ -117,14 +128,17 @@ EXAMPLE
 
 ## `vcd-ext pack [NAME]`
 
-Packages the contents of the solution project into a CARE package
+Packages the contents of the solution project into a CARE package. File name can be provided as optional parameter.
 
 ```
 USAGE
   $ vcd-ext pack [NAME]
 
+ARGUMENTS
+  NAME  Optional archive name
+
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help  Provides usage for the current command.
 
 EXAMPLES
   $ vcd-ext pack
@@ -140,7 +154,7 @@ USAGE
   $ vcd-ext serve
 
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help  Provides usage for the current command.
 
 EXAMPLE
   $ vcd-ext serve

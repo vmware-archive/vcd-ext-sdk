@@ -7,12 +7,12 @@ import * as uuid from 'uuid';
 import Command, { flags } from '@oclif/command'
 import { CloudDirectorConfig } from '@vcd/node-client'
 import { Deployer } from '../deployer';
-import { CarePackage, CarePackageSource } from '../care';
+import { CarePackage } from '../care';
 
 export default class Deploy extends Command {
     type: string = 'deploy';
 
-    static description = 'Deploys extensibility entities to previously logged in vCD instance'
+    static description = 'Deploys extensibility entities to previously logged in vCD instance. If a file is provided it deployes from the file, otherwise it needs to be run in the context of a solution projects.'
 
     static examples = [
         `$ vcd-ext deploy`,
@@ -20,9 +20,9 @@ export default class Deploy extends Command {
     ]
 
     static flags = {
-        help: flags.help({ char: 'h' }),
-        force: flags.boolean({ char: 'f', default: false }),
-        only: flags.string({ required: false, default: "" })
+        help: flags.help({ char: 'h', description: "Provides usage for the current command." }),
+        force: flags.boolean({ char: 'f', default: false, description: "If provided it will first try to remove all objects if present and recreated them." }),
+        only: flags.string({ required: false, default: "", description: "Comma separated list of subcomponent names to be deployed. If not provided it deployes all subcomponents." })
     }
 
     static args = [{ name: 'name', required: false }]
@@ -53,7 +53,7 @@ export default class Deploy extends Command {
             throw e
         } finally {
             if (isUnzipped) {
-                rimraf(carePackage.packageRoot, (e) => 
+                rimraf(carePackage.packageRoot, (e) =>
                     this.debug(`Finished removing tmp folder ${carePackage.packageRoot}`, e))
             }
         }
