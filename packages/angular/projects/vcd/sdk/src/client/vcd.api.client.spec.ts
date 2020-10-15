@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { LoggingInterceptor } from './logging.interceptor';
 import { RequestHeadersInterceptor } from './request.headers.interceptor';
-import { VcdApiClient } from './vcd.api.client';
+import {LinkRelType, Navigable, VcdApiClient} from './vcd.api.client';
 import { VcdHttpClient } from './vcd.http.client';
 import { AuthTokenHolderService, API_ROOT_URL, SESSION_SCOPE, SESSION_ORG_ID } from '../common';
 import { SupportedVersionsType } from '@vcd/bindings/vcloud/api/rest/schema/versioning';
@@ -386,3 +386,74 @@ describe('Provider in provider scope actAs scoping', () => {
         }).flush(mockResult);
     });
 });
+
+describe('API client utility code', () => {
+    let httpClient: VcdHttpClient;
+    let httpMock: HttpTestingController;
+    let apiClient: VcdApiClient;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                HttpClientTestingModule
+            ],
+            providers: [
+                LoggingInterceptor,
+                RequestHeadersInterceptor,
+                ResponseNormalizationInterceptor,
+                VcdHttpClient
+            ]
+        });
+
+        httpClient = TestBed.get(VcdHttpClient);
+        httpMock = TestBed.get(HttpTestingController);
+
+        const injector = ReflectiveInjector.resolveAndCreate([VcdHttpClient,
+            {provide: AuthTokenHolderService, useValue: {token: 'authToken'}},
+            {provide: API_ROOT_URL, useValue: 'rootUrl'}]);
+
+        apiClient = new VcdApiClient(httpClient, injector);
+    }));
+
+    afterEach(() => {
+        httpMock.verify();
+    });
+
+    describe('canPerformAction', () => {
+
+        const type = "DummyType";
+        let item: Navigable;
+
+        beforeEach(() => {
+            item = {
+                link: [{
+                    rel: LinkRelType.remove,
+                    type: type,
+                    href: "https://dummy-url.com"
+                }]
+            };
+        });
+
+        afterEach(() => {
+            item = null;
+        });
+
+        it('can resolve action availability with links and type', () => {
+
+            expect(apiClient.canPerformAction(item, LinkRelType.remove, type)).toBeTruthy();
+        });
+
+        it('can resolve action availability with links', () => {
+
+            expect(apiClient.canPerformAction(item, LinkRelType.remove)).toBeTruthy();
+        });
+
+        it('can resolve action availability without links', () => {
+
+            item.link = [];
+
+            expect(apiClient.canPerformAction(item, LinkRelType.remove)).toBeFalsy();
+        });
+    });
+});
+

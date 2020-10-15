@@ -88,6 +88,12 @@ export function parseHeaderHateoasLinks(header: string): LinkType[] {
     return results;
 }
 
+export enum LinkRelType{
+    add = "add",
+    remove = "remove",
+    edit = "edit",
+}
+
 /**
  * A basic client for interacting with the vCloud Director APIs.
  */
@@ -512,6 +518,16 @@ export class VcdApiClient {
             concatMap(() => !multisite ? this.http.get<T>(href) :
                     this.http.get<T>(href, { headers: new HttpHeaders({ _multisite: this.parseMultisiteValue(multisite) }) }))
         );
+    }
+
+  /**
+   * Use to perform action availability check before calling the API
+   * @param item - the navigable item (containing link collection)
+   * @param linkRelType - the link rel type, pass either LinkRelType or string
+   * @param entityRefType - the entity reference type
+   */
+    public canPerformAction(item: Navigable, linkRelType: LinkRelType | string, entityRefType?: string): boolean{
+        return !!this.findLink(item, linkRelType, entityRefType);
     }
 
     private findLink(item: Navigable, rel: string, type: string): LinkType {
