@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as debug from 'debug';
 import { CloudDirectorConfig, DefinedInterfaceApi, DefinedInterfaceBehaviorsApi } from '@vcd/node-client';
 import { BaseTypesDeployer } from './base';
@@ -72,7 +73,8 @@ export class InterfacesDeployer extends BaseTypesDeployer {
         }))
     }
     fileFilter(file: string): boolean {
-        return file.indexOf('interfaces/') > -1
+        return file.split(path.sep).reverse().find(pathElement => 
+            pathElement === "types" || pathElement === "interfaces") === 'interfaces'
     }
 
     async clean(location: string) {

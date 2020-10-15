@@ -5,6 +5,13 @@ import { sync as globSync } from "glob";
 import ClassVisitor from './visitors/ClassVisitor';
 import VisitorContext from './VisitorContext';
 
+const SCHEMA_GENERATOR_PROPERTIES = [
+    "sortProps",
+    "strictTuples",
+    "skipTypeCheck",
+    "encodeRefs",
+    "additionalProperties"
+]
 
 export class Compiler {
     rootDir: string;
@@ -14,6 +21,7 @@ export class Compiler {
     output: any[] = [];
     config: any;
     vendorPrefix: string;
+    schemaGeneratorConfig: any = {}
 
     constructor(files: string[], flags: any) {
         this.config = flags;
@@ -22,6 +30,13 @@ export class Compiler {
         this.fileNames = files && files.length
             ? files.map(file => path.resolve(this.rootDir, file))
             : globSync(path.resolve(this.rootDir, 'src', "**/*.ts"));
+        
+        this.schemaGeneratorConfig = Object.keys(flags)
+            .filter(key => SCHEMA_GENERATOR_PROPERTIES.indexOf(key) > -1)
+            .reduce((acc: any, key: string) => {
+                acc[key] = flags[key]
+                return acc
+            }, this.schemaGeneratorConfig)
     }
 
     private logDiagnostics(diagnostics: readonly ts.Diagnostic[]): void {
@@ -110,7 +125,8 @@ export class Compiler {
             name,
             pjson.nssPrefix,
             pjson.vendor,
-            pjson.version
+            pjson.version,
+            this.schemaGeneratorConfig
         );
         const visitor = new ClassVisitor(context);
 
