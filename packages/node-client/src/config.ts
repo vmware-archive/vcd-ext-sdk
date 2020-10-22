@@ -97,22 +97,34 @@ export class CloudDirectorConfig {
         }
     }
 
+    private updateConfig(
+        configMutation: (config: any) => void,
+        fileLocation?: string) {
+            fileLocation = fileLocation || DEFAULT_CONFIG_LOCATION
+            const dirName = path.dirname(fileLocation)
+            if (!fs.existsSync(dirName)) {
+                log(`Config location doesn't exists. Creating: ${dirName}`)
+                fs.mkdirSync(dirName)
+            }
+            const config = loadConfig(fileLocation) || {}
+            configMutation(config)
+            fs.writeFileSync(fileLocation, JSON.stringify(config))
+    }
+
+    public use(alias: string, fileLocation?: string): void {
+        this.updateConfig((config) => { config.current = alias }, fileLocation)
+    }
+
     public saveConfig(alias: string, fileLocation?: string): void {
-        fileLocation = fileLocation || DEFAULT_CONFIG_LOCATION
-        const dirName = path.dirname(fileLocation)
-        if (!fs.existsSync(dirName)) {
-            log(`Config location doesn't exists. Creating: ${dirName}`)
-            fs.mkdirSync(dirName)
-        }
-        const config = loadConfig(fileLocation) || {}
-        config[alias] = {
-            basePath: this.basePath,
-            username: this.authentication['username'],
-            org: this.authentication['org'],
-            authorizationKey: this.authentication['authorizationKey']
-        }
-        config.current = alias
-        fs.writeFileSync(fileLocation, JSON.stringify(config))
+        this.updateConfig((config) => {
+            config[alias] = {
+                basePath: this.basePath,
+                username: this.authentication['username'],
+                org: this.authentication['org'],
+                authorizationKey: this.authentication['authorizationKey']
+            }
+            config.current = alias    
+        }, fileLocation)
     }
 
     static async withUsernameAndPassword(basePath: string, username: string, org: string, password: string): Promise<CloudDirectorConfig> {
