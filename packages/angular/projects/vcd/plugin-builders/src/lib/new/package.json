@@ -1,0 +1,8 @@
+{
+    "dependencies": {
+        "zip-webpack-plugin": "3.0.0"
+    },
+    "devDependencies": {
+        "@angular-devkit/build-angular": "0.803.29"
+    }
+}
