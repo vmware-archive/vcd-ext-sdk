@@ -1,0 +1,58 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "properties": {
+        "project": {
+            "type": "string",
+            "minLength": 1,
+            "default": "cloud-director-container",
+            "x-prompt": "What is the name of your project?"
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What is the name of your Extension Point Name?"
+        },
+        "description": {
+            "type": "string",
+            "x-prompt": "What is the name of your Extension Point Description?"
+        },
+        "urn": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "What is the name of your Extension Point URN?"
+        },
+        "type": {
+            "type": "string",
+            "default": "navigation:primary",
+            "enum": [
+                "vm-action",
+                "vapp-action",
+                "navigation:datacenter:overview",
+                "navigation:primary",
+                "navigation:applications",
+                "navigation:datacenter:compute",
+                "navigation:datacenter:network",
+                "navigation:datacenter:storage"
+            ],
+            "x-prompt": "What's your Extension Point Type?"
+        },
+        "path": {
+            "type": "string",
+            "x-prompt": "Pass your containing folder"
+        },
+        "uiPluginMainModulePath": {
+            "type": "string",
+            "x-prompt": "Pass the relatiive path to your UI Plugin main module"
+        },
+        "manifest": {
+            "type": "string",
+            "minLength": 1,
+            "x-prompt": "Pass the relative path to your UI Plugin manifest file"
+        }
+    },
+    "required": [
+        "name",
+        "urn",
+        "manifest"
+    ]
+}
