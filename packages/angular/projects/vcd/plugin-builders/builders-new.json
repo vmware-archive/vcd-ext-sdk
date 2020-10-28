@@ -1,0 +1,10 @@
+
+{
+    "builders": {
+        "plugin-builder": {
+            "implementation": "./new/index.js",
+            "schema": "./schema.json",
+            "description": "Build vCloud Director UI Plugin for version 10.1+"
+        }
+    }
+}

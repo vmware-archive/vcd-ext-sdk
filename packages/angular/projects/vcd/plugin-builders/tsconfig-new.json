@@ -2,13 +2,13 @@
     "extends": "../../../tsconfig.json",
     "compilerOptions": {
       "module": "commonjs",
-      "outDir": "../../../dist/vcd/plugin-builders",
+      "outDir": "../../../dist/vcd/plugin-builders-new",
       "importHelpers": false,
       "sourceMap": false,
       "target": "ES2015",
       "skipLibCheck": true
     },
     "include": [
-      "./src/lib/base/**/*.ts"
+      "./src/lib/new/**/*.ts"
     ]
 }

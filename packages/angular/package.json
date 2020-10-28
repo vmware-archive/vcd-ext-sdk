@@ -5,20 +5,26 @@
     "ng": "ng",
     "build": "npm run build:sdk && npm run build:schematics && npm run build:plugin-builders",
     "build:sdk": "ng build @vcd/sdk && npm run sdk:build:prod",
-    "build:plugin-builders": "npm run plugin-builders:install:dev:dep && ng build @vcd/plugin-builders && npm run plugin-builders:build",
+    "build:plugin-builders": "npm run plugin-builders:install:dev:dep && ng build @vcd/plugin-builders && ng build @vcd/plugin-builders-new && npm run plugin-builders:build:schematics && npm run plugin-builders:build && npm run plugin-builders:build:new",
     "build:schematics": "ng build @vcd/schematics && npm run schematics:build:prod",
+
 
     "sdk:build": "tsc -p ./projects/vcd/sdk/tsconfig.schematics.json",
     "sdk:build:prod": "npm run sdk:build && npm run sdk:copy:schemas && npm run sdk:fix:backwards:compatability",
     "sdk:copy:schemas": "cp -R ./projects/vcd/sdk/src/schematics ./dist/vcd/sdk",
     "sdk:fix:backwards:compatability": "node ./scripts/update_packagejson.js",
 
+    "plugin-builders:install:dev:dep": "cd ./projects/vcd/plugin-builders && npm i && cd ./src/lib/new && npm i",
     "plugin-builders:build:schematics": "tsc -p ./projects/vcd/plugin-builders/tsconfig.schematics.json",
-    "plugin-builders:copy:schemas": "cp -R ./projects/vcd/plugin-builders/src/lib/schematics ./dist/vcd/plugin-builders",
-    "plugin-builders:build": "tsc --build ./projects/vcd/plugin-builders/tsconfig.json && npm run plugin-builders:cpy:schema && npm run plugin-builders:cpy:builders && npm run plugin-builders:build:schematics && npm run plugin-builders:copy:schemas",
+
+    "plugin-builders:build": "tsc --build ./projects/vcd/plugin-builders/tsconfig.json && npm run plugin-builders:cpy:schema && npm run plugin-builders:cpy:builders && cp -R ./projects/vcd/plugin-builders/src/lib/schematics ./dist/vcd/plugin-builders",
     "plugin-builders:cpy:schema": "cp ./projects/vcd/plugin-builders/src/lib/base/schema.json ./dist/vcd/plugin-builders",
     "plugin-builders:cpy:builders": "cp ./projects/vcd/plugin-builders/builders.json ./dist/vcd/plugin-builders",
-    "plugin-builders:install:dev:dep": "cd ./projects/vcd/plugin-builders && npm i && cd ./src/lib/new && npm i",
+
+    "plugin-builders:build:new": "tsc --build ./projects/vcd/plugin-builders/tsconfig-new.json && npm run plugin-builders:cpy:schema:new && npm run plugin-builders:cpy:builders:new && cp -R ./projects/vcd/plugin-builders/src/lib/schematics ./dist/vcd/plugin-builders-new",
+    "plugin-builders:cpy:schema:new": "cp ./projects/vcd/plugin-builders/src/lib/new/schema.json ./dist/vcd/plugin-builders-new",
+    "plugin-builders:cpy:builders:new": "cp ./projects/vcd/plugin-builders/builders-new.json ./dist/vcd/plugin-builders-new/builders.json",
+
 
     "schematics:build": "tsc -p ./projects/vcd/schematics/tsconfig.json",
     "schematics:build:prod": "npm run schematics:build && npm run schematics:copy:schemas",

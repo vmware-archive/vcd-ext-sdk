@@ -70,6 +70,33 @@
         }
       }
     },
+    "@vcd/plugin-builders-new": {
+      "projectType": "library",
+      "root": "projects/vcd/plugin-builders",
+      "sourceRoot": "projects/vcd/plugin-builders/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/vcd/plugin-builders/tsconfig.lib.json",
+            "project": "projects/vcd/plugin-builders/ng-package-new.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/vcd/plugin-builders/tsconfig.lib.json",
+              "projects/vcd/plugin-builders/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
     "@vcd/schematics": {
       "projectType": "library",
       "root": "projects/vcd/schematics",
