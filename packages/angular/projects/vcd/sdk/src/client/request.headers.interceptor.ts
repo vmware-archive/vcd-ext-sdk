@@ -58,8 +58,12 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
         return next.handle(customReq).pipe(
             map((res: HttpEvent<any>) => {
                 if (res instanceof HttpResponse) {
-                    if (!res.body || !res.headers) {
+                    if (!res.headers) {
                         return res;
+                    }
+
+                    if (!res.body && res.headers) {
+                        (res as { body: any })["body"] = {};
                     }
 
                     if (res.headers.has("link")) {

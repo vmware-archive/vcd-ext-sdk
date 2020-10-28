@@ -106,6 +106,10 @@ export class VcdApiClient {
         this._baseUrl = _baseUrl;
     }
 
+    private normalizeBaseUrl() {
+        return this._baseUrl ? `${this._baseUrl}/` : ""
+    }
+
     get version(): string {
         return this.http.requestHeadersInterceptor.version;
     }
@@ -243,12 +247,12 @@ export class VcdApiClient {
 
     public get<T>(endpoint: string): Observable<T> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.get<T>(`${this._baseUrl}/${endpoint}`))
+            concatMap(() => this.http.get<T>(`${this.normalizeBaseUrl()}${endpoint}`))
         );
     }
 
     public list<T>(endpoint: string, queryBuilder?: Query.Builder, multisite?: boolean | AuthorizedLocationType[]) {
-        let url = `${this._baseUrl}/${endpoint}`;
+        let url = `${this.normalizeBaseUrl()}${endpoint}`;
 
         if (queryBuilder) {
             url = `${url}${queryBuilder.getCloudAPI()}`
@@ -262,20 +266,20 @@ export class VcdApiClient {
 
     public createSync<T>(endpoint: string, item: T): Observable<T> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.post<T>(`${this._baseUrl}/${endpoint}`, item))
+            concatMap(() => this.http.post<T>(`${this.normalizeBaseUrl()}${endpoint}`, item))
         );
     }
 
     public createAsync<T>(endpoint: string, item: T): Observable<TaskType> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' })),
+            concatMap(() => this.http.post(`${this.normalizeBaseUrl()}${endpoint}`, item, { observe: 'response' })),
             concatMap(response => this.mapResponseToTask(response, 'POST'))
         );
     }
 
     public getTransferLink<T>(endpoint: string, item: T, transferRel: string = TRANSFER_LINK_REL): Observable<string> {
         return this.http
-            .post(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' })
+            .post(`${this.normalizeBaseUrl()}${endpoint}`, item, { observe: 'response' })
             .pipe(
                 map((res: HttpResponse<T & Navigable>) => {
                     const headerLinks: LinkType[] = res.headers.has(HATEOAS_HEADER)
@@ -301,26 +305,26 @@ export class VcdApiClient {
 
     public updateSync<T>(endpoint: string, item: T): Observable<T> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.put<T>(`${this._baseUrl}/${endpoint}`, item))
+            concatMap(() => this.http.put<T>(`${this.normalizeBaseUrl()}${endpoint}`, item))
         );
     }
 
     public updateAsync<T>(endpoint: string, item: T): Observable<TaskType> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.put(`${this._baseUrl}/${endpoint}`, item, { observe: 'response' })),
+            concatMap(() => this.http.put(`${this.normalizeBaseUrl()}${endpoint}`, item, { observe: 'response' })),
             concatMap(response => this.mapResponseToTask(response, 'PUT'))
         );
     }
 
     public deleteSync(endpoint: string): Observable<void> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.delete<void>(`${this._baseUrl}/${endpoint}`))
+            concatMap(() => this.http.delete<void>(`${this.normalizeBaseUrl()}${endpoint}`))
         );
     }
 
     public deleteAsync(endpoint: string): Observable<TaskType> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.delete(`${this._baseUrl}/${endpoint}`, { observe: 'response' })),
+            concatMap(() => this.http.delete(`${this.normalizeBaseUrl()}${endpoint}`, { observe: 'response' })),
             concatMap(response => this.mapResponseToTask(response, 'DELETE'))
         );
     }
