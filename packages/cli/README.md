@@ -19,7 +19,7 @@ $ npm install -g @vcd/ext-cli
 $ vcd-ext COMMAND
 running command...
 $ vcd-ext (-v|--version|version)
-@vcd/ext-cli/0.0.9 darwin-x64 node-v12.18.4
+@vcd/ext-cli/0.0.11 darwin-x64 node-v12.18.4
 $ vcd-ext --help [COMMAND]
 USAGE
   $ vcd-ext COMMAND
@@ -35,6 +35,7 @@ USAGE
 * [`vcd-ext new [NAME]`](#vcd-ext-new-name)
 * [`vcd-ext pack [NAME]`](#vcd-ext-pack-name)
 * [`vcd-ext serve`](#vcd-ext-serve)
+* [`vcd-ext use [ALIAS]`](#vcd-ext-use-alias)
 
 ## `vcd-ext build`
 
@@ -158,5 +159,23 @@ OPTIONS
 
 EXAMPLE
   $ vcd-ext serve
+```
+
+## `vcd-ext use [ALIAS]`
+
+Switch to previously configured session
+
+```
+USAGE
+  $ vcd-ext use [ALIAS]
+
+ARGUMENTS
+  ALIAS  Alias for the session token to switch to
+
+OPTIONS
+  -h, --help  Provides usage for the current command.
+
+EXAMPLE
+  $ vcd-ext use <alias>
 ```
 <!-- commandsstop -->
