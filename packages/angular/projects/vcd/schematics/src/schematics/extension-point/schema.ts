@@ -3,10 +3,9 @@ export interface Schema {
     name: string;
     description: string;
     urn: string;
-    manifest: string;
     type: ExtensionPointType;
-    uiPluginMainModulePath?: string;
-    path?: string;
+    mainModuleFileName?: string;
+    mainModuleSrcPath?: string;
 }
 
 export type ExtensionPointType = "vm-action" | "vapp-action" | "navigation:datacenter:overview" |
