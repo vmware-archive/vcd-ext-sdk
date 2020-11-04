@@ -530,7 +530,7 @@ export class VcdApiClient {
         return !!this.findLink(item, linkRelType, entityRefType);
     }
 
-    private findLink(item: Navigable, rel: string, type: string): LinkType {
+    public findLink(item: Navigable, rel: string, type: string): LinkType {
         if (!item || !item.link) {
             return undefined;
         }
