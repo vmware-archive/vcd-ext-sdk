@@ -2,9 +2,14 @@
   "$schema": "../../../../../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "plugin-seed": {
-      "description": "A blank schematic.",
+      "description": "Plugin Seed",
       "factory": "./plugin-seed/index#pluginSeed",
       "schema": "./plugin-seed/schema.json"
+    },
+    "extension-point": {
+      "description": "Generate Extension Point",
+      "factory": "./extension-point/index#newExtensionPoint",
+      "schema": "./extension-point/schema.json"
     }
   }
 }
