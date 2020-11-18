@@ -7,6 +7,7 @@
 /projects/**/*.js
 /projects/**/*.d.ts
 !schema.d.ts
+!karma.conf.*js
 # Only exists if Bazel was run
 /bazel-out
 build/
