@@ -6,6 +6,7 @@
 /out-tsc
 /projects/**/*.js
 /projects/**/*.d.ts
+!schema.d.ts
 # Only exists if Bazel was run
 /bazel-out
 build/
