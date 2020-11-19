@@ -1,6 +1,6 @@
 {
   "name": "@vcd/angular-sdk",
-  "version": "0.12.0",
+  "version": "0.13.0-alpha.0",
   "scripts": {
     "ng": "ng",
     "build": "npm run build:sdk && npm run build:schematics && npm run build:plugin-builders",
@@ -26,8 +26,7 @@
 
     "test": "ng test",
     "test-ci": "ng test --configuration=test-ci",
-    "lint": "ng lint",
-    "deploy": "cp .npmrc.dist . --rename=.npmrc && npm publish ./dist/vcd/sdk --access public && rimraf .npmrc"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {

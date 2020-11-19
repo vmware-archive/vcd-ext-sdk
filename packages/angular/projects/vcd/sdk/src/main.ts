@@ -2,8 +2,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgModule } from '@angular/core';
 import {CommonModule } from '@angular/common';
 
-import * as client from './client';
-import * as query from './query';
+import * as client from '@vcd/angular-client';
+import * as query from '@vcd/angular-client';
 import * as common from './common';
 import * as core from './core';
 import * as i18n from './i18n';

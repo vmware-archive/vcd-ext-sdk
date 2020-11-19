@@ -3,7 +3,7 @@
  */
 
 export * from './main';
-export * from './client';
+export * from '@vcd/angular-client/client';
 export * from './common';
 export * from './core';
-export * from './query';
+export * from '@vcd/angular-client/query';

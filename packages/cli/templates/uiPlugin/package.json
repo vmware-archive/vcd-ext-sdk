@@ -52,7 +52,7 @@
     "@types/node": "8.9.4",
     "@vcd/ext-cli": "0.0.11",
     "@vcd/plugin-builders": "0.12.1",
-    "@vcd/ui-emulator": "0.0.5",
+    "@vcd/ui-emulator": "0.0.6-alpha.1",
     "codelyzer": "4.3.0",
     "jasmine-core": "2.99.1",
     "jasmine-spec-reporter": "4.2.1",
