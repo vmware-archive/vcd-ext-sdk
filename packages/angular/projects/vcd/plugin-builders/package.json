@@ -18,6 +18,6 @@
   },
   "publishConfig": {
     "access": "public",
-    "directory": "../dist/vcd/plugin-builders"
+    "directory": "../../../dist/vcd/plugin-builders"
   }
 }
