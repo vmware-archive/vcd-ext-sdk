@@ -1,2 +1,2 @@
-export * from "./Compiler"
-export * from "./model/AccessControl"
+export * from './Compiler';
+export * from './model/AccessControl';

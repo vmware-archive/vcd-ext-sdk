@@ -58,5 +58,5 @@ describe('TranslateService', () => {
             'key=with-2-args,args=["arg1","arg2"]',
             'key=with-arg-array,args=[["arg1","arg2"]]',
         ]);
-    })
+    });
 });

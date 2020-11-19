@@ -1,5 +1,5 @@
 import { Injectable, PipeTransform, Pipe, ChangeDetectorRef } from '@angular/core';
-import { TranslateService } from "./translate.service";
+import { TranslateService } from './translate.service';
 
 @Injectable()
 @Pipe({
@@ -7,18 +7,18 @@ import { TranslateService } from "./translate.service";
     pure: false
 })
 export class TranslatePipe implements PipeTransform {
-    private value: string = '';
-    private lastKey: string = '';
+    private value = '';
+    private lastKey = '';
     private lastArgs: any[] = [];
 
     constructor(private translate: TranslateService, private changeDetector: ChangeDetectorRef) { }
 
     transform(key: string, ...args: any[]): any {
-        if (!key || key.length == 0) {
+        if (!key || key.length === 0) {
             return key;
         }
 
-        if (key == this.lastKey && args == this.lastArgs) {
+        if (key === this.lastKey && args === this.lastArgs) {
             return this.value;
         }
 

@@ -3,12 +3,12 @@ import {
     importExtensionPointComponentToModule,
     updateUiPluginManifest,
     addExports,
-} from "../schematic-steps";
-import { ExtensionPointDefinition } from "../interfaces";
+} from '../schematic-steps';
+import { ExtensionPointDefinition } from '../interfaces';
 
 export const NAVIGATION_DATACENTER_AND_APPLICATION_CONFIG: ExtensionPointDefinition = {
     template: {
-        name: "view-extension-point",
+        name: 'view-extension-point',
     },
     schematicSteps: [
         createExtensionPointFiles,

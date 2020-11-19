@@ -7,18 +7,18 @@ class MockTranslationLoader extends TranslationLoader {
         super(null, '');
     }
 
-    getCombinedTranslation(): Observable<Object> {
+    getCombinedTranslation(): Observable<any> {
         const translation = {
-            'en': {
-                "duration": "{0} hours {1} minutes"
+            en: {
+                duration: '{0} hours {1} minutes'
             }
         };
         return of(translation);
     }
 }
 
-describe('TranslateService', function () {
-    it('should accept 2 arguments', function () {
+describe('TranslateService', () => {
+    it('should accept 2 arguments', () => {
         const loader = new MockTranslationLoader();
         const translate = new TranslateService(loader);
 

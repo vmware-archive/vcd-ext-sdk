@@ -1,9 +1,9 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import VisitorContext from '../VisitorContext';
 import TypeVisitor from './TypeVisitor';
 import InterfaceVisitor from './InterfaceVisitor';
 
-const TAGS: string[] = ["definedEntityType", "definedEntityInterface"];
+const TAGS: string[] = ['definedEntityType', 'definedEntityInterface'];
 
 export default class ClassVisitor {
 
@@ -12,6 +12,7 @@ export default class ClassVisitor {
 
     private isNodeExported(node: ts.Declaration): boolean {
         return (
+            // tslint:disable-next-line: no-bitwise
             (ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export) !== 0 ||
             (!!node.parent && node.parent.kind === ts.SyntaxKind.SourceFile)
         );
@@ -19,8 +20,8 @@ export default class ClassVisitor {
 
     private isExtensibilityType(node: ts.Node): boolean {
         return ts.getJSDocTags(node).some(jsDocTag => {
-            return TAGS.indexOf(jsDocTag.tagName ? jsDocTag.tagName.escapedText.toString() : "") > -1
-        })
+            return TAGS.indexOf(jsDocTag.tagName ? jsDocTag.tagName.escapedText.toString() : '') > -1;
+        });
     }
 
     visit(node: ts.Node) {

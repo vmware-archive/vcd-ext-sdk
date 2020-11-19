@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { ExtensionNavRegistration, ExtensionNavRegistrationAction } from '../common';
-import { TranslateService } from "../i18n";
+import { TranslateService } from '../i18n';
 
 export class PluginModule {
     private translate: TranslateService;

@@ -1,9 +1,9 @@
 export function AccessControl(value: string) {
-    return function (
+    return (
         target: any,
         propertyKey: string,
         descriptor: PropertyDescriptor
-    ) {
-        //does nothing
+    ) => {
+        // does nothing
     };
 }

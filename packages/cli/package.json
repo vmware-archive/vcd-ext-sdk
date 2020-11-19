@@ -38,7 +38,8 @@
     "@types/yeoman-generator": "^3.0.2",
     "@types/yosay": "^0.0.29",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "tslint": "5.15.0"
   },
   "engines": {
     "node": ">=10.12.0"
@@ -66,7 +67,7 @@
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
     "build": "tsc",
-    "setup-dev": "npm link"
+    "lint": "tslint 'src/**/*.ts'"
   },
   "types": "lib/index.d.ts"
 }
