@@ -1,8 +1,7 @@
 # This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
 # For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
-# TODO: this is currently broken, we need to figure out how to do `lerna publish --dry-run`
 
-name: 'SDK Publish'
+name: 'Angular API client Publish'
 
 on:
   release:
@@ -13,8 +12,11 @@ jobs:
     if: ${{ github.event.action == 'prereleased' && startsWith(github.event.release.target_commitish, 'angular-') }}
     defaults:
       run:
-        working-directory: './'
+        working-directory: './api-client/'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        packages: ['sdk', 'schematics', 'plugin-builders']
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -22,16 +24,15 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm run bootstrap
-      - run: npm run build --if-present
-      - run: npm run publish --dry-run --access public
+      - run: npm run build:${{ matrix.packages }} --if-present
+      - run: npm publish dist/vcd/${{ matrix.packages }} --dry-run --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
   publish-npm-packages:
     if: ${{ github.event.action == 'released' && startsWith(github.event.release.target_commitish, 'angular-') }}
     defaults:
       run:
-        working-directory: './'
+        working-directory: './api-client/'
     runs-on: ubuntu-latest
     strategy:
       matrix:
