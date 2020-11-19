@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/vmware/vcd-ext-sdk.svg?branch=master)](https://travis-ci.org/vmware/vcd-ext-sdk)
+![Build Status](https://github.com/vmware/vcd-ext-sdk/workflows/Development%20Workflow/badge.svg)]
 
 # vcd-ext-sdk
 
