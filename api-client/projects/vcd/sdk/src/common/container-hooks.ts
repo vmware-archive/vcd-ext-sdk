@@ -178,3 +178,16 @@ export abstract class _EntityActionExtensionComponent {
      abstract performAction(menuItemUrn: string, entityUrn: string): Observable<{ refreshRequested: boolean }>;
 }
 export const EntityActionExtensionComponent: typeof _EntityActionExtensionComponent = containerHooks.EntityActionExtensionComponent;
+
+export abstract class _WizardExtensionComponent<P, R, E> {
+    /**
+     * Define method which will be executed by the Extension Point Orchestrator,
+     * when certain event is triggered.
+     * @param payload - the payload of the request triggered by the Core UI.
+     * @param response - the response from the request triggered by the Core UI.
+     * @param error - the Core UI will reprot any error that may appear during execution.
+     */
+    abstract performAction(payload: P, response: R, error: E): void;
+}
+
+export const WizardExtensionComponent: typeof _WizardExtensionComponent = containerHooks.WizardExtensionComponent;
