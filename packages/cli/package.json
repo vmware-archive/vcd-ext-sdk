@@ -69,5 +69,8 @@
     "build": "tsc",
     "lint": "tslint 'src/**/*.ts'"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  }
 }
