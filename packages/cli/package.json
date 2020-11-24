@@ -1,8 +1,9 @@
 {
   "name": "@vcd/ext-cli",
   "description": "CLI tool for working with Cloud Director extensions",
-  "version": "0.0.11",
-  "author": "mslavov@vmware.com",
+  "version": "0.0.12-alpha.0",
+  "author": "VMware",
+  "license": "BSD-2",
   "bin": {
     "vcd-ext": "./bin/run"
   },
@@ -10,8 +11,8 @@
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
     "@oclif/plugin-help": "^2.2.1",
-    "@vcd/ext-compiler": "0.0.2",
-    "@vcd/node-client": "0.0.3",
+    "@vcd/ext-compiler": "0.0.3-alpha.0",
+    "@vcd/node-client": "0.0.5-alpha.1",
     "adm-zip": "^0.4.16",
     "camelcase": "^6.0.0",
     "debug": "^4.2.0",
@@ -37,7 +38,8 @@
     "@types/yeoman-generator": "^3.0.2",
     "@types/yosay": "^0.0.29",
     "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "tslint": "5.15.0"
   },
   "engines": {
     "node": ">=10.12.0"
@@ -52,7 +54,6 @@
   "keywords": [
     "oclif"
   ],
-  "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
@@ -66,7 +67,7 @@
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
     "build": "tsc",
-    "setup-dev": "npm link"
+    "lint": "tslint 'src/**/*.ts'"
   },
   "types": "lib/index.d.ts"
 }

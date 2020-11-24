@@ -4,12 +4,12 @@ import {
     addExportsForPrimary,
     updateAngularJson,
     updatePluginRegistrations,
-} from "../schematic-steps";
-import { ExtensionPointDefinition } from "../interfaces";
+} from '../schematic-steps';
+import { ExtensionPointDefinition } from '../interfaces';
 
 export const NAVIGATION_PRIMARY_CONFIG: ExtensionPointDefinition = {
     template: {
-        name: "module-extension-point",
+        name: 'module-extension-point',
     },
     schematicSteps: [
         createExtensionPointFiles,

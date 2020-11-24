@@ -1,5 +1,5 @@
 export interface LibrariesConfig {
-    [libName:string]: {
+    [libName: string]: {
         version: string;
         scope: LibraryConfigScopeTypes,
         location: string;
@@ -9,11 +9,11 @@ export interface LibrariesConfig {
         // The context is used to define in whihc sub project the builder has to search for
         // your library.
         context: string;
-    }
+    };
 }
 
-export type LibraryConfigScopeTypes = "external" | "bundled" | "isolated";
-export const LibraryConfigScopes = ["external", "bundled", "isolated"];
+export type LibraryConfigScopeTypes = 'external' | 'bundled' | 'isolated';
+export const LibraryConfigScopes = ['external', 'bundled', 'isolated'];
 
 /**
  * The contents of a third party extension's manifest.json file.
@@ -116,7 +116,7 @@ export interface ExtensionManifest {
     };
 }
 
-export type ExtensionLibScope = "external" | "bundled" | "isolated";
+export type ExtensionLibScope = 'external' | 'bundled' | 'isolated';
 
 /**
  * This defines a formal extension point.  An extension point is a declarative way for an extension manifest
@@ -157,26 +157,26 @@ export interface ExtensionPointManifest {
 /**
  * Supported extension scopes.
  */
-export type ExtensionScope = "tenant" | "service-provder";
+export type ExtensionScope = 'tenant' | 'service-provder';
 
 export interface BasePluginBuilderSchema {
     enableRuntimeDependecyManagement: boolean;
-  	/**
-	 * A string of the form `path/to/file#exportName`
-		 * that acts as a path to include to bundle.
-	 */
-	modulePath: string;
-	/**
-	 * List of external libraries defined by the user.
-	 */
-	externalLibs: string[];
-	/**
-	 * Will disable the default external libraries,
-	 * allowing the user to define his own thanks to externalLibs property.
-	 */
-	ignoreDefaultExternals: boolean;
-	/**
-	 * List of libraries determining thier version, scope and file name (location). 
-	 */
-	librariesConfig: LibrariesConfig;
+    /**
+     * A string of the form `path/to/file#exportName`
+     * that acts as a path to include to bundle.
+     */
+    modulePath: string;
+    /**
+     * List of external libraries defined by the user.
+     */
+    externalLibs: string[];
+    /**
+     * Will disable the default external libraries,
+     * allowing the user to define his own thanks to externalLibs property.
+     */
+    ignoreDefaultExternals: boolean;
+    /**
+     * List of libraries determining thier version, scope and file name (location).
+     */
+    librariesConfig: LibrariesConfig;
 }

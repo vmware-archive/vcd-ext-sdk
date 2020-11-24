@@ -1,1 +1,1 @@
-export { Deployer } from './deployer'
+export { Deployer } from './deployer';

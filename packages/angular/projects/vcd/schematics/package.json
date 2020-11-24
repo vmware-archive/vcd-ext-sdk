@@ -1,10 +1,9 @@
 {
   "name": "@vcd/schematics",
-  "version": "0.12.0",
+  "version": "0.12.1-alpha.0",
   "description": "Angular CLI-compatible schematics for building Cloud Director UI plugins.",
   "author": "VMware",
   "license": "BSD-2-Clause",
-  "description": "Generate vCloud Director UI plugin specific version",
   "keywords": [
     "schematics"
   ],
@@ -13,5 +12,9 @@
     "@angular-devkit/core": "7.3.8",
     "@angular-devkit/schematics": "7.3.8",
     "@schematics/angular": "9.1.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "../../../dist/vcd/schematics"
   }
 }

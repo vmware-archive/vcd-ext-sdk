@@ -1,15 +1,20 @@
-import { Schema } from "./schema";
-import { updateJsonFile, buildDefaultPath, readIntoSourceFile, buildRelativePath, insertExport, getSourceFile } from "../utils";
-import { Rule, template, move, mergeWith, apply, url, Tree, SchematicContext, SchematicsException } from "@angular-devkit/schematics";
-import { getWorkspace, updateWorkspace } from "@schematics/angular/utility/config";
-import { EXTENSION_POINTS_DEFINITIONS } from "./extension-point-types.config";
-import { strings } from "@angular-devkit/core";
-import { normalize } from "path";
-import { dasherize, classify } from "@angular-devkit/core/src/utils/strings";
-import { addDeclarationToModule, addExportToModule, addEntryComponentToModule, getSourceNodes } from "@schematics/angular/utility/ast-utils";
-import { InsertChange, Change } from "@schematics/angular/utility/change";
-import { ExtensionPointManifest, Manifest } from "./interfaces";
-import { SyntaxKind, SourceFile } from "@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript";
+import { Schema } from './schema';
+import { updateJsonFile, buildDefaultPath, readIntoSourceFile, buildRelativePath, insertExport, getSourceFile } from '../utils';
+import { Rule, template, move, mergeWith, apply, url, Tree, SchematicContext, SchematicsException } from '@angular-devkit/schematics';
+import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
+import { EXTENSION_POINTS_DEFINITIONS } from './extension-point-types.config';
+import { strings } from '@angular-devkit/core';
+import { normalize } from 'path';
+import { dasherize, classify } from '@angular-devkit/core/src/utils/strings';
+import {
+    addDeclarationToModule,
+    addExportToModule,
+    addEntryComponentToModule,
+    getSourceNodes
+} from '@schematics/angular/utility/ast-utils';
+import { InsertChange, Change } from '@schematics/angular/utility/change';
+import { ExtensionPointManifest, Manifest } from './interfaces';
+import { SyntaxKind, SourceFile } from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
 export function createExtensionPointFiles(options: Schema): Rule {
     return (host: Tree) => {
@@ -20,7 +25,7 @@ export function createExtensionPointFiles(options: Schema): Rule {
             options.mainModuleSrcPath = buildDefaultPath(project);
         }
 
-        const definition = EXTENSION_POINTS_DEFINITIONS[options.type]
+        const definition = EXTENSION_POINTS_DEFINITIONS[options.type];
 
         const sourceTemplates = url(`./templates/${definition.template.name}`);
         const sourceParametrizedTemplates = apply(sourceTemplates, [
@@ -32,7 +37,7 @@ export function createExtensionPointFiles(options: Schema): Rule {
         ]);
 
         return mergeWith(sourceParametrizedTemplates);
-    }
+    };
 }
 
 export function importExtensionPointComponentToModule(options: Schema): Rule {
@@ -40,12 +45,12 @@ export function importExtensionPointComponentToModule(options: Schema): Rule {
         if (!options.mainModuleFileName || !options.mainModuleSrcPath) {
             return host;
         }
-        
-        const pathToMainModule = normalize(`${options.mainModuleSrcPath}/main/${options.mainModuleFileName}`)
+
+        const pathToMainModule = normalize(`${options.mainModuleSrcPath}/main/${options.mainModuleFileName}`);
 
         // Add to declarations
         let source = readIntoSourceFile(host, pathToMainModule);
-        
+
         const componentPath = absComponentPath(options);
         const modulePath = absMainModulePath(options);
         const relativePath = buildRelativePath(modulePath, componentPath);
@@ -58,7 +63,7 @@ export function importExtensionPointComponentToModule(options: Schema): Rule {
             classifiedName,
             relativePath
         );
-    
+
         const declarationRecorder = host.beginUpdate(relativeMainModulePath);
         for (const change of declarationChanges) {
             if (change instanceof InsertChange) {
@@ -73,7 +78,7 @@ export function importExtensionPointComponentToModule(options: Schema): Rule {
         source = readIntoSourceFile(host, relativeMainModulePath);
         const exportRecorder = host.beginUpdate(relativeMainModulePath);
         const exportChanges = addExportToModule(source, relativeMainModulePath, classifiedName, relativePath);
-    
+
         for (const change of exportChanges) {
             if (change instanceof InsertChange) {
                 exportRecorder.insertLeft(change.pos, change.toAdd);
@@ -81,13 +86,14 @@ export function importExtensionPointComponentToModule(options: Schema): Rule {
         }
         host.commitUpdate(exportRecorder);
 
-        
+
         // Add to entry components
         // Need to refresh the AST because we overwrote the file in the host.
         source = readIntoSourceFile(host, relativeMainModulePath);
         const entryComponentRecorder = host.beginUpdate(relativeMainModulePath);
+        // tslint:disable-next-line: deprecation
         const entryComponentChanges = addEntryComponentToModule(source, relativeMainModulePath, classifiedName, relativePath);
-    
+
         for (const change of entryComponentChanges) {
             if (change instanceof InsertChange) {
                 entryComponentRecorder.insertLeft(change.pos, change.toAdd);
@@ -111,7 +117,7 @@ export function addExports(options: Schema): Rule {
         // Add exports * from created extension point file
         const source = readIntoSourceFile(host, relativeMainModulePath);
         const mainFileRecorder = host.beginUpdate(relativeMainModulePath);
-        const changes = [insertExport(source, relativeMainModulePath, relativePath)]
+        const changes = [insertExport(source, relativeMainModulePath, relativePath)];
         for (const change of changes) {
             if (change instanceof InsertChange) {
                 mainFileRecorder.insertLeft(change.pos, change.toAdd);
@@ -119,8 +125,8 @@ export function addExports(options: Schema): Rule {
         }
         host.commitUpdate(mainFileRecorder);
 
-        return host
-    }
+        return host;
+    };
 }
 
 export function addExportsForPrimary(options: Schema): Rule {
@@ -137,7 +143,7 @@ export function addExportsForPrimary(options: Schema): Rule {
         // Add exports * from created extension point file
         const source = readIntoSourceFile(host, relativeMainModulePath);
         const mainFileRecorder = host.beginUpdate(relativeMainModulePath);
-        const changes = [insertExport(source, relativeMainModulePath, relativePath)]
+        const changes = [insertExport(source, relativeMainModulePath, relativePath)];
         for (const change of changes) {
             if (change instanceof InsertChange) {
                 mainFileRecorder.insertLeft(change.pos, change.toAdd);
@@ -145,8 +151,8 @@ export function addExportsForPrimary(options: Schema): Rule {
         }
         host.commitUpdate(mainFileRecorder);
 
-        return host
-    }
+        return host;
+    };
 }
 
 export function updateUiPluginManifest(options: Schema): Rule {
@@ -168,9 +174,9 @@ export function updateUiPluginManifest(options: Schema): Rule {
 
             extPoint.component = `${classify(options.name)}Component`;
 
-            manifest.extensionPoints.push(extPoint)
+            manifest.extensionPoints.push(extPoint);
         });
-    }
+    };
 }
 
 export function updateUiPluginManifestForPrimary(options: Schema) {
@@ -193,9 +199,9 @@ export function updateUiPluginManifestForPrimary(options: Schema) {
             extPoint.module = `${classify(options.name)}Module`;
             extPoint.route = `${dasherize(options.name)}-route`;
 
-            manifest.extensionPoints.push(extPoint)
+            manifest.extensionPoints.push(extPoint);
         });
-    }
+    };
 }
 
 export function updateAngularJson(options: Schema) {
@@ -205,39 +211,39 @@ export function updateAngularJson(options: Schema) {
         }
 
         const workspaceConfig = getWorkspace(host);
-        
+
         if (!workspaceConfig) {
             throw new SchematicsException('Could not find Angular workspace configuration');
         }
-    
+
         if (!options.project || !workspaceConfig.projects[options.project]) {
-            throw new SchematicsException(`Could not find Angular Project with name ${options.project} in your workspace`); 
+            throw new SchematicsException(`Could not find Angular Project with name ${options.project} in your workspace`);
         }
-    
+
         if (!workspaceConfig.projects[options.project].architect) {
             throw new SchematicsException('Could not find Angular architect configuration in your workspace');
         }
-    
+
         let lazyModules: string[] = (workspaceConfig.projects as any)[options.project].architect.build.options.lazyModules;
-    
+
         if (!lazyModules || !lazyModules.length) {
             lazyModules = [];
         }
-    
+
         const moduleToAdd = normalize(
-            `${options.mainModuleSrcPath.replace("./", "")}` +
-            "/main/" +
+            `${options.mainModuleSrcPath.replace('./', '')}` +
+            '/main/' +
             `${dasherize(options.name)}/${dasherize(options.name)}.module`
         );
-    
+
         if (lazyModules.indexOf(moduleToAdd) === -1) {
             lazyModules.push(moduleToAdd);
         }
-    
+
         (workspaceConfig.projects as any)[options.project].architect.build.options.lazyModules = lazyModules;
-    
+
         return updateWorkspace(workspaceConfig)(host, context as any) as any;
-    }
+    };
 }
 
 export function updatePluginRegistrations(options: Schema) {
@@ -255,7 +261,7 @@ export function updatePluginRegistrations(options: Schema) {
         const changes: Change[] = [
             addNewPlugin(options, pluginConfig)
         ];
-        
+
         const recorder = host.beginUpdate(`src/plugins/index.ts`);
 
         changes.forEach((change: any) => {
@@ -267,20 +273,21 @@ export function updatePluginRegistrations(options: Schema) {
         host.commitUpdate(recorder);
 
         return host;
-    }
+    };
 }
 
 function addNewPlugin(options: Schema, pluginConfig: SourceFile) {
     const arr = getSourceNodes(pluginConfig).filter((node) => {
-      return node.kind === SyntaxKind.CloseBracketToken
+      return node.kind === SyntaxKind.CloseBracketToken;
     });
-  
+
     const lastPluginItem = arr[arr.length - 1].getStart() - 1;
-  
+
     return new InsertChange(
       `src/plugins/index.ts`,
       lastPluginItem,
-      `\tnew PluginRegistration("${(options.mainModuleSrcPath as string).replace("./", "")}", "main/${dasherize(options.name)}/${dasherize(options.name)}.module#${strings.classify(options.name)}Module", "${strings.classify(options.name)}"),\n`)
+      // tslint:disable-next-line: max-line-length
+      `\tnew PluginRegistration("${(options.mainModuleSrcPath as string).replace('./', '')}", "main/${dasherize(options.name)}/${dasherize(options.name)}.module#${strings.classify(options.name)}Module", "${strings.classify(options.name)}"),\n`);
 }
 
 // Common Functions
@@ -292,25 +299,25 @@ function mainifstExtensionPointsSafeGuard(manifest: Manifest) {
 
 function patchContainerVersion(manifest: Manifest) {
     // VCD Platform supports extension points only for container version 9.5.0
-    if (manifest.containerVersion !== "9.5.0") {
-        manifest.containerVersion = "9.5.0";
+    if (manifest.containerVersion !== '9.5.0') {
+        manifest.containerVersion = '9.5.0';
     }
 }
 
 function absMainModulePath(options: Schema) {
-    return normalize(`${(options.mainModuleSrcPath as string).replace(".", "/")}/main/${options.mainModuleFileName}`);
+    return normalize(`${(options.mainModuleSrcPath as string).replace('.', '/')}/main/${options.mainModuleFileName}`);
 }
 
 function absComponentPath(options: Schema) {
     return normalize(
-        (options.mainModuleSrcPath as string).replace(".", "/") +
+        (options.mainModuleSrcPath as string).replace('.', '/') +
         `/main/${dasherize(options.name)}/${dasherize(options.name)}.component`
     );
 }
 
 function absModulePath(options: Schema) {
     return normalize(
-        (options.mainModuleSrcPath as string).replace(".", "/") +
+        (options.mainModuleSrcPath as string).replace('.', '/') +
         `/main/${dasherize(options.name)}/${dasherize(options.name)}.module`
     );
 }

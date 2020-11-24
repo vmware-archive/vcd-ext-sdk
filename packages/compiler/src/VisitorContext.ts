@@ -1,14 +1,14 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import * as sg from 'ts-json-schema-generator';
 import debug from 'debug';
 
-const log = debug('vcd:ext:compiler:visitorcontext')
+const log = debug('vcd:ext:compiler:visitorcontext');
 
 export default class VisitorContext {
     output = {
         types: {},
         interfaces: {}
-    }
+    };
     sg: sg.SchemaGenerator;
     typeChecker: ts.TypeChecker;
 
@@ -17,7 +17,7 @@ export default class VisitorContext {
                 public nssPrefix: string,
                 public vendor: string,
                 public version: string,
-                private schemaGeneratorConfig: sg.Config = {}){
+                private schemaGeneratorConfig: sg.Config = {}) {
         this.typeChecker = program.getTypeChecker();
     }
 
@@ -29,8 +29,8 @@ export default class VisitorContext {
                 jsDoc: 'extended',
                 extraTags: [],
                 ...this.schemaGeneratorConfig
-            }
-            log("Creating schema generator with config", config);
+            };
+            log('Creating schema generator with config', config);
             const parser = sg.createParser(this.program, config);
             this.sg = new sg.SchemaGenerator(this.program, parser, sg.createFormatter(config));
         }

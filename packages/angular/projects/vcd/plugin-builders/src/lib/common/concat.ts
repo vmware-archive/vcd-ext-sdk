@@ -1,4 +1,4 @@
-import { RawSource } from "webpack-sources";
+import { RawSource } from 'webpack-sources';
 
 export interface ConcatWebpackPluginOptions {
     concat: {
@@ -40,13 +40,13 @@ export class ConcatWebpackPlugin {
                     const sourcesToConcat = obj.inputs.map((input) => {
                         const source = compilation.assets[input].source();
                         delete compilation.assets[input];
-                        return Buffer.isBuffer(source) ? source : new Buffer(source)
+                        return Buffer.isBuffer(source) ? source : new Buffer(source);
                     });
 
                     return {
                         output: obj.output,
                         sourcesToConcat
-                    }
+                    };
                 })
                 .map((asset) => {
                     return {

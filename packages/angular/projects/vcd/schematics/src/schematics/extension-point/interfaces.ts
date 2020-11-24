@@ -1,5 +1,5 @@
-import { Rule } from "@angular-devkit/schematics";
-import { Schema } from "./schema";
+import { Rule } from '@angular-devkit/schematics';
+import { Schema } from './schema';
 
 export  interface Manifest {
     containerVersion: string;
@@ -56,6 +56,6 @@ export interface ExtensionPointDefinition {
         name: TEMPLATE_TYPE;
     };
     schematicSteps: ((options: Schema) => Rule)[];
-};
+}
 
-export type TEMPLATE_TYPE = "entity-action-extension-point" | "module-extension-point" | "view-extension-point";
+export type TEMPLATE_TYPE = 'entity-action-extension-point' | 'module-extension-point' | 'view-extension-point';

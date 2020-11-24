@@ -8,6 +8,6 @@ export interface Schema {
     mainModuleSrcPath?: string;
 }
 
-export type ExtensionPointType = "vm-action" | "vapp-action" | "navigation:datacenter:overview" |
-    "navigation:primary" | "navigation:applications" | "navigation:datacenter:compute" | "navigation:datacenter:network" |
-    "navigation:datacenter:storage";
+export type ExtensionPointType = 'vm-action' | 'vapp-action' | 'navigation:datacenter:overview' |
+    'navigation:primary' | 'navigation:applications' | 'navigation:datacenter:compute' | 'navigation:datacenter:network' |
+    'navigation:datacenter:storage';

@@ -1,3 +1,3 @@
 export enum ElementType {
-    types='types', uiPlugin='uiPlugin'
+    types= 'types', uiPlugin= 'uiPlugin'
 }
