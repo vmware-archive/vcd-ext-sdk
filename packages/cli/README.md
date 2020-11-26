@@ -19,7 +19,7 @@ $ npm install -g @vcd/ext-cli
 $ vcd-ext COMMAND
 running command...
 $ vcd-ext (-v|--version|version)
-@vcd/ext-cli/0.0.12-alpha.0 darwin-x64 node-v12.18.4
+@vcd/ext-cli/0.0.12-alpha.1 darwin-x64 node-v12.18.4
 $ vcd-ext --help [COMMAND]
 USAGE
   $ vcd-ext COMMAND
@@ -55,7 +55,7 @@ EXAMPLE
 
 ## `vcd-ext deploy [NAME]`
 
-Deploys extensibility entities to previously logged in vCD instance. If a file is provided it deployes from the file, otherwise it needs to be run in the context of a solution projects.
+Deploys extensibility entities to previously logged in vCD instance.
 
 ```
 USAGE
@@ -65,6 +65,9 @@ OPTIONS
   -f, --force  If provided it will first try to remove all objects if present and recreated them.
   -h, --help   Provides usage for the current command.
   --only=only  Comma separated list of subcomponent names to be deployed. If not provided it deployes all subcomponents.
+
+DESCRIPTION
+  If a file is provided it deployes from the file, otherwise it needs to be run in the context of a solution projects.
 
 EXAMPLES
   $ vcd-ext deploy
@@ -129,7 +132,7 @@ EXAMPLE
 
 ## `vcd-ext pack [NAME]`
 
-Packages the contents of the solution project into a CARE package. File name can be provided as optional parameter.
+Packages the contents of the solution project into a CARE package.
 
 ```
 USAGE
@@ -140,6 +143,9 @@ ARGUMENTS
 
 OPTIONS
   -h, --help  Provides usage for the current command.
+
+DESCRIPTION
+  File name can be provided as optional parameter.
 
 EXAMPLES
   $ vcd-ext pack
