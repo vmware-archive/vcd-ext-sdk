@@ -6,7 +6,7 @@
     "vcd",
     "extension"
   ],
-  "author": "vCloud Directory Extensions CLI",
+  "author": "VMware Cloud Directory Extensions CLI",
   "private": true,
   "engines": {
     "node": ">= 10.14.2"
@@ -16,7 +16,7 @@
   ],
   "devDependencies": {
     "lerna": "^3.22.1",
-    "@vcd/ext-cli": "0.0.11"
+    "@vcd/ext-cli": "0.0.12-alpha.2"
   },
   "dependencies": {},
   "scripts": {
