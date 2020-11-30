@@ -50,7 +50,7 @@
     "@types/jasmine": "2.8.8",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "8.9.4",
-    "@vcd/ext-cli": "0.0.12-alpha.2",
+    "@vcd/ext-cli": "0.0.12-alpha.3",
     "@vcd/plugin-builders": "0.12.1-alpha.1",
     "@vcd/ui-emulator": "0.0.6-alpha.1",
     "codelyzer": "4.3.0",
