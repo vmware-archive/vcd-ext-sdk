@@ -9,7 +9,6 @@
       "skipLibCheck": true
     },
     "include": [
-      "./src/lib/base/**/*.ts",
-      "./src/lib/new/**/*.ts"
+      "./src/lib/base/**/*.ts"
     ]
 }

@@ -9,6 +9,6 @@
     "vendor": "<%- components.uiPlugin.vendor %>",
     "license": "<%- answers.license %>",
     "link": "<%- answers.link %>",
-    "module": "Description for <%- nameCamelCase %>PluginModule",
+    "module": "<%- nameCamelCase %>PluginModule",
     "route": "<%- name %>"
 }

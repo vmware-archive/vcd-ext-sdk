@@ -29,7 +29,7 @@
             "sourceMap": false,
             "extractCss": false,
             "namedChunks": false,
-            "aot": true,
+            "aot": false,
             "extractLicenses": false,
             "vendorChunk": false,
             "buildOptimizer": false
