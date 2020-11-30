@@ -35,7 +35,6 @@
     "@angular/router": "8.2.14",
     "@ngrx/core": "1.2.0",
     "@ngrx/store": "9.1.0",
-    "@vcd/angular-client": "file:../../../cloud-director-typescript-clients/packages/angular/dist/vcd-angular-client-0.0.2-alpha.1.tgz",
     "@vcd/bindings": "9.1.1",
     "rxjs": "6.4.0",
     "rxjs-compat": "6.5.5",
