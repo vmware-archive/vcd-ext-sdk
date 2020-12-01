@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { VcdApiClient } from '@vcd/sdk';
 import { EXTENSION_ASSET_URL } from '@vcd/sdk/common';
-import { Query } from "@vcd/sdk/query";
+import { Query } from "@vcd/sdk";
 import { Observable } from "rxjs";
 
 @Component({

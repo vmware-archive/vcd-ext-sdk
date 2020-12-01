@@ -3,23 +3,14 @@ import {NgModule } from '@angular/core';
 import {CommonModule } from '@angular/common';
 
 import * as client from '@vcd/angular-client';
-import * as query from '@vcd/angular-client';
 import * as common from './common';
 import * as core from './core';
 import * as i18n from './i18n';
 
-// These exports, for legacy reasons, are exposed at the top level.
-import VcdApiClient = client.VcdApiClient;
-import ApiResultService = client.ApiResultService;
-
 export {
-  client,
   common,
   core,
   i18n,
-  query,
-  VcdApiClient,
-  ApiResultService,
 };
 
 /**

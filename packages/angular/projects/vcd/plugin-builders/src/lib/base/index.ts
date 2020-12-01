@@ -1,13 +1,18 @@
-import { BuilderConfiguration, BuildEvent } from '@angular-devkit/architect';
-import {
-  BrowserBuilder,
-  NormalizedBrowserBuilderSchema
-} from '@angular-devkit/build-angular';
-import { Path, virtualFs } from '@angular-devkit/core';
+/**
+ * This new version of the builder shims the basics which
+ * has to be covered in future, additinal work is expected.
+ * Most of the functionallity which has to be implemented here is
+ * well described in the base plugin builder.
+ */
+
+// Angular builder
+// Builder bootstrap dependencies
+import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
+import { executeBrowserBuilder } from '@angular-devkit/build-angular';
+import { buildBrowserWebpackConfigFromContext } from '@angular-devkit/build-angular/src/browser';
+import { NormalizedBrowserBuilderSchema } from '@angular-devkit/build-angular/src/utils/normalize-builder-schema';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import * as ZipPlugin from 'zip-webpack-plugin';
 import { ConcatWebpackPlugin } from '../common/concat';
 import { BasePluginBuilderSchema, ExtensionManifest } from '../common/interfaces';
@@ -19,7 +24,7 @@ import {
     VCD_CUSTOM_LIB_SEPARATOR
 } from '../common/utilites';
 
-export interface PluginBuilderSchema6X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema {}
+export interface PluginBuilderSchema7X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema {}
 
 export const defaultExternals = {
     common: [
@@ -40,55 +45,50 @@ export const defaultExternals = {
     ]
 };
 
-export default class PluginBuilder extends BrowserBuilder {
-      private options: PluginBuilderSchema6X;
+export default createBuilder(commandBuilder as () => Promise<BuilderOutput>);
 
-      private entryPointPath: string;
-    private entryPointOriginalContent: string;
-    private pluginLibsBundles = new Map<string, string>();
-
-    constructor(context) {
-        super(context);
-    }
-
-    patchEntryPoint(contents: string) {
-        fs.writeFileSync(this.entryPointPath, contents);
-    }
-
-    buildWebpackConfig(
-        root: Path,
-        projectRoot: Path,
-        host: virtualFs.Host<fs.Stats>,
-        options: PluginBuilderSchema6X
-    ) {
-        if (!this.options.modulePath) {
+async function commandBuilder(
+  options: PluginBuilderSchema7X,
+  context: BuilderContext,
+  ): Promise<BuilderOutput> {
+    if (!options.modulePath) {
             throw Error('Please define modulePath!');
         }
 
-        const config = super.buildWebpackConfig(root, projectRoot, host, options);
+    // Build webpack configurtion
+    const configs = await buildBrowserWebpackConfigFromContext(options, context);
+    const pluginLibsBundles = new Map<string, string>();
 
-        // Reset the default configurations
-        delete config.entry.polyfills;
-        delete config.optimization.runtimeChunk;
-        delete config.optimization.splitChunks;
-        delete config.entry.styles;
-        delete config.entry['polyfills-es5'];
+    // Get the configuration
+    const config = configs.config[0];
 
-        // List the external libraries which will be provided by vcd
-        config.externals = [
-            ...(options.ignoreDefaultExternals ? [] : defaultExternals.common),
-            ...(!options.enableRuntimeDependecyManagement && !options.ignoreDefaultExternals ? defaultExternals['9.7-10.0'] : []),
-            ...extractExternalRegExps(options.externalLibs),
-        ];
+    // Make sure we are producing a single bundle
+    delete config.entry.polyfills;
+    delete config.optimization.runtimeChunk;
+    delete config.optimization.splitChunks;
+    delete config.entry.styles;
+    delete config.entry['polyfills-es5'];
 
-        const [modulePathWithExt, moduleName] = this.options.modulePath.split('#');
+    // List the external libraries which will be provided by vcd
+    config.externals = [
+        ...(options.ignoreDefaultExternals ? [] : defaultExternals.common),
+        ...(!options.enableRuntimeDependecyManagement && !options.ignoreDefaultExternals ? defaultExternals['9.7-10.0'] : []),
+        ...extractExternalRegExps(options.externalLibs),
+    ];
 
-        if (options.enableRuntimeDependecyManagement) {
-            const self = this;
+    // preserve path to entry point
+    // so that we can clear use it within `run` method to clear that file
+    const entryPointPath = config.entry.main[0];
+    const entryPointOriginalContent = fs.readFileSync(entryPointPath, 'utf-8');
 
+    // Patch the main.ts file to point to the plugin which will be compiled
+    // tslint:disable-next-line:prefer-const
+    let [modulePath, moduleName] = options.modulePath.split('#');
+
+    if (options.enableRuntimeDependecyManagement) {
             // Create unique jsonpFunction name
-            const copyPlugin = config.plugins.find((x) => x && x.copyWebpackPluginPatterns);
-            const manifestJsonPath = path.join(copyPlugin.copyWebpackPluginPatterns[0].context, 'manifest.json');
+            const copyPlugin = config.plugins.find((x) => x && x.patterns);
+            const manifestJsonPath = path.join(copyPlugin.patterns[0].context, 'manifest.json');
             const manifest: ExtensionManifest = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'));
             config.output.jsonpFunction = `vcdJsonp#${moduleName}#${manifest.urn}`;
 
@@ -98,46 +98,45 @@ export default class PluginBuilder extends BrowserBuilder {
                 cacheGroups: {
                     vendor: {
                         test: filterRuntimeModules(options),
-                        name: nameVendorFile(config, options, self.pluginLibsBundles),
+                        name: nameVendorFile(config, options, pluginLibsBundles),
                     },
                 },
             };
 
             // Transform manifest json file.
-            copyPlugin.copyWebpackPluginPatterns[0].transform = processManifestJsonFile(
+            copyPlugin.patterns[0].transform = processManifestJsonFile(
                 options.librariesConfig || {},
-                this.pluginLibsBundles,
+                pluginLibsBundles,
                 config.output.jsonpFunction
             );
         }
 
-        // preserve path to entry point
-        // so that we can clear use it within `run` method to clear that file
-        this.entryPointPath = config.entry.main[0];
-        this.entryPointOriginalContent = fs.readFileSync(this.entryPointPath, 'utf-8');
-
-        // Export the plugin module
-        const modulePath = modulePathWithExt.substr(0, modulePathWithExt.indexOf('.ts'));
-        const entryPointContents = `export * from '${modulePath}';`;
-        this.patchEntryPoint(entryPointContents);
+    // Export the plugin module
+    modulePath = modulePath.substr(0, modulePath.indexOf('.ts'));
+    const entryPointContents = `export * from '${modulePath}';`;
+    patchEntryPoint(entryPointPath, entryPointContents);
 
         // Define amd lib
-        config.output.filename = `bundle.js`;
-        config.output.library = moduleName;
-        config.output.libraryTarget = 'amd';
-        // workaround to support bundle on nodejs
-        config.output.globalObject = `(typeof self !== 'undefined' ? self : this)`;
+    config.output.filename = 'bundle.js';
+    config.output.library = moduleName;
+    config.output.libraryTarget = 'amd';
+    // workaround to support bundle on nodejs
+    config.output.globalObject = `(typeof self !== 'undefined' ? self : this)`;
 
-        // Reset angular compiler entry module, in order to compile our plugin.
-        const ngCompilerPluginInstance = config.plugins.find(
-            x => x.constructor && x.constructor.name === 'AngularCompilerPlugin'
-        );
+    if (!config.plugins || !config.plugins.length) {
+      config.plugins = [];
+    }
 
-        if (ngCompilerPluginInstance) {
-            ngCompilerPluginInstance._entryModule = modulePath;
-        }
+    // Get the angular compiler
+    const ngCompilerPluginInstance = config.plugins.find(
+      x => x.constructor && x.constructor.name === 'AngularCompilerPlugin'
+    );
+    if (ngCompilerPluginInstance) {
+        ngCompilerPluginInstance._compilerOptions.enableIvy = false;
+        ngCompilerPluginInstance._entryModule = `${modulePath}#${moduleName}`;
+    }
 
-        if (options.enableRuntimeDependecyManagement) {
+    if (options.enableRuntimeDependecyManagement) {
             config.plugins.push(
                 new ConcatWebpackPlugin({
                     concat: [
@@ -153,41 +152,45 @@ export default class PluginBuilder extends BrowserBuilder {
             );
         }
 
-        // Zip the result
-        config.plugins.push(
-            new ZipPlugin({
-                filename: 'plugin.zip',
-                exclude: [
-                    /\.html$/,
-                    ...Object.keys(options.librariesConfig)
-                    .filter((key) => {
-                        return options.librariesConfig[key].scope === 'external';
-                    })
-                    .map((key) => `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.bundle.js`)
-                ]
-            }),
-        );
+    // Zip the result
+    config.plugins.push(
+        new ZipPlugin({
+            filename: 'plugin.zip',
+            exclude: [
+                /\.html$/,
+                ...Object.keys(options.librariesConfig)
+                .filter((key) => {
+                    return options.librariesConfig[key].scope === 'external';
+                })
+                .map((key) => {
+                    const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.bundle.js`;
+                    return libBundleName;
+                })
+            ]
+        }),
+    );
 
-        return config;
-    }
+    options.fileReplacements = options.fileReplacements && options.fileReplacements.length ? options.fileReplacements : [];
+    options.styles = options.styles && options.styles.length ? options.styles : [];
+    options.scripts = options.scripts && options.scripts.length ? options.scripts : [];
 
-    run(
-        builderConfig: BuilderConfiguration<PluginBuilderSchema6X>
-    ): Observable<BuildEvent> {
-        this.options = builderConfig.options;
-        this.options.fileReplacements = this.options.fileReplacements && this.options.fileReplacements.length ?
-            this.options.fileReplacements : [];
-        this.options.styles = this.options.styles && this.options.styles.length ? this.options.styles : [];
-        this.options.scripts = this.options.scripts && this.options.scripts.length ? this.options.scripts : [];
+    // Trigger the angular browser builder
+    return executeBrowserBuilder(options, context, {
+      webpackConfiguration: () => (config)
+    })
+    .toPromise()
+    .then(() => {
+      patchEntryPoint(entryPointPath, entryPointOriginalContent);
+      return Promise.resolve({ success: true });
+    })
+    .catch((e) => {
+      console.error(e);
+      patchEntryPoint(entryPointPath, entryPointOriginalContent);
+      context.logger.error(e);
+      return Promise.reject({ success: false });
+    });
+}
 
-        // To avoid writing it in my scripts every time keep it here
-        builderConfig.options.deleteOutputPath = false;
-
-        return super.run(builderConfig).pipe(
-            tap(() => {
-                // clear entry point so our main.ts (or any other entry file) to remain untouched.
-                this.patchEntryPoint(this.entryPointOriginalContent);
-            })
-        );
-    }
+function patchEntryPoint(entryPointPath: string, contents: string) {
+  fs.writeFileSync(entryPointPath, contents);
 }
