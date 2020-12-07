@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "<%- components.uiPlugin.name %>": {
+    "<%- elements.uiPlugin.name %>": {
       "projectType": "library",
       "root": "",
       "sourceRoot": "src",
@@ -82,12 +82,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "<%- components.uiPlugin.name %>:build-emulator",
+            "browserTarget": "<%- elements.uiPlugin.name %>:build-emulator",
             "proxyConfig": ".env/proxy.conf.runtime.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "<%- components.uiPlugin.name %>:build-emulator:production"
+              "browserTarget": "<%- elements.uiPlugin.name %>:build-emulator:production"
             }
           }
         },
@@ -114,5 +114,5 @@
       }
     }
   },
-  "defaultProject": "<%- components.uiPlugin.name %>"
+  "defaultProject": "<%- elements.uiPlugin.name %>"
 }

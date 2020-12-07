@@ -1,16 +1,16 @@
 {
-  "name": "<%- components.uiPlugin.name %>",
-  "version": "<%- components.uiPlugin.version %>",
-  "description": "<%- components.uiPlugin.description %>",
+  "name": "<%- elements.uiPlugin.name %>",
+  "version": "<%- version %>",
+  "description": "<%- description %>",
   "scripts": {
     "clean": "rimraf dist",
     "lint": "ng lint",
     "build": "ng build",
     "serve": "vcd-ext serve",
     "ng:serve": "ng serve",
-    "deploy": "vcd-ext deploy --only=<%- components.uiPlugin.componentName %>"
+    "deploy": "vcd-ext deploy --only=<%- elements.uiPlugin.name %>"
   },
-  "license": "<%- answers.license %>",
+  "license": "<%- license %>",
   "dependencies": {
     "@angular/animations": "9.1.12",
     "@angular/cdk": "8.2.1",
@@ -50,7 +50,7 @@
     "@types/jasmine": "2.8.8",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "8.9.4",
-    "@vcd/ext-cli": "0.0.12-alpha.3",
+    "@vcd/ext-cli": "<%- cliVersion %>",
     "@vcd/plugin-builders": "0.12.1-alpha.1",
     "@vcd/ui-emulator": "0.0.6-alpha.1",
     "codelyzer": "4.3.0",
@@ -63,6 +63,7 @@
     "karma-jasmine-html-reporter": "0.2.2",
     "protractor": "5.4.0",
     "ts-node": "7.0.0",
+    "tslib": "1.10.0",
     "tslint": "5.11.0",
     "typescript": "3.6.4"
   }

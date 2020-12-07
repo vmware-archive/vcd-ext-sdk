@@ -2,13 +2,14 @@
   "compilerOptions": {
     "declaration": true,
     "importHelpers": true,
+    "strictNullChecks": false,
     "module": "commonjs",
     "outDir": "lib",
-    "skipLibCheck": true,
     "rootDir": "src",
-    "strict": true,
-    "target": "es2017",
+    "strict": false,
+    "target": "es6",
     "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*"

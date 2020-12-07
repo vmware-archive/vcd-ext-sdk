@@ -1,6 +1,7 @@
 {
   "packages": [
     "packages/*",
+    "packages/care-package/*",
     "packages/angular/projects/vcd/*"
   ],
   "version": "0.0.1"

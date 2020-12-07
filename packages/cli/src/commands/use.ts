@@ -1,5 +1,6 @@
 import Command, { flags } from '@oclif/command';
 import { CloudDirectorConfig } from '@vcd/node-client';
+import * as inquirer from 'inquirer';
 
 export default class Use extends Command {
 
@@ -15,14 +16,31 @@ export default class Use extends Command {
     };
 
     static args = [
-        { name: 'alias', description: 'Alias for the session token to switch to' }
+        { name: 'alias', required: false, description: 'Alias for the session token to switch to' }
     ];
     type = 'use';
 
     async run() {
         const { args } = this.parse(Use);
-        CloudDirectorConfig
-            .fromDefault()
-            .use(args.alias);
+        const alias = args.alias;
+        if (alias) {
+            CloudDirectorConfig.use(alias);
+        } else {
+            const configs = CloudDirectorConfig.getConfigurations();
+            const answers = await inquirer.prompt({
+                type: 'list',
+                name: 'alias',
+                message: 'Select configuration',
+                default: configs.current,
+                loop: false,
+                choices: configs.configurations.map((element) => {
+                    return {
+                        name: `${element.key}: ${element.username}/${element.org} ${element.basePath}`,
+                        value: element.key
+                    };
+                }),
+            });
+            CloudDirectorConfig.use(answers.alias);
+        }
     }
 }

@@ -1,14 +1,18 @@
 {
-  "name": "@vcd/ext-compiler",
-  "description": "VMware Cloud Director Extension Compiler",
-  "version": "0.0.3-alpha.1",
+  "name": "@vcd/care-package-plugin-types",
+  "description": "CARE Package plugin for Defined Entity Types",
+  "version": "0.0.1-alpha.0",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
+    "@vcd/care-package-plugins": "0.0.1-alpha.0",
+    "@vcd/ext-compiler": "0.0.3-alpha.1",
     "debug": "^4.1.1",
     "glob": "^7.1.3",
+    "camelcase": "^6.0.0",
     "ts-json-schema-generator": "^0.76.1",
-    "tslib": "^1.10.0"
+    "tslib": "^1.10.0",
+    "yeoman-generator": "^4.1.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
@@ -16,6 +20,7 @@
     "@types/node": "^10.14.20",
     "ts-node": "^8.4.1",
     "tslint": "5.15.0",
+    "@types/yeoman-generator": "^3.0.2",
     "typescript": "~4.0.3"
   },
   "engines": {

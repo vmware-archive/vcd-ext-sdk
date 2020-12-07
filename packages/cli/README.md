@@ -19,7 +19,7 @@ $ npm install -g @vcd/ext-cli
 $ vcd-ext COMMAND
 running command...
 $ vcd-ext (-v|--version|version)
-@vcd/ext-cli/0.0.12-alpha.1 darwin-x64 node-v12.18.4
+@vcd/ext-cli/0.0.12-alpha.4 darwin-x64 node-v12.18.4
 $ vcd-ext --help [COMMAND]
 USAGE
   $ vcd-ext COMMAND

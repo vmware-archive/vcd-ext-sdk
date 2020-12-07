@@ -1,10 +1,9 @@
 import Command, { flags } from '@oclif/command';
-import { Compiler } from '@vcd/ext-compiler';
-import { CarePackage, ElementType } from '../care';
+import { CarePackage } from '@vcd/care-package';
 
 export default class Build extends Command {
 
-    static description = 'compile the project from TS to JSON';
+    static description = 'builds the elements of a CARE package for which custom build is defined';
 
     static examples = [
         `$ vcd-ext build
@@ -13,19 +12,17 @@ export default class Build extends Command {
 
     static flags = {
         help: flags.help({ char: 'h', description: 'Provides usage for the current command' }),
-        additionalProperties:
-            flags.boolean({ required: false, description: 'Controls whether or not additionalProperties will be allowed or not.' })
+        only: flags.string({
+            required: false,
+            default: '',
+            description: 'Comma separated list of element names to be deployed. If not provided it deployes all elements.'
+        })
     };
-    type = 'build';
 
     async run() {
-        const carePackage = CarePackage.loadFromSource();
-        const currentElement = carePackage.getElementAt(process.cwd());
-        if (!currentElement || currentElement.type !== ElementType.types) {
-            throw new Error('Build command can be triggred only in the context of \'types\' subcomponent');
-        }
         // tslint:disable-next-line: no-shadowed-variable
-        const { argv, flags } = this.parse(Build);
-        new Compiler(argv, flags).compile();
+        const { flags } = this.parse(Build);
+        const carePackage = await CarePackage.loadFromSource();
+        return carePackage.build(flags.only);
     }
 }
