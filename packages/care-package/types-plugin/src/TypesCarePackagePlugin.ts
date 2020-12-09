@@ -1,6 +1,7 @@
 import * as path from 'path';
-import { AbstractPlugin } from '@vcd/care-package-plugins';
+import { AbstractPlugin } from '@vcd/care-package-plugin-abstract';
 import { Compiler } from '@vcd/ext-compiler';
+import { CarePackageSourceSpec, ElementSource } from '@vcd/care-package-def';
 
 export class TypesCarePackagePlugin extends AbstractPlugin {
     name = 'types';
@@ -10,7 +11,7 @@ export class TypesCarePackagePlugin extends AbstractPlugin {
         return path.join(__dirname, '..', 'templates');
     }
 
-    async build(packageRoot: string, _: any, element: any) {
+    private buildElement(packageRoot: string, element: ElementSource) {
         const base = path.join(packageRoot, element.location?.base || path.join('packages', element.name));
         let opts = {
             rootDir: base,
@@ -22,6 +23,11 @@ export class TypesCarePackagePlugin extends AbstractPlugin {
                 ...opts
             };
         }
-        return new Compiler(null, opts).compile();
+        new Compiler(null, opts).compile();
+    }
+
+    async build(packageRoot: string, _: CarePackageSourceSpec, elements: ElementSource[]) {
+        elements.forEach(ele => this.buildElement(packageRoot, ele));
+        return Promise.resolve();
     }
 }

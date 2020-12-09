@@ -1,5 +1,5 @@
+import { Plugin } from '@vcd/care-package-def';
 import defaultPlugins from './DefaultPlugins';
-import { Plugin } from '@vcd/care-package-plugins';
 
 export default class PluginLoader {
     public static async loadWithDefaults(pluginNames: string[] = []): Promise<Plugin[]> {

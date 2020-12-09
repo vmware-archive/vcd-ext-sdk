@@ -1,0 +1,72 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "",
+  "projects": {
+    "emulator": {
+      "projectType": "library",
+      "root": "",
+      "sourceRoot": "node_modules/@vcd/ui-emulator/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/emulator",
+            "index": "node_modules/@vcd/ui-emulator/src/index.html",
+            "main": "node_modules/@vcd/ui-emulator/src/main.ts",
+            "polyfills": "node_modules/@vcd/ui-emulator/src/polyfills.ts",
+            "tsConfig": "tsconfig.emulator.json",
+            "assets": [
+              "node_modules/@vcd/ui-emulator/src/favicon.ico",
+              {
+                "glob": "**/*",
+                "input": "./packages/uiPlugin/src/public",
+                "output": "/packages/uiPlugin/src/public"
+              }
+            ],
+            "styles": [
+              "node_modules/@clr/icons/clr-icons.min.css",
+              "node_modules/@clr/ui/clr-ui.min.css",
+              "node_modules/@vcd/ui-emulator/src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
+              "node_modules/@clr/icons/clr-icons.min.js",
+              "node_modules/systemjs/dist/system.src.js"
+            ],
+            "lazyModules": [
+              "packages/uiPlugin/src/main/d3.module"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "emulator:build",
+            "proxyConfig": ".env/proxy.conf.runtime.json"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "emulator:build:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "emulator"
+}

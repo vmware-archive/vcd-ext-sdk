@@ -8,7 +8,7 @@
     "extension"
   ],
   "scripts": {
-    "build": "vcd-ext build",
+    "build": "vcd-ext build --only=<%- elements.types.name %>",
     "deploy": "vcd-ext deploy --only=<%- elements.types.name %>"
   },
   "author": "vCloud Directory Extensions CLI",

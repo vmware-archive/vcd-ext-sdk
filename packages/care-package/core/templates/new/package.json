@@ -22,6 +22,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
+    "start": "vcd-ext serve",
     "package": "vcd-ext pack",
     "publish": "lerna publish",
     "deploy": "vcd-ext deploy"

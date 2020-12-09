@@ -1,5 +1,0 @@
-[{
-    "label": "<%- nameCamelCase %>",
-    "root": "src",
-    "module": "main/<%- name %>.module#<%- nameCamelCase %>PluginModule"
-}]

@@ -1,7 +1,7 @@
 import { } from 'jasmine';
 import * as path from 'path';
 import { CarePackageGenerator } from './CarePackageGenerator';
-import { AbstractPlugin } from '@vcd/care-package-plugins';
+import { AbstractPlugin } from '@vcd/care-package-plugin-abstract';
 
 export class TestPlugin extends AbstractPlugin {
     name = 'test';

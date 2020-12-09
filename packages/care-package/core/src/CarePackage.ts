@@ -1,25 +1,12 @@
-import { Plugin } from '@vcd/care-package-plugins';
+import { Plugin, CarePackageSpec, Element } from '@vcd/care-package-def';
 import debug from 'debug';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as rimraf from 'rimraf';
 import PluginLoader from './plugins/PluginLoader';
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
 
-const log = debug('vcd:ext:deployer');
-
-export interface Element {
-    name: string;
-    type: string;
-    location?: string | { base?: string, outDir?: string };
-}
-
-export interface CarePackageSpec {
-    name: string;
-    version: string;
-    vendor: string;
-    specVersion: string;
-    elements: Element[];
-}
+const log = debug('vcd:ext:care-package');
 
 const loadPackageJson = (root: string) => {
     const pjsonPath = path.resolve(root, 'package.json');
@@ -60,25 +47,43 @@ export class CarePackage {
         return this.plugins.find(p => p.module === type);
     }
 
-    private async runOperationOnElements(opName: string, only: string) {
+    private async runOperationOnElements(opName: string, only: string, options?: any) {
         let elements  = this.spec.elements;
         if (only) {
             const onlyArr = only.split(',').map(p => p.trim());
             elements = elements.filter(ele => onlyArr.includes(ele.name));
         }
-        return elements
-            .filter(ele => !!this.getPluginForType(ele.type)[opName])
-            .reduce(async (prevPromise, ele) => {
+        const elementGroups: any = elements
+            .reduce((prev, ele) => {
+                const plugin = this.getPluginForType(ele.type);
+                if (!!plugin[opName]) {
+                    if (!prev[ele.type]) {
+                        prev[ele.type] = {
+                            plugin,
+                            elements: []
+                        };
+                    }
+                    prev[ele.type].elements.push(ele);
+                }
+                return prev;
+            }, {});
+        return Object.values(elementGroups)
+            .reduce(async (prevPromise: Promise<any>, group: any): Promise<any> => {
                 await prevPromise;
-                return this.getPluginForType(ele.type)[opName](this.packageRoot, this.spec, ele).catch(e => log(e));
-            }, Promise.resolve()).catch(e => log(e));
+                return group.plugin[opName](this.packageRoot, this.spec, group.elements, options).catch(log);
+            }, Promise.resolve());
     }
 
-    async build(only: string) {
+    async build(only: string, options?: any) {
         if (!this.fromSource) {
             throw new Error('Build operation can only be triggered from CARE package source project');
         }
-        return this.runOperationOnElements('build', only);
+        return this.runOperationOnElements('build', only, options);
     }
-
+    async serve(only: string, options?: any) {
+        if (!this.fromSource) {
+            throw new Error('Serve operation can only be triggered from CARE package source project');
+        }
+        return this.runOperationOnElements('serve', only, options);
+    }
 }

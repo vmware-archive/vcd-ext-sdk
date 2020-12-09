@@ -35,59 +35,15 @@
             "buildOptimizer": false
           }
         },
-        "build-emulator": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/emulator",
-            "index": "node_modules/@vcd/ui-emulator/src/index.html",
-            "main": "node_modules/@vcd/ui-emulator/src/main.ts",
-            "polyfills": "node_modules/@vcd/ui-emulator/src/polyfills.ts",
-            "tsConfig": "tsconfig.emulator.json",
-            "assets": [
-              "src/favicon.ico",
-              {
-                "glob": "**/*",
-                "input": "./src/public",
-                "output": "/src/public"
-              }
-            ],
-            "styles": [
-              "node_modules/@clr/icons/clr-icons.min.css",
-              "node_modules/@clr/ui/clr-ui.min.css",
-              "src/styles.scss"
-            ],
-            "scripts": [
-              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js",
-              "node_modules/systemjs/dist/system.src.js"
-            ],
-            "lazyModules": [
-              "src/main/<%- name %>.module"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
-            }
-          }
-        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "<%- elements.uiPlugin.name %>:build-emulator",
+            "browserTarget": "<%- elements.uiPlugin.name %>:build",
             "proxyConfig": ".env/proxy.conf.runtime.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "<%- elements.uiPlugin.name %>:build-emulator:production"
+              "browserTarget": "<%- elements.uiPlugin.name %>:build:production"
             }
           }
         },

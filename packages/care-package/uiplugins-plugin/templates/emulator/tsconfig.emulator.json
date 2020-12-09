@@ -21,8 +21,8 @@
         "baseUrl": "./"
     },
     "include": [
-        "src/**/*.ts",
-        "src/.env/*.json",
+        "packages/uiPlugin/src/**/*.ts",
+        ".env/*.json",
         "node_modules/@vcd/ui-emulator/src/**/*.ts"
     ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@vcd/care-package-plugins",
+  "name": "@vcd/care-package-plugin-abstract",
   "description": "Manages CARE Packages",
   "version": "0.0.1-alpha.0",
   "author": "VMware",
@@ -13,6 +13,7 @@
     "yeoman-generator": "^4.1.0"
   },
   "devDependencies": {
+    "@vcd/care-package-def": "0.0.1-alpha.0",
     "@types/debug": "^4.1.5",
     "@types/glob": "^5.0.36",
     "@types/node": "^10.14.20",

@@ -3,7 +3,7 @@ import * as Generator from 'yeoman-generator';
 import camelcase from 'camelcase';
 import PluginLoader from './plugins/PluginLoader';
 import { Schema } from 'ts-json-schema-generator';
-import { Plugin } from '@vcd/care-package-plugins';
+import { Plugin } from '@vcd/care-package-def';
 import { createSchema } from './createSchema';
 
 export interface CarePackageCreateSpec {

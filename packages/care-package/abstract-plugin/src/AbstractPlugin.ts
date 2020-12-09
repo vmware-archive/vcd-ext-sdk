@@ -1,7 +1,7 @@
 import { Schema } from 'ts-json-schema-generator';
 import * as path from 'path';
 import * as Generator from 'yeoman-generator';
-import { Plugin } from './Plugin';
+import { Plugin } from '@vcd/care-package-def';
 
 export abstract class AbstractPlugin implements Plugin {
     module: string;
