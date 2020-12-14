@@ -19,6 +19,7 @@ export interface ElementSource extends ElementBase {
     location?: {
         base?: string;
         outDir?: string;
+        files?: string;
     };
 }
 export interface CarePackageSourceSpec {

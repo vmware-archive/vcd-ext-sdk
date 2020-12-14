@@ -21,6 +21,9 @@ export const DEFAULT_PROXY_CONTENT = {
 };
 
 export const emulatorDeps = {
+    scripts: {
+        "ng:serve": "ng serve"
+    },
     devDependencies: {
         '@types/jasmine': '2.8.8',
         '@types/jasminewd2': '2.0.3',

@@ -10,6 +10,12 @@ export class TypesCarePackagePlugin extends AbstractPlugin {
     getSrcRoot(): string {
         return path.join(__dirname, '..', 'templates');
     }
+    getDefaultOutDir(): string {
+        return 'lib';
+    }
+    getDefaultFiles(): string {
+        return '**/*.json'
+    }
 
     private buildElement(packageRoot: string, element: ElementSource) {
         const base = path.join(packageRoot, element.location?.base || path.join('packages', element.name));

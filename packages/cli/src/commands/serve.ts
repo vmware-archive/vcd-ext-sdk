@@ -16,7 +16,7 @@ export default class Serve extends Command {
         only: flags.string({
             required: false,
             default: '',
-            description: 'Comma separated list of element names to be deployed. If not provided it deployes all elements.'
+            description: 'Comma separated list of element names to be served. If not provided it serves all elements.'
         })
     };
 

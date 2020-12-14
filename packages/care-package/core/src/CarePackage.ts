@@ -2,9 +2,11 @@ import { Plugin, CarePackageSpec, Element } from '@vcd/care-package-def';
 import debug from 'debug';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as rimraf from 'rimraf';
+import AdmZip from 'adm-zip';
 import PluginLoader from './plugins/PluginLoader';
+
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
+const DIST_FOLDER_NAME = 'dist';
 
 const log = debug('vcd:ext:care-package');
 
@@ -69,9 +71,11 @@ export class CarePackage {
             }, {});
         return Object.values(elementGroups)
             .reduce(async (prevPromise: Promise<any>, group: any): Promise<any> => {
-                await prevPromise;
-                return group.plugin[opName](this.packageRoot, this.spec, group.elements, options).catch(log);
-            }, Promise.resolve());
+                const accumulator = await prevPromise;
+                return group.plugin[opName](this.packageRoot, this.spec, group.elements, options)
+                    .then(result => accumulator.concat(result))
+                    .catch(log);
+            }, Promise.resolve([]));
     }
 
     async build(only: string, options?: any) {
@@ -85,5 +89,27 @@ export class CarePackage {
             throw new Error('Serve operation can only be triggered from CARE package source project');
         }
         return this.runOperationOnElements('serve', only, options);
+    }
+
+    async pack(only: string, options?: any) {
+        if (!this.fromSource) {
+            throw new Error('Serve operation can only be triggered from CARE package source project');
+        }
+        const dist = path.join(this.packageRoot, DIST_FOLDER_NAME);
+        const name = options.name || `${this.spec.name}.care`;
+
+        if (!fs.existsSync(dist)) {
+            fs.mkdirSync(dist, { recursive: true });
+        }
+        const zip = new AdmZip();
+        options.zip = zip;
+        const elements = await this.runOperationOnElements('pack', only, options);
+        const manifest = {
+            ...this.spec,
+            elements
+        }
+        const content = JSON.stringify(manifest);
+        zip.addFile('manifest.json', Buffer.alloc(content.length, content));
+        zip.writeZip(path.join(dist, name));
     }
 }

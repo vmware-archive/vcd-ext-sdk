@@ -2,6 +2,12 @@ import { } from 'jasmine';
 import { AbstractPlugin } from './AbstractPlugin';
 
 class TestPlugin extends AbstractPlugin {
+    getDefaultOutDir(): string {
+        throw new Error('Method not implemented.');
+    }
+    getDefaultFiles(): string {
+        throw new Error('Method not implemented.');
+    }
     name = 'test';
     module = './AbstractPlugin/TestPlugin';
     displayName = 'Test Plugin';

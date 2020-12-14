@@ -14,6 +14,12 @@ export class UiPluginCarePackagePlugin extends AbstractPlugin {
     name = 'uiPlugin';
     displayName = 'UI Plugin';
 
+    getDefaultOutDir(): string {
+        return 'dist';
+    }
+    getDefaultFiles(): string {
+        return '*.zip'
+    }
     getSrcRoot(): string {
         return path.join(__dirname, '..', 'templates');
     }

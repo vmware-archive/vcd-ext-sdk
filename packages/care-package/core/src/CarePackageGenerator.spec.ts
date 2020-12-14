@@ -7,6 +7,12 @@ export class TestPlugin extends AbstractPlugin {
     name = 'test';
     module = '../CarePackageGenerator.spec/TestPlugin';
     displayName = 'Test Plugin';
+    getDefaultOutDir(): string {
+        throw new Error('Method not implemented.');
+    }
+    getDefaultFiles(): string {
+        throw new Error('Method not implemented.');
+    }
     getSrcRoot(): string {
         return 'test/root';
     }
