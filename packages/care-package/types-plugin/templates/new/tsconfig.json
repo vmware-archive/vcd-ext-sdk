@@ -7,7 +7,14 @@
     "sourceMap": true,
     "target": "es2017",
     "resolveJsonModule": true,
-    "experimentalDecorators": true
-  },
-  "compileOnSave": true
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "./node_modules/@types"
+  ]
+},
+  "compileOnSave": true,
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
 }
