@@ -122,7 +122,7 @@ export class CarePackage {
         const manifest = {
             ...this.spec,
             elements
-        }
+        };
         const content = JSON.stringify(manifest);
         zip.addFile('manifest.json', Buffer.alloc(content.length, content));
         zip.writeZip(path.join(dist, name));

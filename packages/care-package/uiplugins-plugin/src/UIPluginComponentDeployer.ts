@@ -41,7 +41,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
     private async traverse(location: string, visitor: (file: string, pluginMetadata: any, existingPlugin?: any) => Promise<any>) {
         const files = globSync(location);
         if (!files || files.length === 0) {
-            log('No plugin files to upload!')
+            log('No plugin files to upload!');
             return Promise.resolve();
         }
         log(`Plugin files to upload: ${files}`);

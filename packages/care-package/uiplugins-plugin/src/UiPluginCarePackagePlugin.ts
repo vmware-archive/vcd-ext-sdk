@@ -24,7 +24,7 @@ export class UiPluginCarePackagePlugin extends AbstractPlugin {
         return 'dist';
     }
     getDefaultFiles(): string {
-        return '*.zip'
+        return '*.zip';
     }
     getSrcRoot(): string {
         return path.join(__dirname, '..', 'templates');

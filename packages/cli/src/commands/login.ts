@@ -18,7 +18,11 @@ export default class Login extends Command {
     static args = [
         { name: 'alias', required: true, description: 'Alias for stroing the session token' },
         { name: 'basePath', required: true, description: 'Cloud director URL https://<host>[:<port>]/cloudapi' },
-        { name: 'username', required: true, description: 'Username in the form of <user>[@<tenant>]. If @<tenant> is omitted System tenant will be used.' },
+        {
+            name: 'username',
+            required: true,
+            description: 'Username in the form of <user>[@<tenant>]. If @<tenant> is omitted System tenant will be used.'
+        },
         { name: 'password', description: 'Password for the user'}
     ];
 
@@ -42,7 +46,7 @@ export default class Login extends Command {
             password
         );
         if (!config.connectionAuth.authorized) {
-            console.warn("Connection error: " + config.connectionAuth.authorizationError)
+            console.warn('Connection error: ' + config.connectionAuth.authorizationError);
             console.log(config.connectionAuth.certificate);
             const answers = await inquirer.prompt({
                 type: 'confirm',

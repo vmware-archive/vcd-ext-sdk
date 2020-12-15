@@ -3,6 +3,10 @@ import { AbstractPlugin } from './AbstractPlugin';
 import { ComponentDeployer } from './ComponentDeployer';
 
 class TestPlugin extends AbstractPlugin {
+    name = 'test';
+    module = './AbstractPlugin/TestPlugin';
+    displayName = 'Test Plugin';
+
     getComponentDeployer(): ComponentDeployer {
         throw new Error('Method not implemented.');
     }
@@ -12,9 +16,6 @@ class TestPlugin extends AbstractPlugin {
     getDefaultFiles(): string {
         throw new Error('Method not implemented.');
     }
-    name = 'test';
-    module = './AbstractPlugin/TestPlugin';
-    displayName = 'Test Plugin';
     getSrcRoot(): string {
         return 'test/root';
     }

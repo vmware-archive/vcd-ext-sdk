@@ -1,11 +1,11 @@
 export const createSchema = {
     type: 'object',
     required: [
-        "name",
-        "version",
-        "vendor",
-        "link",
-        "license"
+        'name',
+        'version',
+        'vendor',
+        'link',
+        'license'
     ],
     properties: {
         name: {

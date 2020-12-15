@@ -19,7 +19,7 @@ export class TypesCarePackagePlugin extends AbstractPlugin {
         return 'lib';
     }
     getDefaultFiles(): string {
-        return '**/*.json'
+        return '**/*.json';
     }
 
     private buildElement(packageRoot: string, element: ElementSource) {

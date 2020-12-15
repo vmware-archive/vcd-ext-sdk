@@ -39,7 +39,7 @@ export abstract class AbstractPlugin implements Plugin {
     }
 
     getDefaultBase(name): string {
-        return path.join('packages', name)
+        return path.join('packages', name);
     }
 
     getBaseRelative(element: ElementSource) {
@@ -70,30 +70,30 @@ export abstract class AbstractPlugin implements Plugin {
                 name: ele.name,
                 type: ele.type,
                 configuration: ele.configuration,
-                location: location
-            }
-        })
+                location
+            };
+        });
         return Promise.resolve(elementSpecs);
     }
 
     async deploy(packageRoot: string, _: CarePackageSpec, srcElements: (Element | ElementSource)[], options) {
 
         const elements: Element[] = srcElements.map(ele => {
-            if (typeof(ele.location) === "string") {
+            if (typeof(ele.location) === 'string') {
                 return ele as Element;
             }
             const eleSrc = ele as ElementSource;
             const base = this.getBaseRelative(eleSrc);
             const outDir = eleSrc.location?.outDir || this.getDefaultOutDir();
             const files = eleSrc.location?.files || this.getDefaultFiles();
-            let location = path.join(base, outDir, files)
+            const location = path.join(base, outDir, files);
             return {
                 name: ele.name,
                 type: ele.type,
                 configuration: ele.configuration,
                 location
             } as Element;
-        })
+        });
         log(`Deploying elements: ${JSON.stringify(elements, null, 2)}`);
         const deployer = this.getComponentDeployer(options);
         log(`Deploying with args force: ${options.force}`);
