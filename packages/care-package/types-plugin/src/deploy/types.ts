@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as debug from 'debug';
+import debug from 'debug';
 import {
     CloudDirectorConfig,
     DefinedEntityTypeApi,
@@ -9,7 +9,7 @@ import {
 } from '@vcd/node-client';
 import { BaseTypesDeployer } from './base';
 
-const log = debug('vcd:ext:deployer:types');
+const log = debug('vcd:ext:types-plugin:deploy:types');
 
 export class TypesDeployer extends BaseTypesDeployer {
     detApi: DefinedEntityTypeApi;

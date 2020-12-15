@@ -7,12 +7,18 @@ import { AbstractPlugin } from '@vcd/care-package-plugin-abstract';
 import { CarePackageSourceSpec, ElementSource } from '@vcd/care-package-def';
 import * as Generator from 'yeoman-generator';
 import { DEFAULT_ENV_CONTENT, DEFAULT_PROXY_CONTENT, emulatorDeps } from './Constants';
+import { ComponentDeployer } from '@vcd/care-package-plugin-abstract';
+import { UIPluginComponentDeployer } from './UIPluginComponentDeployer';
 
 const log = debug('vcd:ext:care-package:uiPlugins-plugin');
 
 export class UiPluginCarePackagePlugin extends AbstractPlugin {
     name = 'uiPlugin';
     displayName = 'UI Plugin';
+
+    getComponentDeployer(options: any): ComponentDeployer {
+        return new UIPluginComponentDeployer(options.config);
+    }
 
     getDefaultOutDir(): string {
         return 'dist';

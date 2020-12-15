@@ -1,11 +1,16 @@
 import * as path from 'path';
-import { AbstractPlugin } from '@vcd/care-package-plugin-abstract';
+import { AbstractPlugin, ComponentDeployer } from '@vcd/care-package-plugin-abstract';
 import { Compiler } from '@vcd/ext-compiler';
 import { CarePackageSourceSpec, ElementSource } from '@vcd/care-package-def';
+import { TypesComponentDeployer } from './deploy';
 
 export class TypesCarePackagePlugin extends AbstractPlugin {
     name = 'types';
     displayName = 'Defined Entities';
+
+    getComponentDeployer(options: any): ComponentDeployer {
+        return new TypesComponentDeployer(options.config);
+    }
 
     getSrcRoot(): string {
         return path.join(__dirname, '..', 'templates');

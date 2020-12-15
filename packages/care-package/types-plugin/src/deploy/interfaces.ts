@@ -1,9 +1,9 @@
 import * as path from 'path';
-import * as debug from 'debug';
+import debug from 'debug';
 import { CloudDirectorConfig, DefinedInterfaceApi, DefinedInterfaceBehaviorsApi } from '@vcd/node-client';
 import { BaseTypesDeployer } from './base';
 
-const log = debug('vcd:ext:deployer:interfaces');
+const log = debug('vcd:ext:types-plugin:deploy:interfaces');
 
 const getIdComponent = (det: any): string => {
     return `${det.vendor}:${det.nss}:${det.version}`;

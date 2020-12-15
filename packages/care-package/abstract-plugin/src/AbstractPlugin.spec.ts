@@ -1,7 +1,11 @@
 import { } from 'jasmine';
 import { AbstractPlugin } from './AbstractPlugin';
+import { ComponentDeployer } from './ComponentDeployer';
 
 class TestPlugin extends AbstractPlugin {
+    getComponentDeployer(): ComponentDeployer {
+        throw new Error('Method not implemented.');
+    }
     getDefaultOutDir(): string {
         throw new Error('Method not implemented.');
     }

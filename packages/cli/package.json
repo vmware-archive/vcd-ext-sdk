@@ -14,7 +14,7 @@
     "@oclif/plugin-help": "^2.2.1",
     "@vcd/care-package": "0.0.1-alpha.0",
     "@vcd/care-package-plugin-abstract": "0.0.1-alpha.0",
-    "@vcd/node-client": "0.0.5-alpha.2",
+    "@vcd/node-client": "0.0.5-alpha.3",
     "adm-zip": "^0.4.16",
     "debug": "^4.2.0",
     "glob": "^7.1.3",

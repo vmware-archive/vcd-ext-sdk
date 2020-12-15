@@ -1,6 +1,6 @@
 import { JSONSchema7 } from 'json-schema';
 import * as Generator from 'yeoman-generator';
-import { CarePackageSourceSpec, CarePackageSpec, Element, ElementSource } from './CarePackage';
+import { CarePackageSourceSpec, CarePackageSpec, Element, ElementBase, ElementSource } from './CarePackage';
 
 export interface Plugin {
     module: string;
@@ -11,5 +11,5 @@ export interface Plugin {
     build?(packageRoot: string, careSpec: CarePackageSourceSpec, elements: ElementSource[], options?: any);
     serve?(packageRoot: string, careSpec: CarePackageSourceSpec, elements: ElementSource[], options?: any);
     pack?(packageRoot: string, careSpec: CarePackageSourceSpec, elements: ElementSource[], options?: any);
-    deploy?(packageRoot: string, careSpec: CarePackageSpec, elements: Element[], options?: any);
+    deploy?(packageRoot: string, careSpec: CarePackageSpec, elements: (Element | ElementSource)[], options?: any);
 }

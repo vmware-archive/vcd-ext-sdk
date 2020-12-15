@@ -10,6 +10,7 @@
     "target": "es6",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "esModuleInterop": true
   },
   "include": [

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { sync as globSync } from 'glob';
-import { ComponentDeployer } from '../ComponentDeployer';
+import { ComponentDeployer } from '@vcd/care-package-plugin-abstract';
 
 const getIdComponent = (det: any): string => {
     return `${det.vendor}:${det.nss}:${det.version}`;
@@ -8,9 +8,9 @@ const getIdComponent = (det: any): string => {
 
 export abstract class BaseTypesDeployer implements ComponentDeployer {
 
-    protected abstract async getServerEntities(): Promise<any>;
-    public abstract async clean(location: string): Promise<any>;
-    public abstract async deploy(location: string): Promise<any>;
+    protected abstract getServerEntities(): Promise<any>;
+    public abstract clean(location: string): Promise<any>;
+    public abstract deploy(location: string): Promise<any>;
     protected abstract log(...args: any): void;
 
     protected async traverse(

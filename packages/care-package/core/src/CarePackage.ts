@@ -1,8 +1,10 @@
-import { Plugin, CarePackageSpec, Element } from '@vcd/care-package-def';
+import * as os from 'os';
 import debug from 'debug';
 import * as fs from 'fs';
 import * as path from 'path';
 import AdmZip from 'adm-zip';
+import * as uuid from 'uuid';
+import { Plugin, CarePackageSpec } from '@vcd/care-package-def';
 import PluginLoader from './plugins/PluginLoader';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
@@ -27,6 +29,16 @@ export class CarePackage {
         private plugins: Plugin[]
     ) {}
 
+    private static async load(packageRoot: string, descriptorName: string, fromSource: boolean, defaults?: any) {
+        const fileContent = fs.readFileSync(path.join(packageRoot, descriptorName)).toString();
+        const spec = JSON.parse(fileContent) as CarePackageSpec;
+        spec.name = spec.name || defaults?.name;
+        spec.version = spec.version || defaults?.version;
+        const plugins: Plugin[] = await PluginLoader.load([...new Set(spec.elements.map(ele => ele.type))]);
+        return new CarePackage(packageRoot, spec, fromSource, plugins);
+
+    }
+
     static async loadFromSource() {
         let currentDir = process.cwd();
         while (!fs.existsSync(path.join(currentDir, CARE_PACKAGE_DESCRIPTOR_NAME)) &&
@@ -37,12 +49,15 @@ export class CarePackage {
             throw new Error(`CARE package descriptor missing: ${CARE_PACKAGE_DESCRIPTOR_NAME}`);
         }
         const pjson = loadPackageJson(currentDir);
-        const fileContent = fs.readFileSync(path.join(currentDir, CARE_PACKAGE_DESCRIPTOR_NAME)).toString();
-        const spec = JSON.parse(fileContent) as CarePackageSpec;
-        spec.name = spec.name || pjson.name;
-        spec.version = spec.version || pjson.version;
-        const plugins: Plugin[] = await PluginLoader.load([...new Set(spec.elements.map(ele => ele.type))]);
-        return new CarePackage(currentDir, spec, true, plugins);
+        return this.load(currentDir, CARE_PACKAGE_DESCRIPTOR_NAME, true, pjson);
+    }
+
+    static async loadFromPackage(packagePath: string) {
+        const zip = new AdmZip(packagePath);
+        const packageRoot = path.join(os.tmpdir(), uuid.v4());
+        log(`Creating package with source: ${packagePath} to packageRoot: ${packageRoot}`);
+        zip.extractAllTo(packageRoot, true);
+        return this.load(packageRoot, 'manifest.json', false);
     }
 
     private getPluginForType(type: string): Plugin {
@@ -111,5 +126,9 @@ export class CarePackage {
         const content = JSON.stringify(manifest);
         zip.addFile('manifest.json', Buffer.alloc(content.length, content));
         zip.writeZip(path.join(dist, name));
+    }
+
+    async deploy(only: string, options?: any) {
+        return this.runOperationOnElements('deploy', only, options);
     }
 }

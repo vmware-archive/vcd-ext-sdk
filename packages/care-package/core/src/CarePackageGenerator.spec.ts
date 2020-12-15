@@ -1,12 +1,15 @@
 import { } from 'jasmine';
 import * as path from 'path';
 import { CarePackageGenerator } from './CarePackageGenerator';
-import { AbstractPlugin } from '@vcd/care-package-plugin-abstract';
+import { AbstractPlugin, ComponentDeployer } from '@vcd/care-package-plugin-abstract';
 
 export class TestPlugin extends AbstractPlugin {
     name = 'test';
     module = '../CarePackageGenerator.spec/TestPlugin';
     displayName = 'Test Plugin';
+    getComponentDeployer(): ComponentDeployer {
+        throw new Error('Method not implemented.');
+    }
     getDefaultOutDir(): string {
         throw new Error('Method not implemented.');
     }

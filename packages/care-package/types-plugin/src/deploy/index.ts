@@ -1,11 +1,11 @@
-import * as debug from 'debug';
+import debug from 'debug';
 
 import { CloudDirectorConfig } from '@vcd/node-client';
-import { ComponentDeployer } from '../ComponentDeployer';
+import { ComponentDeployer } from '@vcd/care-package-plugin-abstract';
 import { InterfacesDeployer } from './interfaces';
 import { TypesDeployer } from './types';
 
-const log = debug('vcd:ext:deployer:typesbase');
+const log = debug('vcd:ext:types-plugin:deploy:base');
 
 
 export class TypesComponentDeployer implements ComponentDeployer {

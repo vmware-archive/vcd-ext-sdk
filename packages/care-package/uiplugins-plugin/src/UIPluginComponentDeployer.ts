@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as debug from 'debug';
 import { sync as globSync } from 'glob';
-import * as AdmZip from 'adm-zip';
+import debug from 'debug';
+import AdmZip from 'adm-zip';
 
 import { CloudDirectorConfig, UiPluginApi, UiPluginMetadataResponse, UiPluginResourceApi, UiPluginsApi } from '@vcd/node-client';
-import { ComponentDeployer } from '../ComponentDeployer';
+import { ComponentDeployer } from '@vcd/care-package-plugin-abstract';
 
 const log = debug('vcd:ext:deployer:uiPlugin');
 
@@ -40,6 +40,10 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
 
     private async traverse(location: string, visitor: (file: string, pluginMetadata: any, existingPlugin?: any) => Promise<any>) {
         const files = globSync(location);
+        if (!files || files.length === 0) {
+            log('No plugin files to upload!')
+            return Promise.resolve();
+        }
         log(`Plugin files to upload: ${files}`);
         const response = await this.uiPluginsApi.getUiPlugins();
         const existingPlugins = response.body
