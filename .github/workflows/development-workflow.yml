@@ -74,6 +74,12 @@ jobs:
           path: |
             **/node_modules
           key: ${{github.sha}}-dependencies
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/dist
+            **/lib
+          key: ${{github.sha}}-artifacts
       - run: npm run test-ci
   publish-next:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
