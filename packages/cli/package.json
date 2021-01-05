@@ -1,7 +1,7 @@
 {
   "name": "@vcd/ext-cli",
   "description": "CLI tool for working with Cloud Director extensions",
-  "version": "0.0.12-alpha.4",
+  "version": "0.0.12-alpha.5",
   "author": "VMware",
   "license": "BSD-2",
   "bin": {
@@ -12,8 +12,7 @@
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
     "@oclif/plugin-help": "^2.2.1",
-    "@vcd/care-package": "0.0.1-alpha.0",
-    "@vcd/care-package-plugin-abstract": "0.0.1-alpha.0",
+    "@vcd/care-package": "0.0.1-alpha.1",
     "@vcd/node-client": "0.0.5-alpha.3",
     "adm-zip": "^0.4.16",
     "debug": "^4.2.0",
@@ -52,6 +51,10 @@
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^3.0.0"
   },
+  "resolutions": {
+    "yargs": "13.3.2",
+    "axios": "0.21.1"
+  },
   "engines": {
     "node": ">=10.14.2 <13.0.0"
   },
@@ -74,6 +77,7 @@
     ]
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
