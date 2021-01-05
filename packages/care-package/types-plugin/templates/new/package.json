@@ -1,0 +1,22 @@
+{
+  "name": "<%- elements.types.name %>",
+  "version": "<%- version %>",
+  "vendor": "<%- vendor %>",
+  "description": "<%- description %>",
+  "keywords": [
+    "vcd",
+    "extension"
+  ],
+  "scripts": {
+    "build": "vcd-ext build --only=<%- elements.types.name %>",
+    "deploy": "vcd-ext deploy --only=<%- elements.types.name %>"
+  },
+  "author": "vCloud Directory Extensions CLI",
+  "license": "<%- license %>",
+  "devDependencies": {
+    "@vcd/ext-cli": "<%- cliVersion %>",
+    "typescript": "~4.0.3"
+  },
+  "dependencies": {},
+  "types": "lib/src/index.d.ts"
+}

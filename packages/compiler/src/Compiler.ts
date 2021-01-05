@@ -77,7 +77,7 @@ export class Compiler {
         if (fs.existsSync(tsconfigPath)) {
             const fileContent = fs.readFileSync(tsconfigPath).toString();
             const tsconfigOptions = JSON.parse(fileContent).compilerOptions;
-            const optionsResult = ts.convertCompilerOptionsFromJson(tsconfigOptions, process.cwd());
+            const optionsResult = ts.convertCompilerOptionsFromJson(tsconfigOptions, this.rootDir);
 
             if (optionsResult.errors && optionsResult.errors.length) {
                 this.logDiagnostics(optionsResult.errors);
@@ -91,7 +91,7 @@ export class Compiler {
 
         options.module = ts.ModuleKind.CommonJS;
         options.moduleResolution = ts.ModuleResolutionKind.NodeJs;
-        options.target = ts.ScriptTarget.ES5;
+        options.target = ts.ScriptTarget.ES2017;
         options.rootDir = this.rootDir;
         options.outDir = this.outDir;
         options.baseUrl = this.rootDir;

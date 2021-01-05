@@ -1,0 +1,21 @@
+{
+  "name": "@vcd/care-package-def",
+  "description": "CARE Package definitions",
+  "version": "0.0.1-alpha.0",
+  "author": "VMware",
+  "license": "BSD-2",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^10.14.20",
+    "@types/yeoman-generator": "^3.0.2",
+    "@types/json-schema": "7.0.6"
+  },
+  "engines": {
+    "node": ">=10.14.2 <13.0.0"
+  },
+  "scripts": {},
+  "types": "src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  }
+}

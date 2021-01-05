@@ -19,7 +19,7 @@
     "typescript": "~4.0.3"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.14.2 <13.0.0"
   },
   "main": "lib/index.js",
   "scripts": {

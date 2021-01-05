@@ -1,5 +1,6 @@
 import Command, { flags } from '@oclif/command';
 import { CloudDirectorConfig } from '@vcd/node-client';
+import * as inquirer from 'inquirer';
 
 export default class Login extends Command {
 
@@ -15,23 +16,45 @@ export default class Login extends Command {
     };
 
     static args = [
-        { name: 'alias', description: 'Alias for stroing the session token' },
-        { name: 'basePath', description: 'Cloud director URL https://<host>[:<port>]/cloudapi' },
-        { name: 'username', description: 'Username in the form of <user>[@<tenant>]. If @<tenant> is omitted System tenant will be used.' },
+        { name: 'alias', required: true, description: 'Alias for stroing the session token' },
+        { name: 'basePath', required: true, description: 'Cloud director URL https://<host>[:<port>]/cloudapi' },
+        {
+            name: 'username',
+            required: true,
+            description: 'Username in the form of <user>[@<tenant>]. If @<tenant> is omitted System tenant will be used.'
+        },
         { name: 'password', description: 'Password for the user'}
     ];
-    type = 'login';
 
     async run() {
         const { args } = this.parse(Login);
         const user = args.username.split('@')[0];
         const org = args.username.split('@')[1] || 'System';
+        let password = args.password;
+        if (!password) {
+            const answers = await inquirer.prompt({
+                type: 'password',
+                name: 'password',
+                message: 'Password: ',
+            });
+            password = answers.password;
+        }
         const config = await CloudDirectorConfig.withUsernameAndPassword(
             args.basePath,
             user,
             org,
-            args.password
+            password
         );
+        if (!config.connectionAuth.authorized) {
+            console.warn('Connection error: ' + config.connectionAuth.authorizationError);
+            console.log(config.connectionAuth.certificate);
+            const answers = await inquirer.prompt({
+                type: 'confirm',
+                name: 'accept',
+                message: 'Do you accept the provided certificate?',
+            });
+            config.connectionAuth.authorized = answers.accept;
+        }
         config.saveConfig(args.alias);
     }
 }

@@ -1,110 +1,83 @@
+const pjson = require('../../package.json');
 import * as path from 'path';
-import * as camelcase from 'camelcase';
-import Generator = require('yeoman-generator');
+import * as Generator from 'yeoman-generator';
+import { CarePackageGenerator } from '@vcd/care-package';
+import { JSONSchemaPrompt } from '../prompt/JSONSchemaPrompt';
 
 export default class New extends Generator {
     name: any;
-    version: any;
-    vendor: any;
     answers: any;
-    components: any = {};
-    elements = [];
-    nameCamelCase: string;
+    packageGenerator: CarePackageGenerator | null = null;
+    additionalPlugins: string[];
 
     constructor(args: any, opts: any) {
         super(args, opts);
         this.name = opts.name;
-        this.nameCamelCase = camelcase(this.name, { pascalCase: true });
-        this.version = opts.version || '1.0.0';
-        this.description = opts.description || '';
-        this.answers = {};
+        this.additionalPlugins = opts.additionalPlugins;
+        this.answers = {
+            name: this.name,
+            version: opts.version || '1.0.0',
+            description: opts.description || '',
+            cliVersion: pjson.version
+        };
     }
 
     async prompting() {
-        this.answers = await this.prompt([
-            {
-                type: 'input',
-                name: 'name',
-                message: 'Your solution name',
+        this.packageGenerator = await CarePackageGenerator.withPlugins(this.additionalPlugins);
+        const createSpec = this.packageGenerator.getCreateSpec();
+        let questions = JSONSchemaPrompt.convertToPromptQuestions(createSpec.createSchema, {
+            name: {
                 default: this.name
-            }, {
-                type: 'input',
-                name: 'version',
-                message: 'Specify first version',
-                default: '0.0.1'
-            }, {
-                type: 'input',
-                name: 'vendor',
-                message: 'Specify vendor name',
-            }, {
-                type: 'input',
-                name: 'link',
-                message: 'Specify vendor link',
-                default: 'http://example.com'
-            }, {
-                type: 'input',
-                name: 'license',
-                message: 'Specify solution license',
-                default: 'BSD-2-Clause',
-            }, {
-                type: 'checkbox',
-                name: 'components',
-                message: 'Select extensibility components',
-                choices: [
-                    { name: 'UI Plugin', value: 'uiPlugin' },
-                    { name: 'Defined Entities', value: 'types' }
-                ],
-            }, {
-                type: 'input',
-                name: 'uiPluginName',
-                when: (answers) => answers.components.find((component: string) => component === 'uiPlugin'),
-                default: 'ui',
-                message: 'Specify UI Plugin component name',
-            }, {
-                type: 'input',
-                name: 'typesName',
-                when: (answers) => answers.components.find((component: string) => component === 'types'),
-                default: 'types',
-                message: 'Specify Defined Entities component name',
             }
-        ]);
+        });
+
+        questions.push({
+            type: 'checkbox',
+            name: 'elements',
+            message: 'Select extensibility elements',
+            choices: createSpec.elements.map((element) => {
+                return { name: element.displayName, value: element.name };
+            }),
+        });
+
+        createSpec.elements.forEach(element => {
+            const pluginQuestions = JSONSchemaPrompt.convertToPromptQuestions(element.createSchema, {
+                name: {
+                    default: element.name
+                }
+            });
+            questions = questions.concat(pluginQuestions.map(question => {
+                return {
+                    ...question,
+                    name: `${element.name}:${question.name}`,
+                    message: `${element.displayName}:${question.message}`,
+                    when: (answers) => answers.elements.find((ele: string) => ele === element.name),
+                };
+            }));
+        });
+
+        const ans = await this.prompt(questions);
+        this.answers = Object.keys(ans)
+            .filter(key => key.includes(':'))
+            .reduce((prev: any, key) => {
+                const pluginName = key.split(':')[0];
+                const propertyName = key.split(':')[1];
+                if (!prev.elements[pluginName]) {
+                    prev.elements[pluginName] = {};
+                }
+                prev.elements[pluginName][propertyName] = ans[key];
+                return prev;
+            }, {
+                ...this.answers,
+                ...ans,
+                elements: {}
+            });
     }
 
     writing() {
         this.destinationRoot(path.resolve(this.name));
         process.chdir(this.destinationRoot());
-        this.sourceRoot(path.join(__dirname, '../../templates'));
-        this.elements = this.answers.components.map((component: string) => {
-            return {
-                type: component,
-                base: 'packages/' + this.answers[`${component}Name`]
-            };
-        });
-        this.vendor = this.answers.vendor;
-        this.name = this.answers.name;
-        this.nameCamelCase = camelcase(this.name, { pascalCase: true });
-        this.fs.copyTpl(
-            this.templatePath('new'),
-            this.destinationPath(),
-            this,
-            undefined,
-            { globOptions: { dot: true } });
-        this.answers.components.forEach((component: string) => {
-            this.components[component] = {
-                name: `${this.name}-${this.answers[`${component}Name`]}`,
-                componentName: this.answers[`${component}Name`],
-                version: this.answers.version,
-                description: this.description,
-                vendor: this.answers.vendor,
-            };
-            this.sourceRoot(path.join(__dirname, '../../templates'));
-            this.fs.copyTpl(
-                this.templatePath(component),
-                this.destinationPath('packages', this.answers[`${component}Name`]),
-                this,
-                undefined,
-                { globOptions: { dot: true } });
-        });
+        this.packageGenerator?.generate(this, this.answers);
     }
 
     install() {

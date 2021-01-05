@@ -1,0 +1,32 @@
+{
+    "urn": "vmware:vcloud:plugin:<%- vendor %>:<%- name %>",
+    "name": "<%- nameCamelCase %> plugin",
+    "containerVersion": "9.5.0",
+    "manifestVersion": "2.0.0",
+    "version": "<%- version %>",
+    "scope": [
+        "service-provider",
+        "tenant"
+    ],
+    "permissions": [],
+    "description": "<%- nameCamelCase %> Plugin",
+    "vendor": "<%- vendor %>",
+    "license": "<%- license %>",
+    "link": "<%- link %>",
+    "extensionPoints": [
+        {
+            "urn": "urn:vmware:vcd:component-scope:primary-navigation",
+            "type": "navigation:primary",
+            "name": "%nav.label%",
+            "description": "%nav.description%",
+            "module": "<%- nameCamelCase %>PluginModule",
+            "route": "<%- name %>"
+        }
+    ],
+    "locales": {
+        "en": {
+            "nav.label": "<%- nameCamelCase %>",
+            "nav.description": "A basic plugin project"
+        }
+    }
+}

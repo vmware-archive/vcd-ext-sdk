@@ -1,0 +1,22 @@
+{
+  "name": "<%- elements.uiPlugin.name %>",
+  "version": "<%- version %>",
+  "description": "<%- description %>",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "ng lint",
+    "build": "ng build",
+    "serve": "ng serve",
+    "deploy": "vcd-ext deploy --only=<%- elements.uiPlugin.name %>"
+  },
+  "license": "<%- license %>",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@angular/cli": "9.1.12",
+    "@vcd/ext-cli": "0.0.12-alpha.4",
+    "@vcd/plugin-builders": "0.12.1-alpha.1",
+    "rxjs": "6.2.0",
+    "rxjs-compat": "6.2.0"
+  }
+}
