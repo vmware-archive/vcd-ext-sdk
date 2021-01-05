@@ -4,8 +4,9 @@ import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 
 describe('New Generator Tests', () => {
-    it('Generate empty project', () => {
-        helpers.run(New)
+    it('Generate empty project', async () => {
+        return helpers.run(New)
+            .withOptions({name: 'test'})
             .withPrompts({
                 name: 'test',
                 version: '0.0.1',
@@ -14,11 +15,12 @@ describe('New Generator Tests', () => {
                 license: 'BSD'
              })
              .then(() => {
-                assert.file(['test/package.json', 'test/care.json']);
+                assert.file(['package.json', 'care.json']);
              });
     });
-    it('Generate types project', () => {
-        helpers.run(New)
+    it('Generate types project', async () => {
+        await helpers.run(New)
+            .withOptions({name: 'test'})
             .withPrompts({
                 name: 'test',
                 version: '0.0.1',
@@ -32,8 +34,9 @@ describe('New Generator Tests', () => {
                 assert.file('packages/types/package.json');
              });
     });
-    it('Generate uiPlugin project', () => {
-        helpers.run(New)
+    it('Generate uiPlugin project', async () => {
+        await helpers.run(New)
+            .withOptions({name: 'test'})
             .withPrompts({
                 name: 'test',
                 version: '0.0.1',

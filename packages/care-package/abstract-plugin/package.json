@@ -1,7 +1,7 @@
 {
   "name": "@vcd/care-package-plugin-abstract",
-  "description": "Manages CARE Packages",
-  "version": "0.0.1-alpha.0",
+  "description": "CARE Package abstract plugin",
+  "version": "0.0.1-alpha.1",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
@@ -10,7 +10,7 @@
     "camelcase": "^6.0.0",
     "ts-json-schema-generator": "^0.76.1",
     "tslib": "^1.10.0",
-    "yeoman-generator": "^4.1.0"
+    "yeoman-generator": "^4.12.0"
   },
   "devDependencies": {
     "@vcd/care-package-def": "0.0.1-alpha.0",
@@ -27,11 +27,16 @@
     "nock": "^13.0.4",
     "nyc": "^14.1.1"
   },
+  "resolutions": {
+    "yargs": "13.3.2",
+    "axios": "0.21.1"
+  },
   "engines": {
     "node": ">=10.14.2 <13.0.0"
   },
   "main": "lib/index.js",
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "build": "tsc",
     "lint": "tslint 'src/**/*.ts'",
     "test": "jasmine-ts --config=jasmine.json",

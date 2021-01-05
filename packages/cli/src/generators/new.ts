@@ -51,7 +51,7 @@ export default class New extends Generator {
                     ...question,
                     name: `${element.name}:${question.name}`,
                     message: `${element.displayName}:${question.message}`,
-                    when: (answers) => answers.elements.find((ele: string) => ele === element.name),
+                    when: (answers) => answers.elements ? answers.elements.find((ele: string) => ele === element.name) : false,
                 };
             }));
         });
