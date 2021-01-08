@@ -1,0 +1,1 @@
+{"name":"ElasticGroup","nss":"elasticgroup","version":"1.0.0","vendor":"vmware","behaviors":[{"name":"initScaleGroup","execution":{"type":"Activity","id":"InitScaleGroupActivity"}},{"name":"grow","execution":{"type":"Activity","id":"GrowActivity"}},{"name":"shrink","execution":{"type":"Activity","id":"ShrinkActivity"}}]}

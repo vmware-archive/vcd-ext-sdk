@@ -16,7 +16,6 @@ const SCHEMA_GENERATOR_PROPERTIES = [
 export class Compiler {
     rootDir: string;
     fileNames: any;
-    outDir: string;
     checker: ts.TypeChecker;
     output: any[] = [];
     config: any;
@@ -26,7 +25,6 @@ export class Compiler {
     constructor(files: string[], flags: any) {
         this.config = flags;
         this.rootDir = flags.rootDir || process.cwd();
-        this.outDir = flags.outDir || 'lib';
         this.fileNames = files && files.length
             ? files.map(file => path.resolve(this.rootDir, file))
             : globSync(path.resolve(this.rootDir, 'src', '**/*.ts'));
@@ -70,8 +68,26 @@ export class Compiler {
         return JSON.parse(fileContent);
     }
 
+    private getDefaultOptions(): ts.CompilerOptions {
+        const options: ts.CompilerOptions = {};
+
+        options.module = ts.ModuleKind.CommonJS;
+        options.moduleResolution = ts.ModuleResolutionKind.NodeJs;
+        options.target = ts.ScriptTarget.ES2017;
+        options.rootDir = this.rootDir;
+        options.outDir = 'lib';
+        options.baseUrl = this.rootDir;
+        options.stripInternal = false;
+        options.removeComments = false;
+        options.emitDeclarationOnly = true;
+        options.experimentalDecorators = true;
+        options.declaration = true;
+        options.strictNullChecks = false;
+        return options;
+    }
+
     private loadCompilerOptions(): ts.CompilerOptions {
-        let options: ts.CompilerOptions;
+        let fileOptions: ts.CompilerOptions;
         const tsconfigPath = path.resolve(this.rootDir, 'tsconfig.json');
 
         if (fs.existsSync(tsconfigPath)) {
@@ -84,29 +100,19 @@ export class Compiler {
                 throw new Error(`Unable to load ${tsconfigPath}`);
             }
 
-            options = optionsResult.options;
+            fileOptions = optionsResult.options;
         }
 
-        options = options || {};
-
-        options.module = ts.ModuleKind.CommonJS;
-        options.moduleResolution = ts.ModuleResolutionKind.NodeJs;
-        options.target = ts.ScriptTarget.ES2017;
-        options.rootDir = this.rootDir;
-        options.outDir = this.outDir;
-        options.baseUrl = this.rootDir;
-        options.stripInternal = false;
-        options.removeComments = false;
-        options.emitDeclarationOnly = true;
-        options.experimentalDecorators = true;
-        options.declaration = true;
-        options.strictNullChecks = false;
-
-        return options;
+        return {
+            ...this.getDefaultOptions(),
+            ...fileOptions,
+            ...this.config
+        };
     }
 
     compile(): void {
-        const program = ts.createProgram(this.fileNames, this.loadCompilerOptions());
+        const compilerOptions = this.loadCompilerOptions();
+        const program = ts.createProgram(this.fileNames, compilerOptions);
         const emitResult = program.emit();
 
         if (!this.config.skipTypeCheck) {
@@ -136,11 +142,11 @@ export class Compiler {
             }
         }
         Object.keys(context.output).forEach(collection => {
-            fs.mkdirSync(path.resolve(this.outDir, collection), { recursive: true });
+            fs.mkdirSync(path.resolve(compilerOptions.outDir, collection), { recursive: true });
             Object.keys(context.output[collection]).forEach(symbolName => {
                 fs.writeFile(
                     path.resolve(
-                        this.outDir,
+                        compilerOptions.outDir,
                         collection,
                         `${symbolName}.json`
                     ),
