@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "strictNullChecks": false,
+    "noUnusedLocals": false,
+    "sourceMap": true,
+    "target": "es2017",
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "./node_modules/@types"
+  ]
+},
+  "compileOnSave": true,
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
+}

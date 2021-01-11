@@ -1,12 +1,12 @@
 {
   "name": "@vcd/care-package-plugin-types",
   "description": "CARE Package plugin for Defined Entity Types",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
-    "@vcd/care-package-plugin-abstract": "0.0.1-alpha.1",
-    "@vcd/ext-compiler": "0.0.3-alpha.1",
+    "@vcd/care-package-plugin-abstract": "0.0.1-alpha.2",
+    "@vcd/ext-compiler": "0.0.3-alpha.2",
     "@vcd/node-client": "0.0.5-alpha.3",
     "debug": "^4.1.1",
     "glob": "^7.1.3",
@@ -25,16 +25,11 @@
     "@types/yeoman-generator": "^3.0.2",
     "typescript": "~4.0.3"
   },
-  "resolutions": {
-    "yargs": "13.3.2",
-    "axios": "0.21.1"
-  },
   "engines": {
     "node": ">=10.14.2 <13.0.0"
   },
   "main": "lib/index.js",
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "build": "tsc",
     "lint": "tslint 'src/**/*.ts'"
   },
