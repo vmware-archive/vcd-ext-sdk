@@ -1,0 +1,26 @@
+{% assign colLabel = page.url | remove_first: "/" | split: "/" | first %}
+{% assign col = site.collections | where: 'label', colLabel | first %}
+
+{% if page.collection %}
+<nav class="sidenav">
+  <section class="sidenav-content">
+    {% assign mydocs = col.docs | group_by: 'category' %}
+    {% for cat in mydocs %}
+    <section class="nav-group collapsible">
+      <input id="tabexample1" type="checkbox">
+      <label for="tabexample1">{{ cat.name }}</label>
+      <ul class="nav-list">
+        {% assign items = cat.items | sort: 'order' %}
+        {% for item in items %}
+          {% if item.url == page.url %}
+            <li><a class="nav-link active" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
+          {% else %}
+            <li><a class="nav-link" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </section>
+    {% endfor %}
+  </section>
+</nav>
+{% endif %}

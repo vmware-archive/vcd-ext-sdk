@@ -1,0 +1,21 @@
+{
+  "name": "vcd-ext-sdk-docs",
+  "version": "0.0.1",
+  "description": "Cloud Director Extensibility SDK documenation site",
+  "author": "VMware",
+  "license": "BSD-2",
+  "dependencies": {
+    "@webcomponents/custom-elements": "^1.0.0",
+    "@clr/icons": "^4.0.9",
+    "@clr/ui": "^4.0.9"
+  },
+  "scripts": {
+    "postinstall": "npm run install:clr && npm run install:webcomponents && npm run install:bundle",
+    "install:clr": "cp node_modules/@clr/icons/clr-icons.min.css assets/ && cp node_modules/@clr/icons/clr-icons.min.js assets/ && cp node_modules/@clr/ui/clr-ui.min.css assets/",
+    "install:webcomponents": "cp node_modules/@webcomponents/custom-elements/custom-elements.min.js assets/",
+    "install:bundle": "bundle install",
+    "build": "bundle exec jekyll build",
+    "start": "bundle exec jekyll serve",
+    "clean": "rm -rf node_modules"
+  }
+}
