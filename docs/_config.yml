@@ -1,0 +1,36 @@
+# Site settings
+title: VMware Cloud Director Extensibility SDK
+email: your-email@domain.com
+description: >
+  The vcd-ext-sdk is a set of templates for creating extensions to VMware Cloud Director.
+  Service Providers looking to add custom service offerings to Cloud Director, can use these templates as a starting point to build new services.
+  The templates captures best practices for API, Object and, UI extension development and are offered in Java, Javascript/Typescript/nodejs and, Python.
+baseurl: "/vcd-ext-sdk"
+url: "https://vmware.github.io"
+clarity_header_iconshape: plugin
+google_analytics:
+
+plugins:
+  - jekyll-mentions
+  - jekyll-gist
+  - jekyll-sitemap
+  - jekyll-avatar
+
+# Build settings
+markdown: kramdown
+
+exclude: ['node_modules','package.json','.settings','.project']
+compress_html:
+  blanklines: true
+
+collections:
+  use_cases:
+    output: true
+    title: Use Cases
+    nav: true
+    order: 1
+  docs:
+    output: true
+    title: Docs
+    nav: true
+    order: 2
