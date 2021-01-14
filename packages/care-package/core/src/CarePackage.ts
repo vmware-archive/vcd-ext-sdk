@@ -30,7 +30,7 @@ export class CarePackage {
     ) {}
 
     private static async load(packageRoot: string, descriptorName: string, fromSource: boolean, defaults?: any) {
-        console.log(`Loading package with root: ${packageRoot}`)
+        console.log(`Loading package with root: ${packageRoot}`);
         const fileContent = fs.readFileSync(path.join(packageRoot, descriptorName)).toString();
         const spec = JSON.parse(fileContent) as CarePackageSpec;
         spec.name = spec.name || defaults?.name;
@@ -88,7 +88,7 @@ export class CarePackage {
         return Object.values(elementGroups)
             .reduce(async (prevPromise: Promise<any>, group: any): Promise<any> => {
                 const accumulator = await prevPromise;
-                console.log(`Running ${opName} for plugin ${group.plugin.module} with elements ${group.elements.map(e => e.name)}`)
+                console.log(`Running ${opName} for plugin ${group.plugin.module} with elements ${group.elements.map(e => e.name)}`);
                 return group.plugin[opName](this.packageRoot, this.spec, group.elements, options)
                     .then(result => accumulator.concat(result))
                     .catch(console.error);
@@ -128,7 +128,7 @@ export class CarePackage {
         const content = JSON.stringify(manifest);
         zip.addFile('manifest.json', Buffer.alloc(content.length, content));
         zip.writeZip(path.join(dist, name));
-        console.log(`Creating CARE package: ${path.join(dist, name)}`)
+        console.log(`Creating CARE package: ${path.join(dist, name)}`);
     }
 
     async deploy(only: string, options?: any) {
