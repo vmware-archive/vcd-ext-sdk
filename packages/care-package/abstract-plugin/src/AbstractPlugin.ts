@@ -98,18 +98,17 @@ export abstract class AbstractPlugin implements Plugin {
         const deployer = this.getComponentDeployer(options);
         log(`Deploying with args force: ${options.force}`);
         if (options.force) {
-            log('Force option set to true. Cleaning up...');
+            console.log('Force option set to true. Cleaning up...');
             await elements
-                .reverse()
-                .reduce(async (prevPromise, ele) => {
+                .reduceRight(async (prevPromise, ele) => {
                     await prevPromise;
-                    return deployer.clean(path.join(packageRoot, ele.location)).catch(e => log(e));
-                }, Promise.resolve()).catch(e => log(e));
+                    return deployer.clean(path.join(packageRoot, ele.location)).catch(console.error);
+                }, Promise.resolve()).catch(console.error);
         }
         return (elements as Element[])
             .reduce(async (prevPromise: Promise<any>, ele: Element) => {
                 await prevPromise;
-                return deployer.deploy(path.join(packageRoot, ele.location)).catch(e => log(e));
-            }, Promise.resolve()).catch(e => log(e));
+                return deployer.deploy(path.join(packageRoot, ele.location)).catch(console.error);
+            }, Promise.resolve()).catch(console.error);
     }
 }

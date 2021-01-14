@@ -1,7 +1,7 @@
 {
   "name": "@vcd/care-package-plugin-abstract",
   "description": "CARE Package abstract plugin",
-  "version": "0.0.1-alpha.2",
+  "version": "0.0.1-alpha.3",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {

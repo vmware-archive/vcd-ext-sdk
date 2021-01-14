@@ -1,7 +1,7 @@
 {
   "name": "@vcd/ext-compiler",
   "description": "VMware Cloud Director Extension Compiler",
-  "version": "0.0.3-alpha.2",
+  "version": "0.0.3-alpha.3",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
