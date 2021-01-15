@@ -19,16 +19,17 @@ export class TypesComponentDeployer implements ComponentDeployer {
     }
 
     async deploy(location: string): Promise<any> {
-        return this.objectDeployers.reduce(async (prevPromise, od) => {
-            await prevPromise;
-            return od.deploy(location).catch(e => log(e));
-        }, Promise.resolve()).catch(e => log(e));
+        return this.objectDeployers
+            .reduce(async (prevPromise, od) => {
+                await prevPromise;
+                return od.deploy(location).catch(console.error);
+            }, Promise.resolve()).catch(console.error);
     }
     async clean(location: string) {
-        return this.objectDeployers.reverse().reduce(async (prevPromise, od) => {
-            await prevPromise;
-            return od.clean(location).catch(e => log(e));
-        }, Promise.resolve()).catch(e => log(e));
+        return this.objectDeployers
+            .reduceRight(async (prevPromise, od) => {
+                await prevPromise;
+                return od.clean(location).catch(console.error);
+            }, Promise.resolve()).catch(console.error);
     }
-
 }

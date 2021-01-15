@@ -31,7 +31,7 @@ export class TypesDeployer extends BaseTypesDeployer {
 
     protected async cleanVisitor(det: any, existingDet: any) {
         if (existingDet) {
-            log(`Removing defined entity type ${det.name}`);
+            console.log(`Removing defined entity type ${det.name}`);
             return this.detApi.deleteDefinedEntityType(existingDet.id);
         }
         return Promise.resolve();
@@ -43,17 +43,18 @@ export class TypesDeployer extends BaseTypesDeployer {
 
         let typeResponse = null;
         if (existingDet) {
-            log(`Defined entity type already exists. Updating...`);
+            console.log(`Defined entity type ${det.name} already exists. Updating...`);
             typeResponse = await this.detApi.updateDefinedEntityType(det, existingDet.id);
         } else {
-            log(`Creating new defined entity type ${det.name}`);
+            console.log(`Creating new defined entity type ${det.name}`);
             typeResponse = await this.detApi.createDefinedEntityType(det);
         }
         if (values.length > 0) {
             const typeId = typeResponse.body.id;
             const accessControls = new BehaviorAccesses();
             accessControls.values = values;
-            return this.behApi.setDefinedEntityTypeAccess(accessControls, typeId).catch(e => log(e));
+            console.log(`\tCreating behavior access control ${JSON.stringify(accessControls)} on type ${det.name} ...`);
+            return this.behApi.setDefinedEntityTypeAccess(accessControls, typeId).catch(console.error);
         }
         return Promise.resolve();
     }
@@ -63,12 +64,12 @@ export class TypesDeployer extends BaseTypesDeployer {
     }
 
     async clean(location: string) {
-        this.log('Starting clean up');
+        console.log(`Cleaning up types defined at location: ${location}`);
         return this.traverse(location, this.fileFilter, this.cleanVisitor.bind(this));
     }
 
     async deploy(location: string) {
-        this.log('Starting deployment');
+        console.log(`Deploying types defined at location: ${location}`);
         return this.traverse(location, this.fileFilter, this.deployVisitor.bind(this));
     }
 

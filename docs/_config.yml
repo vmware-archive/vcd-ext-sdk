@@ -19,7 +19,7 @@ plugins:
 # Build settings
 markdown: kramdown
 
-exclude: ['node_modules','package.json','.settings','.project']
+exclude: ['node_modules','package.json','.settings','.project','package-lock.json']
 compress_html:
   blanklines: true
 

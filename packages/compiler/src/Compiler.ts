@@ -153,10 +153,10 @@ export class Compiler {
                     JSON.stringify(context.output[collection][symbolName]
                 ), err => {
                     if (err) {
-                        console.error(`Error creating file: ${symbolName}.yaml. Error: ${err}`);
+                        console.error(`Error creating file: ${symbolName}.json. Error: ${err}`);
                         return;
                     }
-                    console.log(`Writing file: ${symbolName}.json`);
+                    console.log(`Writing file: ${collection}/${symbolName}.json`);
                 });
             });
         });

@@ -54,11 +54,11 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         log(existingPlugins);
         return Promise.all(
             files.map(async file => {
-                log(`Loading plugin from file: ${file}`);
+                console.log(`Loading plugin from file: ${file}`);
                 const zip = new AdmZip(file);
                 const pluginMetadata = toPluginMetadata(JSON.parse(zip.readAsText('manifest.json')));
                 const existingPlugin = existingPlugins[getIdComponent(pluginMetadata)];
-                return visitor(file, pluginMetadata, existingPlugin).catch(e => log(e));
+                return visitor(file, pluginMetadata, existingPlugin);
             })
         );
     }
@@ -68,7 +68,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
             if (existingPlugin) {
                 throw new Error(`Plugin already exists ${existingPlugin.pluginName}. Use --force option to override`);
             }
-            log(`Creating new plugin ${pluginMetadata.pluginName}`);
+            console.log(`Creating new plugin ${pluginMetadata.pluginName}`);
             const pluginMetadataResponse = (await this.uiPluginsApi.addUiPlugin(pluginMetadata)).body;
             log(pluginMetadataResponse);
             const data: Buffer = fs.readFileSync(file);
@@ -76,13 +76,14 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
                 fileName: path.basename(file),
                 size: data.length
             }, pluginMetadataResponse.id);
-            log(`prepare ui plugin upload: ${JSON.stringify(response.response, null, 2)}`);
+            log(JSON.stringify(response.response, null, 2));
             let uploadLink =  response.response.headers.link as string;
             const match = uploadLink.match(/<(.+)>/i);
             if (!match) {
                 throw new Error(`No or invalid upload link ${uploadLink}`);
             }
             uploadLink = match[1];
+            console.log(`Upload plugin to: ${uploadLink}`);
             const transferClient = this.apiConfig.makeTransferClient(uploadLink);
             return transferClient.upload(file, 'application/zip');
 
@@ -92,9 +93,9 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
     async clean(location: string) {
         return this.traverse(location, async (_: string, __: any, existingPlugin?: any) => {
             if (existingPlugin) {
-                log(`Removing plugin ${existingPlugin.pluginName}`);
+                console.log(`Removing plugin ${existingPlugin.pluginName}`);
                 await this.uiPluginResourceApi.deleteUiPluginResource(existingPlugin.id)
-                    .catch(e => log('Error removing plugin resource', e));
+                    .catch(e => console.log('Error removing plugin resource', e));
                 return this.uiPluginApi.deleteUiPlugin(existingPlugin.id);
             }
             return Promise.resolve();
