@@ -67,6 +67,11 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
+    "hooks": {
+      "init": "./lib/hooks/init/analytics",
+      "prerun": "./lib/hooks/prerun/analytics",
+      "postrun": "./lib/hooks/postrun/analytics"
+    },
     "bin": "vcd-ext",
     "plugins": [
       "@oclif/plugin-help"

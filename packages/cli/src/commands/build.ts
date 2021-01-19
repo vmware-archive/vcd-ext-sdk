@@ -16,7 +16,8 @@ export default class Build extends Command {
             required: false,
             default: '',
             description: 'Comma separated list of element names to be deployed. If not provided it deployes all elements.'
-        })
+        }),
+        ci: flags.boolean({ description: 'Indicates the command is run within CI environment. It skips analytics consent prompt.'})
     };
 
     async run() {

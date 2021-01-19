@@ -1,5 +1,16 @@
 #!/usr/bin/env node
 
-require('@oclif/command').run()
-.then(require('@oclif/command/flush'))
-.catch(require('@oclif/errors/handle'))
+const collector_1 = require('../lib/analytics/collector');
+const payload_1 = require("../lib/analytics/payload");
+
+require('@oclif/command')
+    .run()
+    .then(require('@oclif/command/flush'))
+    .catch((error) => {
+        const oclifHandler = require('@oclif/errors/handle');
+        return collector_1.AnalyticsCollector
+            .send(payload_1.EventType.FAILED, null, error)
+            .then(() => {
+                oclifHandler(error);
+            })
+    })

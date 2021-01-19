@@ -23,7 +23,8 @@ export default class Deploy extends Command {
             required: false,
             default: '',
             description: 'Comma separated list of subcomponent names to be deployed. If not provided it deployes all subcomponents.'
-        })
+        }),
+        ci: flags.boolean({ description: 'Indicates the command is run within CI environment. It skips analytics consent prompt.'})
     };
 
     static args = [{ name: 'name', required: false }];
