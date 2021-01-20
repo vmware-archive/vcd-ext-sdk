@@ -79,7 +79,7 @@
   },
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest",
     "version": "oclif-dev readme && git add README.md",
     "build": "tsc",
     "lint": "tslint 'src/**/*.ts'",
