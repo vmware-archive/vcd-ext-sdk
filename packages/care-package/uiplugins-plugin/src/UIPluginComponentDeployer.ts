@@ -66,7 +66,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
     async deploy(location: string): Promise<any> {
         return this.traverse(location, async (file: string, pluginMetadata: any, existingPlugin?: any) => {
             if (existingPlugin) {
-                throw new Error(`Plugin already exists ${existingPlugin.pluginName}. Use --force option to override`);
+                throw new Error(`Plugin already exists. Updated is not supported. Use --force option to clean up and deploy.`);
             }
             console.log(`Creating new plugin ${pluginMetadata.pluginName}`);
             const pluginMetadataResponse = (await this.uiPluginsApi.addUiPlugin(pluginMetadata)).body;

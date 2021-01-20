@@ -11,7 +11,7 @@ export default abstract class ScaffoldingBaseCommand extends Command {
             `vcd-ext:${type}`
         );
 
-        await new Promise((resolve, reject) => {
+        await new Promise<void>((resolve, reject) => {
             env.run(`vcd-ext:${type}`, generatorOptions, (err: Error | null) => {
                 if (err) { reject(err); } else { resolve(); }
             });

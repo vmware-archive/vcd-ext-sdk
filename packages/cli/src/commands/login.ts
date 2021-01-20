@@ -13,6 +13,7 @@ export default class Login extends Command {
 
     static flags = {
         help: flags.help({ char: 'h', description: 'Provides usage for the current command.' }),
+        ci: flags.boolean({ description: 'Indicates the command is run within CI environment. It skips analytics consent prompt.'})
     };
 
     static args = [

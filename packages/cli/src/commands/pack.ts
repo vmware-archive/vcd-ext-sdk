@@ -17,7 +17,8 @@ export default class Pack extends Command {
             required: false,
             default: '',
             description: 'Comma separated list of element names to be packed. If not provided it packs all elements.'
-        })
+        }),
+        ci: flags.boolean({ description: 'Indicates the command is run within CI environment. It skips analytics consent prompt.'})
     };
 
     static args = [{ name: 'name', required: false, description: 'Optional archive name' }];
