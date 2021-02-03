@@ -3,21 +3,20 @@ import * as path from 'path';
 import { spawn } from 'child_process';
 import { debug } from 'debug';
 
-import { AbstractPlugin } from '@vcd/care-package-plugin-abstract';
-import { CarePackageSourceSpec, ElementSource } from '@vcd/care-package-def';
+import { AbstractBuildActions } from '@vcd/care-package-plugin-abstract';
+import { BuildActionParameters, DeployActions, ElementSource } from '@vcd/care-package-def';
 import * as Generator from 'yeoman-generator';
 import { DEFAULT_ENV_CONTENT, DEFAULT_PROXY_CONTENT, emulatorDeps } from './Constants';
-import { ComponentDeployer } from '@vcd/care-package-plugin-abstract';
-import { UIPluginComponentDeployer } from './UIPluginComponentDeployer';
+import { DeployActions as UIPluginDeployActions } from './DeployActions';
+import { names } from './names';
 
 const log = debug('vcd:ext:care-package:uiPlugins-plugin');
 
-export class UiPluginCarePackagePlugin extends AbstractPlugin {
-    name = 'uiPlugin';
-    displayName = 'UI Plugin';
+export class BuildActions extends AbstractBuildActions {
+    name = names.name;
 
-    getComponentDeployer(options: any): ComponentDeployer {
-        return new UIPluginComponentDeployer(options.config);
+    getDeployActions(): DeployActions {
+        return new UIPluginDeployActions();
     }
 
     getDefaultOutDir(): string {
@@ -77,7 +76,7 @@ export class UiPluginCarePackagePlugin extends AbstractPlugin {
         };
     }
 
-    async serve(packageRoot: string, careSpec: CarePackageSourceSpec, elements: ElementSource[], options?: any) {
+    async serve({ packageRoot, elements, options }: BuildActionParameters) {
         const config = options.config;
         const rootDir = path.join(packageRoot, '.env'); // Extract as optional parameter?
         const angularJson = this.loadJsonConfig(packageRoot, 'angular.json');

@@ -1,15 +1,14 @@
 import * as path from 'path';
-import { AbstractPlugin, ComponentDeployer } from '@vcd/care-package-plugin-abstract';
+import { AbstractBuildActions } from '@vcd/care-package-plugin-abstract';
 import { Compiler } from '@vcd/ext-compiler';
-import { CarePackageSourceSpec, ElementSource } from '@vcd/care-package-def';
-import { TypesComponentDeployer } from './deploy';
+import * as careDef from '@vcd/care-package-def';
+import { DeployActions } from './DeployActions';
+import { names } from './names';
 
-export class TypesCarePackagePlugin extends AbstractPlugin {
-    name = 'types';
-    displayName = 'Defined Entities';
-
-    getComponentDeployer(options: any): ComponentDeployer {
-        return new TypesComponentDeployer(options.config);
+export class BuildActions extends AbstractBuildActions {
+    name = names.name;
+    getDeployActions(): careDef.DeployActions {
+        return new DeployActions();
     }
 
     getSrcRoot(): string {
@@ -22,7 +21,7 @@ export class TypesCarePackagePlugin extends AbstractPlugin {
         return '**/*.json';
     }
 
-    private buildElement(packageRoot: string, element: ElementSource) {
+    private buildElement(packageRoot: string, element: careDef.ElementSource, options: any = {}) {
         const base = path.join(packageRoot, element.location?.base || path.join('packages', element.name));
         let opts = {
             rootDir: base,
@@ -30,15 +29,16 @@ export class TypesCarePackagePlugin extends AbstractPlugin {
         };
         if (element.configuration) {
             opts = {
+                ...opts,
                 ...element.configuration,
-                ...opts
+                ...options
             };
         }
         new Compiler(null, opts).compile();
     }
 
-    async build(packageRoot: string, _: CarePackageSourceSpec, elements: ElementSource[]) {
-        elements.forEach(ele => this.buildElement(packageRoot, ele));
+    async build({ packageRoot, elements, options }: careDef.BuildActionParameters) {
+        elements.forEach(ele => this.buildElement(packageRoot, ele, options));
         return Promise.resolve();
     }
 }

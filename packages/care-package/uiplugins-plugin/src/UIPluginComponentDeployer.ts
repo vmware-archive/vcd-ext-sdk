@@ -1,6 +1,5 @@
-import * as fs from 'fs';
+import { glob, readFile } from '@vcd/file-system';
 import * as path from 'path';
-import { sync as globSync } from 'glob';
 import debug from 'debug';
 import AdmZip from 'adm-zip';
 
@@ -39,7 +38,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
     }
 
     private async traverse(location: string, visitor: (file: string, pluginMetadata: any, existingPlugin?: any) => Promise<any>) {
-        const files = globSync(location);
+        const files = await glob(location);
         if (!files || files.length === 0) {
             log('No plugin files to upload!');
             return Promise.resolve();
@@ -55,7 +54,8 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         return Promise.all(
             files.map(async file => {
                 console.log(`Loading plugin from file: ${file}`);
-                const zip = new AdmZip(file);
+                const data: Buffer = await readFile(file);
+                const zip = new AdmZip(data);
                 const pluginMetadata = toPluginMetadata(JSON.parse(zip.readAsText('manifest.json')));
                 const existingPlugin = existingPlugins[getIdComponent(pluginMetadata)];
                 return visitor(file, pluginMetadata, existingPlugin);
@@ -71,7 +71,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
             console.log(`Creating new plugin ${pluginMetadata.pluginName}`);
             const pluginMetadataResponse = (await this.uiPluginsApi.addUiPlugin(pluginMetadata)).body;
             log(pluginMetadataResponse);
-            const data: Buffer = fs.readFileSync(file);
+            const data: Buffer = await readFile(file);
             const response = await this.uiPluginResourceApi.uploadUiPluginResource({
                 fileName: path.basename(file),
                 size: data.length

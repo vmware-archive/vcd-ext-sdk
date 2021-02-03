@@ -7,7 +7,6 @@
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^10.14.20",
-    "@types/yeoman-generator": "^3.0.2",
     "@types/json-schema": "7.0.6"
   },
   "engines": {

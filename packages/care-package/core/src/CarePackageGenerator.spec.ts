@@ -1,24 +1,21 @@
 import { } from 'jasmine';
 import * as path from 'path';
 import { CarePackageGenerator } from './CarePackageGenerator';
-import { AbstractPlugin, ComponentDeployer } from '@vcd/care-package-plugin-abstract';
+import { Plugin } from '@vcd/care-package-def';
+import { JSONSchema7 } from 'json-schema';
 
-export class TestPlugin extends AbstractPlugin {
+export class TestPlugin implements Plugin {
     name = 'test';
     module = '../CarePackageGenerator.spec/TestPlugin';
     displayName = 'Test Plugin';
-    getComponentDeployer(): ComponentDeployer {
-        throw new Error('Method not implemented.');
-    }
-    getDefaultOutDir(): string {
-        throw new Error('Method not implemented.');
-    }
-    getDefaultFiles(): string {
-        throw new Error('Method not implemented.');
-    }
-    getSrcRoot(): string {
-        return 'test/root';
-    }
+
+    buildActions = {
+        getInputSchema: (): JSONSchema7  => null
+    };
+
+    deployActions = {
+        getInputSchema: (): JSONSchema7  => null
+    };
 }
 
 describe('CarePackageGenerator Tests', () => {

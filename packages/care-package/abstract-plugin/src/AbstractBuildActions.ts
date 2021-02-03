@@ -1,32 +1,20 @@
-import { Schema } from 'ts-json-schema-generator';
+import { JSONSchema7 } from 'json-schema';
 import * as path from 'path';
 import { sync as globSync } from 'glob';
 import * as Generator from 'yeoman-generator';
-import { CarePackageSourceSpec, CarePackageSpec, Element, ElementBase, ElementSource, Plugin } from '@vcd/care-package-def';
-import { ComponentDeployer } from './ComponentDeployer';
+import { BuildActionParameters, BuildActions, DeployActions, Element, ElementSource } from '@vcd/care-package-def';
 import debug from 'debug';
 
 const log = debug('vcd:ext:deployer');
 
-export abstract class AbstractPlugin implements Plugin {
-    module: string;
-    abstract name: string;
-    abstract displayName: string;
+export abstract class AbstractBuildActions implements BuildActions {
 
-    createSchema: Schema = {
-        type: 'object',
-        properties: {
-            name: {
-                type: 'string',
-                description: 'element name'
-            }
-        }
-    };
+    abstract name: string;
 
     abstract getSrcRoot(): string;
     abstract getDefaultOutDir(): string;
     abstract getDefaultFiles(): string;
-    abstract getComponentDeployer(options: any): ComponentDeployer;
+    abstract getDeployActions(): DeployActions;
 
     protected copyTemplate(folderName: string, generator: Generator, answers: any) {
         generator.sourceRoot(this.getSrcRoot());
@@ -46,12 +34,27 @@ export abstract class AbstractPlugin implements Plugin {
         return element.location?.base || this.getDefaultBase(element.name);
     }
 
+    getInputSchema(action: string): JSONSchema7 {
+        if (action === 'generate') {
+            return {
+                type: 'object',
+                properties: {
+                    name: {
+                        type: 'string',
+                        description: 'element name'
+                    }
+                }
+            };
+        }
+        return null;
+    }
+
     generate(generator: Generator, answers: any) {
         const folderName = answers.elements[this.name].name || this.name;
         this.copyTemplate(folderName, generator, answers);
     }
 
-    pack(packageRoot: string, _: CarePackageSourceSpec, elements: ElementSource[], options) {
+    pack({ packageRoot, elements, options }: BuildActionParameters) {
         const elementSpecs: Element[] = elements.map(ele => {
             const base = this.getBaseRelative(ele);
             const outDir = ele.location?.outDir || this.getDefaultOutDir();
@@ -76,39 +79,28 @@ export abstract class AbstractPlugin implements Plugin {
         return Promise.resolve(elementSpecs);
     }
 
-    async deploy(packageRoot: string, _: CarePackageSpec, srcElements: (Element | ElementSource)[], options) {
+    async deploy({ packageRoot, careSpec, elements, options }: BuildActionParameters) {
 
-        const elements: Element[] = srcElements.map(ele => {
-            if (typeof(ele.location) === 'string') {
-                return ele as Element;
-            }
-            const eleSrc = ele as ElementSource;
+        const packageElements: Element[] = elements.map(eleSrc => {
             const base = this.getBaseRelative(eleSrc);
             const outDir = eleSrc.location?.outDir || this.getDefaultOutDir();
             const files = eleSrc.location?.files || this.getDefaultFiles();
             const location = path.join(base, outDir, files);
             return {
-                name: ele.name,
-                type: ele.type,
-                configuration: ele.configuration,
+                name: eleSrc.name,
+                type: eleSrc.type,
+                configuration: eleSrc.configuration,
                 location
             } as Element;
         });
-        log(`Deploying elements: ${JSON.stringify(elements, null, 2)}`);
-        const deployer = this.getComponentDeployer(options);
-        log(`Deploying with args force: ${options.force}`);
-        if (options.force) {
-            console.log('Force option set to true. Cleaning up...');
-            await elements
-                .reduceRight(async (prevPromise, ele) => {
-                    await prevPromise;
-                    return deployer.clean(path.join(packageRoot, ele.location)).catch(console.error);
-                }, Promise.resolve()).catch(console.error);
-        }
-        return (elements as Element[])
-            .reduce(async (prevPromise: Promise<any>, ele: Element) => {
-                await prevPromise;
-                return deployer.deploy(path.join(packageRoot, ele.location)).catch(console.error);
-            }, Promise.resolve()).catch(console.error);
+        return this.getDeployActions().deploy({
+            packageRoot,
+            careSpec: {
+                ...careSpec,
+                elements: packageElements
+            },
+            elements: packageElements,
+            options
+        });
     }
 }
