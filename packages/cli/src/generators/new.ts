@@ -5,17 +5,14 @@ import { CarePackageGenerator } from '@vcd/care-package';
 import { JSONSchemaPrompt } from '../prompt/JSONSchemaPrompt';
 
 export default class New extends Generator {
-    name: any;
     answers: any;
     packageGenerator: CarePackageGenerator | null = null;
     additionalPlugins: string[];
 
     constructor(args: any, opts: any) {
         super(args, opts);
-        this.name = opts.name;
         this.additionalPlugins = opts.additionalPlugins;
         this.answers = {
-            name: this.name,
             version: opts.version || '1.0.0',
             description: opts.description || '',
             cliVersion: pjson.version
@@ -25,11 +22,7 @@ export default class New extends Generator {
     async prompting() {
         this.packageGenerator = await CarePackageGenerator.withPlugins(this.additionalPlugins);
         const createSpec = this.packageGenerator.getCreateSpec();
-        let questions = JSONSchemaPrompt.convertToPromptQuestions(createSpec.createSchema, {
-            name: {
-                default: this.name
-            }
-        });
+        let questions = JSONSchemaPrompt.convertToPromptQuestions(createSpec.createSchema);
 
         questions.push({
             type: 'checkbox',
@@ -75,7 +68,7 @@ export default class New extends Generator {
     }
 
     writing() {
-        this.destinationRoot(path.resolve(this.name));
+        this.destinationRoot(path.resolve(this.answers.name));
         process.chdir(this.destinationRoot());
         this.packageGenerator?.generate(this, this.answers);
     }

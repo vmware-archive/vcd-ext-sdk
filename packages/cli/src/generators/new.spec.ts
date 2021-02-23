@@ -6,7 +6,6 @@ import * as assert from 'yeoman-assert';
 describe('New Generator Tests', () => {
     it('Generate empty project', async () => {
         return helpers.run(New)
-            .withOptions({name: 'test'})
             .withPrompts({
                 name: 'test',
                 version: '0.0.1',
@@ -20,7 +19,6 @@ describe('New Generator Tests', () => {
     });
     it('Generate types project', async () => {
         await helpers.run(New)
-            .withOptions({name: 'test'})
             .withPrompts({
                 name: 'test',
                 version: '0.0.1',
@@ -36,7 +34,6 @@ describe('New Generator Tests', () => {
     });
     it('Generate uiPlugin project', async () => {
         await helpers.run(New)
-            .withOptions({name: 'test'})
             .withPrompts({
                 name: 'test',
                 version: '0.0.1',

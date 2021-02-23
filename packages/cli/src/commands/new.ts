@@ -14,15 +14,12 @@ export default class New extends ScaffoldingBaseCommand {
         help: flags.help({ char: 'h', description: 'Provides usage for the current command.' }),
     };
 
-    static args = [{ name: 'name', description: 'Project name' }];
     type = 'new';
 
     async run() {
-        const { args } = this.parse(New);
 
         await super.generate(this.type, {
-            type: this.type,
-            name: args.name
+            type: this.type
         });
     }
 }
