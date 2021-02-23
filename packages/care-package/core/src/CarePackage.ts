@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import AdmZip from 'adm-zip';
 import * as uuid from 'uuid';
-import { CarePackageSpec } from '@vcd/care-package-def';
+import { CarePackageSpec, CloudDirectorConfig } from '@vcd/care-package-def';
 import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
@@ -65,7 +65,7 @@ export class CarePackage {
         return this.plugins.find(p => p.module === type);
     }
 
-    private async runOperationOnElements(opName: string, only: string, options?: any) {
+    private async runOperationOnElements(opName: string, only: string, clientConfig?: CloudDirectorConfig, options?: any) {
         const opType: string = this.fromSource ? 'buildActions' : 'deployActions';
         let elements = this.spec.elements;
         if (only) {
@@ -94,6 +94,7 @@ export class CarePackage {
                     packageRoot: this.packageRoot,
                     careSpec: this.spec,
                     elements: group.elements,
+                    clientConfig,
                     options
                 })
                     .then(result => accumulator.concat(result))
@@ -105,13 +106,13 @@ export class CarePackage {
         if (!this.fromSource) {
             throw new Error('Build operation can only be triggered from CARE package source project');
         }
-        return this.runOperationOnElements('build', only, options);
+        return this.runOperationOnElements('build', only, null, options);
     }
-    async serve(only: string, options?: any) {
+    async serve(only: string, clientConfig: CloudDirectorConfig, options?: any) {
         if (!this.fromSource) {
             throw new Error('Serve operation can only be triggered from CARE package source project');
         }
-        return this.runOperationOnElements('serve', only, options);
+        return this.runOperationOnElements('serve', only, clientConfig, options);
     }
 
     async pack(only: string, options?: any) {
@@ -126,7 +127,7 @@ export class CarePackage {
         }
         const zip = new AdmZip();
         options.zip = zip;
-        const elements = await this.runOperationOnElements('pack', only, options);
+        const elements = await this.runOperationOnElements('pack', only, null, options);
         const manifest = {
             ...this.spec,
             elements
@@ -137,7 +138,7 @@ export class CarePackage {
         console.log(`Creating CARE package: ${path.join(dist, name)}`);
     }
 
-    async deploy(only: string, options?: any) {
-        return this.runOperationOnElements('deploy', only, options);
+    async deploy(only: string, clientConfig: CloudDirectorConfig, options?: any) {
+        return this.runOperationOnElements('deploy', only, clientConfig, options);
     }
 }

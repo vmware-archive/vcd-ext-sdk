@@ -1,10 +1,18 @@
-import { glob, readFile } from '@vcd/file-system';
+import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import debug from 'debug';
 import AdmZip from 'adm-zip';
 
-import { CloudDirectorConfig, UiPluginApi, UiPluginMetadataResponse, UiPluginResourceApi, UiPluginsApi } from '@vcd/node-client';
-import { ComponentDeployer } from '@vcd/care-package-plugin-abstract';
+import {
+    CloudDirectorConfig,
+    UiPluginApi,
+    UiPluginMetadataResponse,
+    UiPluginResourceApi,
+    UiPluginsApi,
+    UploadSpec
+} from '@vcd/node-client';
+import { ComponentDeployer, glob } from '@vcd/care-package-plugin-abstract';
 
 const log = debug('vcd:ext:deployer:uiPlugin');
 
@@ -37,8 +45,12 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         this.uiPluginResourceApi = this.apiConfig.makeApiClient(UiPluginResourceApi);
     }
 
-    private async traverse(location: string, visitor: (file: string, pluginMetadata: any, existingPlugin?: any) => Promise<any>) {
-        const files = await glob(location);
+    private async traverse(
+        location: string,
+        pattern: string,
+        visitor: (file: string, pluginMetadata: any, existingPlugin?: any
+    ) => Promise<any>) {
+        const files = glob(location, pattern);
         if (!files || files.length === 0) {
             log('No plugin files to upload!');
             return Promise.resolve();
@@ -54,7 +66,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         return Promise.all(
             files.map(async file => {
                 console.log(`Loading plugin from file: ${file}`);
-                const data: Buffer = await readFile(file);
+                const data: Buffer = fs.readFileSync(file);
                 const zip = new AdmZip(data);
                 const pluginMetadata = toPluginMetadata(JSON.parse(zip.readAsText('manifest.json')));
                 const existingPlugin = existingPlugins[getIdComponent(pluginMetadata)];
@@ -63,18 +75,22 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         );
     }
 
-    async deploy(location: string): Promise<any> {
-        return this.traverse(location, async (file: string, pluginMetadata: any, existingPlugin?: any) => {
+    async deploy(location: string, pattern: string): Promise<any> {
+        log(`Deploy operation called for ${location}/${pattern}`);
+        return this.traverse(location, pattern, async (file: string, pluginMetadata: any, existingPlugin?: any) => {
             if (existingPlugin) {
                 throw new Error(`Plugin already exists. Updated is not supported. Use --force option to clean up and deploy.`);
             }
             console.log(`Creating new plugin ${pluginMetadata.pluginName}`);
             const pluginMetadataResponse = (await this.uiPluginsApi.addUiPlugin(pluginMetadata)).body;
             log(pluginMetadataResponse);
-            const data: Buffer = await readFile(file);
+            const data: Buffer = fs.readFileSync(file);
+            const checksum = crypto.createHash('sha256').update(data).digest('hex');
             const response = await this.uiPluginResourceApi.uploadUiPluginResource({
                 fileName: path.basename(file),
-                size: data.length
+                size: data.length,
+                checksum,
+                checksumAlgo: UploadSpec.ChecksumAlgoEnum.Sha256
             }, pluginMetadataResponse.id);
             log(JSON.stringify(response.response, null, 2));
             let uploadLink =  response.response.headers.link as string;
@@ -90,8 +106,9 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         });
     }
 
-    async clean(location: string) {
-        return this.traverse(location, async (_: string, __: any, existingPlugin?: any) => {
+    async clean(location: string, pattern: string) {
+        log(`Clean operation called for ${location}/${pattern}`);
+        return this.traverse(location, pattern, async (_: string, __: any, existingPlugin?: any) => {
             if (existingPlugin) {
                 console.log(`Removing plugin ${existingPlugin.pluginName}`);
                 await this.uiPluginResourceApi.deleteUiPluginResource(existingPlugin.id)

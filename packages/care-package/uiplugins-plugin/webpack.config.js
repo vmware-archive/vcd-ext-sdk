@@ -17,29 +17,31 @@ module.exports = {
     ],
   },
   externals: {
+    'fs': 'commonjs @vcd/file-system',
     '@vcd/node-client': 'commonjs @vcd/node-client',
-    '@vcd/file-system': 'commonjs @vcd/file-system'
+    'https': 'commonjs @vcd/https',
+    'url': 'commonjs url',
+    'buffer': 'commonjs buffer',
+    'zlib': 'commonjs browserify-zlib',
+    'assert': 'commonjs assert',
+    'crypto': 'commonjs crypto-browserify',
+    'path': 'commonjs path'
   },
   resolve: {
     extensions: ['.ts', '.js'],
     fallback: {
-      path: require.resolve("path-browserify"),
-      assert: require.resolve("assert/"),
-      zlib: require.resolve("browserify-zlib"),
-      util: false,
-      url: false,
-      crypto: false,
-      events: false,
-      stream: false,
-      fs: false,
       'original-fs': false
     }
   },
   optimization: {
     usedExports: true,
+    innerGraph: true
   },
   output: {
     filename: '[name].js',
+    library: 'DeployActions',
+    libraryExport: 'DeployActions',
+    libraryTarget: 'var',
     path: path.resolve(__dirname, 'dist'),
   },
 };

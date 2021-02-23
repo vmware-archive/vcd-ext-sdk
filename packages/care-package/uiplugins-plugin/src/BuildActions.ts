@@ -76,8 +76,7 @@ export class BuildActions extends AbstractBuildActions {
         };
     }
 
-    async serve({ packageRoot, elements, options }: BuildActionParameters) {
-        const config = options.config;
+    async serve({ packageRoot, elements, clientConfig }: BuildActionParameters) {
         const rootDir = path.join(packageRoot, '.env'); // Extract as optional parameter?
         const angularJson = this.loadJsonConfig(packageRoot, 'angular.json');
         const tsconfigJson = this.loadJsonConfig(packageRoot, 'tsconfig.emulator.json');
@@ -87,11 +86,11 @@ export class BuildActions extends AbstractBuildActions {
         try {
             log('Setting auth token');
             environmnet.credentials = {
-                token: `Bearer ${config.token}`
+                token: `Bearer ${clientConfig.token}`
             };
             log('Updating proxy config');
             Object.keys(proxyConfig).forEach(key => {
-                proxyConfig[key].target = new URL(config.basePath).origin;
+                proxyConfig[key].target = new URL(clientConfig.basePath).origin;
             });
             log('Updating Plugins');
             const pluginModules = elements.map(element => this.discoverPluginModule(packageRoot, element));

@@ -20,7 +20,7 @@ export class InterfacesDeployer extends BaseTypesDeployer {
     }
 
     protected getServerEntities(): Promise<any> {
-        return this.intApi.queryInterfaces(1, 100);
+        return this.intApi.queryInterfaces(1, 100, '', '', '');
     }
     protected async cleanVisitor(definedInterface: any, existingInt: any) {
         if (!existingInt) {
@@ -73,14 +73,14 @@ export class InterfacesDeployer extends BaseTypesDeployer {
             pathElement === 'types' || pathElement === 'interfaces') === 'interfaces';
     }
 
-    async clean(location: string) {
-        console.log(`Cleaning up interfaces defined at location: ${location}`);
-        return this.traverse(location, this.fileFilter, this.cleanVisitor.bind(this));
+    async clean(location: string, pattern: string) {
+        console.log(`Cleaning up interfaces defined at location: ${location}/${pattern}`);
+        return this.traverse(location, pattern, this.fileFilter, this.cleanVisitor.bind(this));
     }
 
-    async deploy(location: string) {
-        console.log(`Deploying interfaces defined at location: ${location}`);
-        return this.traverse(location, this.fileFilter, this.deployVisitor.bind(this));
+    async deploy(location: string, pattern: string) {
+        console.log(`Deploying interfaces defined at location: ${location}/${pattern}`);
+        return this.traverse(location, pattern, this.fileFilter, this.deployVisitor.bind(this));
     }
 
 }

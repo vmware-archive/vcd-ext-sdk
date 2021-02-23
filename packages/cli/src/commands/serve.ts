@@ -28,6 +28,6 @@ export default class Serve extends Command {
         const { flags } = this.parse(Serve);
         const config = CloudDirectorConfig.fromDefault();
         const carePackage = await CarePackage.loadFromSource();
-        return carePackage.serve(flags.only, { config });
+        return carePackage.serve(flags.only, config);
     }
 }

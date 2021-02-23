@@ -1,6 +1,7 @@
 import { JSONSchema7 } from 'json-schema';
 import * as Generator from 'yeoman-generator';
 import { CarePackageSourceSpec, CarePackageSpec, Element, ElementBase, ElementSource } from './CarePackage';
+import { CloudDirectorConfig } from './CloudDirectorConfig';
 
 export interface SchemaProvider {
     getInputSchema(action: string): JSONSchema7;
@@ -10,6 +11,7 @@ export interface BuildActionParameters {
     packageRoot: string;
     careSpec: CarePackageSourceSpec;
     elements: ElementSource[];
+    clientConfig?: CloudDirectorConfig
     options?: any
 }
 
@@ -25,6 +27,7 @@ export interface DeployActionParameters {
     packageRoot: string;
     careSpec: CarePackageSpec;
     elements: Element[];
+    clientConfig: CloudDirectorConfig
     options?: any
 }
 
