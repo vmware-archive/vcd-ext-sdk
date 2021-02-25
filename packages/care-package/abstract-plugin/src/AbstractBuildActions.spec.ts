@@ -1,12 +1,14 @@
+import { DeployActions } from '@vcd/care-package-def';
 import { } from 'jasmine';
-import { AbstractPlugin } from './AbstractPlugin';
+import { AbstractBuildActions } from './AbstractBuildActions';
 import { ComponentDeployer } from './ComponentDeployer';
 
-class TestPlugin extends AbstractPlugin {
+class TestPlugin extends AbstractBuildActions {
     name = 'test';
-    module = './AbstractPlugin/TestPlugin';
-    displayName = 'Test Plugin';
 
+    getDeployActions(): DeployActions {
+        throw new Error('Method not implemented.');
+    }
     getComponentDeployer(): ComponentDeployer {
         throw new Error('Method not implemented.');
     }

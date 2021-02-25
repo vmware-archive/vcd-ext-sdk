@@ -26,7 +26,7 @@ export class TypesDeployer extends BaseTypesDeployer {
     }
 
     protected getServerEntities(): Promise<any> {
-        return this.detApi.getDefinedEntityTypes(1, 100);
+        return this.detApi.getDefinedEntityTypes(1, 100, '', '', '');
     }
 
     protected async cleanVisitor(det: any, existingDet: any) {
@@ -63,14 +63,14 @@ export class TypesDeployer extends BaseTypesDeployer {
             pathElement === 'types' || pathElement === 'interfaces') === 'types';
     }
 
-    async clean(location: string) {
-        console.log(`Cleaning up types defined at location: ${location}`);
-        return this.traverse(location, this.fileFilter, this.cleanVisitor.bind(this));
+    async clean(location: string, pattern: string) {
+        console.log(`Cleaning up types defined at location: ${location}/${pattern}`);
+        return this.traverse(location, pattern, this.fileFilter, this.cleanVisitor.bind(this));
     }
 
-    async deploy(location: string) {
-        console.log(`Deploying types defined at location: ${location}`);
-        return this.traverse(location, this.fileFilter, this.deployVisitor.bind(this));
+    async deploy(location: string, pattern: string) {
+        console.log(`Deploying types defined at location: ${location}/${pattern}`);
+        return this.traverse(location, pattern, this.fileFilter, this.deployVisitor.bind(this));
     }
 
 }

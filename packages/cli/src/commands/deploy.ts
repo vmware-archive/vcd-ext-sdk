@@ -37,6 +37,6 @@ export default class Deploy extends Command {
         const carePackage = args.name ?
             await CarePackage.loadFromPackage(args.name) :
             await CarePackage.loadFromSource();
-        return carePackage.deploy(flags.only, { config, force: flags.force });
+        return carePackage.deploy(flags.only, config, { force: flags.force });
     }
 }

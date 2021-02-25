@@ -4,8 +4,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import AdmZip from 'adm-zip';
 import * as uuid from 'uuid';
-import { Plugin, CarePackageSpec } from '@vcd/care-package-def';
-import PluginLoader from './plugins/PluginLoader';
+import { CarePackageSpec, CloudDirectorConfig } from '@vcd/care-package-def';
+import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
 const DIST_FOLDER_NAME = 'dist';
@@ -26,8 +26,8 @@ export class CarePackage {
         public packageRoot: string,
         public spec: CarePackageSpec,
         private fromSource: boolean,
-        private plugins: Plugin[]
-    ) {}
+        private plugins: PluginExtended[]
+    ) { }
 
     private static async load(packageRoot: string, descriptorName: string, fromSource: boolean, defaults?: any) {
         console.log(`Loading package with root: ${packageRoot}`);
@@ -35,7 +35,7 @@ export class CarePackage {
         const spec = JSON.parse(fileContent) as CarePackageSpec;
         spec.name = spec.name || defaults?.name;
         spec.version = spec.version || defaults?.version;
-        const plugins: Plugin[] = await PluginLoader.load([...new Set(spec.elements.map(ele => ele.type))]);
+        const plugins: PluginExtended[] = await PluginLoader.load([...new Set(spec.elements.map(ele => ele.type))]);
         return new CarePackage(packageRoot, spec, fromSource, plugins);
 
     }
@@ -61,12 +61,13 @@ export class CarePackage {
         return this.load(packageRoot, 'manifest.json', false);
     }
 
-    private getPluginForType(type: string): Plugin {
+    private getPluginForType(type: string): PluginExtended {
         return this.plugins.find(p => p.module === type);
     }
 
-    private async runOperationOnElements(opName: string, only: string, options?: any) {
-        let elements  = this.spec.elements;
+    private async runOperationOnElements(opName: string, only: string, clientConfig?: CloudDirectorConfig, options?: any) {
+        const opType: string = this.fromSource ? 'buildActions' : 'deployActions';
+        let elements = this.spec.elements;
         if (only) {
             const onlyArr = only.split(',').map(p => p.trim());
             elements = elements.filter(ele => onlyArr.includes(ele.name));
@@ -74,7 +75,7 @@ export class CarePackage {
         const elementGroups: any = elements
             .reduce((prev, ele) => {
                 const plugin = this.getPluginForType(ele.type);
-                if (!!plugin[opName]) {
+                if (!!plugin[opType][opName]) {
                     if (!prev[ele.type]) {
                         prev[ele.type] = {
                             plugin,
@@ -89,7 +90,13 @@ export class CarePackage {
             .reduce(async (prevPromise: Promise<any>, group: any): Promise<any> => {
                 const accumulator = await prevPromise;
                 console.log(`Running ${opName} for plugin ${group.plugin.module} with elements ${group.elements.map(e => e.name)}`);
-                return group.plugin[opName](this.packageRoot, this.spec, group.elements, options)
+                return group.plugin[opType][opName]({
+                    packageRoot: this.packageRoot,
+                    careSpec: this.spec,
+                    elements: group.elements,
+                    clientConfig,
+                    options
+                })
                     .then(result => accumulator.concat(result))
                     .catch(console.error);
             }, Promise.resolve([]));
@@ -99,13 +106,13 @@ export class CarePackage {
         if (!this.fromSource) {
             throw new Error('Build operation can only be triggered from CARE package source project');
         }
-        return this.runOperationOnElements('build', only, options);
+        return this.runOperationOnElements('build', only, null, options);
     }
-    async serve(only: string, options?: any) {
+    async serve(only: string, clientConfig: CloudDirectorConfig, options?: any) {
         if (!this.fromSource) {
             throw new Error('Serve operation can only be triggered from CARE package source project');
         }
-        return this.runOperationOnElements('serve', only, options);
+        return this.runOperationOnElements('serve', only, clientConfig, options);
     }
 
     async pack(only: string, options?: any) {
@@ -120,7 +127,7 @@ export class CarePackage {
         }
         const zip = new AdmZip();
         options.zip = zip;
-        const elements = await this.runOperationOnElements('pack', only, options);
+        const elements = await this.runOperationOnElements('pack', only, null, options);
         const manifest = {
             ...this.spec,
             elements
@@ -131,7 +138,7 @@ export class CarePackage {
         console.log(`Creating CARE package: ${path.join(dist, name)}`);
     }
 
-    async deploy(only: string, options?: any) {
-        return this.runOperationOnElements('deploy', only, options);
+    async deploy(only: string, clientConfig: CloudDirectorConfig, options?: any) {
+        return this.runOperationOnElements('deploy', only, clientConfig, options);
     }
 }

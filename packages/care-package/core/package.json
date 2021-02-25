@@ -1,14 +1,14 @@
 {
   "name": "@vcd/care-package",
   "description": "Manages CARE Packages",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
-    "@vcd/care-package-plugin-types": "0.0.1-alpha.3",
-    "@vcd/care-package-plugin-uiplugins": "0.0.1-alpha.3",
-    "@vcd/care-package-def": "0.0.1-alpha.0",
-    "@vcd/care-package-plugin-abstract": "0.0.1-alpha.3",
+    "@vcd/care-package-plugin-types": "0.0.1-alpha.4",
+    "@vcd/care-package-plugin-uiplugins": "0.0.1-alpha.4",
+    "@vcd/care-package-def": "0.0.1-alpha.1",
+    "@vcd/care-package-plugin-abstract": "0.0.1-alpha.4",
     "camelcase": "^6.0.0",
     "adm-zip": "^0.4.16",
     "debug": "^4.1.1",
@@ -17,7 +17,7 @@
     "rimraf": "^3.0.2",
     "ts-json-schema-generator": "^0.76.1",
     "tslib": "^1.10.0",
-    "yeoman-generator": "^4.1.0"
+    "yeoman-generator": "^4.12.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
@@ -32,7 +32,6 @@
     "nyc": "^14.1.1",
     "ts-node": "^8.4.1",
     "tslint": "5.15.0",
-    "@types/yeoman-generator": "^3.0.2",
     "typescript": "~4.0.3"
   },
   "engines": {

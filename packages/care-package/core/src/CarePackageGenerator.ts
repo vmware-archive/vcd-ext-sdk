@@ -1,18 +1,17 @@
 import * as path from 'path';
 import * as Generator from 'yeoman-generator';
 import camelcase from 'camelcase';
-import PluginLoader from './plugins/PluginLoader';
-import { Plugin } from '@vcd/care-package-def';
+import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
 import { createSchema } from './createSchema';
 
 export interface CarePackageCreateSpec {
     createSchema: any;
-    elements: Plugin[];
+    elements: PluginExtended[];
 }
 
 export class CarePackageGenerator {
 
-    private constructor(private plugins: Plugin[]) {
+    private constructor(private plugins: PluginExtended[]) {
     }
 
     static async withPlugins(additionalPlugins: string[] = []) {
@@ -46,7 +45,7 @@ export class CarePackageGenerator {
             { globOptions: { dot: true } }
         );
         this.plugins
-            .filter(plugin => !!plugin.generate && !!answers.elements[plugin.name])
-            .forEach(plugin => plugin.generate(generator, answers));
+            .filter(plugin => !!plugin.buildActions.generate && !!answers.elements[plugin.name])
+            .forEach(plugin => plugin.buildActions.generate(generator, answers));
     }
 }
