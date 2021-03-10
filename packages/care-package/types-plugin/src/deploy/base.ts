@@ -26,7 +26,7 @@ export abstract class BaseTypesDeployer implements ComponentDeployer {
                 return prev;
             }, {});
         this.log(existingDets);
-        return Promise.all(
+        return await Promise.all(
             files.map(async file => {
                 this.log(`Loading defined entity type from file: ${file}`);
                 const det = JSON.parse(fs.readFileSync(file).toString());

@@ -26,15 +26,15 @@ export class InterfacesDeployer extends BaseTypesDeployer {
         if (!existingInt) {
             return Promise.resolve();
         }
-        console.log(`Interface exists ${definedInterface.name}. Cleaning up behaviours`);
+        log(`Interface exists ${definedInterface.name}. Cleaning up behaviours`);
         const serverBehs = await this.behApi.getInterfaceBehaviors(1, 128, existingInt.id);
         await Promise.all(serverBehs.body.values.map(
             async beh => {
-                console.log(`Removing behaviour ${beh.name}`);
-                return this.behApi.deleteInterfaceBehavior(existingInt.id, beh.id).catch(console.error);
+                log(`Removing behaviour ${beh.name}`);
+                return this.behApi.deleteInterfaceBehavior(existingInt.id, beh.id).catch(log);
             }
         ));
-        console.log(`Removing interface ${definedInterface.name}`);
+        log(`Removing interface ${definedInterface.name}`);
         return this.intApi.deleteInterface(existingInt.id);
 
     }
@@ -45,10 +45,10 @@ export class InterfacesDeployer extends BaseTypesDeployer {
 
         let interfaceResponse = null;
         if (existingInt) {
-            console.log(`Interface exists ${definedInterface.name}. Updating ...`);
+            log(`Interface exists ${definedInterface.name}. Updating ...`);
             interfaceResponse = await this.intApi.updateInterface(definedInterface, existingInt.id);
         } else {
-            console.log(`Creating new defined interface ${definedInterface.name}`);
+            log(`Creating new defined interface ${definedInterface.name}`);
             interfaceResponse = await this.intApi.createInterface(definedInterface);
         }
         const intId = interfaceResponse.body.id;
@@ -59,13 +59,13 @@ export class InterfacesDeployer extends BaseTypesDeployer {
                 return prev;
             }, {});
         log(exisingBehs);
-        return Promise.all(behaviors.map(async beh => {
+        return await Promise.all(behaviors.map(async beh => {
             if (exisingBehs[beh.name]) {
-                console.log(`\t Behavior already exists ${beh.name}. Updating ...`);
-                return this.behApi.updateInterfaceBehavior(beh, intId, exisingBehs[beh.name].id).catch(console.error);
+                log(`\t Behavior already exists ${beh.name}. Updating ...`);
+                return this.behApi.updateInterfaceBehavior(beh, intId, exisingBehs[beh.name].id).catch(log);
             }
-            console.log(`\t Creating behavior ${beh.name} on interface ${definedInterface.name} ...`);
-            return this.behApi.addInterfaceBehavior(beh, intId).catch(console.error);
+            log(`\t Creating behavior ${beh.name} on interface ${definedInterface.name} ...`);
+            return this.behApi.addInterfaceBehavior(beh, intId).catch(log);
         }));
     }
     fileFilter(file: string): boolean {
@@ -74,13 +74,13 @@ export class InterfacesDeployer extends BaseTypesDeployer {
     }
 
     async clean(location: string, pattern: string) {
-        console.log(`Cleaning up interfaces defined at location: ${location}/${pattern}`);
+        log(`Cleaning up interfaces defined at location: ${location}/${pattern}`);
         return this.traverse(location, pattern, this.fileFilter, this.cleanVisitor.bind(this));
     }
 
     async deploy(location: string, pattern: string) {
-        console.log(`Deploying interfaces defined at location: ${location}/${pattern}`);
-        return this.traverse(location, pattern, this.fileFilter, this.deployVisitor.bind(this));
+        log(`Deploying interfaces defined at location: ${location}/${pattern}`);
+        return await this.traverse(location, pattern, this.fileFilter, this.deployVisitor.bind(this));
     }
 
 }

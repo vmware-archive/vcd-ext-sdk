@@ -31,7 +31,7 @@ export class TypesDeployer extends BaseTypesDeployer {
 
     protected async cleanVisitor(det: any, existingDet: any) {
         if (existingDet) {
-            console.log(`Removing defined entity type ${det.name}`);
+            log(`Removing defined entity type ${det.name}`);
             return this.detApi.deleteDefinedEntityType(existingDet.id);
         }
         return Promise.resolve();
@@ -43,18 +43,18 @@ export class TypesDeployer extends BaseTypesDeployer {
 
         let typeResponse = null;
         if (existingDet) {
-            console.log(`Defined entity type ${det.name} already exists. Updating...`);
+            log(`Defined entity type ${det.name} already exists. Updating...`);
             typeResponse = await this.detApi.updateDefinedEntityType(det, existingDet.id);
         } else {
-            console.log(`Creating new defined entity type ${det.name}`);
+            log(`Creating new defined entity type ${det.name}`);
             typeResponse = await this.detApi.createDefinedEntityType(det);
         }
         if (values.length > 0) {
             const typeId = typeResponse.body.id;
             const accessControls = new BehaviorAccesses();
             accessControls.values = values;
-            console.log(`\tCreating behavior access control ${JSON.stringify(accessControls)} on type ${det.name} ...`);
-            return this.behApi.setDefinedEntityTypeAccess(accessControls, typeId).catch(console.error);
+            log(`\tCreating behavior access control ${JSON.stringify(accessControls)} on type ${det.name} ...`);
+            return this.behApi.setDefinedEntityTypeAccess(accessControls, typeId).catch(log);
         }
         return Promise.resolve();
     }
@@ -64,12 +64,12 @@ export class TypesDeployer extends BaseTypesDeployer {
     }
 
     async clean(location: string, pattern: string) {
-        console.log(`Cleaning up types defined at location: ${location}/${pattern}`);
+        log(`Cleaning up types defined at location: ${location}/${pattern}`);
         return this.traverse(location, pattern, this.fileFilter, this.cleanVisitor.bind(this));
     }
 
     async deploy(location: string, pattern: string) {
-        console.log(`Deploying types defined at location: ${location}/${pattern}`);
+        log(`Deploying types defined at location: ${location}/${pattern}`);
         return this.traverse(location, pattern, this.fileFilter, this.deployVisitor.bind(this));
     }
 
