@@ -1,12 +1,12 @@
 {
   "name": "@vcd/care-package",
   "description": "Manages CARE Packages",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
-    "@vcd/care-package-plugin-types": "0.0.1-alpha.4",
-    "@vcd/care-package-plugin-uiplugins": "0.0.1-alpha.4",
+    "@vcd/care-package-plugin-types": "0.0.1-alpha.5",
+    "@vcd/care-package-plugin-uiplugins": "0.0.1-alpha.5",
     "@vcd/care-package-def": "0.0.1-alpha.1",
     "@vcd/care-package-plugin-abstract": "0.0.1-alpha.4",
     "camelcase": "^6.0.0",

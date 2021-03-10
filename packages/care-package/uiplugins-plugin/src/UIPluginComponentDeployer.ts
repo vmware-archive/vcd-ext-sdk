@@ -65,7 +65,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         log(existingPlugins);
         return Promise.all(
             files.map(async file => {
-                console.log(`Loading plugin from file: ${file}`);
+                log(`Loading plugin from file: ${file}`);
                 const data: Buffer = fs.readFileSync(file);
                 const zip = new AdmZip(data);
                 const pluginMetadata = toPluginMetadata(JSON.parse(zip.readAsText('manifest.json')));
@@ -81,7 +81,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
             if (existingPlugin) {
                 throw new Error(`Plugin already exists. Updated is not supported. Use --force option to clean up and deploy.`);
             }
-            console.log(`Creating new plugin ${pluginMetadata.pluginName}`);
+            log(`Creating new plugin ${pluginMetadata.pluginName}`);
             const pluginMetadataResponse = (await this.uiPluginsApi.addUiPlugin(pluginMetadata)).body;
             log(pluginMetadataResponse);
             const data: Buffer = fs.readFileSync(file);
@@ -99,7 +99,7 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
                 throw new Error(`No or invalid upload link ${uploadLink}`);
             }
             uploadLink = match[1];
-            console.log(`Upload plugin to: ${uploadLink}`);
+            log(`Upload plugin to: ${uploadLink}`);
             const transferClient = this.apiConfig.makeTransferClient(uploadLink);
             return transferClient.upload(file, 'application/zip');
 
@@ -110,9 +110,9 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
         log(`Clean operation called for ${location}/${pattern}`);
         return this.traverse(location, pattern, async (_: string, __: any, existingPlugin?: any) => {
             if (existingPlugin) {
-                console.log(`Removing plugin ${existingPlugin.pluginName}`);
+                log(`Removing plugin ${existingPlugin.pluginName}`);
                 await this.uiPluginResourceApi.deleteUiPluginResource(existingPlugin.id)
-                    .catch(e => console.log('Error removing plugin resource', e));
+                    .catch(e => log('Error removing plugin resource', e));
                 return this.uiPluginApi.deleteUiPlugin(existingPlugin.id);
             }
             return Promise.resolve();
