@@ -2,6 +2,10 @@
 /**
  * Site header
  */
+
+.header-pos {
+    z-index: 10;
+}
 .site-header {
     border-top: 5px solid $grey-color-dark;
     border-bottom: 1px solid $grey-color-light;
@@ -240,4 +244,53 @@
             font-size: 18px;
         }
     }
+}
+
+.home {
+    position: absolute;
+    width: 100vw;
+    max-height: 600px;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, #0079B8 0%, #0079B8 107.18%);
+}
+
+.home .title-container {
+    height: 100%;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 15%;
+}
+
+.home .title-container .title {
+    max-width: 600px;
+    font-family: Metropolis;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 120%;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+}
+
+.home .title-container .subtitle {
+    max-width: 500px;
+    font-family: Clarity City;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 140%;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+}
+
+.home .clouds {
+    max-height: 600px;
 }
