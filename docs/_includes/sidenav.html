@@ -10,7 +10,7 @@
       <input id="tabexample1" type="checkbox">
       <label for="tabexample1">{{ cat.name }}</label>
       <ul class="nav-list">
-        {% assign items = cat.items | sort: 'order' %}
+        {% assign items = cat.items | sort: 'order' | where: 'hasMore', true %}
         {% for item in items %}
           {% if item.url == page.url %}
             <li><a class="nav-link active" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>

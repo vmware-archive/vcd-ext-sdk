@@ -1,6 +1,9 @@
 ---
 layout: default
 title:  "Ticketing"
+description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu odio nisi. Vestibulum dignissim eget massa sit amet feugiat. Quisque auctor mattis quam eu suscipit."
+hasMore: true
+labels: [Defined Entities, UI Plugins]
 category: Use Cases
 order: 1
 permalink: /use_cases/ticketing/
