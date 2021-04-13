@@ -4,22 +4,34 @@
 {% if page.collection %}
 <nav class="sidenav">
   <section class="sidenav-content">
-    {% assign mydocs = col.docs | group_by: 'category' %}
+    {% assign mydocs = col.docs | sort: 'catOrder' | group_by: 'category' %}
     {% for cat in mydocs %}
-    <section class="nav-group collapsible">
-      <input id="tabexample1" type="checkbox">
-      <label for="tabexample1">{{ cat.name }}</label>
-      <ul class="nav-list">
+      {% if cat.name == 'none' %}
         {% assign items = cat.items | sort: 'order' | where: 'hasMore', true %}
         {% for item in items %}
-          {% if item.url == page.url %}
-            <li><a class="nav-link active" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
-          {% else %}
-            <li><a class="nav-link" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
-          {% endif %}
+          <a class="nav-link {% if item.url == page.url %} active {% endif %}" href="{{ item.url | prepend: site.baseurl }}">
+            {% if item.iconShape %} <clr-icon shape="{{ item.iconShape }}"></clr-icon> {% endif %}
+            {{ item.title }}
+          </a>
         {% endfor %}
-      </ul>
-    </section>
+      {% else %}
+        {% assign items = cat.items | sort: 'order' | where: 'hasMore', true %}
+        {% assign firstItem = cat.items | first %}
+        <section class="nav-group collapsible">
+          <input id="tabexample1" type="checkbox">
+          <label for="tabexample1">
+            {% if firstItem.iconShape %} <clr-icon shape="{{ firstItem.iconShape }}"></clr-icon> {% endif %}
+            {{ cat.name }}
+          </label>
+          <ul class="nav-list">
+            {% for item in items %}
+              <li><a class="nav-link {% if item.url == page.url %} active {% endif %}" href="{{ item.url | prepend: site.baseurl }}">
+                {{ item.title }}
+              </a></li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
     {% endfor %}
   </section>
 </nav>

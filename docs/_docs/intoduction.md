@@ -1,6 +1,10 @@
 ---
 layout: default
-title: Docs
+title: Intoduction
+category: none
+catOrder: 1
+hasMore: true
+order: 1
 permalink: /docs/
 ---
 

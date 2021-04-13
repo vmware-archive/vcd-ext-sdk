@@ -31,6 +31,6 @@ collections:
     order: 1
   docs:
     output: true
-    title: Docs
+    title: Developer Guides
     nav: true
     order: 2
