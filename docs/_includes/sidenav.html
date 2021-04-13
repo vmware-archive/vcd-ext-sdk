@@ -4,22 +4,33 @@
 {% if page.collection %}
 <nav class="sidenav">
   <section class="sidenav-content">
-    {% assign mydocs = col.docs | group_by: 'category' %}
+    {% assign mydocs = col.docs | sort: 'catOrder' | group_by: 'category' %}
     {% for cat in mydocs %}
-    <section class="nav-group collapsible">
-      <input id="tabexample1" type="checkbox">
-      <label for="tabexample1">{{ cat.name }}</label>
-      <ul class="nav-list">
+      {% if cat.name == 'none' %}
         {% assign items = cat.items | sort: 'order' | where: 'hasMore', true %}
         {% for item in items %}
           {% if item.url == page.url %}
-            <li><a class="nav-link active" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
+            <a class="nav-link active" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a>
           {% else %}
-            <li><a class="nav-link" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
+            <a class="nav-link" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a>
           {% endif %}
         {% endfor %}
-      </ul>
-    </section>
+      {% else %}
+        <section class="nav-group collapsible">
+          <input id="tabexample1" type="checkbox">
+          <label for="tabexample1">{{ cat.name }}</label>
+          <ul class="nav-list">
+            {% assign items = cat.items | sort: 'order' | where: 'hasMore', true %}
+            {% for item in items %}
+              {% if item.url == page.url %}
+                <li><a class="nav-link active" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
+              {% else %}
+                <li><a class="nav-link" href="{{ item.url | prepend: site.baseurl }}">{{ item.title }}</a></li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
     {% endfor %}
   </section>
 </nav>
