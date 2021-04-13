@@ -294,3 +294,17 @@
 .home .clouds {
     max-height: 600px;
 }
+
+.use-cases {
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    align-items: center;
+}
+.use-cases .title {
+    max-width: 800px;
+    align-items: flex-start;
+}
+.use-cases .use-case {
+    max-width: 800px;
+}
