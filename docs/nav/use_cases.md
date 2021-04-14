@@ -21,7 +21,9 @@ permalink: /use_cases/
               {{uc.description}}
             <div>
               {% for ucLabel in uc.labels %}
-                <span class="label label-light-blue">{{ ucLabel }}</span>
+                {% if ucLabel.link %} <a href="{{ ucLabel.link | prepend: site.baseurl }}"> {% endif %}
+                  <span class="label label-light-blue"><clr-icon shape="{{ ucLabel.iconShape }}"></clr-icon> {{ ucLabel.name }}</span>
+                {% if ucLabel.link %} </a> {% endif %}
               {% endfor %}
             </div>
           </div>
