@@ -5,7 +5,7 @@ category: Defined Entities
 catOrder: 2
 iconShape: objects
 hasMore: true
-order: 2
+order: 3
 permalink: /docs/defined_entities_types
 ---
 # Create Defined Entity Types
