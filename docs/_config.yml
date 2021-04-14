@@ -7,6 +7,7 @@ description: >
   The templates captures best practices for API, Object and, UI extension development and are offered in Java, Javascript/Typescript/nodejs and, Python.
 baseurl: "/vcd-ext-sdk"
 url: "https://vmware.github.io"
+repository: https://github.com/vmware/vcd-ext-sdk
 clarity_header_iconshape: plugin
 google_analytics:
 
