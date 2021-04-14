@@ -5,7 +5,7 @@ category: Defined Entities
 catOrder: 2
 iconShape: objects
 hasMore: true
-order: 3
+order: 4
 permalink: /docs/defined_entities_interfaces
 ---
 # Add behaviours to entities
