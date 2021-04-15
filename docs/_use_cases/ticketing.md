@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Ticketing"
-description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu odio nisi. Vestibulum dignissim eget massa sit amet feugiat. Quisque auctor mattis quam eu suscipit."
+description: "This tutorial uses a Ticketing application example using the vCD Extensibility SDK"
 hasMore: true
 labels: 
   - name: Defined Entities
