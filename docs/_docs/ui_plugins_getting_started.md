@@ -14,11 +14,7 @@ This quick start shows you how to create UI Plugins project, how to host the pro
 
 ## Creating the UI plugin project
 
-To create the plugin project, you need to install the VCD Extensibility CLI as a global npm package
-
-`npm i -g @vcd/ext-cli`
-
-Once the package is available, open a terminal, go to your desired directory and run
+Run the following command to generate a new project:
 
 `vcd-ext new`
 

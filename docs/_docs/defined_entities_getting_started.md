@@ -15,7 +15,7 @@ This quickstart shows you how to create types project, add a type and deploy it 
 ## Create a types project
 Run the following command to generate a new project:
 ```bash
-vcd-ext new types-demo
+vcd-ext new
 ? Your solution name types-demo
 ? Specify first version 0.0.1
 ? Specify vendor name MyCompany
