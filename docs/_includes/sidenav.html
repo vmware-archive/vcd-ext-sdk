@@ -17,9 +17,10 @@
       {% else %}
         {% assign items = cat.items | sort: 'order' | where: 'hasMore', true %}
         {% assign firstItem = cat.items | first %}
+        {% assign checkedItemsCount = items | where: 'url', page.url | size %}
         <section class="nav-group collapsible">
-          <input id="tabexample1" type="checkbox">
-          <label for="tabexample1">
+          <input id="tabexample-{{ cat.name }}" type="checkbox" {% if checkedItemsCount == 0 %} checked {% endif %}>
+          <label for="tabexample-{{ cat.name }}">
             {% if firstItem.iconShape %} <clr-icon shape="{{ firstItem.iconShape }}"></clr-icon> {% endif %}
             {{ cat.name }}
           </label>

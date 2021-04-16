@@ -8,7 +8,7 @@ labels:
     iconShape: tasks
   - name: UI Plugins
     iconShape: plugin
-    link: /docs/ui_plugins_intro
+    link: /docs/ui_plugins/overview
 category: Use Cases
 order: 2
 permalink: /use_cases/approvals/

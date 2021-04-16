@@ -9,7 +9,7 @@ labels:
     link: /docs/defined_entities_intro
   - name: UI Plugins
     iconShape: plugin
-    link: /docs/ui_plugins_intro
+    link: /docs/ui_plugins/overview
 category: Use Cases
 order: 1
 permalink: /use_cases/ticketing/
