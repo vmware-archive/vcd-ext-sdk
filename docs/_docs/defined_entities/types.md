@@ -6,7 +6,7 @@ catOrder: 2
 iconShape: objects
 hasMore: true
 order: 3
-permalink: /docs/defined_entities_types
+permalink: /docs/defined_entities/types
 ---
 # Create Defined Entity Types
 

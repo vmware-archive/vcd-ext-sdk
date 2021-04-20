@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Get Started
-category: none
+category: none2
 catOrder: 1
 hasMore: true
 order: 2
@@ -11,7 +11,7 @@ permalink: /docs/getting_started
 Follow this guide to get started with build a Cloud Director Solution
 
 ## Prerequisites
-* Your favourite IDE
+* Your favorite IDE
 * NodeJS: >=10.14.2 <13.0.0
 
 ## Install the CLI

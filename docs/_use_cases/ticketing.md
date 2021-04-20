@@ -6,7 +6,7 @@ hasMore: true
 labels: 
   - name: Defined Entities
     iconShape: objects
-    link: /docs/defined_entities_intro
+    link: /docs/defined_entities/intro
   - name: UI Plugins
     iconShape: plugin
     link: /docs/ui_plugins/overview

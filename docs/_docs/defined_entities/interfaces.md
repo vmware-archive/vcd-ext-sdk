@@ -6,7 +6,7 @@ catOrder: 2
 iconShape: objects
 hasMore: true
 order: 4
-permalink: /docs/defined_entities_interfaces
+permalink: /docs/defined_entities/interfaces
 ---
 # Add behaviours to entities
 

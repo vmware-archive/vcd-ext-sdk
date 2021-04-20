@@ -6,7 +6,7 @@ catOrder: 2
 iconShape: objects
 hasMore: true
 order: 1
-permalink: /docs/defined_entities_intro
+permalink: /docs/defined_entities/intro
 ---
 # Defined Entities
 
