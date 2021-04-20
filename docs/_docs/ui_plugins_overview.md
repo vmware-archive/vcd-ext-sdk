@@ -23,7 +23,7 @@ and achieving a unified Cloud Director UX.
   <tr >
     <th class="concept-header-column">Extension Points</th>
     <td> An extension point essentially is a Cloud Director predefined global or contextual navigation/menu placeholder, which a UI plugin will use to attach itself to and be used for navigation/plugin initialization. 
-    There are finite number of extension points one can pick from. 
+    There are finite number of extension points in Cloud Director, one can pick from. 
     </td>
   </tr>
 </table>
