@@ -6,7 +6,7 @@
   <section class="sidenav-content">
     {% assign mydocs = col.docs | sort: 'catOrder' | group_by: 'category' %}
     {% for cat in mydocs %}
-      {% if cat.name == 'none' %}
+      {% if cat.name contains 'none' %}
         {% assign items = cat.items | sort: 'order' | where: 'hasMore', true %}
         {% for item in items %}
           <a class="nav-link {% if item.url == page.url %} active {% endif %}" href="{{ item.url | prepend: site.baseurl }}">

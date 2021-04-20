@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Intoduction
-category: none
+title: Introduction
+category: none1
 catOrder: 1
 hasMore: true
 order: 1
@@ -18,7 +18,7 @@ Cloud Developer Platform consists of tools and best practices supporting the dev
   </tr>
   <tr >
     <th class="concept-header-column">Solution project</th>
-    <td>The solution project is a NodeJS based monorepo project, which consists of subprojects. Each subrpoject represents different component of the solution.</td>
+    <td>The solution project is a NodeJS based monorepo project, which consists of sub-projects. Each sub-project represents different component of the solution.</td>
   </tr>
   <tr >
     <th class="concept-header-column">CARE Package</th>
