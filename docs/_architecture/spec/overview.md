@@ -11,7 +11,7 @@ permalink: /architecture/spec/overview
 This page tracks the CARE Package Specification drafts and versions. It also provides a change log between the versions of the specification. 
 
 ## Change log
-### [Draft 2 (0.0.2)]({{ site.baseurl }}/architecture/care_package/spec_draft_2)
+### [Draft 2 (0.0.2)]({{ site.baseurl }}/architecture/spec/draft_2)
 
 #### Status
 <span class="status-macro aui-lozenge aui-lozenge-moved">IN PROGRESS</span>
@@ -24,7 +24,7 @@ This page tracks the CARE Package Specification drafts and versions. It also pro
   * serviceAccount
   * customRights
 
-### [Draft 1 (0.0.1)]({{ site.baseurl }}/architecture/care_package/spec_draft_1)
+### [Draft 1 (0.0.1)]({{ site.baseurl }}/architecture/spec/draft_1)
 
 #### Status
 <span class="status-macro aui-lozenge aui-lozenge-success">LATEST</span>
