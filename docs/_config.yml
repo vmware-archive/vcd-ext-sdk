@@ -35,3 +35,8 @@ collections:
     title: Developer Guides
     nav: true
     order: 2
+  architecture:
+    output: true
+    title: Architecture
+    nav: true
+    order: 3
