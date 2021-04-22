@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Draft 1 (0.0.1)"
-category: Specification
+category: CARE Package Specification
 catOrder: 2
 hasMore: true
 order: 3
