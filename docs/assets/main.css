@@ -51,6 +51,25 @@ p {
     font-size: 15px !important;
 }
 
+/**
+ * Images
+ */
+p img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+/**
+ * Figures
+ */
+figure > img {
+    display: block;
+}
+
+figcaption {
+    font-size: 10px;
+}
+
 .clr-row > div {
     position: relative;
     z-index: 10;
