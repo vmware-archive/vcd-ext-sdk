@@ -1,0 +1,519 @@
+/**
+ * Clarity styles override
+ */
+
+/**
+ * Custom doc pages styling
+ */
+
+
+.main-container {
+    height: auto !important;
+    overflow: hidden;
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-container > * {
+    flex: 1;
+}
+
+.container-fluid {
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 50px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+h1, h2, h3, h4, h5 {
+    line-height: 1.25 !important;
+    color: #565656 !important;
+}
+
+h1 {
+    font-size: 35px !important;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 26px !important;
+}
+
+h3 {
+    font-size: 23px !important;
+}
+
+p {
+    color: #565656 !important;
+    font-size: 15px !important;
+}
+
+.clr-row > div {
+    position: relative;
+    z-index: 10;
+}
+
+.home-page {
+    /** compensate the content-area forced by the layout **/
+    margin: -1.2rem !important;
+}
+
+.home-page-header {
+    background: linear-gradient(180deg, #0079B8 0%, #0079B8 107.18%);
+    padding-top: 90px;
+    padding-bottom: 90px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-divider {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background-image: linear-gradient(to left top, #fff 0%, #fff 50%, transparent 50%);
+    z-index: 10;
+}
+
+.home-page-header h1,
+.home-page-header h2,
+.home-page-header h3,
+.home-page-header h4,
+.home-page-header h5,
+.home-page-header p {
+    color: #fff !important;
+}
+
+.home-page-header h1 {
+    font-weight: bold;
+    font-size: 48px !important;
+}
+
+.home-page-header .btn,
+.home-page-header .btn:hover {
+    margin-top: 20px;
+    opacity: 0.9;
+    background: #fff;
+    color: #0079B8 !important;
+    transition: background 0.25s;
+}
+
+.home-page-header .btn:hover {
+    opacity: 1;
+}
+
+.clouds-icon {
+    position: absolute;
+    right: -120px;
+    top: -100px;
+}
+
+.home-story-section {
+    padding-bottom: 100px;
+    padding-top: 50px
+}
+
+.icon-wrapper {
+    position: relative;
+    z-index: 1 !important;
+}
+
+.robot-server-icon {
+    position: absolute;
+    bottom: -90px;
+    right: 40px;
+}
+
+.road-icon {
+    margin-top: 70px;
+    position: absolute;
+    bottom: -140px;
+    right: -400px;
+}
+
+.first-section {
+    background: #fff;
+}
+
+.second-section {
+    background: #F6FCFE;
+}
+
+.fourth-section {
+}
+
+.fifth-section {
+    background: #fff;
+}
+
+.block {
+    padding: 20px;
+    background: #F6FCFE;
+    border: 1px solid #0079B8;
+    box-sizing: border-box;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.block h5 {
+    margin: 0;
+    font-weight: bold;
+}
+
+.card-block-labels {
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+
+.card-block-img {
+    background: rgba(196, 196, 196, 0.1);
+    width: 100%;
+    border: none;
+}
+
+.browse-cases-btn-wrapper {
+    margin-top: 30px;
+}
+
+.footer {
+    background: #324F61;
+    padding: .9rem 1.2rem;
+    color: #fff;
+    font-size: 12px;
+    height: 85px;
+    flex: 0;
+}
+
+.footer a {
+    color: #49aeda;
+}
+
+.footer a:visited {
+    color: #49aeda;
+}
+
+.content-second-level-nav {
+    margin-left: 20% !important;
+    margin-top: 20px !important;
+    font-size: 14px !important;
+    border-left: solid 4px #ddd;
+    list-style: none;
+    margin-right: 20px !important;
+}
+
+.content-second-level-nav a {
+    color: #565656 !important;
+    display: block;
+}
+
+/* first level */
+.content-second-level-nav > li a {
+    padding: 3px 10px !important;
+}
+
+/* second level */
+.content-second-level-nav > li > ul > li a {
+    padding: 3px 40px !important;;
+}
+
+/* third level */
+.content-second-level-nav > li > ul > li > ul > li a {
+    padding: 3px 70px !important;;
+}
+
+.content-second-level-nav a:hover {
+    text-decoration: none;
+}
+
+.content-second-level-nav ul {
+    list-style: none;
+    margin-left: 0 !important;
+}
+
+.content-second-level-nav li.active {
+    background: #EEEEEE;
+    position: relative;
+}
+
+.content-second-level-nav li.active::after {
+    content: "";
+    position: absolute;
+    background: #0079B8;
+    width: 4px;
+    left: -4px;
+    bottom: 0;
+    top: 0;
+}
+
+/**
+ * Syntax highlighting styles
+ */
+
+pre.highlight {
+    padding: 5px 10px;
+}
+
+.highlight {
+    background: #fff;
+}
+
+.highlight .highlighter-rouge {
+    background: #eef;
+}
+
+.highlight .c {
+    color: #998;
+    font-style: italic
+}
+
+.highlight .err {
+    color: #a61717;
+    background-color: #e3d2d2
+}
+
+.highlight .k {
+    font-weight: bold
+}
+
+.highlight .o {
+    font-weight: bold
+}
+
+.highlight .cm {
+    color: #998;
+    font-style: italic
+}
+
+.highlight .cp {
+    color: #999;
+    font-weight: bold
+}
+
+.highlight .c1 {
+    color: #998;
+    font-style: italic
+}
+
+.highlight .cs {
+    color: #999;
+    font-weight: bold;
+    font-style: italic
+}
+
+
+.highlight .gd {
+    color: #000;
+    background-color: #fdd
+}
+
+.highlight .gd .x {
+    color: #000;
+    background-color: #faa
+}
+
+.highlight .ge {
+    font-style: italic
+}
+
+.highlight .gr {
+    color: #a00
+}
+
+.highlight .gh {
+    color: #999
+}
+
+.highlight .gi {
+    color: #000;
+    background-color: #dfd
+}
+
+.highlight .gi .x {
+    color: #000;
+    background-color: #afa
+}
+
+.highlight .go {
+    color: #888
+}
+
+.highlight .gp {
+    color: #555
+}
+
+.highlight .gs {
+    font-weight: bold
+}
+
+.highlight .gu {
+    color: #aaa
+}
+
+.highlight .gt {
+    color: #a00
+}
+
+.highlight .kc {
+    font-weight: bold
+}
+
+.highlight .kd {
+    font-weight: bold
+}
+
+.highlight .kp {
+    font-weight: bold
+}
+
+.highlight .kr {
+    font-weight: bold
+}
+
+.highlight .kt {
+    color: #458;
+    font-weight: bold
+}
+
+.highlight .m {
+    color: #099
+}
+
+.highlight .s {
+    color: #d14
+}
+
+.highlight .na {
+    color: #008080
+}
+
+.highlight .nb {
+    color: #0086B3
+}
+
+.highlight .nc {
+    color: #458;
+    font-weight: bold
+}
+
+.highlight .no {
+    color: #008080
+}
+
+.highlight .ni {
+    color: #800080
+}
+
+.highlight .ne {
+    color: #900;
+    font-weight: bold
+}
+
+.highlight .nf {
+    color: #900;
+    font-weight: bold
+}
+
+.highlight .nn {
+    color: #555
+}
+
+.highlight .nt {
+    color: #000080
+}
+
+.highlight .nv {
+    color: #008080
+}
+
+.highlight .ow {
+    font-weight: bold
+}
+
+.highlight .w {
+    color: #bbb
+}
+
+.highlight .mf {
+    color: #099
+}
+
+.highlight .mh {
+    color: #099
+}
+
+.highlight .mi {
+    color: #099
+}
+
+.highlight .mo {
+    color: #099
+}
+
+.highlight .sb {
+    color: #d14
+}
+
+.highlight .sc {
+    color: #d14
+}
+
+.highlight .sd {
+    color: #d14
+}
+
+.highlight .s2 {
+    color: #d14
+}
+
+.highlight .se {
+    color: #d14
+}
+
+.highlight .sh {
+    color: #d14
+}
+
+.highlight .si {
+    color: #d14
+}
+
+.highlight .sx {
+    color: #d14
+}
+
+.highlight .sr {
+    color: #009926
+}
+
+.highlight .s1 {
+    color: #d14
+}
+
+.highlight .ss {
+    color: #990073
+}
+
+.highlight .bp {
+    color: #999
+}
+
+.highlight .vc {
+    color: #008080
+}
+
+.highlight .vg {
+    color: #008080
+}
+
+.highlight .vi {
+    color: #008080
+}
+
+.highlight .il {
+    color: #099
+}
+
