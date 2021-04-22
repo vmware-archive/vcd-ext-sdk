@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Overview"
-category: Specification
+category: CARE Package Specification
 catOrder: 2
 hasMore: true
 order: 1

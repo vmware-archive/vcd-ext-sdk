@@ -2,7 +2,7 @@
 layout: default
 title:  "Extensibility CLI"
 category: none2
-catOrder: 3
+catOrder: 4
 hasMore: true
 order: 1
 permalink: /architecture/extensibility_cli
