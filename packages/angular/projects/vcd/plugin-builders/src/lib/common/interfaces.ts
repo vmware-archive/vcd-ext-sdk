@@ -162,6 +162,10 @@ export type ExtensionScope = 'tenant' | 'service-provder';
 export interface BasePluginBuilderSchema {
     enableRuntimeDependecyManagement: boolean;
     /**
+     * Preserve main plugin file contents.
+     */
+    preserveMainFile: boolean;
+    /**
      * A string of the form `path/to/file#exportName`
      * that acts as a path to include to bundle.
      */
