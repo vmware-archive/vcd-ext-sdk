@@ -14,11 +14,10 @@ An extension point essentially is a Cloud Director predefined global or contextu
 which a UI plugin will use to attach itself to and be used for navigation/plugin initialization. 
 There is a list of extension points, one can pick from.
 
-There are two main types of extension points:
-- Navigation type extension point - used for registering a route along with an angular component or module contained in the UI Plugin, 
-to a newly defined navigation element, in a particular Cloud Director navigation menu
-- Action type extension point - used for attaching a callback function within an angular component to a newly defined action element, 
-in a particular Cloud Director action menu
+Here are the different types of extension points:
+- [Action type extension point](#action-type-extension-points)
+- [Navigation type extension point](#navigation-type-extension-points)
+- [Wizard type extension point](#wizard-type-extension-points)
 
 ## Configuring extension points in a UI Plugin
 The configuration of extension points happens in the `packages/uiPlugin/src/public/manifest.json` file.
@@ -60,98 +59,16 @@ To localize some properties you can use placeholders `"%nav.label%` which you de
 {% endhighlight %}
 
 ## Available extension points
-The available extension points are demonstrated in the [Showcase plugin][vcd-ext-samples-showcase]
+The available extension points are demonstrated in the [Showcase plugin][vcd-ext-samples-showcase]{:target="_blank"}
 
-{% highlight json %}
-[   
-    {
-        "urn": "vmware:vcloud:vm-action:backup",
-        "type": "vm-action",
-        "name": "VM Backup Action",
-        "description": "Example of adding an action to VMs",
-        "component": "VmBackupActionComponent" //component only
-    },
-    {
-        "urn": "vmware:vcloud:vapp-action:restore",
-        "type": "vapp-action",
-        "name": "vApp Restore Action",
-        "description": "Example of adding an action to vApps",
-        "component": "VappRestoreActionComponent" //component only
-    },
-    {
-        "urn": "vmware:vcloud:datacenter:sample",
-        "type": "datacenter-overview",
-        "name": "Custom Datacenters",
-        "description": "Display custom information in the Datacenter Overview",
-        "component": "DatacenterContainerComponent" //component or module - if module then route needed
-    }, {
-        "urn": "vmware:vcloud:datacenter:sample",
-        "type": "navigation:datacenter:overview",
-        "name": "Custom Datacenters (New type)",
-        "description": "Display custom information in the Datacenter Overview",
-        "component": "DatacenterContainerComponent" //component or module - if module then route needed
-    }, {
-        "urn": "urn:vmware:vcd:component-scope:primary-navigation",
-        "type": "navigation:primary",
-        "name": "Primary Navigation Extenson Point (New)",
-        "description": "Example of adding Primary Navigation Plugin",
-        "module": "SubnavPluginModule", //module only
-        "route": "primary-plugin" //root route of the module
-    }, {
-        "urn": "urn:vmware:vcd:component-scope:applications",
-        "type": "navigation:applications",
-        "name": "Applicaton Extenson Point (New)",
-        "description": "Display custom information in the Applicaton Tab",
-        "component": "ApplicationComponent" //component or module - if module then route needed
-    },
-    {
-        "urn": "urn:vmware:vcd:component-scope:datacenter-compute",
-        "type": "navigation:datacenter:compute",
-        "name": "Datacetner Compute Extenson Point (New)",
-        "description": "Display custom information in the Datacetner -> Compute section",
-        "component": "DatacenterComputeComponent" //component or module - if module then route needed
-    },
-    {
-        "urn": "urn:vmware:vcd:component-scope:datacenter-network",
-        "type": "navigation:datacenter:network",
-        "name": "Datacetner Network Extenson Point (New)",
-        "description": "Display custom information in the Datacetner -> Network section",
-        "component": "DatacenterNetworkComponent"
-    },
-    {
-        "urn": "urn:vmware:vcd:component-scope:datacenter-storage",
-        "type": "navigation:datacenter:storage",
-        "name": "Datacetner Storage Extenson Point (New)",
-        "description": "Display custom information in the Datacetner -> Storage section",
-        "component": "DatacenterStorageComponent" //component or module - if module then route needed
-    },
-    {
-        "urn": "vmware:vcloud:vapp:create", //page in create vapp wizard
-        "type": "create-vapp",
-        "name": "vApp Create Extension Point",
-        "description": "Example of vApp Create Extensibility",
-        "component": "VappCreateWizardExtensionPointComponent", //component only
-        "render": {
-            "after": ".vapp-name-extension-point" //render supports before and after, for now only after this class
-        }
-    },
-    {
-        "urn": "vmware:vcloud:vm:create", //page in create vm wizard
-        "type": "create-vm",
-        "name": "VM Create Extension Point",
-        "description": "Example of VM Create Extensibility",
-        "component": "VmCreateWizardExtensionPointComponent", //component only
-        "render": {
-            "after": ".vm-description" //render supports before and after, for now only after this class
-        }
-    }
-]
-{% endhighlight %}
-
-### Vm action
+### Action type extension points
+Action type extension points are used for registering a route along with an angular component or module contained in the UI Plugin, 
+to a newly defined navigation element, in a particular Cloud Director navigation menu.
+#### Vm action
 This extension point is used for creating an extra action item in a the VM contextual action menu. 
 For this particular extension point only a component can be defined.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "vmware:vcloud:vm-action:actionName",
@@ -162,10 +79,41 @@ For this particular extension point only a component can be defined.
     }
 {% endhighlight %}
 
-### VApp action
+**Code example**
+{% highlight typescript %}
+...
+export class VmBackupActionComponent extends EntityActionExtensionComponent {
+    ...
+    private result: Subject<{ refreshRequested: boolean }>;
+
+    getMenuEntry(entityUrn: string): Observable<EntityActionExtensionMenuEntry> {
+        return Observable.of({
+            text: "Backup",
+            children: [{
+                ...
+            },
+            {
+                ...
+            }]
+        });
+    }
+
+    performAction(menuItemUrn: string, entityUrn: string): Observable<{ refreshRequested: boolean }> {
+        ...
+    }
+
+    onClose() {
+        ...
+    }
+}
+{% endhighlight %}
+[Open full code example][code-example-vm-action]{:target="_blank"}
+
+#### VApp action
 This extension point is used for creating an extra action item in a the vApp contextual action menu. 
 For this particular extension point only a component can be defined.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "vmware:vcloud:vapp-action:actionName",
@@ -176,11 +124,46 @@ For this particular extension point only a component can be defined.
     }
 {% endhighlight %}
 
-### Datacenter main navigation
+**Code example**
+{% highlight typescript %}
+...
+export class VappRestoreActionComponent extends EntityActionExtensionComponent {
+    ...
+    private result: Subject<{ refreshRequested: boolean }>;
+
+    getMenuEntry(entityUrn: string): Observable<EntityActionExtensionMenuEntry> {
+        return Observable.of({
+            text: "Restore",
+            children: [{
+                ...
+            },
+            {
+                ...
+            }]
+        });
+    }
+
+    performAction(menuItemUrn: string, entityUrn: string): Observable<{ refreshRequested: boolean }> {
+        ...
+    }
+
+    onClose() {
+        ...
+    }
+}
+{% endhighlight %}
+[Open full code example][code-example-vapp-action]{:target="_blank"}
+
+### Navigation type extension points
+Navigation type extension points are used for attaching a callback function within an angular component to a newly defined action element, 
+in a particular Cloud Director action menu.
+
+#### Datacenter main navigation
 This extension point is used for creating an extra navigation item in the Datacenter main navigation menu.
 For this particular extension point either component or module can be defined. If a module is defined, a route definition 
 is also required.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "vmware:vcloud:datacenter:menuElementName",
@@ -193,10 +176,13 @@ is also required.
     }
 {% endhighlight %}
 
-### Primary navigation
+[Open sample][code-example-datacenter-main]{:target="_blank"}
+
+#### Primary navigation
 This extension point is used for creating an extra navigation item in the Primary navigation menu.
 For this particular extension point only module can be defined. Therefor a route definition is also required.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "urn:vmware:vcd:component-scope:primary-navigation:menuElementName",
@@ -208,11 +194,12 @@ For this particular extension point only module can be defined. Therefor a route
     }
 {% endhighlight %}
 
-### Applications navigation
+#### Applications navigation
 This extension point is used for creating an extra navigation item in the Applications navigation menu.
 For this particular extension point either component or module can be defined. If a module is defined, a route definition 
 is also required.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "urn:vmware:vcd:component-scope:applications:menuElementName",
@@ -225,13 +212,16 @@ is also required.
     }
 {% endhighlight %}
 
-### Datacenter extension points
+[Open sample][code-example-primary]{:target="_blank"}
+
+#### Datacenter extension points
 For these particular extension points either component or module can be defined. If a module is defined, a route definition 
 is also required.
 
-#### Compute
+##### Compute
 This extension point is used for creating an extra navigation item in the Datacenter compute navigation menu.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "urn:vmware:vcd:component-scope:datacenter-compute:menuElementName",
@@ -244,9 +234,12 @@ This extension point is used for creating an extra navigation item in the Datace
     }
 {% endhighlight %}
 
-#### Network
+[Open sample][code-example-datacenter-compute]{:target="_blank"}
+
+##### Network
 This extension point is used for creating an extra navigation item in the Datacenter network navigation menu.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "urn:vmware:vcd:component-scope:datacenter-network:menuElementName",
@@ -259,9 +252,12 @@ This extension point is used for creating an extra navigation item in the Datace
     }
 {% endhighlight %}
 
-#### Storage
+[Open sample][code-example-datacenter-network]{:target="_blank"}
+
+##### Storage
 This extension point is used for creating an extra navigation item in the Datacenter storage navigation menu.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "urn:vmware:vcd:component-scope:datacenter-storage:menuElementName",
@@ -274,10 +270,17 @@ This extension point is used for creating an extra navigation item in the Datace
     }
 {% endhighlight %}
 
-### Vapp Create
+[Open sample][code-example-datacenter-storage]{:target="_blank"}
+
+### Wizard type extension points
+These extension points in a way combine navigation type and action type extension points. The plugin is rendered as a page in 
+particular wizard, however it also provides an action handler, for completing the wizard step.
+
+#### Vapp Create
 This extension point is used for creating an extra page in all create vApp wizards.
 For this particular extension point only a component can be defined.
 
+**Definition**
 {% highlight json %}
     {
         "urn": "vmware:vcloud:vapp:create", //page in create vapp wizard
@@ -291,9 +294,22 @@ For this particular extension point only a component can be defined.
     }
 {% endhighlight %}
 
-### VM Create
+**Code example**
+{% highlight typescript %}
+...
+export class VappCreateWizardExtensionPointComponent extends WizardExtensionComponent<any, any, any> {
+    performAction(payoad: string, returnValue: string, error: any) {
+        console.log("[vApp Create Wizard Extension Point]", payoad, returnValue, error);
+    }
+}
+{% endhighlight %}
+[Open sample][code-example-vapp-create]{:target="_blank"}
+
+#### VM Create
 This extension point is used for creating an extra page in all create VM wizards.
 For this particular extension point only a component can be defined.
+
+**Definition**
 {% highlight json %}
     {
         "urn": "vmware:vcloud:vm:create", //page in create vm wizard
@@ -307,5 +323,24 @@ For this particular extension point only a component can be defined.
     }
 {% endhighlight %}
 
-[vcd-ext-samples-showcase]: https://www.vmware.com/products/cloud-director.html
+**Code example**
+{% highlight typescript %}
+...
+export class VmCreateWizardExtensionPointComponent extends WizardExtensionComponent<any, any, any> {
+    performAction(payoad: string, returnValue: string, error: any) {
+        console.log("[VM Create Wizard Extension Point]", payoad, returnValue, error);
+    }
+}
+{% endhighlight %}
+[Open sample][code-example-vm-create]{:target="_blank"}
 
+[vcd-ext-samples-showcase]: https://www.vmware.com/products/cloud-director.html
+[code-example-vm-action]: https://github.com/vmware-samples/vcd-ext-samples/blob/showcase-plugin/src/main/actions/vm.backup.action.component.ts
+[code-example-vapp-action]: https://github.com/vmware-samples/vcd-ext-samples/blob/showcase-plugin/src/main/actions/vapp.restore.action.component.ts
+[code-example-datacenter-main]: https://github.com/vmware-samples/vcd-ext-samples/tree/showcase-plugin/src/main/datacenter-overview
+[code-example-datacenter-compute]: https://github.com/vmware-samples/vcd-ext-samples/tree/showcase-plugin/src/main/datacenter-compute
+[code-example-datacenter-network]: https://github.com/vmware-samples/vcd-ext-samples/tree/showcase-plugin/src/main/datacenter-network
+[code-example-datacenter-storage]: https://github.com/vmware-samples/vcd-ext-samples/tree/showcase-plugin/src/main/datacenter-storage
+[code-example-primary]: https://github.com/vmware-samples/vcd-ext-samples/tree/showcase-plugin/src/main
+[code-example-vapp-create]: https://github.com/vmware-samples/vcd-ext-samples/tree/showcase-plugin/src/main/create-vapp
+[code-example-vm-create]: https://github.com/vmware-samples/vcd-ext-samples/tree/showcase-plugin/src/main/create-vm
