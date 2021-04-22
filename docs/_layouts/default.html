@@ -10,13 +10,15 @@ layout: compress
 <body>
   <div class="main-container">
     {% include header.html %}
+
     <div class="content-container">
       {% include sidenav.html %}
       <div class="content-area">
-        {{ content }}
-        {% include footer.html %}
+      {{ content }}
       </div>
     </div>
+
+    {% include footer.html %}
   </div>
 
   {% if site.google_analytics %}
