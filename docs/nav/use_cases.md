@@ -31,7 +31,7 @@ permalink: /use_cases/
                                             </div>
                         
                                             {% if uc.hasMore %}
-                                            <a href="{{ uc.url | prepend: site.baseurl }}" class="btn btn-outline btn-sm">Learn More</a>
+                                            <a href="{{ uc.url | prepend: site.baseurl }}" class="btn btn-primary">Learn More</a>
                                             {% endif %}
                                         </div>
                                         <div class="clr-col-4">

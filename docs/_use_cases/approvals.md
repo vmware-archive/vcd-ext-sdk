@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Approvals"
-description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu odio nisi. Vestibulum dignissim eget massa sit amet feugiat. Quisque auctor mattis quam eu suscipit."
+description: "A key component of service management in cloud is being able to provide control on actions and trackability of activities. Delivering an Approval workflow between users in an organization, allows more control to the customer and will ultimately provide a better experience in deliver service faster with automation"
 hasMore: false
 labels: 
   - name: Blocking Tasks
@@ -15,4 +15,4 @@ permalink: /use_cases/approvals/
 ---
 # Approvals
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu odio nisi. Vestibulum dignissim eget massa sit amet feugiat. Quisque auctor mattis quam eu suscipit.
+A key component of service management in cloud is being able to provide control on actions and trackability of activities. Delivering an Approval workflow between users in an organization, allows more control to the customer and will ultimately provide a better experience in deliver service faster with automation
