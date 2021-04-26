@@ -53,24 +53,15 @@ instance with an organisation account
 
 `vcd-ext login userAliasName http://cell.url.com/cloudapi username@tenantName`
 
-This CLI command will log in using the provided cell url as a tenant user. A session will be created and 
-the token will be stored locally. One thing to pay attention to is the .env folder. Notice that at this point 
-the folder contains the following files
-
-![Env folder pre auth]({{ site.baseurl }}/assets/images/uiPlugins/env-folder.png)
-
 To host the UI plugin locally run
 
 `npm run start`
 
-The plugin is compiled and hosted as an Angular app inside a VCD simulator container under `localhost`. 
-Notice that now the .env folder contains two more files - `proxy.conf.runtime.json` and `environment.runtime.json`.
-They are both generated based on the templates in the folder, using the previously cached login session using the 
-`vcd-ext login` CLI command. The `environment.runtime.json` file contains authentication information and the `proxy.conf.runtime.json` 
-contains proxy configuration for the VCD APIs the plugin will be using. Going to localhost in your browse you should see 
-the following example
+Going to localhost in your browse you should see the following example
 
 ![Initial UI]({{ site.baseurl }}/assets/images/uiPlugins/emulator-hosting-plugin.png)
+
+For further details about the `emulator` please refer to: [UI Emulator]({{ site.baseurl }}/docs/ui_plugins/emulator)
 
 ## Deploying the example project
 
