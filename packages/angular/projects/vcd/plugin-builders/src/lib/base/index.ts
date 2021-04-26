@@ -114,9 +114,12 @@ async function commandBuilder(
     // Export the plugin module
     modulePath = modulePath.substr(0, modulePath.indexOf('.ts'));
     const entryPointContents = `export * from '${modulePath}';`;
-    patchEntryPoint(entryPointPath, entryPointContents);
 
-        // Define amd lib
+    if (!options.preserveMainFile) {
+        patchEntryPoint(entryPointPath, entryPointContents);
+    }
+
+    // Define amd lib
     config.output.filename = 'bundle.js';
     config.output.library = moduleName;
     config.output.libraryTarget = 'amd';

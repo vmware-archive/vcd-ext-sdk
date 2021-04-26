@@ -19,7 +19,7 @@ permalink: /use_cases/
                                 <div class="card-title">{{ uc.title }}</div>
                                 <div class="card-text">
                                     <div class="clr-row">
-                                        <div class="clr-col-8">
+                                        <div class="clr-col-7">
                                             {{uc.description}}
                         
                                             <div class="card-block-labels">
@@ -34,8 +34,8 @@ permalink: /use_cases/
                                             <a href="{{ uc.url | prepend: site.baseurl }}" class="btn btn-primary">Learn More</a>
                                             {% endif %}
                                         </div>
-                                        <div class="clr-col-4">
-                                            <img src="https://via.placeholder.com/60?text=Image" class="card-block-img" />
+                                        <div class="clr-col-5">
+                                            <img src="{{ site.baseurl }}/assets/images/{{uc.img}}" class="card-block-img" />
                                         </div>
                                     </div>
                                 </div>
