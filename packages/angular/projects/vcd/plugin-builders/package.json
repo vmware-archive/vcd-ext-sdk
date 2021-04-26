@@ -1,6 +1,6 @@
 {
   "name": "@vcd/plugin-builders",
-  "version": "0.12.1-alpha.1",
+  "version": "0.12.1-alpha.2",
   "description": "Angular CLI-compatible tools for building Cloud Director plugins.",
   "author": "VMware",
   "license": "BSD-2-Clause",
