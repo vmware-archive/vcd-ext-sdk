@@ -40,3 +40,8 @@ collections:
     title: Architecture
     nav: true
     order: 3
+  resources:
+    output: true
+    title: Resources
+    nav: true
+    order: 4
