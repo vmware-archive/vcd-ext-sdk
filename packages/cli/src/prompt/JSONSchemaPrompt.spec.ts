@@ -35,7 +35,7 @@ describe('JSONSchemaPrompt Tests', () => {
                     minLength: 1
                 }
             },
-            required:["name"]
+            required: ['name']
         };
         const questions = JSONSchemaPrompt.convertToPromptQuestions(testSchema);
         expect(questions.length).toBe(1);
