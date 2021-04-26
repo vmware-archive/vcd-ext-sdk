@@ -6,6 +6,11 @@
             "description": "Based on the this some features will be turned on or off.",
             "default": ""
         },
+        "preserveMainFile": {
+            "type": "boolean",
+            "description": "Preserve main file contents.",
+            "default": false
+        },
         "modulePath": {
             "type": "string",
             "description": "Path to module like loadChildren",
