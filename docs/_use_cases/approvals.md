@@ -11,6 +11,7 @@ labels:
     link: /docs/ui_plugins/overview
 category: Use Cases
 order: 2
+img: approval.jpg
 permalink: /use_cases/approvals/
 ---
 # Approvals
