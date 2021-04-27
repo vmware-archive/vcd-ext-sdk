@@ -24,7 +24,7 @@ The manifest contains information about the package itself, the required input p
 
 ### Package Information
 The following properties are used to describe the package
-<table class="concept-table">
+<table class="table">
   <tr>
     <th>Name</th>
     <th>Type</th>
@@ -33,37 +33,37 @@ The following properties are used to describe the package
     <th>Default Value</th>
   </tr>
   <tr >
-    <th class="concept-header-column">name</th>
+    <th>name</th>
     <td>string ([a-zA-Z0-9-_]+)</td>
-    <td>The name of the package. It is used to identify the package within a repository or running system.</td>
+    <td class="left">The name of the package. It is used to identify the package within a repository or running system.</td>
     <td>Yes</td>
     <td>-</td>
   </tr>
   <tr >
-    <th class="concept-header-column">version</th>
+    <th>version</th>
     <td>string([Semver](https://semver.org/))</td>
-    <td>The version of the package.</td>
+    <td class="left">The version of the package.</td>
     <td>Yes</td>
     <td>-</td>
   </tr>
   <tr >
-    <th class="concept-header-column">vendor</th>
+    <th>vendor</th>
     <td>string ([a-zA-Z0-9-_]+)</td>
-    <td>Identifier of the organization or the user producer of the package.</td>
+    <td class="left">Identifier of the organization or the user producer of the package.</td>
     <td>Yes</td>
     <td>-</td>
   </tr>
   <tr >
-    <th class="concept-header-column">specVersion</th>
+    <th>specVersion</th>
     <td>string([Semver](https://semver.org/))</td>
-    <td>The version of the CARE package specification.</td>
+    <td class="left">The version of the CARE package specification.</td>
     <td>Yes</td>
     <td>-</td>
   </tr>
   <tr >
-    <th class="concept-header-column">elements</th>
+    <th>elements</th>
     <td>array/object</td>
-    <td>An array of objects describing the elements which are contained within the package.</td>
+    <td class="left">An array of objects describing the elements which are contained within the package.</td>
     <td>Yes</td>
     <td>-</td>
   </tr>
@@ -71,7 +71,7 @@ The following properties are used to describe the package
 
 ### Elements
 The list of elements contains description of a specific extensibility component, as well as a pointer within the package to any files if applicable to the element type.
-<table class="concept-table">
+<table class="table">
   <tr>
     <th>Name</th>
     <th>Type</th>
@@ -80,16 +80,16 @@ The list of elements contains description of a specific extensibility component,
     <th>Default Value</th>
   </tr>
   <tr >
-    <th class="concept-header-column">type</th>
+    <th>type</th>
     <td>string</td>
-    <td>The type of the parameter one of the following values. The type points to a specific Class within a Javascript module. The format is the following: &lt;scope&gt;/&lt;module&gt;/&lt;class&gt;. Scope is optional.</td>
+    <td class="left">The type of the parameter one of the following values. The type points to a specific Class within a Javascript module. The format is the following: &lt;scope&gt;/&lt;module&gt;/&lt;class&gt;. Scope is optional.</td>
     <td>Yes</td>
     <td>-</td>
   </tr>
   <tr >
-    <th class="concept-header-column">location</th>
+    <th>location</th>
     <td>string(glob syntax)</td>
-    <td>The relative to the root of the package path pointing to one or more files required by the type of element.</td>
+    <td class="left">The relative to the root of the package path pointing to one or more files required by the type of element.</td>
     <td>No</td>
     <td>-</td>
   </tr>

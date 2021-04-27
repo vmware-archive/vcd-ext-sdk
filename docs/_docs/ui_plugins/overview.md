@@ -15,13 +15,13 @@ gives access to common Cloud Director UI and client libraries, which results in 
 and achieving a unified Cloud Director UX.
 
 ## Key Concepts
-<table class="concept-table">
+<table class="table table-vertical">
   <tr >
-    <th class="concept-header-column">Scope</th>
+    <th>Scope</th>
     <td> The scope determines in which part of the Cloud Director a UI plugin will reside. There are two types of scopes: <b>tenant</b> and <b>provider</b></td>
   </tr>
   <tr >
-    <th class="concept-header-column">Extension Points</th>
+    <th>Extension Points</th>
     <td> An extension point essentially is a Cloud Director predefined global or contextual navigation/menu placeholder, which a UI plugin will use to attach itself to and be used for navigation/plugin initialization. 
     There are finite number of extension points in Cloud Director, one can pick from. 
     </td>
