@@ -14,16 +14,17 @@ This quickstart shows you how to create types project, add a type and deploy it 
 
 ## Create a types project
 Run the following command to generate a new project:
-```bash
-vcd-ext new
-? Your solution name types-demo
-? Specify first version 0.0.1
-? Specify vendor name MyCompany
-? Specify vendor link http://example.com
-? Specify solution license BSD-2-Clause
-? Select extensibility elements Defined Entities
-? Defined Entities:element name types
-```
+<div class="language-custom custom-code-block"> 
+    <div>vcd-ext new</div>
+    <div><span class="token builtin">?</span> Your solution name <span class="token keyword">types-demo</span></div>
+    <div><span class="token builtin">?</span> Specify first version <span class="token keyword">0.0.1</span></div>
+    <div><span class="token builtin">?</span> Specify vendor name <span class="token keyword">MyCompany</span></div>
+    <div><span class="token builtin">?</span> Specify vendor link <span class="token keyword">http://example.com</span></div>
+    <div><span class="token builtin">?</span> Specify solution license <span class="token keyword">BSD-2-Clause</span></div>
+    <div><span class="token builtin">?</span> Select extensibility elements <span class="token keyword">Defined Entities</span></div>
+    <div><span class="token builtin">?</span> Defined Entities:element name <span class="token keyword">types</span></div>
+</div>
+
 ## Create a type
 Navigate to `types-demo/packages/types/src` and create new file called `Post.ts` with the following content
 ```typescript
