@@ -15,28 +15,18 @@ This quick start shows you how to create UI Plugins project, how to host the pro
 ## Creating the UI plugin project
 
 Run the following command to generate a new project:
-
-`vcd-ext new`
-
-Then you will have to go through a couple of setup steps
-
-`? Your solution name` Enter a solution name (GettingStarted)
-
-`? Specify first version (0.0.1)` Either press enter or type in a different version
-
-`? Specify vendor name` Type in vendor name, for this example we type in `vmware`
-
-`? Specify vendor link (http://example.com)` Either press enter or type in a different vendor link, for this example we press enter
-
-`? Specify solution license (BSD-2-Clause)` Either press enter or type in a different license type, for this example we press enter
-
-`? Select extensibility elements (Press <space> to select, <a> to toggle all, <i> to invert selection) 
- ❯◯ Defined Entities
-  ◯ UI Plugin`
-  
-You need to select which projects you want the CLI to generate in the mono repo. For this example we select `UI Plugin` and press enter
-
-`? UI Plugin:element name (uiPlugin)` Either press enter or type in a different UI Plugin project name, for this example we press enter
+<div class="language-custom custom-code-block"> 
+    <div>$ vcd-ext new</div>
+    <div><span class="token builtin">?</span> Your solution name <span class="token keyword">Enter a solution name (GettingStarted)</span></div>
+    <div><span class="token builtin">?</span> Specify first version <span class="token keyword">Either press enter or type in a different version</span></div>
+    <div><span class="token builtin">?</span> Specify vendor name <span class="token keyword">Type in vendor name, for this example we type in 'vmware'</span></div>
+    <div><span class="token builtin">?</span> Specify vendor link <span class="token keyword">Either press enter or type in a different vendor link, for this example we press enter</span></div>
+    <div><span class="token builtin">?</span> Specify solution license <span class="token keyword">Either press enter or type in a different license type, for this example we press enter</span></div>
+    <div><span class="token builtin">?</span> Select extensibility elements (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection) <br/>
+ ❯◯ Defined Entities<br/>
+  ◯ UI Plugin <br/><span class="token keyword">You need to select which projects you want the CLI to generate in the mono repo. For this example we select `UI Plugin` and press enter</span></div>
+    <div><span class="token builtin">?</span> UI Plugin:element name (uiPlugin) <span class="token keyword">Either press enter or type in a different UI Plugin project name, for this example we press enter</span></div>
+</div>
 
 Once the CLI project structure generation process completes, open the project folder in your favorite IDE and the structure should look like this:
 
