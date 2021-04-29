@@ -14,7 +14,7 @@ This page tracks the CARE Package Specification drafts and versions. It also pro
 ### [Draft 2 (0.0.2)]({{ site.baseurl }}/architecture/spec/draft_2)
 
 #### Status
-<span class="status-macro aui-lozenge aui-lozenge-moved">IN PROGRESS</span>
+<span class="label label-warning">IN PROGRESS</span>
 
 #### Key Changes
 * Added support for input parameters and configuration of the element types
@@ -27,7 +27,7 @@ This page tracks the CARE Package Specification drafts and versions. It also pro
 ### [Draft 1 (0.0.1)]({{ site.baseurl }}/architecture/spec/draft_1)
 
 #### Status
-<span class="status-macro aui-lozenge aui-lozenge-success">LATEST</span>
+<span class="label label-success">LATEST</span>
 
 #### Key Changes
 * Initial specification and structure of the CARE package.
