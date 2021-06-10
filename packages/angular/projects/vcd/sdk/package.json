@@ -12,7 +12,7 @@
   },
   "module": "esm5/vcd-sdk.js",
   "dependencies": {
-    "@vcd/angular-client": "0.0.2-alpha.3"
+    "@vcd/angular-client": "0.0.2-alpha.4"
   },
   "peerDependencies": {
     "@angular-devkit/schematics": "7.3.8",
