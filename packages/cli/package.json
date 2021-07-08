@@ -13,7 +13,7 @@
     "@oclif/config": "^1.13.3",
     "@oclif/plugin-help": "^2.2.1",
     "@vcd/care-package": "0.0.1-alpha.5",
-    "@vcd/node-client": "0.0.5-alpha.5",
+    "@vcd/node-client": "0.0.5",
     "adm-zip": "^0.4.16",
     "debug": "^4.2.0",
     "glob": "^7.1.3",

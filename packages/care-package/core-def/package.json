@@ -8,7 +8,7 @@
   "devDependencies": {
     "@types/node": "^10.14.20",
     "@types/json-schema": "7.0.6",
-    "@vcd/node-client": "0.0.5-alpha.4"
+    "@vcd/node-client": "0.0.5"
   },
   "engines": {
     "node": ">=10.14.2 <13.0.0"

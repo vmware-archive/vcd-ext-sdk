@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@vcd/care-package-def": "0.0.1-alpha.1",
-    "@vcd/node-client": "0.0.5-alpha.4",
+    "@vcd/node-client": "0.0.5",
     "@types/debug": "^4.1.5",
     "@types/node": "^10.14.20",
     "@types/jasmine": "^3.5.4",
