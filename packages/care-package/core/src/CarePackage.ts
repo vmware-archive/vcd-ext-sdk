@@ -5,8 +5,8 @@ import * as path from 'path';
 import AdmZip from 'adm-zip';
 import * as semver from 'semver';
 import * as uuid from 'uuid';
-import { CarePackageSpec, CloudDirectorConfig } from '@vcd/care-package-def';
-import { CellApi } from '@vcd/node-client';
+import { CarePackageSpec } from '@vcd/care-package-def';
+import { CellApi, CloudDirectorConfig } from '@vcd/node-client';
 import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';

@@ -1,7 +1,7 @@
 import { JSONSchema7 } from 'json-schema';
 import * as Generator from 'yeoman-generator';
 import { CarePackageSourceSpec, CarePackageSpec, Element, ElementSource } from './CarePackage';
-import { CloudDirectorConfig } from './CloudDirectorConfig';
+import {CloudDirectorConfig} from '@vcd/node-client';
 
 export interface SchemaProvider {
     /**

@@ -1,5 +1,4 @@
-import { CloudDirectorConfig } from '@vcd/care-package-def';
-
+import {CloudDirectorConfig} from '@vcd/node-client';
 /**
  * ComponentDeployer constructor function type
  */
