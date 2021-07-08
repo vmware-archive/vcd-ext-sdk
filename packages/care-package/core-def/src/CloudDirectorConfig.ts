@@ -13,6 +13,7 @@ declare type ApiConstructor<T extends ApiType> = new () => T;
 export interface CloudDirectorConfig {
     token: string;
     basePath: string;
+    actAs(actAsId: string): CloudDirectorConfig;
     makeApiClient<T extends ApiType>(apiClientType: ApiConstructor<T>): T;
     makeTransferClient(url: string): TransferClient;
 }
