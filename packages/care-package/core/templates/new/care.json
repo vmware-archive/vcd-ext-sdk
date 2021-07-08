@@ -1,5 +1,5 @@
 {
     "vendor": "<%- vendor %>",
     "specVersion": "0.0.1",
-    "elements": <%- JSON.stringify(careElements, 2, null) %>
+    "elements": <%- JSON.stringify(careElements, null, 4) %>
 }
