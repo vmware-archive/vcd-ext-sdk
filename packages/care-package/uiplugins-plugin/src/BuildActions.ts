@@ -5,8 +5,7 @@ import { debug } from 'debug';
 
 import { AbstractBuildActions } from '@vcd/care-package-plugin-abstract';
 import { BuildActionParameters, DeployActions, ElementSource } from '@vcd/care-package-def';
-import * as Generator from 'yeoman-generator';
-import { DEFAULT_ENV_CONTENT, DEFAULT_PROXY_CONTENT, emulatorDeps } from './Constants';
+import { DEFAULT_ENV_CONTENT, DEFAULT_PROXY_CONTENT } from './Constants';
 import { DeployActions as UIPluginDeployActions } from './DeployActions';
 import { names } from './names';
 
@@ -25,22 +24,6 @@ export class BuildActions extends AbstractBuildActions {
     getDefaultFiles(): string {
         return '*.zip';
     }
-    getSrcRoot(): string {
-        return path.join(__dirname, '..', 'templates');
-    }
-
-    generate(generator: Generator, answers: any) {
-        super.generate(generator, answers);
-        generator.sourceRoot(this.getSrcRoot());
-        generator.fs.copyTpl(
-            generator.templatePath('emulator'),
-            generator.destinationPath(),
-            answers,
-            undefined,
-            { globOptions: { dot: true } });
-        generator.fs.extendJSON(generator.destinationPath('package.json'), emulatorDeps);
-    }
-
 
     private loadJsonConfig(rootDir: string, name: string) {
         const jsonPath = path.resolve(rootDir, name);
@@ -80,12 +63,12 @@ export class BuildActions extends AbstractBuildActions {
         const rootDir = path.join(packageRoot, '.env'); // Extract as optional parameter?
         const angularJson = this.loadJsonConfig(packageRoot, 'angular.json');
         const tsconfigJson = this.loadJsonConfig(packageRoot, 'tsconfig.emulator.json');
-        const environmnet = this.loadJsonConfig(rootDir, 'environment.json') || DEFAULT_ENV_CONTENT;
+        const environment = this.loadJsonConfig(rootDir, 'environment.json') || DEFAULT_ENV_CONTENT;
         const proxyConfig = this.loadJsonConfig(rootDir, 'proxy.conf.json') || DEFAULT_PROXY_CONTENT;
         let pluginsConfig = [];
         try {
             log('Setting auth token');
-            environmnet.credentials = {
+            environment.credentials = {
                 token: `Bearer ${clientConfig.token}`
             };
             log('Updating proxy config');
@@ -122,7 +105,7 @@ export class BuildActions extends AbstractBuildActions {
         } catch (e) {
             log('Error configuring environment.', e);
         } finally {
-            this.storeJsonConfig(rootDir, 'environment.runtime.json', environmnet);
+            this.storeJsonConfig(rootDir, 'environment.runtime.json', environment);
             this.storeJsonConfig(rootDir, 'proxy.conf.runtime.json', proxyConfig);
             this.storeJsonConfig(rootDir, 'plugins.json', pluginsConfig);
             this.storeJsonConfig(packageRoot, 'angular.json', angularJson);

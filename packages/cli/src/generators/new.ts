@@ -34,7 +34,7 @@ export default class New extends Generator {
         });
 
         createSpec.elements.forEach(element => {
-            const pluginQuestions = JSONSchemaPrompt.convertToPromptQuestions(element.buildActions.getInputSchema('generate'), {
+            const pluginQuestions = JSONSchemaPrompt.convertToPromptQuestions(element.newActions.getInputSchema('generate'), {
                 name: {
                     default: element.name
                 }

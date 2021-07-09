@@ -1,4 +1,3 @@
-import { } from 'jasmine';
 import * as path from 'path';
 import { CarePackageGenerator } from './CarePackageGenerator';
 import { Plugin } from '@vcd/care-package-def';
@@ -9,13 +8,16 @@ export class TestPlugin implements Plugin {
     module = '../CarePackageGenerator.spec/TestPlugin';
     displayName = 'Test Plugin';
 
-    buildActions = {
-        getInputSchema: (): JSONSchema7  => null
+    newActions = {
+        getInputSchema: (): JSONSchema7 => null,
+        generate: () => null
     };
 
-    deployActions = {
-        getInputSchema: (): JSONSchema7  => null
-    };
+    buildActions = {};
+
+    deployActions = {};
+
+    workingDirectory: () => null;
 }
 
 describe('CarePackageGenerator Tests', () => {
@@ -47,7 +49,7 @@ describe('CarePackageGenerator Tests', () => {
                 link: {
                     type: 'string',
                     description: 'Specify vendor link',
-                    default: 'http://example.com',
+                    default: 'https://example.com',
                     required: true,
                     minLength: 1
                 },

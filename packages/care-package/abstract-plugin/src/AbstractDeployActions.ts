@@ -1,4 +1,3 @@
-import { JSONSchema7 } from 'json-schema';
 import { DeployActionParameters, DeployActions, Element } from '@vcd/care-package-def';
 import { ComponentDeployerConstructor } from './ComponentDeployer';
 import debug from 'debug';
@@ -7,7 +6,6 @@ const log = debug('vcd:ext:deployer');
 
 export abstract class AbstractDeployActions implements DeployActions {
 
-    abstract getInputSchema(action: string): JSONSchema7;
     abstract getComponentDeployer(): ComponentDeployerConstructor;
 
     async deploy({ packageRoot, elements, clientConfig, options }: DeployActionParameters) {

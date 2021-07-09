@@ -30,7 +30,7 @@ export const createSchema = {
         link: {
             type: 'string',
             description: 'Specify vendor link',
-            default: 'http://example.com',
+            default: 'https://example.com',
             required: true,
             minLength: 1
         },

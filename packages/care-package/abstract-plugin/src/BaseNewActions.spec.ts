@@ -1,29 +1,24 @@
-import { DeployActions } from '@vcd/care-package-def';
-import { } from 'jasmine';
-import { AbstractBuildActions } from './AbstractBuildActions';
-import { ComponentDeployer } from './ComponentDeployer';
+import {} from 'jasmine';
+import {BaseNewActions} from './BaseNewActions';
+import { Plugin } from '@vcd/care-package-def';
 
-class TestPlugin extends AbstractBuildActions {
+export class TestPlugin implements Plugin {
     name = 'test';
+    module = '../CarePackageGenerator.spec/TestPlugin';
+    displayName = 'Test Plugin';
 
-    getDeployActions(): DeployActions {
-        throw new Error('Method not implemented.');
-    }
-    getComponentDeployer(): ComponentDeployer {
-        throw new Error('Method not implemented.');
-    }
-    getDefaultOutDir(): string {
-        throw new Error('Method not implemented.');
-    }
-    getDefaultFiles(): string {
-        throw new Error('Method not implemented.');
-    }
-    getSrcRoot(): string {
-        return 'test/root';
+    newActions = new BaseNewActions();
+
+    buildActions = {};
+
+    deployActions = {};
+
+    workingDirectory(): string {
+        return 'test/lib';
     }
 }
 
-describe('AbstractPlugin Tests', () => {
+describe('BaseNewActions Tests', () => {
     it('Generate plugin files', () => {
         const fs = jasmine.createSpyObj('fs', ['copyTpl', 'readJSON', 'writeJSON']);
         fs.readJSON.and.returnValue({
@@ -38,8 +33,9 @@ describe('AbstractPlugin Tests', () => {
                 }
             }
         };
-        new TestPlugin().generate(generator, answers);
-        expect(generator.sourceRoot).toHaveBeenCalledWith('test/root');
+        const plugin = new TestPlugin();
+        plugin.newActions.generate(plugin, generator, answers);
+        expect(generator.sourceRoot).toHaveBeenCalledWith('test/templates');
         expect(generator.templatePath).toHaveBeenCalled();
         expect(generator.destinationPath).toHaveBeenCalled();
     });
@@ -55,8 +51,9 @@ describe('AbstractPlugin Tests', () => {
                 test: {}
             }
         };
-        new TestPlugin().generate(generator, answers);
-        expect(generator.sourceRoot).toHaveBeenCalledWith('test/root');
+        const plugin = new TestPlugin();
+        plugin.newActions.generate(plugin, generator, answers);
+        expect(generator.sourceRoot).toHaveBeenCalledWith('test/templates');
         expect(generator.templatePath).toHaveBeenCalled();
         expect(generator.destinationPath).toHaveBeenCalled();
     });

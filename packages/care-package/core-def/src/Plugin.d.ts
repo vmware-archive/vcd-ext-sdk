@@ -3,8 +3,10 @@ import * as Generator from 'yeoman-generator';
 import { CarePackageSourceSpec, CarePackageSpec, Element, ElementSource } from './CarePackage';
 import { CloudDirectorConfig } from './CloudDirectorConfig';
 
-export interface SchemaProvider {
+export interface NewActions {
     getInputSchema(action: string): JSONSchema7;
+    generate(plugin: Plugin, generator: Generator, answers: any);
+    getConfiguration?(): any;
 }
 
 export interface BuildActionParameters {
@@ -15,8 +17,7 @@ export interface BuildActionParameters {
     options?: any
 }
 
-export interface BuildActions extends SchemaProvider {
-    generate?(generator: Generator, answers: any);
+export interface BuildActions {
     build?(params: BuildActionParameters);
     serve?(params: BuildActionParameters);
     pack?(params: BuildActionParameters);
@@ -31,7 +32,7 @@ export interface DeployActionParameters {
     options?: any
 }
 
-export interface DeployActions extends SchemaProvider {
+export interface DeployActions {
     deploy?(params: DeployActionParameters);
     publish?(params: DeployActionParameters);
     unpublish?(params: DeployActionParameters);
@@ -41,6 +42,9 @@ export interface DeployActions extends SchemaProvider {
 export interface Plugin {
     name: string;
     displayName: string;
+    newActions: NewActions;
     buildActions: BuildActions;
     deployActions: DeployActions;
+
+    workingDirectory(): string;
 }

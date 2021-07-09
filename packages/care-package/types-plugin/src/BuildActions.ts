@@ -11,9 +11,6 @@ export class BuildActions extends AbstractBuildActions {
         return new DeployActions();
     }
 
-    getSrcRoot(): string {
-        return path.join(__dirname, '..', 'templates');
-    }
     getDefaultOutDir(): string {
         return 'lib';
     }

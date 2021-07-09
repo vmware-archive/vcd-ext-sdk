@@ -10,7 +10,7 @@ describe('New Generator Tests', () => {
                 name: 'test',
                 version: '0.0.1',
                 vendor: 'VMware',
-                link: 'http://example.com',
+                link: 'https://example.com',
                 license: 'BSD'
              })
              .then(() => {
@@ -23,7 +23,7 @@ describe('New Generator Tests', () => {
                 name: 'test',
                 version: '0.0.1',
                 vendor: 'VMware',
-                link: 'http://example.com',
+                link: 'https://example.com',
                 license: 'BSD',
                 elements: ['types'],
                 'types:name': 'types'
@@ -38,7 +38,7 @@ describe('New Generator Tests', () => {
                 name: 'test',
                 version: '0.0.1',
                 vendor: 'VMware',
-                link: 'http://example.com',
+                link: 'https://example.com',
                 license: 'BSD',
                 elements: ['uiPlugin'],
                 'uiPlugin:name': 'uiPlugin'

@@ -29,12 +29,15 @@ export class CarePackageGenerator {
     async generate(generator: Generator, answers: any) {
         generator.sourceRoot(path.join(__dirname, '..', 'templates'));
         answers.nameCamelCase = camelcase(answers.name, { pascalCase: true });
-        answers.careElements = Object.keys(answers.elements).map(pluginName => {
-            const ele = answers.elements[pluginName];
-            const plugin = this.plugins.find(p => p.name === pluginName);
-            return {
-                name: ele.name || plugin.name,
-                type: plugin.module
+        answers.careElements = Object
+            .keys(answers.elements)
+            .map(pluginName => {
+                const ele = answers.elements[pluginName];
+                const plugin = this.plugins.find(p => p.name === pluginName);
+                return {
+                    name: ele.name || plugin.name,
+                    type: plugin.module,
+                    configuration: plugin.newActions.getConfiguration ? plugin.newActions.getConfiguration() : undefined
             };
         });
         generator.fs.copyTpl(
@@ -45,7 +48,7 @@ export class CarePackageGenerator {
             { globOptions: { dot: true } }
         );
         this.plugins
-            .filter(plugin => !!plugin.buildActions.generate && !!answers.elements[plugin.name])
-            .forEach(plugin => plugin.buildActions.generate(generator, answers));
+            .filter(plugin => !!plugin.newActions.generate && !!answers.elements[plugin.name])
+            .forEach(plugin => plugin.newActions.generate(plugin, generator, answers));
     }
 }

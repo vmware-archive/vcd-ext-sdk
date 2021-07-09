@@ -1,30 +1,14 @@
-import { JSONSchema7 } from 'json-schema';
 import * as path from 'path';
-import * as Generator from 'yeoman-generator';
 import { BuildActionParameters, BuildActions, DeployActions, Element, ElementSource } from '@vcd/care-package-def';
-import debug from 'debug';
 import { glob } from './glob';
-
-const log = debug('vcd:ext:deployer');
 
 export abstract class AbstractBuildActions implements BuildActions {
 
     abstract name: string;
 
-    abstract getSrcRoot(): string;
     abstract getDefaultOutDir(): string;
     abstract getDefaultFiles(): string;
     abstract getDeployActions(): DeployActions;
-
-    protected copyTemplate(folderName: string, generator: Generator, answers: any) {
-        generator.sourceRoot(this.getSrcRoot());
-        generator.fs.copyTpl(
-            generator.templatePath('new'),
-            generator.destinationPath(this.getDefaultBase(folderName)),
-            answers,
-            undefined,
-            { globOptions: { dot: true } });
-    }
 
     getDefaultBase(name): string {
         return path.join('packages', name);
@@ -32,26 +16,6 @@ export abstract class AbstractBuildActions implements BuildActions {
 
     getBaseRelative(element: ElementSource) {
         return element.location?.base || this.getDefaultBase(element.name);
-    }
-
-    getInputSchema(action: string): JSONSchema7 {
-        if (action === 'generate') {
-            return {
-                type: 'object',
-                properties: {
-                    name: {
-                        type: 'string',
-                        description: 'element name'
-                    }
-                }
-            };
-        }
-        return null;
-    }
-
-    generate(generator: Generator, answers: any) {
-        const folderName = answers.elements[this.name].name || this.name;
-        this.copyTemplate(folderName, generator, answers);
     }
 
     pack({ packageRoot, elements, options }: BuildActionParameters) {
