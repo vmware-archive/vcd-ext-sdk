@@ -10,11 +10,19 @@ const pjson = require('../../package.json');
 
 const log = debug('vcd-ext:analytics');
 
-
+/**
+ * Used to collect and send data to VMware Analytics Cloud
+ */
 export class AnalyticsCollector {
     static store = new ConsentStore();
     static cliRunId = uuidv4();
 
+  /**
+   * Sends cli event to Analytics Cloud
+   * @param eventType - type of cli event
+   * @param options - event specific options
+   * @param error - error
+   */
     static async send(eventType: EventType, options?: HookKeyOrOptions<'prerun'> | HookKeyOrOptions<'postrun'>, error?: Error) {
         if (!this.store.hasConsent()) {
             return;

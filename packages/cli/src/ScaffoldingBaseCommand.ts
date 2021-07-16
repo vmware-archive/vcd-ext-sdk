@@ -3,6 +3,9 @@ import { createEnv } from 'yeoman-environment';
 
 export default abstract class ScaffoldingBaseCommand extends Command {
 
+  /**
+   * Setups the yeoman generator environment
+   */
     protected async generate(type: string, generatorOptions: object = {}) {
         const env = createEnv();
 

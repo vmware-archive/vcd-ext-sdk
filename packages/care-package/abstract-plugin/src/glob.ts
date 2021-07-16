@@ -4,6 +4,12 @@ import minimatch from 'minimatch';
 import debug from 'debug';
 const log = debug('vcd:ext:glob');
 
+/**
+ * Searches for files by glob pattern recursively
+ * @param root - root path
+ * @param directory - current directory
+ * @param pattern - a glob search pattern
+ */
 const globReq = (root: string, directory: string, pattern: string): string[] => {
     let filepaths = [];
     const files = fs.readdirSync(directory);
@@ -21,6 +27,11 @@ const globReq = (root: string, directory: string, pattern: string): string[] => 
     return filepaths;
 };
 
+/**
+ * Searches for files by glob pattern recursively
+ * @param directory - root path
+ * @param pattern - a glob search pattern
+ */
 export const glob = (directory: string, pattern: string): string[] => {
     return globReq(directory, directory, pattern);
 };

@@ -1,3 +1,6 @@
+/*
+Responsible for managing user consent
+ */
 import * as fs from 'fs';
 import * as path from 'path';
 import * as debug from 'debug';
@@ -6,8 +9,14 @@ import * as inquirer from 'inquirer';
 
 const log = debug('vcd-ext:analytics');
 
+/**
+ * Where user consent is persisted
+ */
 const DEFAULT_CONFIG_LOCATION = path.join(findHomeDir(), '.vcd', 'analytics');
 
+/**
+ * Returns OS independent home directory
+ */
 function findHomeDir(): string {
     if (process.env.HOME) {
         try {
@@ -37,6 +46,9 @@ function findHomeDir(): string {
     return '';
 }
 
+/**
+ * Loads previously stored user consent
+ */
 const loadConfig = () => {
     if (fs.existsSync(DEFAULT_CONFIG_LOCATION)) {
         const fileContent = fs.readFileSync(DEFAULT_CONFIG_LOCATION).toString();
@@ -46,6 +58,10 @@ const loadConfig = () => {
     return null;
 };
 
+/**
+ * Creates or Updates previously user consent
+ * @param config - contains user consent
+ */
 const updateConfig = (config: any) => {
     const dirName = path.dirname(DEFAULT_CONFIG_LOCATION);
     if (!fs.existsSync(dirName)) {
@@ -55,6 +71,9 @@ const updateConfig = (config: any) => {
     fs.writeFileSync(DEFAULT_CONFIG_LOCATION, JSON.stringify(config));
 };
 
+/**
+ * Provides user consent operations
+ */
 export class ConsentStore {
 
     config: any;

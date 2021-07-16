@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
+/**
+ * CNCF Cloud event https://github.com/cloudevents/spec
+ */
 export interface CloudEvent {
     specversion: string;
     datacontenttype?: string;
@@ -12,10 +15,16 @@ export interface CloudEvent {
     data?: any;
 }
 
+/**
+ * Extended event defining the destination table
+ */
 export interface SuperColliderEvent extends CloudEvent {
     '@table': string;
 }
 
+/**
+ * Data payload
+ */
 export interface CLIAnalyticsPayload {
     command?: string;
     errorCode?: string;
@@ -25,12 +34,18 @@ export interface CLIAnalyticsPayload {
     isCIRun?: boolean;
 }
 
+/**
+ * CLI Event types
+ */
 export enum EventType {
     PRERUN = 'CLI_COMMAND_PRERUN',
     SUCCESS = 'CLI_COMMAND_SUCCESS',
     FAILED = 'CLI_COMMAND_FAILED'
 }
 
+/**
+ * Cli cloud event implementation
+ */
 export class CLIAnalyticsEvent implements SuperColliderEvent {
     '@table' = 'vcd_ext_cli';
     specversion = '1.0';

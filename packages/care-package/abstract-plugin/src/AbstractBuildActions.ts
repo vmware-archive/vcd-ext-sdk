@@ -7,15 +7,44 @@ import { glob } from './glob';
 
 const log = debug('vcd:ext:deployer');
 
+/**
+ * Provides default implementation for 'generate', 'pack' and 'deploy' actions
+ */
 export abstract class AbstractBuildActions implements BuildActions {
 
+    /**
+     * Short name of the plugin
+     */
     abstract name: string;
 
+    /**
+     * Plugin 'templates' folder.
+     */
+    // TODO Rename to getTemplatesRoot
     abstract getSrcRoot(): string;
+
+    /**
+     * The default build artifacts output directory
+     */
     abstract getDefaultOutDir(): string;
+
+    /**
+     * Returns a glob pattern which describes the element build artifacts
+     */
     abstract getDefaultFiles(): string;
+
+    /**
+     * Reference to the deploy actions
+     */
     abstract getDeployActions(): DeployActions;
 
+    /**
+     * Copies the new template to the element default directory
+     * @param folderName - element destination folder
+     * @param generator - yeoman generator
+     * @param answers - user input answers
+     */
+    // TODO answers should use a type
     protected copyTemplate(folderName: string, generator: Generator, answers: any) {
         generator.sourceRoot(this.getSrcRoot());
         generator.fs.copyTpl(
@@ -26,14 +55,26 @@ export abstract class AbstractBuildActions implements BuildActions {
             { globOptions: { dot: true } });
     }
 
+    /**
+     * Gets the path for a given element
+     * @param name - element name
+     */
     getDefaultBase(name): string {
         return path.join('packages', name);
     }
 
+    /**
+     * Gets element custom path
+     * @param element - element source definition
+     */
     getBaseRelative(element: ElementSource) {
         return element.location?.base || this.getDefaultBase(element.name);
     }
 
+    /**
+     * Gets user input schema for a specific action
+     * @param action - element action
+     */
     getInputSchema(action: string): JSONSchema7 {
         if (action === 'generate') {
             return {
@@ -49,11 +90,20 @@ export abstract class AbstractBuildActions implements BuildActions {
         return null;
     }
 
+    /**
+     * Generates a new template for an element based on user input
+     * @param generator - yoeman generator
+     * @param answers - user input answers
+     */
     generate(generator: Generator, answers: any) {
         const folderName = answers.elements[this.name].name || this.name;
         this.copyTemplate(folderName, generator, answers);
     }
 
+    /**
+     * Inserts all element artifacts into the CARE package archive. Based on the output directory and file pattern
+     * configuration
+     */
     pack({ packageRoot, elements, options }: BuildActionParameters) {
         const elementSpecs: Element[] = elements.map(ele => {
             const base = this.getBaseRelative(ele);
@@ -80,6 +130,9 @@ export abstract class AbstractBuildActions implements BuildActions {
         return Promise.resolve(elementSpecs);
     }
 
+    /**
+     * Transforms Source elements into Package elements and invokes deploy on deploy actions
+     */
     async deploy({ packageRoot, careSpec, elements, clientConfig, options }: BuildActionParameters) {
 
         const packageElements: Element[] = elements.map(eleSrc => {

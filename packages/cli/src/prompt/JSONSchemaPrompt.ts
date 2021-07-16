@@ -5,6 +5,11 @@ import { Question } from 'yeoman-generator';
 
 export class JSONSchemaPrompt {
 
+  /**
+   * Converts provided schema to yeoman questions
+   * @param schema - json schema describing the questions
+   * @param predefinedValues - default question values
+   */
     static convertToPromptQuestions(schema: any, predefinedValues: any = {}) {
         const questions: Question[] = [];
         schemaWalk(schema, (subschema: any, path: string[], parent: any) => {

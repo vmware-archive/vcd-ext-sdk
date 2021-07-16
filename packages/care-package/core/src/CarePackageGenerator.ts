@@ -4,21 +4,44 @@ import camelcase from 'camelcase';
 import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
 import { createSchema } from './createSchema';
 
+/**
+ * Describes the CARE package solution generation
+ */
 export interface CarePackageCreateSpec {
+    /**
+     * Defines the schema for the input required to generate a CARE package solution project
+     */
     createSchema: any;
+
+    /**
+     * List of plugins to be used for generating the solution project
+     */
     elements: PluginExtended[];
 }
 
+/**
+ * Generate the CARE package solution project
+ */
 export class CarePackageGenerator {
 
+    /**
+     * @param plugins - List of plugins to be used for generating the solution project
+     */
     private constructor(private plugins: PluginExtended[]) {
     }
 
+    /**
+     * Creates an instance of CarePackageGenerator with custom plugins
+     * @param additionalPlugins - A list of custom plugins
+     */
     static async withPlugins(additionalPlugins: string[] = []) {
         const plugins = await PluginLoader.loadWithDefaults(additionalPlugins);
         return new CarePackageGenerator(plugins);
     }
 
+    /**
+     * Creates an instance of CarePackageCreateSpec
+     */
     getCreateSpec(): CarePackageCreateSpec {
         return {
             createSchema,
@@ -26,7 +49,14 @@ export class CarePackageGenerator {
         };
     }
 
+    /**
+     * Generates a CARE package solution
+     * @param generator - yeoman generator
+     * @param answers - the user answers used to generate the solution
+     */
+    // TODO Revisit answers: any object and if a type can be defined
     async generate(generator: Generator, answers: any) {
+        // TODO extract 'templates' as a const variable
         generator.sourceRoot(path.join(__dirname, '..', 'templates'));
         answers.nameCamelCase = camelcase(answers.name, { pascalCase: true });
         answers.careElements = Object.keys(answers.elements).map(pluginName => {
