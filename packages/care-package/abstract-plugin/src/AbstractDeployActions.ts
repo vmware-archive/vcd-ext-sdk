@@ -8,8 +8,17 @@ const log = debug('vcd:ext:deployer');
 export abstract class AbstractDeployActions implements DeployActions {
 
     abstract getInputSchema(action: string): JSONSchema7;
+
+    /**
+     * Returns a constructor function of a ComponentDeployer
+     * The implementation of ComponentDeployer returned by this constructor function, can deploy a single element
+     */
     abstract getComponentDeployer(): ComponentDeployerConstructor;
 
+    /**
+     * Iterates over all solution elements and performs deploy action on each
+     * If options.force == true it performs clean action on each solution element in reverse order, prior deploy.
+     */
     async deploy({ packageRoot, elements, clientConfig, options }: DeployActionParameters) {
 
         log(`Deploying elements: ${JSON.stringify(elements, null, 2)}`);

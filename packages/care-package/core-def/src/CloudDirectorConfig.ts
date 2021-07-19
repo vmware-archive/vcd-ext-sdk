@@ -1,3 +1,6 @@
+/**
+ * TODO Substitute this with the typedefs from node client
+ */
 export interface TransferClient {
     upload(filePath: string, contentType: string): Promise<any>;
 }
