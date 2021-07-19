@@ -25,6 +25,7 @@ export interface CarePackageSpec {
     version: string;
     vendor: string;
     specVersion: string;
+    platformVersion?: string;
     elements: Element[];
 }
 
@@ -58,5 +59,6 @@ export interface CarePackageSourceSpec {
     version: string;
     vendor: string;
     specVersion: string;
+    platformVersion?: string;
     elements: ElementSource[];
 }

@@ -27,6 +27,10 @@ export const createSchema = {
             required: true,
             minLength: 1
         },
+        platformVersion: {
+            type: 'string',
+            description: 'Specify minimum required Cloud Director version'
+        },
         link: {
             type: 'string',
             description: 'Specify vendor link',

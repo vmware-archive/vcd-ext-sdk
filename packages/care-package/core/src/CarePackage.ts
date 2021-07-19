@@ -3,8 +3,10 @@ import debug from 'debug';
 import * as fs from 'fs';
 import * as path from 'path';
 import AdmZip from 'adm-zip';
+import * as semver from 'semver';
 import * as uuid from 'uuid';
 import { CarePackageSpec, CloudDirectorConfig } from '@vcd/care-package-def';
+import { CellApi } from '@vcd/node-client';
 import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
@@ -214,6 +216,18 @@ export class CarePackage {
      */
     async deploy(only: string, clientConfig: CloudDirectorConfig, options?: any) {
         // TODO extract 'deploy' as a const variable
+        await this.validatePlatformVersion(clientConfig);
         return this.runOperationOnElements('deploy', only, clientConfig, options);
     }
+
+    async validatePlatformVersion(clientConfig: CloudDirectorConfig) {
+        const cellApi = clientConfig.makeApiClient(CellApi);
+        const cellsResp = await cellApi.queryCells(1, 1);
+        if (this.spec.platformVersion && semver.gt(this.spec.platformVersion, cellsResp.body.values[0].productVersion)) {
+            throw new Error(`Platform version mismatch expected greater or equal to ${this.spec.platformVersion}` +
+                ` got ${cellsResp.body.values[0].productVersion}`);
+        }
+    }
+
 }
+
