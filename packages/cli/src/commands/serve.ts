@@ -1,10 +1,10 @@
-import Command, { flags } from '@oclif/command';
-import { CloudDirectorConfig } from '@vcd/node-client';
+import { flags } from '@oclif/command';
 import { CarePackage } from '@vcd/care-package';
+import CloudDirectorConfigBaseCommand from '../CloudDirectorConfigBaseCommand';
 
-export default class Serve extends Command {
+export default class Serve extends CloudDirectorConfigBaseCommand {
 
-    static description = 'Serves an emulated environmnet';
+    static description = 'Serves an emulated environment';
 
     static examples = [
         `$ vcd-ext serve
@@ -26,7 +26,7 @@ export default class Serve extends Command {
     async run() {
         // tslint:disable-next-line: no-shadowed-variable
         const { flags } = this.parse(Serve);
-        const config = CloudDirectorConfig.fromDefault();
+        const config = await this.getCloudDirectorConfig();
         const carePackage = await CarePackage.loadFromSource();
         return carePackage.serve(flags.only, config);
     }

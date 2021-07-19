@@ -1,8 +1,9 @@
-import Command, { flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import { CloudDirectorConfig } from '@vcd/node-client';
 import * as inquirer from 'inquirer';
+import CloudDirectorConfigBaseCommand from '../CloudDirectorConfigBaseCommand';
 
-export default class Use extends Command {
+export default class Use extends CloudDirectorConfigBaseCommand {
 
     static description = 'Switch to previously configured session';
 
@@ -42,5 +43,6 @@ export default class Use extends Command {
             });
             CloudDirectorConfig.use(answers.alias);
         }
+        await this.getCloudDirectorConfig();
     }
 }

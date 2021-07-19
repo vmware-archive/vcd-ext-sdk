@@ -1,7 +1,7 @@
-import Command, { flags } from '@oclif/command';
-import { CloudDirectorConfig } from '@vcd/node-client';
+import { flags } from '@oclif/command';
+import CloudDirectorConfigBaseCommand from '../CloudDirectorConfigBaseCommand';
 
-export default class Subscribe extends Command {
+export default class Subscribe extends CloudDirectorConfigBaseCommand {
 
     static description = 'Subscribes to a mqtt topic and starts to listen to messages';
 
@@ -25,7 +25,7 @@ export default class Subscribe extends Command {
     async run() {
         const { args } = this.parse(Subscribe);
         const topic = args.topic;
-        const config = CloudDirectorConfig.fromDefault();
+        const config = await this.getCloudDirectorConfig();
         return new Promise((_, reject) => {
             config.makeMQTTClient((client) => {
                 console.log(`Subscribing to topic ${topic}`);
