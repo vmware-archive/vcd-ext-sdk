@@ -4,6 +4,10 @@ import { CloudDirectorConfig } from '@vcd/care-package-def';
  * ComponentDeployer constructor function type
  */
 export type ComponentDeployerConstructor = new (clientConfig: CloudDirectorConfig, options: any) => ComponentDeployer;
+/**
+ * Element data write function type
+ */
+export type ElementStore = (data: any) => void;
 
 /**
  * ComponentDeployer deploy actions from files
@@ -14,8 +18,10 @@ export interface ComponentDeployer {
      * Location + pattern describes a list of files, containing resources to be deployed
      * @param location - specifies the absolute path to the folder containing files
      * @param pattern - is a glob pattern describing the files relative to the location
+     * @param siblingsData - stored data for sibling elements
+     * @param store - data write store function
      */
-    deploy(location: string, pattern: string): Promise<any>;
+    deploy(location: string, pattern: string, siblingsData?: any, store?: ElementStore): Promise<any>;
 
     /**
      * Defines a cleaner function which can clean a group of resources or specific type of resource.

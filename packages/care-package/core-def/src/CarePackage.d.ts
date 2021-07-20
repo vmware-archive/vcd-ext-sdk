@@ -11,6 +11,16 @@ export interface ElementBase {
      * Defined individually by plugins for configuration purposes
      */
     configuration: any;
+
+    /**
+     * Element data write key
+     */
+    storeWriteKey?: string;
+
+    /**
+     * Element data read keys
+     */
+    storeReadKeys?: string[];
 }
 
 export interface Element extends ElementBase {

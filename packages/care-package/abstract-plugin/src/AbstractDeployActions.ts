@@ -2,6 +2,7 @@ import { JSONSchema7 } from 'json-schema';
 import { DeployActionParameters, DeployActions, Element } from '@vcd/care-package-def';
 import { ComponentDeployerConstructor } from './ComponentDeployer';
 import debug from 'debug';
+import {PluginStore} from './PluginStore';
 
 const log = debug('vcd:ext:deployer');
 
@@ -21,6 +22,9 @@ export abstract class AbstractDeployActions implements DeployActions {
      */
     async deploy({ packageRoot, elements, clientConfig, options }: DeployActionParameters) {
 
+        // used to share data between elements in a solution
+        const pluginStore: PluginStore = PluginStore.getInstance();
+
         log(`Deploying elements: ${JSON.stringify(elements, null, 2)}`);
         const DeployerConstructor = this.getComponentDeployer();
         const deployer = new DeployerConstructor(clientConfig, options);
@@ -37,7 +41,20 @@ export abstract class AbstractDeployActions implements DeployActions {
         return elements
             .reduce(async (prevPromise: Promise<any>, ele: Element) => {
                 await prevPromise;
-                return deployer.deploy(packageRoot, ele.location).catch(console.error);
+
+                const siblingsData = {};
+
+                if (ele.storeReadKeys) {
+                    ele.storeReadKeys.forEach((key) => {
+                        const elementStoredData = pluginStore.get(key);
+                        log('Element ', ele.name, ' reading from store: ', elementStoredData);
+                        siblingsData[key] = elementStoredData;
+                    });
+                }
+                return deployer.deploy(packageRoot, ele.location, siblingsData, (data: any) => {
+                    log('Element ', ele.name, ' writing into store: ', data);
+                    pluginStore.store(ele.storeWriteKey ? ele.storeWriteKey : ele.name, data);
+                }).catch(console.error);
             }, Promise.resolve()).catch(console.error);
     }
 }

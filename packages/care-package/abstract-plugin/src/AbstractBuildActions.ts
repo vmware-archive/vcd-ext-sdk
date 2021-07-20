@@ -124,6 +124,8 @@ export abstract class AbstractBuildActions implements BuildActions {
                 name: ele.name,
                 type: ele.type,
                 configuration: ele.configuration,
+                storeWriteKey: ele.storeWriteKey,
+                storeReadKeys: ele.storeReadKeys,
                 location
             };
         });
@@ -144,6 +146,8 @@ export abstract class AbstractBuildActions implements BuildActions {
                 name: eleSrc.name,
                 type: eleSrc.type,
                 configuration: eleSrc.configuration,
+                storeWriteKey: eleSrc.storeWriteKey,
+                storeReadKeys: eleSrc.storeReadKeys,
                 location
             } as Element;
         });
