@@ -1,11 +1,11 @@
-import Command, { flags } from '@oclif/command';
-import { CloudDirectorConfig } from '@vcd/node-client';
+import { flags } from '@oclif/command';
 import { CarePackage } from '@vcd/care-package';
+import CloudDirectorConfigBaseCommand from '../CloudDirectorConfigBaseCommand';
 
-export default class Deploy extends Command {
+export default class Deploy extends CloudDirectorConfigBaseCommand {
 
     static description = `Deploys extensibility entities to previously logged in vCD instance.
-    If a file is provided it deployes from the file, otherwise it needs to be run in the context of a solution projects.`;
+    If a file is provided it deploys from the file, otherwise it needs to be run in the context of a solution projects.`;
 
     static examples = [
         `$ vcd-ext deploy`,
@@ -22,7 +22,7 @@ export default class Deploy extends Command {
         only: flags.string({
             required: false,
             default: '',
-            description: 'Comma separated list of subcomponent names to be deployed. If not provided it deployes all subcomponents.'
+            description: 'Comma separated list of sub-component names to be deployed. If not provided it deploys all sub-components.'
         }),
         ci: flags.boolean({ description: 'Indicates the command is run within CI environment. It skips analytics consent prompt.'})
     };
@@ -33,7 +33,8 @@ export default class Deploy extends Command {
     async run() {
         // tslint:disable-next-line: no-shadowed-variable
         const { flags, args } = this.parse(Deploy);
-        const config = CloudDirectorConfig.fromDefault();
+        const config = await this.getCloudDirectorConfig();
+
         const carePackage = args.name ?
             await CarePackage.loadFromPackage(args.name) :
             await CarePackage.loadFromSource();

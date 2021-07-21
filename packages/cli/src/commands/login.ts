@@ -1,8 +1,8 @@
-import Command, { flags } from '@oclif/command';
-import { CloudDirectorConfig } from '@vcd/node-client';
+import { flags } from '@oclif/command';
 import * as inquirer from 'inquirer';
+import CloudDirectorConfigBaseCommand from '../CloudDirectorConfigBaseCommand';
 
-export default class Login extends Command {
+export default class Login extends CloudDirectorConfigBaseCommand {
 
     static description = 'Logs into Cloud Director and stores the session';
 
@@ -17,7 +17,7 @@ export default class Login extends Command {
     };
 
     static args = [
-        { name: 'alias', required: true, description: 'Alias for stroing the session token' },
+        { name: 'alias', required: true, description: 'Alias for storing the session token' },
         { name: 'basePath', required: true, description: 'Cloud director URL https://<host>[:<port>]/cloudapi' },
         {
             name: 'username',
@@ -40,22 +40,6 @@ export default class Login extends Command {
             });
             password = answers.password;
         }
-        const config = await CloudDirectorConfig.withUsernameAndPassword(
-            args.basePath,
-            user,
-            org,
-            password
-        );
-        if (!config.connectionAuth.authorized) {
-            console.warn('Connection error: ' + config.connectionAuth.authorizationError);
-            console.log(config.connectionAuth.certificate);
-            const answers = await inquirer.prompt({
-                type: 'confirm',
-                name: 'accept',
-                message: 'Do you accept the provided certificate?',
-            });
-            config.connectionAuth.authorized = answers.accept;
-        }
-        config.saveConfig(args.alias);
+        this.loginAndStore(args.alias, args.basePath, user, org, password);
     }
 }
