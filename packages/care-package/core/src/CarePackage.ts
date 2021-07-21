@@ -172,6 +172,7 @@ export class CarePackage {
         if (!this.fromSource) {
             throw new Error('Serve operation can only be triggered from CARE package source project');
         }
+        await this.validatePlatformVersion(clientConfig);
         // TODO extract 'serve' as a const variable
         return this.runOperationOnElements('serve', only, clientConfig, options);
     }
@@ -220,10 +221,12 @@ export class CarePackage {
         return this.runOperationOnElements('deploy', only, clientConfig, options);
     }
 
-    async validatePlatformVersion(clientConfig: CloudDirectorConfig) {
+    private async validatePlatformVersion(clientConfig: CloudDirectorConfig) {
         const cellApi = clientConfig.makeApiClient(CellApi);
         const cellsResp = await cellApi.queryCells(1, 1);
-        if (this.spec.platformVersion && semver.gt(this.spec.platformVersion, cellsResp.body.values[0].productVersion)) {
+        if (this.spec.platformVersion &&
+            semver.gte(this.spec.platformVersion,
+                       productVersionToSemver(cellsResp.body.values[0].productVersion))) {
             throw new Error(`Platform version mismatch expected greater or equal to ${this.spec.platformVersion}` +
                 ` got ${cellsResp.body.values[0].productVersion}`);
         }
@@ -231,3 +234,9 @@ export class CarePackage {
 
 }
 
+const productVersionToSemver = (ver: string) => {
+    const verTokens = ver.split('\.');
+    if (verTokens.length > 3) {
+        return `${verTokens[0]}.${verTokens[1]}.${verTokens[2]}`;
+    }
+};
