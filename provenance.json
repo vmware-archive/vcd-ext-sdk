@@ -1,0 +1,3500 @@
+{
+  "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
+  "all-components": {
+    "name": "vcd-ext-sdk",
+    "source_repositories": [
+      {
+        "content": "source",
+        "host": "github.com",
+        "protocol": "git",
+        "paths": [
+          "/vmware/vcd-ext-sdk/tree/main/"
+        ],
+        "branch": "main"
+      }
+    ],
+    "components": {},
+    "artifact_repositories": [
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@babel%2fcode-frame/-/code-frame-7.10.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@babel%2fhelper-validator-identifier/-/helper-validator-identifier-7.10.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@babel%2fhighlight/-/highlight-7.10.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@evocateur%2flibnpmaccess/-/libnpmaccess-3.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@evocateur%2flibnpmpublish/-/libnpmpublish-1.2.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@evocateur%2fnpm-registry-fetch/-/npm-registry-fetch-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@evocateur%2fpacote/-/pacote-9.6.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fadd/-/add-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fbootstrap/-/bootstrap-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fchanged/-/changed-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fcheck-working-tree/-/check-working-tree-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fchild-process/-/child-process-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fclean/-/clean-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fcli/-/cli-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fcollect-uncommitted/-/collect-uncommitted-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fcollect-updates/-/collect-updates-3.20.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fcommand/-/command-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fconventional-commits/-/conventional-commits-3.22.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fcreate/-/create-3.22.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fcreate-symlink/-/create-symlink-3.16.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fdescribe-ref/-/describe-ref-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fdiff/-/diff-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fexec/-/exec-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2ffilter-options/-/filter-options-3.20.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2ffilter-packages/-/filter-packages-3.18.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fget-npm-exec-opts/-/get-npm-exec-opts-3.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fget-packed/-/get-packed-3.16.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fgithub-client/-/github-client-3.22.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fgitlab-client/-/gitlab-client-3.15.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fglobal-options/-/global-options-3.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fhas-npm-version/-/has-npm-version-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fimport/-/import-3.22.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2finfo/-/info-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2finit/-/init-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2flink/-/link-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2flist/-/list-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2flistable/-/listable-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2flog-packed/-/log-packed-3.16.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fnpm-conf/-/npm-conf-3.16.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fnpm-dist-tag/-/npm-dist-tag-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fnpm-install/-/npm-install-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fnpm-publish/-/npm-publish-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fnpm-run-script/-/npm-run-script-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fotplease/-/otplease-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2foutput/-/output-3.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fpack-directory/-/pack-directory-3.16.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fpackage/-/package-3.16.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fpackage-graph/-/package-graph-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fprerelease-id-from-version/-/prerelease-id-from-version-3.16.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fprofiler/-/profiler-3.20.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fproject/-/project-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fprompt/-/prompt-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fpublish/-/publish-3.22.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fpulse-till-done/-/pulse-till-done-3.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fquery-graph/-/query-graph-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fresolve-symlink/-/resolve-symlink-3.16.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2frimraf-dir/-/rimraf-dir-3.16.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2frun/-/run-3.21.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2frun-lifecycle/-/run-lifecycle-3.16.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2frun-topologically/-/run-topologically-3.18.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fsymlink-binary/-/symlink-binary-3.17.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fsymlink-dependencies/-/symlink-dependencies-3.17.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2ftimer/-/timer-3.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fvalidation-error/-/validation-error-3.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fversion/-/version-3.22.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@lerna%2fwrite-log-file/-/write-log-file-3.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@mrmlnc%2freaddir-enhanced/-/readdir-enhanced-2.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@nodelib%2ffs.stat/-/fs.stat-1.1.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2fauth-token/-/auth-token-2.4.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2fendpoint/-/endpoint-6.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2fplugin-enterprise-rest/-/plugin-enterprise-rest-6.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2fplugin-paginate-rest/-/plugin-paginate-rest-1.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2fplugin-request-log/-/plugin-request-log-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2fplugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-2.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2frequest/-/request-5.4.9.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2frequest-error/-/request-error-1.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2frest/-/rest-16.43.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@octokit%2ftypes/-/types-5.5.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@types%2fglob/-/glob-7.1.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@types/inquirer/-/inquirer-7.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@types%2fminimatch/-/minimatch-3.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@types%2fminimist/-/minimist-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@types%2fnode/-/node-14.11.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@types%2fnormalize-package-data/-/normalize-package-data-2.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@types/through/-/through-0.0.30.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@types/yeoman-generator/-/yeoman-generator-3.1.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/@zkochan%2fcmd-shim/-/cmd-shim-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/JSONStream/-/JSONStream-1.3.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/abbrev/-/abbrev-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/agent-base/-/agent-base-4.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/agentkeepalive/-/agentkeepalive-3.5.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ajv/-/ajv-6.12.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ansi-escapes/-/ansi-escapes-3.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ansi-regex/-/ansi-regex-2.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ansi-styles/-/ansi-styles-3.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/any-promise/-/any-promise-1.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/aproba/-/aproba-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/are-we-there-yet/-/are-we-there-yet-1.1.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/argparse/-/argparse-1.0.10.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/arr-diff/-/arr-diff-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/arr-flatten/-/arr-flatten-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/arr-union/-/arr-union-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/array-differ/-/array-differ-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/array-find-index/-/array-find-index-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/array-ify/-/array-ify-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/array-union/-/array-union-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/array-uniq/-/array-uniq-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/array-unique/-/array-unique-0.3.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/arrify/-/arrify-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/asap/-/asap-2.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/asn1/-/asn1-0.2.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/assert-plus/-/assert-plus-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/assign-symbols/-/assign-symbols-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/asynckit/-/asynckit-0.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/atob/-/atob-2.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/atob-lite/-/atob-lite-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/aws-sign2/-/aws-sign2-0.7.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/aws4/-/aws4-1.10.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/balanced-match/-/balanced-match-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/base/-/base-0.11.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/before-after-hook/-/before-after-hook-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/bluebird/-/bluebird-3.7.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/brace-expansion/-/brace-expansion-1.1.11.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/braces/-/braces-2.3.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/btoa-lite/-/btoa-lite-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/buffer-from/-/buffer-from-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/builtins/-/builtins-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/byline/-/byline-5.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/byte-size/-/byte-size-5.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cacache/-/cacache-12.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cache-base/-/cache-base-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/call-me-maybe/-/call-me-maybe-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/caller-callsite/-/caller-callsite-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/caller-path/-/caller-path-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/callsites/-/callsites-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/camelcase/-/camelcase-5.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/camelcase-keys/-/camelcase-keys-6.2.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/caseless/-/caseless-0.12.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/chalk/-/chalk-2.4.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/chardet/-/chardet-0.7.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/chownr/-/chownr-1.1.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ci-info/-/ci-info-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/class-utils/-/class-utils-0.3.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cli-cursor/-/cli-cursor-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cli-width/-/cli-width-2.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cliui/-/cliui-5.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/clone/-/clone-1.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/clone-deep/-/clone-deep-4.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/code-point-at/-/code-point-at-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/collection-visit/-/collection-visit-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/color-convert/-/color-convert-1.9.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/color-name/-/color-name-1.1.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/columnify/-/columnify-1.5.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/combined-stream/-/combined-stream-1.0.8.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/compare-func/-/compare-func-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/component-emitter/-/component-emitter-1.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/concat-map/-/concat-map-0.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/concat-stream/-/concat-stream-1.6.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/config-chain/-/config-chain-1.1.12.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/console-control-strings/-/console-control-strings-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/conventional-changelog-angular/-/conventional-changelog-angular-5.0.11.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/conventional-changelog-core/-/conventional-changelog-core-3.2.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/conventional-changelog-preset-loader/-/conventional-changelog-preset-loader-2.3.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/conventional-changelog-writer/-/conventional-changelog-writer-4.0.17.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/conventional-commits-filter/-/conventional-commits-filter-2.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/conventional-commits-parser/-/conventional-commits-parser-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/conventional-recommended-bump/-/conventional-recommended-bump-5.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/copy-concurrently/-/copy-concurrently-1.0.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/copy-descriptor/-/copy-descriptor-0.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/core-util-is/-/core-util-is-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cosmiconfig/-/cosmiconfig-5.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cross-spawn/-/cross-spawn-6.0.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/currently-unhandled/-/currently-unhandled-0.4.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/cyclist/-/cyclist-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/dargs/-/dargs-4.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/dashdash/-/dashdash-1.14.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/dateformat/-/dateformat-3.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/debug/-/debug-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/debuglog/-/debuglog-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/decamelize/-/decamelize-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/decamelize-keys/-/decamelize-keys-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/decode-uri-component/-/decode-uri-component-0.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/dedent/-/dedent-0.7.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/defaults/-/defaults-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/define-properties/-/define-properties-1.1.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/define-property/-/define-property-2.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/delayed-stream/-/delayed-stream-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/delegates/-/delegates-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/deprecation/-/deprecation-2.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/detect-indent/-/detect-indent-5.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/dezalgo/-/dezalgo-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/dir-glob/-/dir-glob-2.2.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/dot-prop/-/dot-prop-4.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/duplexer/-/duplexer-0.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/duplexify/-/duplexify-3.7.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/emoji-regex/-/emoji-regex-7.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/encoding/-/encoding-0.1.13.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/end-of-stream/-/end-of-stream-1.4.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/env-paths/-/env-paths-2.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/envinfo/-/envinfo-7.7.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/err-code/-/err-code-1.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/error-ex/-/error-ex-1.3.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/es-abstract/-/es-abstract-1.17.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/es-to-primitive/-/es-to-primitive-1.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/es6-promise/-/es6-promise-4.2.8.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/es6-promisify/-/es6-promisify-5.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/esprima/-/esprima-4.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/eventemitter3/-/eventemitter3-3.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/execa/-/execa-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/expand-brackets/-/expand-brackets-2.1.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/extend/-/extend-3.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/extend-shallow/-/extend-shallow-3.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/external-editor/-/external-editor-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/extglob/-/extglob-2.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/extsprintf/-/extsprintf-1.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fast-glob/-/fast-glob-2.2.7.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/figgy-pudding/-/figgy-pudding-3.5.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/figures/-/figures-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fill-range/-/fill-range-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/find-up/-/find-up-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/flush-write-stream/-/flush-write-stream-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/for-in/-/for-in-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/forever-agent/-/forever-agent-0.6.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/form-data/-/form-data-2.3.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fragment-cache/-/fragment-cache-0.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/from2/-/from2-2.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fs-extra/-/fs-extra-8.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fs-minipass/-/fs-minipass-1.2.7.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fs-write-stream-atomic/-/fs-write-stream-atomic-1.0.10.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/fs.realpath/-/fs.realpath-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/function-bind/-/function-bind-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/gauge/-/gauge-2.7.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/genfun/-/genfun-5.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/get-caller-file/-/get-caller-file-2.0.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/get-pkg-repo/-/get-pkg-repo-1.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/get-port/-/get-port-4.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/get-stdin/-/get-stdin-4.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/get-stream/-/get-stream-4.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/get-value/-/get-value-2.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/getpass/-/getpass-0.1.7.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/git-raw-commits/-/git-raw-commits-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/git-remote-origin-url/-/git-remote-origin-url-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/git-semver-tags/-/git-semver-tags-2.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/git-up/-/git-up-4.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/git-url-parse/-/git-url-parse-11.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/gitconfiglocal/-/gitconfiglocal-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/glob/-/glob-7.1.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/glob-parent/-/glob-parent-5.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/glob-to-regexp/-/glob-to-regexp-0.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/globby/-/globby-9.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/graceful-fs/-/graceful-fs-4.2.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/handlebars/-/handlebars-4.7.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/har-schema/-/har-schema-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/har-validator/-/har-validator-5.1.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/hard-rejection/-/hard-rejection-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/has/-/has-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/has-flag/-/has-flag-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/has-symbols/-/has-symbols-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/has-unicode/-/has-unicode-2.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/has-value/-/has-value-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/has-values/-/has-values-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/hosted-git-info/-/hosted-git-info-2.8.8.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/http-cache-semantics/-/http-cache-semantics-3.8.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/http-proxy-agent/-/http-proxy-agent-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/http-signature/-/http-signature-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/https-proxy-agent/-/https-proxy-agent-2.2.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/humanize-ms/-/humanize-ms-1.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/iconv-lite/-/iconv-lite-0.6.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/iferr/-/iferr-0.1.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ignore/-/ignore-4.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ignore-walk/-/ignore-walk-3.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/import-fresh/-/import-fresh-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/import-local/-/import-local-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/imurmurhash/-/imurmurhash-0.1.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/indent-string/-/indent-string-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/infer-owner/-/infer-owner-1.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/inflight/-/inflight-1.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/inherits/-/inherits-2.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/ini/-/ini-1.3.8.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/init-package-json/-/init-package-json-1.10.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/inquirer/-/inquirer-6.5.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ip/-/ip-1.1.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-accessor-descriptor/-/is-accessor-descriptor-0.1.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-arrayish/-/is-arrayish-0.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-buffer/-/is-buffer-1.1.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-callable/-/is-callable-1.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-ci/-/is-ci-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-data-descriptor/-/is-data-descriptor-0.1.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-date-object/-/is-date-object-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-descriptor/-/is-descriptor-0.1.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-directory/-/is-directory-0.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-extendable/-/is-extendable-0.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-extglob/-/is-extglob-2.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-finite/-/is-finite-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-fullwidth-code-point/-/is-fullwidth-code-point-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-glob/-/is-glob-4.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-negative-zero/-/is-negative-zero-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-number/-/is-number-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-obj/-/is-obj-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-plain-obj/-/is-plain-obj-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-plain-object/-/is-plain-object-2.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-regex/-/is-regex-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-ssh/-/is-ssh-1.3.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-stream/-/is-stream-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-symbol/-/is-symbol-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-text-path/-/is-text-path-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-typedarray/-/is-typedarray-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-utf8/-/is-utf8-0.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/is-windows/-/is-windows-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/isarray/-/isarray-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/isexe/-/isexe-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/isobject/-/isobject-3.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/isstream/-/isstream-0.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/js-tokens/-/js-tokens-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/js-yaml/-/js-yaml-3.14.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/jsbn/-/jsbn-0.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/json-schema/-/json-schema-0.2.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/jsonfile/-/jsonfile-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/jsonparse/-/jsonparse-1.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/jsprim/-/jsprim-1.4.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/kind-of/-/kind-of-6.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lerna/-/lerna-3.22.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lines-and-columns/-/lines-and-columns-1.1.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/load-json-file/-/load-json-file-5.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/locate-path/-/locate-path-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/lodash/-/lodash-4.17.21.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.get/-/lodash.get-4.4.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.ismatch/-/lodash.ismatch-4.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.set/-/lodash.set-4.3.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.sortby/-/lodash.sortby-4.7.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.template/-/lodash.template-4.5.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.templatesettings/-/lodash.templatesettings-4.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lodash.uniq/-/lodash.uniq-4.5.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/loud-rejection/-/loud-rejection-1.6.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/lru-cache/-/lru-cache-5.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/macos-release/-/macos-release-2.4.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/make-dir/-/make-dir-1.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/make-fetch-happen/-/make-fetch-happen-5.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/map-cache/-/map-cache-0.2.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/map-obj/-/map-obj-4.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/map-visit/-/map-visit-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/meow/-/meow-7.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/merge2/-/merge2-1.4.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/micromatch/-/micromatch-3.1.10.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mime-db/-/mime-db-1.44.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mime-types/-/mime-types-2.1.27.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mimic-fn/-/mimic-fn-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/min-indent/-/min-indent-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/minimatch/-/minimatch-3.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/minimist/-/minimist-1.2.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/minimist-options/-/minimist-options-4.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/minipass/-/minipass-2.9.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/minizlib/-/minizlib-1.3.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mississippi/-/mississippi-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mixin-deep/-/mixin-deep-1.3.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mkdirp/-/mkdirp-0.5.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mkdirp-promise/-/mkdirp-promise-5.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/modify-values/-/modify-values-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/move-concurrently/-/move-concurrently-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ms/-/ms-2.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/multimatch/-/multimatch-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mute-stream/-/mute-stream-0.0.7.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/mz/-/mz-2.7.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/nanomatch/-/nanomatch-1.2.13.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/neo-async/-/neo-async-2.6.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/nice-try/-/nice-try-1.0.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/node-fetch/-/node-fetch-2.6.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/node-fetch-npm/-/node-fetch-npm-2.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/node-gyp/-/node-gyp-5.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/nopt/-/nopt-4.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/normalize-package-data/-/normalize-package-data-2.5.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/normalize-url/-/normalize-url-3.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npm-bundled/-/npm-bundled-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npm-lifecycle/-/npm-lifecycle-3.1.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npm-normalize-package-bin/-/npm-normalize-package-bin-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npm-package-arg/-/npm-package-arg-6.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npm-packlist/-/npm-packlist-1.4.8.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npm-pick-manifest/-/npm-pick-manifest-3.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npm-run-path/-/npm-run-path-2.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/npmlog/-/npmlog-4.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/number-is-nan/-/number-is-nan-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/oauth-sign/-/oauth-sign-0.9.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object-assign/-/object-assign-4.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object-copy/-/object-copy-0.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object-inspect/-/object-inspect-1.8.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object-keys/-/object-keys-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object-visit/-/object-visit-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object.assign/-/object.assign-4.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object.getownpropertydescriptors/-/object.getownpropertydescriptors-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/object.pick/-/object.pick-1.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/octokit-pagination-methods/-/octokit-pagination-methods-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/once/-/once-1.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/onetime/-/onetime-2.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/os-homedir/-/os-homedir-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/os-name/-/os-name-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/os-tmpdir/-/os-tmpdir-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/osenv/-/osenv-0.1.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-finally/-/p-finally-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-limit/-/p-limit-2.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-locate/-/p-locate-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-map/-/p-map-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-map-series/-/p-map-series-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-pipe/-/p-pipe-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-queue/-/p-queue-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-reduce/-/p-reduce-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-try/-/p-try-2.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/p-waterfall/-/p-waterfall-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/parallel-transform/-/parallel-transform-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/parse-github-repo-url/-/parse-github-repo-url-1.4.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/parse-json/-/parse-json-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/parse-path/-/parse-path-4.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/parse-url/-/parse-url-5.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/pascalcase/-/pascalcase-0.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/path-dirname/-/path-dirname-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/path-exists/-/path-exists-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/path-is-absolute/-/path-is-absolute-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/path-key/-/path-key-2.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/path-parse/-/path-parse-1.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/path-type/-/path-type-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/performance-now/-/performance-now-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/pify/-/pify-4.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/pinkie/-/pinkie-2.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/pinkie-promise/-/pinkie-promise-2.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/pkg-dir/-/pkg-dir-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/posix-character-classes/-/posix-character-classes-0.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/promise-inflight/-/promise-inflight-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/promise-retry/-/promise-retry-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/promzard/-/promzard-0.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/proto-list/-/proto-list-1.2.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/protocols/-/protocols-1.4.8.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/protoduck/-/protoduck-5.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/psl/-/psl-1.8.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/pump/-/pump-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/pumpify/-/pumpify-1.5.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/punycode/-/punycode-2.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/q/-/q-1.5.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/qs/-/qs-6.5.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/quick-lru/-/quick-lru-4.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/read/-/read-1.0.7.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/read-cmd-shim/-/read-cmd-shim-1.0.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/read-package-json/-/read-package-json-2.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/read-package-tree/-/read-package-tree-5.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/read-pkg/-/read-pkg-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/read-pkg-up/-/read-pkg-up-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/readable-stream/-/readable-stream-2.3.7.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/readdir-scoped-modules/-/readdir-scoped-modules-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/redent/-/redent-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/regex-not/-/regex-not-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/repeat-element/-/repeat-element-1.1.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/repeat-string/-/repeat-string-1.6.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/repeating/-/repeating-2.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/request/-/request-2.88.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/require-directory/-/require-directory-2.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/require-main-filename/-/require-main-filename-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/resolve/-/resolve-1.17.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/resolve-cwd/-/resolve-cwd-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/resolve-from/-/resolve-from-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/resolve-url/-/resolve-url-0.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/restore-cursor/-/restore-cursor-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ret/-/ret-0.1.15.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/retry/-/retry-0.10.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/rimraf/-/rimraf-2.7.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/run-async/-/run-async-2.4.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/run-queue/-/run-queue-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/rxjs/-/rxjs-6.6.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/safe-buffer/-/safe-buffer-5.2.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/safe-regex/-/safe-regex-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/safer-buffer/-/safer-buffer-2.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/semver/-/semver-6.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/set-blocking/-/set-blocking-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/set-value/-/set-value-2.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/shallow-clone/-/shallow-clone-3.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/shebang-command/-/shebang-command-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/shebang-regex/-/shebang-regex-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/signal-exit/-/signal-exit-3.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/slash/-/slash-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/slide/-/slide-1.1.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/smart-buffer/-/smart-buffer-4.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/snapdragon/-/snapdragon-0.8.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/snapdragon-node/-/snapdragon-node-2.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/snapdragon-util/-/snapdragon-util-3.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/socks/-/socks-2.3.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/socks-proxy-agent/-/socks-proxy-agent-4.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/sort-keys/-/sort-keys-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/source-map/-/source-map-0.5.7.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/source-map-resolve/-/source-map-resolve-0.5.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/source-map-url/-/source-map-url-0.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/spdx-correct/-/spdx-correct-3.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/spdx-exceptions/-/spdx-exceptions-2.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/spdx-expression-parse/-/spdx-expression-parse-3.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/spdx-license-ids/-/spdx-license-ids-3.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/split/-/split-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/split-string/-/split-string-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/split2/-/split2-2.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/sprintf-js/-/sprintf-js-1.0.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/sshpk/-/sshpk-1.16.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/ssri/-/ssri-6.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/static-extend/-/static-extend-0.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/stream-each/-/stream-each-1.2.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/stream-shift/-/stream-shift-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/string-width/-/string-width-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/string.prototype.trimend/-/string.prototype.trimend-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/string.prototype.trimstart/-/string.prototype.trimstart-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/string_decoder/-/string_decoder-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/strip-ansi/-/strip-ansi-3.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/strip-bom/-/strip-bom-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/strip-eof/-/strip-eof-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/strip-indent/-/strip-indent-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/strong-log-transformer/-/strong-log-transformer-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/supports-color/-/supports-color-5.5.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/tar/-/tar-4.4.13.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/temp-dir/-/temp-dir-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/temp-write/-/temp-write-3.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/text-extensions/-/text-extensions-1.9.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/thenify/-/thenify-3.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/thenify-all/-/thenify-all-1.6.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/through/-/through-2.3.8.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/through2/-/through2-2.0.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/tmp/-/tmp-0.0.33.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/to-object-path/-/to-object-path-0.3.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/to-regex/-/to-regex-3.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/to-regex-range/-/to-regex-range-2.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/tough-cookie/-/tough-cookie-2.5.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/tr46/-/tr46-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/trim-newlines/-/trim-newlines-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/tslib/-/tslib-1.13.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/tunnel-agent/-/tunnel-agent-0.6.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/tweetnacl/-/tweetnacl-0.14.5.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/type-fest/-/type-fest-0.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/typedarray/-/typedarray-0.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/uglify-js/-/uglify-js-3.10.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/uid-number/-/uid-number-0.0.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/umask/-/umask-1.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/union-value/-/union-value-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/unique-filename/-/unique-filename-1.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/unique-slug/-/unique-slug-2.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/universal-user-agent/-/universal-user-agent-4.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/universalify/-/universalify-0.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/unset-value/-/unset-value-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/upath/-/upath-1.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/uri-js/-/uri-js-4.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/urix/-/urix-0.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/use/-/use-3.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/util-deprecate/-/util-deprecate-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/util-promisify/-/util-promisify-2.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/uuid/-/uuid-3.4.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/validate-npm-package-name/-/validate-npm-package-name-3.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/verror/-/verror-1.10.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/wcwidth/-/wcwidth-1.0.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/webidl-conversions/-/webidl-conversions-4.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/whatwg-url/-/whatwg-url-7.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/which/-/which-1.3.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/which-module/-/which-module-2.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/wide-align/-/wide-align-1.1.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/windows-release/-/windows-release-3.3.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/wordwrap/-/wordwrap-1.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/wrap-ansi/-/wrap-ansi-5.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/wrappy/-/wrappy-1.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/write-file-atomic/-/write-file-atomic-2.4.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/write-json-file/-/write-json-file-3.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/write-pkg/-/write-pkg-3.2.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/xtend/-/xtend-4.0.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/y18n/-/y18n-4.0.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/yallist/-/yallist-3.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/yargs/-/yargs-14.2.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "0.0.0.0:4873",
+        "path": "/yargs-parser/-/yargs-parser-15.0.1.tgz"
+      }
+    ]
+  }
+}

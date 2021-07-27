@@ -81,10 +81,35 @@ jobs:
             **/lib
           key: ${{github.sha}}-artifacts
       - run: npm run test-ci
+  generate-dependencies:
+    runs-on: ubuntu-latest
+    name: Generate provenance files
+    if: github.ref != 'refs/heads/main'
+    needs: [dependencies, test]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - run: npm run gen-dependencies
+      - run: |
+          if (( $(git status | grep modified | wc -l | xargs) > 0))
+          then
+            git config --global user.name "ilesev-vmw"
+            git config --global user.email "ilesev@vmware.com"
+
+            git add -A
+            git commit -s -m "Update provenance files"
+            git push
+          fi
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: dependecies-file
+#          path: .github/workflows/dependencies.json
   publish-next:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [dependencies, test]
+    needs: [generate-dependencies]
     name: Publish @next
     steps:
       - uses: actions/checkout@v2
@@ -110,7 +135,7 @@ jobs:
   patch-cli:
     if: ${{ github.event.action == 'released' }}
     runs-on: ubuntu-latest
-    needs: [dependencies, test]
+    needs: [generate-dependencies]
     name: Publish @latest
     steps:
       - uses: actions/checkout@v2
