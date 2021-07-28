@@ -18,6 +18,7 @@ export const createSchema = {
             type: 'string',
             description: 'Specify first version',
             default: '0.0.1',
+            pattern: '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$',
             required: true,
             minLength: 1
         },
@@ -26,6 +27,11 @@ export const createSchema = {
             description: 'Specify vendor name',
             required: true,
             minLength: 1
+        },
+        platformVersion: {
+            type: 'string',
+            description: 'Specify minimum required Cloud Director version',
+            pattern: '^$|^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'
         },
         link: {
             type: 'string',

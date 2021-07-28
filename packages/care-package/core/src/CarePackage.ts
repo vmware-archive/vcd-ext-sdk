@@ -3,8 +3,10 @@ import debug from 'debug';
 import * as fs from 'fs';
 import * as path from 'path';
 import AdmZip from 'adm-zip';
+import * as semver from 'semver';
 import * as uuid from 'uuid';
 import { CarePackageSpec, CloudDirectorConfig } from '@vcd/care-package-def';
+import { CellApi } from '@vcd/node-client';
 import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
@@ -170,6 +172,7 @@ export class CarePackage {
         if (!this.fromSource) {
             throw new Error('Serve operation can only be triggered from CARE package source project');
         }
+        await this.validatePlatformVersion(clientConfig);
         // TODO extract 'serve' as a const variable
         return this.runOperationOnElements('serve', only, clientConfig, options);
     }
@@ -214,6 +217,26 @@ export class CarePackage {
      */
     async deploy(only: string, clientConfig: CloudDirectorConfig, options?: any) {
         // TODO extract 'deploy' as a const variable
+        await this.validatePlatformVersion(clientConfig);
         return this.runOperationOnElements('deploy', only, clientConfig, options);
     }
+
+    private async validatePlatformVersion(clientConfig: CloudDirectorConfig) {
+        const cellApi = clientConfig.makeApiClient(CellApi);
+        const cellsResp = await cellApi.queryCells(1, 1);
+        if (this.spec.platformVersion &&
+            semver.gte(this.spec.platformVersion,
+                       productVersionToSemver(cellsResp.body.values[0].productVersion))) {
+            throw new Error(`Platform version mismatch expected greater or equal to ${this.spec.platformVersion}` +
+                ` got ${cellsResp.body.values[0].productVersion}`);
+        }
+    }
+
 }
+
+const productVersionToSemver = (ver: string) => {
+    const verTokens = ver.split('\.');
+    if (verTokens.length > 3) {
+        return `${verTokens[0]}.${verTokens[1]}.${verTokens[2]}`;
+    }
+};

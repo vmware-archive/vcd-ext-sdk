@@ -1,5 +1,6 @@
 {
     "vendor": "<%- vendor %>",
     "specVersion": "0.0.1",
+    "platformVersion": "<%- platformVersion %>",
     "elements": <%- JSON.stringify(careElements, 2, null) %>
 }
