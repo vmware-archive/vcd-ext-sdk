@@ -1,0 +1,40 @@
+{
+  "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
+  "root": "0.0.2",
+  "all-components": {
+    "name": "vcd-ext-sdk-docs",
+    "version": "0.0.2",
+    "source_repositories": [
+      {
+        "content": "source",
+        "host": "github.com",
+        "protocol": "git",
+        "paths": [
+          "/vmware/vcd-ext-sdk/tree/main/docs"
+        ],
+        "branch": "main"
+      }
+    ],
+    "components": {},
+    "artifact_repositories": [
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@clr/icons/-/icons-4.0.9.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@clr/ui/-/ui-4.0.9.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@webcomponents/custom-elements/-/custom-elements-1.4.3.tgz"
+      }
+    ]
+  }
+}

@@ -16,7 +16,8 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "test-ci": "lerna run test-ci",
-    "publish": "lerna publish from-package --no-git-reset --no-private --yes --no-verify-access"
+    "publish": "lerna publish from-package --no-git-reset --no-private --yes --no-verify-access",
+    "gen-dependencies": "node .github/workflows/generate-dependencies.js"
   },
   "name": "vcd-ext-sdk"
 }

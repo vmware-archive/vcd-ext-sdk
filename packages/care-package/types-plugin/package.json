@@ -1,7 +1,7 @@
 {
   "name": "@vcd/care-package-plugin-types",
   "description": "CARE Package plugin for Defined Entity Types",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.1-alpha.6",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {

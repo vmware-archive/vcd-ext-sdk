@@ -1,6 +1,6 @@
 {
   "name": "@vcd/angular-sdk",
-  "version": "0.13.0-alpha.2",
+  "version": "0.13.0-alpha.3",
   "scripts": {
     "ng": "ng",
     "build": "npm run build:sdk && npm run build:schematics && npm run build:plugin-builders",
