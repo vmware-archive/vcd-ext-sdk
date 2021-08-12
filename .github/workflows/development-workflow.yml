@@ -109,7 +109,7 @@ jobs:
   publish-next:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [generate-dependencies]
+    needs: [dependencies, test]
     name: Publish @next
     steps:
       - uses: actions/checkout@v2
@@ -135,7 +135,7 @@ jobs:
   patch-cli:
     if: ${{ github.event.action == 'released' }}
     runs-on: ubuntu-latest
-    needs: [generate-dependencies]
+    needs: [dependencies, test]
     name: Publish @latest
     steps:
       - uses: actions/checkout@v2
