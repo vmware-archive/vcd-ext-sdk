@@ -5,23 +5,23 @@ const ignoredFolders = ['.github', '.gradle', '.idea', '.git', 'node_modules', '
 const generatedFileName = 'provenance.json';
 const projectName = 'vcd-ext-sdk/';
 
-async function extractDependencies(currentDir, components) {
+function extractDependencies(currentDir, components) {
     try {
-        const files = await fs.promises.readdir(currentDir);
+        const files = fs.readdirSync(currentDir);
 
         for (const file of files) {
             const filePath = path.join(currentDir, file);
             if (file === 'package-lock.json') {
-                const packageLockJson = await readAndParseFile(filePath);
+                const packageLockJson = readAndParseFile(filePath);
                 const packageJsonPath = filePath.replace('package-lock.json', 'package.json');
-                const packageJson = await readAndParseFile(packageJsonPath);
+                const packageJson = readAndParseFile(packageJsonPath);
                 addDependencies(packageLockJson, packageJson.version, components, currentDir);
             } else {
                 // Stat the file to see if we have a file or dir
-                const stat = await fs.promises.stat(filePath);
+                const stat = fs.statSync(filePath);
 
                 if (stat.isDirectory() && !ignoredFolders.includes(file)) {
-                    await extractDependencies(filePath, components);
+                    extractDependencies(filePath, components);
                 }
             }
         }
@@ -92,11 +92,11 @@ function generateResult(name, version, currentDir) {
     };
 }
 
-async function writeFile(dir, result) {
+function writeFile(dir, result) {
     const path = dir + '/' + generatedFileName;
     // delete the generated file if exists
     if (fs.existsSync(path)) {
-        const existingFile = await readAndParseFile(path);
+        const existingFile = readAndParseFile(path);
         // if versions are the same, no need to generate the file
         if (existingFile.root === result.root) {
             return;
@@ -111,10 +111,10 @@ async function writeFile(dir, result) {
     writeStream.close();
 }
 
-(async () => {
+(() => {
     // first we scan all package-lock.json files to get the dependencies
     const components = [];
-    await extractDependencies(__dirname.substr(0, __dirname.indexOf('.github/workflows')), components);
+    extractDependencies(__dirname.substr(0, __dirname.indexOf('.github/workflows')), components);
 
     for (const [key, value] of Object.entries(components)) {
         const dir = value.directory;
@@ -128,7 +128,7 @@ async function writeFile(dir, result) {
                 path: dependency.path
             })
         });
-        await writeFile(dir, provenanceFile);
+        writeFile(dir, provenanceFile);
     }
 })();
 
