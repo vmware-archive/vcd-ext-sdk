@@ -192,3 +192,18 @@ export abstract class _WizardExtensionComponent<P, R, E> {
 }
 
 export const WizardExtensionComponent: typeof _WizardExtensionComponent = containerHooks.WizardExtensionComponent;
+
+export interface WizardExtensionState {
+    isValid: boolean;
+}
+
+// tslint:disable-next-line:class-name
+export abstract class _WizardExtensionWithValidationComponent<P, R, E> extends _WizardExtensionComponent<P, R, E> {
+    /**
+     * Get extension point state.
+     */
+    abstract getState(): Observable<WizardExtensionState>;
+}
+
+// tslint:disable-next-line:max-line-length
+export const WizardExtensionWithValidationComponent: typeof _WizardExtensionWithValidationComponent = containerHooks.WizardExtensionWithValidationComponent;
