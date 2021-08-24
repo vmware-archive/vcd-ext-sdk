@@ -1,6 +1,6 @@
 {
   "name": "@vcd/sdk",
-  "version": "0.12.2-alpha.6",
+  "version": "0.12.2-alpha.7",
   "description": "Angular-based client for the Cloud Director API.",
   "author": "VMware",
   "license": "BSD-2-Clause",
