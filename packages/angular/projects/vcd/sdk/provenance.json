@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.12.2-alpha.6",
+  "root": "0.12.2-alpha.7",
   "all-components": {
     "name": "@vcd/sdk",
-    "version": "0.12.2-alpha.6",
+    "version": "0.12.2-alpha.7",
     "source_repositories": [
       {
         "content": "source",
