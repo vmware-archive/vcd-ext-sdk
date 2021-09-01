@@ -1,18 +1,18 @@
 {
 	"name": "@vcd/care-package-plugin-types",
 	"description": "CARE Package plugin for Defined Entity Types",
-  "version": "0.0.1-alpha.7",
+  "version": "0.0.1-alpha.8",
 	"author": "VMware",
 	"license": "BSD-2",
 	"dependencies": {
-    	"@vcd/care-package-plugin-abstract": "0.0.1-alpha.6",
+    	"@vcd/care-package-plugin-abstract": "0.0.1-alpha.8",
 		"@vcd/ext-compiler": "0.0.3-alpha.3",
-		"@vcd/node-client": "0.0.6-alpha.0",
+		"@vcd/node-client": "0.0.6-alpha.2",
 		"debug": "^4.1.1",
 		"tslib": "^1.10.0"
 	},
 	"devDependencies": {
-		"@vcd/care-package-def": "0.0.1-alpha.2",
+		"@vcd/care-package-def": "0.0.1-alpha.3",
 		"@types/debug": "^4.1.5",
 		"@types/glob": "^5.0.36",
 		"@types/node": "^10.14.20",
