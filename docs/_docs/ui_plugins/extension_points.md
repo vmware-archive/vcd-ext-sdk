@@ -334,6 +334,73 @@ export class VmCreateWizardExtensionPointComponent extends WizardExtensionCompon
 {% endhighlight %}
 [Open sample][code-example-vm-create]{:target="_blank"}
 
+#### Organization Create
+This extension point is used for adding an extra form fields inside the create Organization dialog,
+the extra field could has it's own validation, until your validation don't pass the user won't be able to create organization.
+For this particular extension point only a component can be defined.
+
+**Definition**
+{% highlight json %}
+    {
+        "urn": "vmware:vcloud:org:create", //unique identifier
+        "type": "create-org",
+        "name": "Extension Point Name",
+        "description": "Extension Point Description",
+        "component": "componentName", //component only
+        "render": {
+            "after": ".description" //for now this is the only option
+        }
+    }
+{% endhighlight %}
+
+**Code example**
+{% highlight typescript %}
+...
+export class OrgCreateWizardExtensionPointComponent extends WizardExtensionWithValidationComponent<any, any, any> implements OnDestroy {
+    form: FormGroup;
+    
+    private stateSubject = new BehaviorSubject<{
+        isValid: boolean
+    }>(null);
+    private stateObs = this.stateSubject.asObservable();
+    
+    constructor(
+        private fb: FormBuilder,
+    ) {
+        super();
+
+        this.form = this.fb.group({
+            "example": new FormControl(null, Validators.required)
+        });
+        this.stateSubject.next({
+            isValid: this.form.valid
+        });
+        this.setState();
+    }
+
+    ngOnDestroy() {
+        console.log("[OrgCreateWizardExtensionPointComponent] Destroyed!");
+    }
+
+    performAction(payload: string, returnValue: string, error: any) {
+        console.log("[Org Create Wizard Extension Point]", payload, returnValue, error);
+    }
+
+    setState() {
+        this.form.statusChanges.subscribe(() => {
+            this.stateSubject.next({
+                isValid: this.form.valid
+            });
+        });
+    }
+
+    getState(): Observable<WizardExtensionState> {
+        return this.stateObs;
+    }
+}
+{% endhighlight %}
+[Open sample][code-example-vm-create]{:target="_blank"}
+
 [vcd-ext-samples-showcase]: https://www.vmware.com/products/cloud-director.html
 [code-example-vm-action]: https://github.com/vmware-samples/vcd-ext-samples/blob/showcase-plugin/src/main/actions/vm.backup.action.component.ts
 [code-example-vapp-action]: https://github.com/vmware-samples/vcd-ext-samples/blob/showcase-plugin/src/main/actions/vapp.restore.action.component.ts
