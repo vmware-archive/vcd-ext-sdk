@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.0.12-alpha.13",
+  "root": "0.0.12-alpha.14",
   "all-components": {
     "name": "@vcd/ext-cli",
-    "version": "0.0.12-alpha.13",
+    "version": "0.0.12-alpha.14",
     "source_repositories": [
       {
         "content": "source",
@@ -303,13 +303,13 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/@types/paho-mqtt/-/paho-mqtt-1.0.4.tgz"
+        "path": "/@types/paho-mqtt/-/paho-mqtt-1.0.5.tgz"
       },
       {
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/@types/request/-/request-2.48.5.tgz"
+        "path": "/@types/request/-/request-2.48.7.tgz"
       },
       {
         "content": "binary",
@@ -345,7 +345,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/@types/tough-cookie/-/tough-cookie-4.0.0.tgz"
+        "path": "/@types/tough-cookie/-/tough-cookie-4.0.1.tgz"
       },
       {
         "content": "binary",
@@ -393,7 +393,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/@vcd/node-client/-/node-client-0.0.6-alpha.0.tgz"
+        "path": "/@vcd/node-client/-/node-client-0.0.6-alpha.2.tgz"
       },
       {
         "content": "binary",
@@ -1143,7 +1143,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/ext/-/ext-1.4.0.tgz"
+        "path": "/ext/-/ext-1.5.0.tgz"
       },
       {
         "content": "binary",
