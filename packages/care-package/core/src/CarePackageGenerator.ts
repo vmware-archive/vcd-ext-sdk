@@ -59,13 +59,16 @@ export class CarePackageGenerator {
         // TODO extract 'templates' as a const variable
         generator.sourceRoot(path.join(__dirname, '..', 'templates'));
         answers.nameCamelCase = camelcase(answers.name, { pascalCase: true });
-        answers.careElements = Object.keys(answers.elements).map(pluginName => {
-            const ele = answers.elements[pluginName];
-            const plugin = this.plugins.find(p => p.name === pluginName);
-            return {
-                name: ele.name || plugin.name,
-                type: plugin.module
-            };
+        answers.careElements = Object
+            .keys(answers.elements)
+            .map(pluginName => {
+                const ele = answers.elements[pluginName];
+                const plugin = this.plugins.find(p => p.name === pluginName);
+                return {
+                    name: ele.name || plugin.name,
+                    type: plugin.module,
+                    configuration: plugin.buildActions.getConfiguration ? plugin.buildActions.getConfiguration() : undefined
+                };
         });
         generator.fs.copyTpl(
             generator.templatePath('new'),

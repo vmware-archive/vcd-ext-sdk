@@ -3,6 +3,7 @@
  */
 // TODO Can we extract these names from package.json files instead of holding them here?
 export default [
+    '@vcd/care-package-plugin-import-vapp/ImportVAppCarePackagePlugin',
     '@vcd/care-package-plugin-types/TypesCarePackagePlugin',
     '@vcd/care-package-plugin-uiplugins/UiPluginCarePackagePlugin'
 ];

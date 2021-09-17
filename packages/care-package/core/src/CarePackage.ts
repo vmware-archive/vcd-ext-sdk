@@ -201,11 +201,11 @@ export class CarePackage {
             ...this.spec,
             elements
         };
-        const content = JSON.stringify(manifest);
+        const content = JSON.stringify(manifest, null, 2);
         // TODO extract 'manifest.json' as a const variable
         zip.addFile('manifest.json', Buffer.alloc(content.length, content));
         zip.writeZip(path.join(dist, name));
-        console.log(`Creating CARE package: ${path.join(dist, name)}`);
+        console.log(`CARE package created: ${path.join(dist, name)}`);
     }
 
     /**

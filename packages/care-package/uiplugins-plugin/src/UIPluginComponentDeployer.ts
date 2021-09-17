@@ -100,8 +100,8 @@ export class UIPluginComponentDeployer implements ComponentDeployer {
             }
             uploadLink = match[1];
             log(`Upload plugin to: ${uploadLink}`);
-            const transferClient = this.apiConfig.makeTransferClient(uploadLink);
-            return transferClient.upload(file, 'application/zip');
+            const transferClient = this.apiConfig.makeTransferClient();
+            return transferClient.upload(uploadLink, file, 'application/zip');
 
         });
     }

@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.0.1-alpha.2",
+  "root": "0.0.1-alpha.3",
   "all-components": {
     "name": "@vcd/care-package-def",
-    "version": "0.0.1-alpha.2",
+    "version": "0.0.1-alpha.3",
     "source_repositories": [
       {
         "content": "source",
@@ -69,7 +69,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/@vcd/node-client/-/node-client-0.0.6-alpha.0.tgz"
+        "path": "/@vcd/node-client/-/node-client-0.0.6-alpha.2.tgz"
       },
       {
         "content": "binary",
@@ -201,7 +201,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/core-util-is/-/core-util-is-1.0.2.tgz"
+        "path": "/core-util-is/-/core-util-is-1.0.3.tgz"
       },
       {
         "content": "binary",
