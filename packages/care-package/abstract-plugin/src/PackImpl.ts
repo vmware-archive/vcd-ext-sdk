@@ -5,7 +5,7 @@ import fs from 'fs';
 export class PackImpl {
 
     pack(element: ElementBase, zip: any) {
-        const pluginDirPath = path.join(path.join('packages', element.name));
+        const pluginDirPath = path.join('packages', element.name);
         const allFiles: string[] = [];
         this.getFiles(pluginDirPath, allFiles);
 

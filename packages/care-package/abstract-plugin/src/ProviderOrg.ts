@@ -8,8 +8,7 @@ import {
 import {QueryResultOrgRecordType} from '@vcd/bindings/vcloud/api/rest/schema_v1_5/QueryResultOrgRecordType';
 import {LegacyApiClient} from '@vcd/node-client/lib/legacy.api.client';
 
-export class ProviderOrgEntities {
-
+export interface ProviderOrgEntities {
     org: {
         name: string;
         id: string;
@@ -38,42 +37,39 @@ export class ProviderOrg {
     }
 
     private static async getOrg(legacyApiClient: LegacyApiClient) {
-        const query = `/api/query?type=organization&filter=metadata@SYSTEM:ProviderOrg==BOOLEAN:true`;
+        const query = '/api/query?type=organization&filter=metadata@SYSTEM:ProviderOrg==BOOLEAN:true';
         const organisations = await legacyApiClient.get<QueryResultRecordsType>(query);
         if (organisations.total === 0) {
-            throw new Error(`No organisation is tagged with 'ProviderOrg==BOOLEAN:true'`);
+            throw new Error('No organisation is tagged with "ProviderOrg==BOOLEAN:true"');
         } else if (organisations.total > 1) {
-            throw new Error(`More than one organisation is tagged with 'ProviderOrg==BOOLEAN:true'`);
+            throw new Error('More than one organisation is tagged with "ProviderOrg==BOOLEAN:true"');
         }
 
-        const lastIndexOfSlash = organisations.record[0].href.lastIndexOf('/');
+        const orgPlainId = organisations.record[0].href.split('/').pop();
         return {
-            id: `urn:vcloud:org:${organisations.record[0].href.substring(lastIndexOfSlash + 1)}`,
+            id: `urn:vcloud:org:${orgPlainId}`,
             name: (organisations.record[0] as QueryResultOrgRecordType).name
         };
     }
 
     private static async getMetadata(legacyApiClient: LegacyApiClient, orgId: string): Promise<MetadataType> {
-        const lastIndexOfSemiColumn = orgId.lastIndexOf(`:`);
-        const orgMetadataUrl = `/api/org/${orgId.substring(lastIndexOfSemiColumn + 1)}/metadata`;
+        const orgPlainId = orgId.split(':').pop();
+        const orgMetadataUrl = `/api/org/${orgPlainId}/metadata`;
         const orgMetadata = await legacyApiClient.get<MetadataType>(orgMetadataUrl);
 
-        if (orgMetadata.metadataEntry
-            .filter(entry => entry.key === `ProviderOrgVdc`)
-            .length !== 1) {
-            throw new Error(`Missing Org Metadata with tag 'ProviderOrgVdc'`);
+        if (!orgMetadata.metadataEntry
+            .find(entry => entry.key === 'ProviderOrgVdc')) {
+            throw new Error('Missing Org Metadata with tag "ProviderOrgVdc"');
         }
 
-        if (orgMetadata.metadataEntry
-            .filter(entry => entry.key === `ProviderOrgNetwork`)
-            .length !== 1) {
-            throw new Error(`Missing Org Metadata with tag 'ProviderOrgNetwork'`);
+        if (!orgMetadata.metadataEntry
+            .find(entry => entry.key === 'ProviderOrgNetwork')) {
+            throw new Error('Missing Org Metadata with tag "ProviderOrgNetwork"');
         }
 
-        if (orgMetadata.metadataEntry
-            .filter(entry => entry.key === `ProviderOrgVdcStorageProfile`)
-            .length !== 1) {
-            throw new Error(`Missing Org Metadata with tag 'ProviderOrgVdcStorageProfile'`);
+        if (!orgMetadata.metadataEntry
+            .find(entry => entry.key === 'ProviderOrgVdcStorageProfile')) {
+            throw new Error('Missing Org Metadata with tag "ProviderOrgVdcStorageProfile"');
         }
 
         return orgMetadata;
@@ -110,8 +106,7 @@ export class ProviderOrg {
     private static async getStorageProfile(providerOrgApiConfig: CloudDirectorConfig, typedValue: MetadataStringValue) {
         const legacyApiClient = providerOrgApiConfig.makeLegacyApiClient();
         const metadataStringValue = typedValue;
-        const lastIndexOfSemiColumn = metadataStringValue.value.lastIndexOf(`:`);
-        const vdcStorageProfilePlainId = metadataStringValue.value.substring(lastIndexOfSemiColumn + 1);
+        const vdcStorageProfilePlainId = metadataStringValue.value.split(':').pop();
         const orgVdcStoragePolicies = `/api/vdcStorageProfile/${vdcStorageProfilePlainId}`;
         const vdcStorageProfiles = await legacyApiClient.get<VdcStorageProfileType>(orgVdcStoragePolicies);
         if (!vdcStorageProfiles) {
@@ -125,26 +120,26 @@ export class ProviderOrg {
 
     public async getProviderOrgEntities(): Promise<ProviderOrgEntities> {
         const legacyApiClient = this.apiConfig.makeLegacyApiClient();
-        const poe = new ProviderOrgEntities();
-        poe.org = await ProviderOrg.getOrg(legacyApiClient);
-
-        const metadata = await ProviderOrg.getMetadata(legacyApiClient, poe.org.id);
+        const organisation = await ProviderOrg.getOrg(legacyApiClient);
+        const metadata = await ProviderOrg.getMetadata(legacyApiClient, organisation.id);
 
         const vdcMetadata = metadata.metadataEntry
-            .find(entry => entry.key === `ProviderOrgVdc`)
+            .find(entry => entry.key === 'ProviderOrgVdc')
             .typedValue;
         const networkMetadata = metadata.metadataEntry
-            .find(entry => entry.key === `ProviderOrgNetwork`)
+            .find(entry => entry.key === 'ProviderOrgNetwork')
             .typedValue;
         const storageProfileMetadata = metadata.metadataEntry
-            .find(entry => entry.key === `ProviderOrgVdcStorageProfile`)
+            .find(entry => entry.key === 'ProviderOrgVdcStorageProfile')
             .typedValue;
 
-        const providerOrgApiConfig = this.apiConfig.actAs(poe.org.id);
-        poe.vdc = await ProviderOrg.getVdc(providerOrgApiConfig, vdcMetadata);
-        poe.network = await ProviderOrg.getNetwork(providerOrgApiConfig, networkMetadata);
-        poe.storageProfile = await ProviderOrg.getStorageProfile(providerOrgApiConfig, storageProfileMetadata);
-
-        return poe;
+        const providerOrgApiConfig = this.apiConfig.actAs(organisation.id);
+        return {
+            org: organisation,
+            vdc: await ProviderOrg.getVdc(providerOrgApiConfig, vdcMetadata),
+            network: await ProviderOrg.getNetwork(providerOrgApiConfig, networkMetadata),
+            storageProfile: await ProviderOrg.getStorageProfile(providerOrgApiConfig, storageProfileMetadata),
+            limits: ''
+        };
     }
 }
