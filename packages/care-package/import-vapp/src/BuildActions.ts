@@ -4,10 +4,14 @@ import * as fs from 'fs';
 import * as Generator from 'yeoman-generator';
 import { names } from './names';
 import {ImportVApp} from './ImportVApp';
-import {BuildActionParameters, Element} from '@vcd/care-package-def';
+import {BuildActionParameters} from '@vcd/care-package-def';
 import path from 'path';
+import {PackImpl} from '@vcd/care-package-plugin-abstract/lib/PackImpl';
+import {ProviderOrg} from '@vcd/care-package-plugin-abstract/lib/ProviderOrg';
 
 export class BuildActions implements careDef.BuildActions {
+
+    packImpl = new PackImpl();
 
     getInputSchema(action: string): JSONSchema7 {
         if (action === 'generate') {
@@ -37,42 +41,19 @@ export class BuildActions implements careDef.BuildActions {
         fs.mkdirSync(folderName, { recursive: true });
     }
 
-    pack({packageRoot, elements, options}: BuildActionParameters) {
-        const elementSpecs: Element[] = elements.map(element => {
-            const pluginDirPath = path.join(path.join('packages', element.name));
-            const allFiles: string[] = [];
-            this.getFiles(pluginDirPath, allFiles);
-
-            allFiles.forEach(file => {
-                console.log(`Adding file to package: ${file}`);
-                options.zip.addLocalFile(file, path.dirname(file));
-            });
-
-            return {
-                name: element.name,
-                type: element.type,
-                configuration: element.configuration
-            };
-        });
-        return Promise.resolve(elementSpecs);
+    pack({elements, options}: BuildActionParameters) {
+        for (const element of elements) {
+            this.packImpl.pack(element, options.zip);
+        }
+        return Promise.resolve(elements);
     }
 
-    private getFiles(dir: string, allFiles: string[]) {
-        allFiles = allFiles || [];
-        const files = fs.readdirSync(dir);
-        files.forEach(file => {
-            const newPath = path.join(dir, file);
-            if (fs.statSync(newPath).isDirectory()) {
-                this.getFiles(newPath, allFiles);
-            } else {
-                allFiles.push(newPath);
-            }
-        });
-        return allFiles;
-    }
-
-    async deploy(params: careDef.BuildActionParameters) {
-        const importVApp = new ImportVApp(params.clientConfig);
-        await importVApp.executeRequests(params.elements[0]);
+    async deploy({clientConfig, elements}: careDef.BuildActionParameters) {
+        const providerOrg = new ProviderOrg(clientConfig);
+        const providerOrgEntities = await providerOrg.getProviderOrgEntities();
+        const importVApp = new ImportVApp(providerOrgEntities, clientConfig);
+        for (const element of elements) {
+            await importVApp.executeRequests(element);
+        }
     }
 }

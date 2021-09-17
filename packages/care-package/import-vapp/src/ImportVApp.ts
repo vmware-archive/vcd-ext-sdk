@@ -8,18 +8,24 @@ import {TransferClient} from '@vcd/node-client/lib/transfer';
 import {LegacyApiClient} from '@vcd/node-client/lib/legacy.api.client';
 import path from 'path';
 import debug from 'debug';
+import {ProviderOrgEntities} from '@vcd/care-package-plugin-abstract/lib/ProviderOrg';
 
 const log = debug('vcd:ext:import-vapp');
 
 export class ImportVApp {
 
+    basePath: string;
     transferClient: TransferClient;
     legacyApiClient: LegacyApiClient;
+    providerOrgEntities: ProviderOrgEntities;
 
-    constructor(apiConfig: CloudDirectorConfig) {
-        const providerOrgApiConfig = apiConfig.actAs('87ae2b63-da4e-4602-af80-0f722e1a1394');
-        this.transferClient = providerOrgApiConfig.makeTransferClient();
+    constructor(providerOrgEntities: ProviderOrgEntities, apiConfig: CloudDirectorConfig) {
+        this.providerOrgEntities = providerOrgEntities;
+        this.basePath = apiConfig.basePath;
+
+        const providerOrgApiConfig = apiConfig.actAs(providerOrgEntities.org.id);
         this.legacyApiClient = providerOrgApiConfig.makeLegacyApiClient();
+        this.transferClient = providerOrgApiConfig.makeTransferClient();
     }
 
     public async executeRequests({name, configuration}: careDef.ElementBase) {
@@ -75,56 +81,22 @@ export class ImportVApp {
     }
 
     private async instantiateOvf(configuration: Configuration): Promise<VAppType> {
-        const instantiateOvfUrl = '/api/vdc/a61bced4-168f-4944-9b1d-9b667c34dd62/action/instantiateOvf';
-
-        const networkConfig: NetworkConfigSectionType = {
-            // @ts-ignore
-            _type: 'NetworkConfigSectionType',
-            networkConfig: [
-                {
-                    networkName: 'vdcnet',
-                    configuration: {
-                        parentNetwork: {
-                            href: 'https://bos1-vcloud-static-172-177.eng.vmware.com/api/admin/network/b0064f6f-dbd1-47de-8726-fd60653bae86'
-                        },
-                        fenceMode: 'bridged'
-                    }
-                }
-            ]
-        };
-
-        const networkConnection: NetworkConnectionSectionType = {
-            // @ts-ignore
-            _type: 'NetworkConnectionSectionType',
-            primaryNetworkConnectionIndex: 0,
-            networkConnection: [{
-                network: 'vdcnet',
-                needsCustomization: true,
-                networkConnectionIndex: 0,
-                ipAddress: 'any',
-                isConnected: true,
-                ipAddressAllocationMode: 'DHCP',
-                networkAdapterType: 'VMXNET3'
-            }]
-        };
-
+        const lastIndexOfSemiColumn = this.providerOrgEntities.vdc.id.lastIndexOf(`:`);
+        const vdcPlainId = this.providerOrgEntities.vdc.id.substring(lastIndexOfSemiColumn + 1);
+        const instantiateOvfUrl = `/api/vdc/${vdcPlainId}/action/instantiateOvf`;
         const params: InstantiateOvfParamsType = {
             name: configuration.vAppName,
             powerOn: false,
             allEULAsAccepted: true,
             instantiationParams: {
-                section: [networkConfig]
+                section: [this.getNetworkConfigSection()]
             },
             instantiateOvfProperty: configuration.instantiateOvfProperties,
             instantiateVmParams: [{
-                id: 'ubuntu-focal-20.04-cloudimg-20210623',
-                networkConnectionSection: networkConnection,
-                computerName: 'ubuntu-focal-20.04-cloudimg-20210622',
-                vdcStorageProfile: {
-                    href: 'https://bos1-vcloud-static-172-177.eng.vmware.com/api/vdcStorageProfile/03e0cb57-e9fe-400b-aa61-e4114342491b',
-                    name: '*',
-                    type: 'application/vnd.vmware.vcloud.vdcStorageProfile+xml'
-                },
+                id: configuration.vAppName.replace(' ', '-'),
+                networkConnectionSection: this.getNetworkConnectionSectionType(),
+                computerName: configuration.vAppName,
+                vdcStorageProfile: this.getVdcStorageProfile(),
                 hardwareCustomization: {
                     numberOfCpus: 2,
                     coresPerSocket: 1,
@@ -138,5 +110,52 @@ export class ImportVApp {
         const vApp: VAppType = await this.legacyApiClient.post<InstantiateOvfParamsType>(instantiateOvfUrl, params);
         log('vApp: ' +  JSON.stringify(vApp, null, 2));
         return vApp;
+    }
+
+    private getNetworkConfigSection(): NetworkConfigSectionType {
+        const lastIndexOfSemiColumn = this.providerOrgEntities.network.id.lastIndexOf(`:`);
+        const networkPlainId = this.providerOrgEntities.network.id.substring(lastIndexOfSemiColumn + 1);
+        return {
+            // @ts-ignore
+            _type: 'NetworkConfigSectionType',
+            networkConfig: [
+                {
+                    networkName: this.providerOrgEntities.network.name,
+                    configuration: {
+                        parentNetwork: {
+                            href: `${this.basePath}/api/admin/network/${networkPlainId}`
+                        },
+                        fenceMode: 'bridged'
+                    }
+                }
+            ]
+        };
+    }
+
+    private getNetworkConnectionSectionType(): NetworkConnectionSectionType {
+        return {
+            // @ts-ignore
+            _type: 'NetworkConnectionSectionType',
+            primaryNetworkConnectionIndex: 0,
+            networkConnection: [{
+                network: this.providerOrgEntities.network.name,
+                needsCustomization: true,
+                networkConnectionIndex: 0,
+                ipAddress: 'any',
+                isConnected: true,
+                ipAddressAllocationMode: 'DHCP',
+                networkAdapterType: 'VMXNET3'
+            }]
+        };
+    }
+
+    private getVdcStorageProfile() {
+        const lastIndexOfSemiColumn = this.providerOrgEntities.storageProfile.id.lastIndexOf(`:`);
+        const storageProfilePlainId = this.providerOrgEntities.storageProfile.id.substring(lastIndexOfSemiColumn + 1);
+        return  {
+            href: `${this.basePath}/api/vdcStorageProfile/${storageProfilePlainId}`,
+            name: this.providerOrgEntities.storageProfile.name,
+            type: 'application/vnd.vmware.vcloud.vdcStorageProfile+xml'
+        };
     }
 }

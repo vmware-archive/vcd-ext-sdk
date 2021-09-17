@@ -5,6 +5,7 @@
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
+    "@vcd/bindings": "9.1.1",
     "@vcd/node-client": "0.0.6-alpha.2",
     "debug": "^4.1.1",
     "json-schema": "^0.3.0",
