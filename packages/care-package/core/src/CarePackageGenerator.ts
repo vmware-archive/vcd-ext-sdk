@@ -67,7 +67,7 @@ export class CarePackageGenerator {
                 return {
                     name: ele.name || plugin.name,
                     type: plugin.module,
-                    configuration: plugin.buildActions.getConfiguration ? plugin.buildActions.getConfiguration() : undefined
+                    configuration: plugin.buildActions.getConfiguration ? plugin.buildActions.getConfiguration(ele) : undefined
                 };
         });
         generator.fs.copyTpl(

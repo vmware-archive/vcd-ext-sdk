@@ -58,7 +58,7 @@ export interface BuildActions extends SchemaProvider {
      */
     deploy?(params: BuildActionParameters);
 
-    getConfiguration?();
+    getConfiguration?(elementAnswers: any);
 }
 
 /**
