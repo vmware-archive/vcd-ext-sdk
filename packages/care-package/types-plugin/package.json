@@ -1,11 +1,11 @@
 {
 	"name": "@vcd/care-package-plugin-types",
 	"description": "CARE Package plugin for Defined Entity Types",
-  "version": "0.0.1-alpha.8",
+	"version": "0.0.1-alpha.8",
 	"author": "VMware",
 	"license": "BSD-2",
 	"dependencies": {
-    	"@vcd/care-package-plugin-abstract": "0.0.1-alpha.8",
+		"@vcd/care-package-plugin-abstract": "0.0.1-alpha.8",
 		"@vcd/ext-compiler": "0.0.3-alpha.3",
 		"@vcd/node-client": "0.0.6-alpha.2",
 		"debug": "^4.1.1",
@@ -38,11 +38,11 @@
 		"node": ">=10.14.2 <13.0.0"
 	},
 	"main": "lib/index.js",
-  "scripts": {
-    "build": "tsc && npm run build:deploy",
-    "build:deploy": "webpack",
-    "lint": "tslint 'src/**/*.ts'"
-  },
+	"scripts": {
+		"build": "tsc && npm run build:deploy",
+		"build:deploy": "webpack",
+		"lint": "tslint 'src/**/*.ts'"
+	},
 	"types": "lib/index.d.ts",
 	"publishConfig": {
 		"access": "public"

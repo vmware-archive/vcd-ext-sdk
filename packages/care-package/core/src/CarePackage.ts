@@ -5,12 +5,15 @@ import * as path from 'path';
 import AdmZip from 'adm-zip';
 import * as semver from 'semver';
 import * as uuid from 'uuid';
-import { CarePackageSpec } from '@vcd/care-package-def';
-import { CellApi, CloudDirectorConfig } from '@vcd/node-client';
-import PluginLoader, { PluginExtended } from './plugins/PluginLoader';
+import {CarePackageSpec} from '@vcd/care-package-def';
+import {CellApi, CloudDirectorConfig} from '@vcd/node-client';
+import PluginLoader, {PluginExtended} from './plugins/PluginLoader';
+import {exec} from 'child_process';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
 const DIST_FOLDER_NAME = 'dist';
+// tslint:disable-next-line:max-line-length
+const SEMVER_REGEX = new RegExp('^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$');
 
 const log = debug('vcd:ext:care-package');
 
@@ -39,7 +42,8 @@ export class CarePackage {
         public spec: CarePackageSpec,
         private fromSource: boolean,
         private plugins: PluginExtended[]
-    ) { }
+    ) {
+    }
 
     /**
      * Factory for the CarePackage type
@@ -65,7 +69,7 @@ export class CarePackage {
     static async loadFromSource() {
         let currentDir = process.cwd();
         while (!fs.existsSync(path.join(currentDir, CARE_PACKAGE_DESCRIPTOR_NAME)) &&
-            path.dirname(currentDir) !== currentDir) {
+        path.dirname(currentDir) !== currentDir) {
             currentDir = path.dirname(currentDir);
         }
         if (!fs.existsSync(path.join(currentDir, CARE_PACKAGE_DESCRIPTOR_NAME))) {
@@ -181,9 +185,12 @@ export class CarePackage {
      * Packages the solution ont a CARE package.
      * @param only - A coma separated list of elements names defining a subset of elements over which
      * action execution occurs
+     * @param iso - Indicates whether to pack everything as an ISO archive. The value is a path
+     * to a CLI executable file
+     * @param executable - Path to the vcd-ext CLI executable file to be packaged in the ISO archive
      * @param options - action specific parameters
      */
-    async pack(only: string, options?: any) {
+    async pack({only, iso, executable}, options?: any) {
         if (!this.fromSource) {
             throw new Error('Serve operation can only be triggered from CARE package source project');
         }
@@ -191,7 +198,7 @@ export class CarePackage {
         const name = options.name || `${this.spec.name}.care`;
 
         if (!fs.existsSync(dist)) {
-            fs.mkdirSync(dist, { recursive: true });
+            fs.mkdirSync(dist, {recursive: true});
         }
         const zip = new AdmZip();
         options.zip = zip;
@@ -204,8 +211,64 @@ export class CarePackage {
         const content = JSON.stringify(manifest, null, 2);
         // TODO extract 'manifest.json' as a const variable
         zip.addFile('manifest.json', Buffer.alloc(content.length, content));
-        zip.writeZip(path.join(dist, name));
-        console.log(`CARE package created: ${path.join(dist, name)}`);
+        const archivePath = path.join(dist, name);
+        zip.writeZip(archivePath);
+        console.log(`CARE package created: ${archivePath}`);
+
+        if (iso) {
+            this.ifPythonAvailable()
+                .then(() => this.createIsoArchive(archivePath, executable))
+                .catch(err => console.log(err));
+        }
+    }
+
+    async ifPythonAvailable(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            exec('python --version', (err, stdout, stderr) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                const pythonSemverOut = stdout.split(' ').find(part => SEMVER_REGEX.test(part.trim()));
+                // sometimes the output is actually contained in stderr so we check both
+                const pythonSemverErr = stderr.split(' ').find(part => SEMVER_REGEX.test(part.trim()));
+                console.log('Split:', stderr.split(' '));
+                if (this.isEmpty(pythonSemverOut) && this.isEmpty(pythonSemverErr)) {
+                    console.log('No Python:', stdout, 'stderr:', stderr);
+                    return reject('Cannot package as ISO because Python is not installed.');
+                }
+
+                return resolve();
+            });
+        });
+    }
+
+    createIsoArchive(zipPath: string, cliExecutable: string) {
+        // TODO: replace this with Python
+        const isoArchiverPath = path.join(__dirname, '..', 'python-iso.py');
+        const careJsonPath = path.join(this.packageRoot, 'care.json');
+        const packageJsonPath = path.join(this.packageRoot, 'package.json');
+        let command = `python ${isoArchiverPath} ${zipPath} ${careJsonPath} ${packageJsonPath} `;
+        if (!this.isEmpty(cliExecutable)) {
+            command += cliExecutable;
+        }
+
+        console.log('command:', command);
+        exec(command, (err, stdout, stderr) => {
+            if (err) {
+                console.log('Error occurred: ', err);
+            }
+            if (!this.isEmpty(stderr)) {
+                console.log('Error output: ', stderr);
+            }
+            if (!this.isEmpty(stdout)) {
+                console.log('Output: ', stdout);
+            }
+        });
+    }
+
+    isEmpty(str: string) {
+        return !str || str.length === 0;
     }
 
     /**
@@ -226,12 +289,11 @@ export class CarePackage {
         const cellsResp = await cellApi.queryCells(1, 1);
         if (this.spec.platformVersion &&
             semver.gte(this.spec.platformVersion,
-                       productVersionToSemver(cellsResp.body.values[0].productVersion))) {
+                productVersionToSemver(cellsResp.body.values[0].productVersion))) {
             throw new Error(`Platform version mismatch expected greater or equal to ${this.spec.platformVersion}` +
                 ` got ${cellsResp.body.values[0].productVersion}`);
         }
     }
-
 }
 
 const productVersionToSemver = (ver: string) => {
