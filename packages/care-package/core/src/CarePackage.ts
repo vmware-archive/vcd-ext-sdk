@@ -232,9 +232,7 @@ export class CarePackage {
                 const pythonSemverOut = stdout.split(' ').find(part => SEMVER_REGEX.test(part.trim()));
                 // sometimes the output is actually contained in stderr so we check both
                 const pythonSemverErr = stderr.split(' ').find(part => SEMVER_REGEX.test(part.trim()));
-                console.log('Split:', stderr.split(' '));
                 if (this.isEmpty(pythonSemverOut) && this.isEmpty(pythonSemverErr)) {
-                    console.log('No Python:', stdout, 'stderr:', stderr);
                     return reject('Cannot package as ISO because Python is not installed.');
                 }
 
