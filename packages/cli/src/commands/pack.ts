@@ -42,7 +42,6 @@ export default class Pack extends Command {
     async run() {
         // tslint:disable-next-line: no-shadowed-variable
         const { flags, args } = this.parse(Pack);
-        console.log('eecho');
 
         const carePackage = await CarePackage.loadFromSource();
         return carePackage.pack(flags, { name: args.name });

@@ -8,7 +8,7 @@ import * as uuid from 'uuid';
 import {CarePackageSpec} from '@vcd/care-package-def';
 import {CellApi, CloudDirectorConfig} from '@vcd/node-client';
 import PluginLoader, {PluginExtended} from './plugins/PluginLoader';
-import {exec} from 'child_process';
+import {exec, spawnSync} from 'child_process';
 
 const CARE_PACKAGE_DESCRIPTOR_NAME = 'care.json';
 const DIST_FOLDER_NAME = 'dist';
@@ -218,26 +218,19 @@ export class CarePackage {
         if (iso) {
             this.ifPythonAvailable()
                 .then(() => this.createIsoArchive(archivePath, executable))
-                .catch(err => console.log(err));
+                .catch(err => console.error(err));
         }
     }
 
     async ifPythonAvailable(): Promise<void> {
         return new Promise((resolve, reject) => {
-            exec('python --version', (err, stdout, stderr) => {
-                if (err) {
-                    return reject(err);
-                }
+            const which = spawnSync('which', ['python']);
+            // status 0 means command completed successfully
+            if (which.status === 0) {
+                resolve();
+            }
 
-                const pythonSemverOut = stdout.split(' ').find(part => SEMVER_REGEX.test(part.trim()));
-                // sometimes the output is actually contained in stderr so we check both
-                const pythonSemverErr = stderr.split(' ').find(part => SEMVER_REGEX.test(part.trim()));
-                if (this.isEmpty(pythonSemverOut) && this.isEmpty(pythonSemverErr)) {
-                    return reject('Cannot package as ISO because Python is not installed.');
-                }
-
-                return resolve();
-            });
+            return reject('Cannot package as ISO because Python is not installed.');
         });
     }
 
