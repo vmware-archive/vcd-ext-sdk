@@ -1,9 +1,12 @@
 {
   "name": "@vcd/ext-cli",
   "description": "CLI tool for working with Cloud Director extensions",
-  "version": "0.0.12-alpha.14",
+  "version": "0.0.12-alpha.15",
   "author": "VMware",
   "license": "BSD-2",
+  "pkg": {
+    "scripts": "./lib/**/*.js"
+  },
   "bin": {
     "vcd-ext": "bin/run"
   },
@@ -12,7 +15,7 @@
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
     "@oclif/plugin-help": "^2.2.1",
-    "@vcd/care-package": "0.0.1-alpha.8",
+    "@vcd/care-package": "0.0.1-alpha.9",
     "@vcd/node-client": "0.0.6-alpha.2",
     "adm-zip": "^0.4.16",
     "debug": "^4.2.0",
@@ -81,6 +84,7 @@
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest",
     "version": "oclif-dev readme && git add README.md",
     "build": "tsc",
+    "build-and-pack": "tsc && pkg .",
     "lint": "tslint 'src/**/*.ts'",
     "test": "jasmine-ts --config=jasmine.json",
     "test-ci": "npm run test",

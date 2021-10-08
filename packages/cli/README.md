@@ -231,4 +231,23 @@ OPTIONS
 EXAMPLE
   $ vcd-ext use <alias>
 ```
+## Packaging as single file executable
+You can package the CLI as a cross-platform single file executable
+```
+npm install -g pkg@4.4.9 - It is important to specify this specific version since later versions won't work
+npm run build-and-pack
+```
+
+# Creating ISO archives
+```
+Install Python 2.7.9
+Then run pip install git+https://github.com/clalancette/pycdlib.git#egg=pycdlib
+
+Once you've build your solution execute the pack command with the iso flag: 
+vcd-ext pack --iso
+
+You can also provide a path to the single file executable generated from the previous step:
+vcd-ext pack --iso --executable /path/to/executable
+```
+
 <!-- commandsstop -->
