@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.0.13-beta.0",
+  "root": "0.0.13-beta.1",
   "all-components": {
     "name": "@vcd/ext-cli",
-    "version": "0.0.13-beta.0",
+    "version": "0.0.13-beta.1",
     "source_repositories": [
       {
         "content": "source",
@@ -236,6 +236,12 @@
       {
         "content": "binary",
         "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@types/ejs/-/ejs-3.1.0.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
         "host": "0.0.0.0:4873",
         "path": "/@types%2fexpect/-/expect-1.20.4.tgz"
       },
@@ -280,6 +286,12 @@
         "protocol": "HTTPS",
         "host": "0.0.0.0:4873",
         "path": "/@types%2fmem-fs/-/mem-fs-1.1.2.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@types/mem-fs-editor/-/mem-fs-editor-7.0.1.tgz"
       },
       {
         "content": "binary",
@@ -380,8 +392,8 @@
       {
         "content": "binary",
         "protocol": "HTTPS",
-        "host": "0.0.0.0:4873",
-        "path": "/@types%2fyeoman-generator/-/yeoman-generator-3.1.4.tgz"
+        "host": "registry.npmjs.org",
+        "path": "/@types/yeoman-generator/-/yeoman-generator-4.11.4.tgz"
       },
       {
         "content": "binary",
@@ -394,48 +406,6 @@
         "protocol": "HTTPS",
         "host": "0.0.0.0:4873",
         "path": "/@types%2fyosay/-/yosay-0.0.29.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/@vcd/bindings/-/bindings-9.1.1.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/@vcd/care-package/-/care-package-0.0.1-alpha.8.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/@vcd/care-package-plugin-abstract/-/care-package-plugin-abstract-0.0.1-alpha.6.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/@vcd/care-package-plugin-import-vapp/-/care-package-plugin-import-vapp-0.0.1.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/@vcd/care-package-plugin-types/-/care-package-plugin-types-0.0.1-alpha.5.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/@vcd/care-package-plugin-uiplugins/-/care-package-plugin-uiplugins-0.0.1-alpha.5.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/@vcd/ext-compiler/-/ext-compiler-0.0.3-alpha.3.tgz"
       },
       {
         "content": "binary",
@@ -934,12 +904,6 @@
         "protocol": "HTTPS",
         "host": "0.0.0.0:4873",
         "path": "/copy-descriptor/-/copy-descriptor-0.1.1.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/copy-dir/-/copy-dir-1.3.0.tgz"
       },
       {
         "content": "binary",
@@ -1923,12 +1887,6 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
         "path": "/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz"
       },
       {
@@ -1942,12 +1900,6 @@
         "protocol": "HTTPS",
         "host": "0.0.0.0:4873",
         "path": "/jsonfile/-/jsonfile-6.0.1.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/jsonify/-/jsonify-0.0.0.tgz"
       },
       {
         "content": "binary",
@@ -3154,12 +3106,6 @@
         "protocol": "HTTPS",
         "host": "0.0.0.0:4873",
         "path": "/tough-cookie/-/tough-cookie-2.5.0.tgz"
-      },
-      {
-        "content": "binary",
-        "protocol": "HTTPS",
-        "host": "registry.npmjs.org",
-        "path": "/ts-json-schema-generator/-/ts-json-schema-generator-0.76.1.tgz"
       },
       {
         "content": "binary",

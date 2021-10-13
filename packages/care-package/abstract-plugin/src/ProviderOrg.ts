@@ -1,31 +1,39 @@
-import {CloudDirectorConfig, OrgVdcNetworkApi, VdcApi} from '@vcd/node-client';
 import {
-    MetadataStringValue,
-    MetadataType,
-    QueryResultRecordsType,
-    VdcStorageProfileType
+    CloudDirectorConfig,
+    DefinedEntityApi,
+    DefinedEntityTypeApi,
+    OrgApi,
+    OrgVdcNetworksApi,
+    VdcApi
+} from '@vcd/node-client';
+import {
+    QueryResultOrgVdcStorageProfileRecordType,
+    QueryResultRecordsType
 } from '@vcd/bindings/vcloud/api/rest/schema_v1_5';
-import {QueryResultOrgRecordType} from '@vcd/bindings/vcloud/api/rest/schema_v1_5/QueryResultOrgRecordType';
-import {LegacyApiClient} from '@vcd/node-client/lib/legacy.api.client';
+import debug from 'debug';
 
-export interface ProviderOrgEntities {
-    org: {
-        name: string;
+const log = debug('vcd:ext:provider-org-interface');
+
+export interface BaseStruct {
+    id: string;
+    name: string;
+    capabilities: string[];
+}
+
+export interface VDC extends BaseStruct {
+    networks: BaseStruct[];
+    securityGroups: BaseStruct[];
+    storagePolicies: BaseStruct[];
+    computePolicies: BaseStruct[];
+}
+
+export interface ProviderOrgInterface {
+    organization: {
         id: string;
-    };
-    vdc: {
         name: string;
-        id: string;
+        capabilities: string[];
+        vdcs: VDC[];
     };
-    network: {
-        name: string;
-        id: string;
-    };
-    storageProfile: {
-        name: string;
-        id: string;
-    };
-    limits: string;
 }
 
 export class ProviderOrg {
@@ -36,110 +44,125 @@ export class ProviderOrg {
         this.apiConfig = apiConfig;
     }
 
-    private static async getOrg(legacyApiClient: LegacyApiClient) {
-        const query = '/api/query?type=organization&filter=metadata@SYSTEM:ProviderOrg==BOOLEAN:true';
-        const organisations = await legacyApiClient.get<QueryResultRecordsType>(query);
-        if (organisations.total === 0) {
-            throw new Error('No organisation is tagged with "ProviderOrg==BOOLEAN:true"');
-        } else if (organisations.total > 1) {
-            throw new Error('More than one organisation is tagged with "ProviderOrg==BOOLEAN:true"');
+    private static async getOrg(apiConfig: CloudDirectorConfig, urn: string) {
+        const orgApi = apiConfig.makeApiClient(OrgApi);
+        const org = await orgApi.getOrg(urn);
+        if (!org) {
+            throw new Error(`Unable to retrieve Organization with id: ${urn}`);
         }
-
-        const orgPlainId = organisations.record[0].href.split('/').pop();
-        return {
-            id: `urn:vcloud:org:${orgPlainId}`,
-            name: (organisations.record[0] as QueryResultOrgRecordType).name
-        };
+        console.log(`Organization: "${org.body.name}" found.`);
+        return org.body.name;
     }
 
-    private static async getMetadata(legacyApiClient: LegacyApiClient, orgId: string): Promise<MetadataType> {
-        const orgPlainId = orgId.split(':').pop();
-        const orgMetadataUrl = `/api/org/${orgPlainId}/metadata`;
-        const orgMetadata = await legacyApiClient.get<MetadataType>(orgMetadataUrl);
-
-        if (!orgMetadata.metadataEntry
-            .find(entry => entry.key === 'ProviderOrgVdc')) {
-            throw new Error('Missing Org Metadata with tag "ProviderOrgVdc"');
-        }
-
-        if (!orgMetadata.metadataEntry
-            .find(entry => entry.key === 'ProviderOrgNetwork')) {
-            throw new Error('Missing Org Metadata with tag "ProviderOrgNetwork"');
-        }
-
-        if (!orgMetadata.metadataEntry
-            .find(entry => entry.key === 'ProviderOrgVdcStorageProfile')) {
-            throw new Error('Missing Org Metadata with tag "ProviderOrgVdcStorageProfile"');
-        }
-
-        return orgMetadata;
-    }
-
-    private static async getVdc(providerOrgApiConfig: CloudDirectorConfig, typedValue: MetadataStringValue) {
+    private static async getVdcs(providerOrgApiConfig: CloudDirectorConfig, vdcs: BaseStruct[]) {
         const vdcApi = providerOrgApiConfig.makeApiClient(VdcApi);
-        const metadataStringValue = typedValue;
-        const orgVdc = await vdcApi.getVdc(metadataStringValue.value);
-        if (!orgVdc) {
-            throw new Error(`Unable to retrieve VDC with id ${metadataStringValue.value}`);
-
+        const filter = vdcs.map(entry => 'id==' + entry.id).join(',');
+        const orgVdcs = await vdcApi.queryVdcs(1, 128, filter);
+        if (!orgVdcs) {
+            throw new Error('Unable to retrieve VDCs');
         }
-        return {
-            id: orgVdc.body.id,
-            name: orgVdc.body.name
-        };
+        return orgVdcs.body.values;
     }
 
-    private static async getNetwork(providerOrgApiConfig: CloudDirectorConfig, typedValue: MetadataStringValue) {
-        const orgVdcNetworksApi = providerOrgApiConfig.makeApiClient(OrgVdcNetworkApi);
-        const metadataStringValue = typedValue;
-        const orgVdcNetwork = await orgVdcNetworksApi.getOrgVdcNetwork(metadataStringValue.value);
-        if (!orgVdcNetwork) {
-            throw new Error(`Unable to retrieve network with id ${metadataStringValue.value}`);
-
+    private static async getNetworks(providerOrgApiConfig: CloudDirectorConfig, networks: BaseStruct[]) {
+        const orgVdcNetworksApi = providerOrgApiConfig.makeApiClient(OrgVdcNetworksApi);
+        const filter = networks.map(entry => 'id==' + entry.id).join(',');
+        const orgVdcNetworks = await orgVdcNetworksApi.getAllVdcNetworks(1, 128, filter);
+        if (!orgVdcNetworks) {
+            throw new Error('Unable to retrieve vdc networks');
         }
-        return {
-            id: orgVdcNetwork.body.id,
-            name: orgVdcNetwork.body.name
-        };
+        return orgVdcNetworks.body.values;
     }
 
-    private static async getStorageProfile(providerOrgApiConfig: CloudDirectorConfig, typedValue: MetadataStringValue) {
+    private static async getStoragePolicies(providerOrgApiConfig: CloudDirectorConfig, orgVdcStorageProfiles: BaseStruct[]) {
         const legacyApiClient = providerOrgApiConfig.makeLegacyApiClient();
-        const metadataStringValue = typedValue;
-        const vdcStorageProfilePlainId = metadataStringValue.value.split(':').pop();
-        const orgVdcStoragePolicies = `/api/vdcStorageProfile/${vdcStorageProfilePlainId}`;
-        const vdcStorageProfiles = await legacyApiClient.get<VdcStorageProfileType>(orgVdcStoragePolicies);
+        const filter = orgVdcStorageProfiles.map(entry => 'id==' + entry.id).join(',');
+        const path = '/api/query?type=orgVdcStorageProfile&filter=' + filter;
+        const vdcStorageProfiles = await legacyApiClient.get<QueryResultRecordsType>(path);
         if (!vdcStorageProfiles) {
-            throw new Error(`Unable to retrieve storage profile with id ${metadataStringValue.value}`);
+            throw new Error('Unable to retrieve storage profiles');
         }
-        return {
-            id: vdcStorageProfiles.id,
-            name: vdcStorageProfiles.name
-        };
+        return vdcStorageProfiles.record as QueryResultOrgVdcStorageProfileRecordType[];
     }
 
-    public async getProviderOrgEntities(): Promise<ProviderOrgEntities> {
-        const legacyApiClient = this.apiConfig.makeLegacyApiClient();
-        const organisation = await ProviderOrg.getOrg(legacyApiClient);
-        const metadata = await ProviderOrg.getMetadata(legacyApiClient, organisation.id);
+    public async getProviderOrgInterface(): Promise<ProviderOrgInterface> {
+        log('Getting ProviderOrg Interface');
+        const definedEntityTypeApiClient = this.apiConfig.makeApiClient(DefinedEntityTypeApi);
+        const definedEntityTypes = await definedEntityTypeApiClient
+            .getDefinedEntityTypes(1, 1, 'nss==solutions_organization_provider', '', 'version');
+        const definedEntityType = definedEntityTypes.body.values.pop();
 
-        const vdcMetadata = metadata.metadataEntry
-            .find(entry => entry.key === 'ProviderOrgVdc')
-            .typedValue;
-        const networkMetadata = metadata.metadataEntry
-            .find(entry => entry.key === 'ProviderOrgNetwork')
-            .typedValue;
-        const storageProfileMetadata = metadata.metadataEntry
-            .find(entry => entry.key === 'ProviderOrgVdcStorageProfile')
-            .typedValue;
+        if (!definedEntityType) {
+            throw new Error('Provider Organization Interface is not configured.');
+        }
+        log('DefinedEntityType of ProviderOrg Interface found.');
 
-        const providerOrgApiConfig = this.apiConfig.actAs(organisation.id);
-        return {
-            org: organisation,
-            vdc: await ProviderOrg.getVdc(providerOrgApiConfig, vdcMetadata),
-            network: await ProviderOrg.getNetwork(providerOrgApiConfig, networkMetadata),
-            storageProfile: await ProviderOrg.getStorageProfile(providerOrgApiConfig, storageProfileMetadata),
-            limits: ''
-        };
+        const definedEntityTypeClient = this.apiConfig.makeApiClient(DefinedEntityApi);
+        const definedEntities = await definedEntityTypeClient.getDefinedEntitiesByEntityType(
+            definedEntityType.vendor,
+            definedEntityType.nss,
+            definedEntityType.version,
+            1,
+            1);
+
+        if (!definedEntities) {
+            throw new Error('Provider Organization Interface is not configured.');
+        }
+        log('DefinedEntity of ProviderOrg Interface found.');
+
+        const definedEntity = definedEntities.body.values.pop();
+        const providerOrgInterface = definedEntity.entity as ProviderOrgInterface;
+        providerOrgInterface.organization.name = await ProviderOrg.getOrg(this.apiConfig, providerOrgInterface.organization.id);
+
+        const providerOrgApiConfig = this.apiConfig.actAs(providerOrgInterface.organization.id);
+        await this.populateVdcs(providerOrgApiConfig, providerOrgInterface.organization.vdcs);
+
+        for (const vdc of providerOrgInterface.organization.vdcs) {
+            await this.populateNetworks(providerOrgApiConfig, vdc.networks);
+            await this.populateStoragePolicies(providerOrgApiConfig, vdc.storagePolicies);
+        }
+
+        log(JSON.stringify(providerOrgInterface, null, 2));
+        return providerOrgInterface;
     }
+
+    private async populateVdcs(providerOrgApiConfig, vdcs: BaseStruct[]) {
+        const orgVdcs = await ProviderOrg.getVdcs(providerOrgApiConfig, vdcs);
+        for (const vdc of vdcs) {
+            const temp = orgVdcs.find(entry => entry.id === vdc.id);
+            if (temp) {
+                vdc.name = temp.name;
+                console.log(`OrgVdc: "${vdc.name}" found.`);
+            } else {
+                console.log(`OrgVdc with ID: "${vdc.id}" not found.`);
+            }
+        }
+    }
+
+    private async populateNetworks(providerOrgApiConfig, networks: BaseStruct[]) {
+        const vdcNetworks = await ProviderOrg.getNetworks(providerOrgApiConfig, networks);
+        for (const network of networks) {
+            const temp = vdcNetworks.find(iter => iter.id === network.id);
+            if (temp) {
+                network.name = temp.name;
+                console.log(`Network: "${network.name}" found.`);
+            } else {
+                console.log(`Network with ID: "${network.id}" not found.`);
+            }
+        }
+    }
+
+    private async populateStoragePolicies(providerOrgApiConfig, storagePolicies: BaseStruct[]) {
+        const queryStoragePolicies = await ProviderOrg.getStoragePolicies(providerOrgApiConfig, storagePolicies);
+        for (const storagePolicy of storagePolicies) {
+            const temp = queryStoragePolicies.find(iter => storagePolicy.id.endsWith(iter.href.split('/').pop()));
+            if (temp) {
+                storagePolicy.name = temp.name;
+                console.log(`StoragePolicy: "${storagePolicy.name}" found.`);
+            } else {
+                console.log(`StoragePolicy with ID: "${storagePolicy.id}" not found.`);
+            }
+        }
+    }
+
 }
