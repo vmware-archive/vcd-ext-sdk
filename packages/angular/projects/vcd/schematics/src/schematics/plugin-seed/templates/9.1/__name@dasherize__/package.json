@@ -1,6 +1,6 @@
 {
   "name": "<%= classify(name) %>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "VCD UI Stub Extension",
   "scripts": {
     "clean": "rimraf dist",

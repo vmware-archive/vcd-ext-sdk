@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.0.1-alpha.9",
+  "root": "0.0.2-beta.0",
   "all-components": {
     "name": "@vcd/care-package",
-    "version": "0.0.1-alpha.9",
+    "version": "0.0.2-beta.0",
     "source_repositories": [
       {
         "content": "source",
@@ -201,7 +201,25 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
+        "path": "/@vcd/bindings/-/bindings-9.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@vcd/care-package-def/-/care-package-def-0.0.1-alpha.3.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
         "path": "/@vcd/care-package-plugin-abstract/-/care-package-plugin-abstract-0.0.1-alpha.6.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/@vcd/care-package-plugin-import-vapp/-/care-package-plugin-import-vapp-0.0.1.tgz"
       },
       {
         "content": "binary",
@@ -393,7 +411,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/axios/-/axios-0.21.1.tgz"
+        "path": "/axios/-/axios-0.21.4.tgz"
       },
       {
         "content": "binary",
@@ -664,6 +682,12 @@
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
         "path": "/copy-descriptor/-/copy-descriptor-0.1.1.tgz"
+      },
+      {
+        "content": "binary",
+        "protocol": "HTTPS",
+        "host": "registry.npmjs.org",
+        "path": "/copy-dir/-/copy-dir-1.3.0.tgz"
       },
       {
         "content": "binary",

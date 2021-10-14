@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.13.0-alpha.3",
+  "root": "0.13.0-alpha.4",
   "all-components": {
     "name": "@vcd/angular-sdk",
-    "version": "0.13.0-alpha.3",
+    "version": "0.13.0-alpha.4",
     "source_repositories": [
       {
         "content": "source",
@@ -2139,7 +2139,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/dns-packet/-/dns-packet-1.3.1.tgz"
+        "path": "/dns-packet/-/dns-packet-1.3.4.tgz"
       },
       {
         "content": "binary",
@@ -2690,8 +2690,8 @@
       {
         "content": "binary",
         "protocol": "HTTPS",
-        "host": "build-artifactory.eng.vmware.com",
-        "path": "/api/npm/npm/glob-parent/-/glob-parent-3.1.0.tgz"
+        "host": "registry.npmjs.org",
+        "path": "/glob-parent/-/glob-parent-3.1.0.tgz"
       },
       {
         "content": "binary",
@@ -3615,7 +3615,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/lodash/-/lodash-4.17.20.tgz"
+        "path": "/lodash/-/lodash-4.17.21.tgz"
       },
       {
         "content": "binary",
@@ -5318,8 +5318,8 @@
       {
         "content": "binary",
         "protocol": "HTTPS",
-        "host": "build-artifactory.eng.vmware.com",
-        "path": "/api/npm/npm/ssri/-/ssri-6.0.1.tgz"
+        "host": "registry.npmjs.org",
+        "path": "/ssri/-/ssri-6.0.2.tgz"
       },
       {
         "content": "binary",
@@ -5775,7 +5775,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/url-parse/-/url-parse-1.4.7.tgz"
+        "path": "/url-parse/-/url-parse-1.5.3.tgz"
       },
       {
         "content": "binary",
@@ -6044,8 +6044,8 @@
       {
         "content": "binary",
         "protocol": "HTTPS",
-        "host": "build-artifactory.eng.vmware.com",
-        "path": "/api/npm/npm/y18n/-/y18n-4.0.0.tgz"
+        "host": "registry.npmjs.org",
+        "path": "/y18n/-/y18n-4.0.3.tgz"
       },
       {
         "content": "binary",

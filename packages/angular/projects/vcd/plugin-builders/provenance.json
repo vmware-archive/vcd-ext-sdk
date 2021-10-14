@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.12.1-alpha.3",
+  "root": "0.12.1-alpha.4",
   "all-components": {
     "name": "@vcd/plugin-builders",
-    "version": "0.12.1-alpha.2",
+    "version": "0.12.1-alpha.4",
     "source_repositories": [
       {
         "content": "source",
@@ -1557,7 +1557,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/dns-packet/-/dns-packet-1.3.1.tgz"
+        "path": "/dns-packet/-/dns-packet-1.3.4.tgz"
       },
       {
         "content": "binary",
@@ -1971,7 +1971,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/glob-parent/-/glob-parent-5.1.1.tgz"
+        "path": "/glob-parent/-/glob-parent-5.1.2.tgz"
       },
       {
         "content": "binary",
@@ -2571,7 +2571,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/lodash/-/lodash-4.17.20.tgz"
+        "path": "/lodash/-/lodash-4.17.21.tgz"
       },
       {
         "content": "binary",
@@ -3789,7 +3789,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/ssri/-/ssri-6.0.1.tgz"
+        "path": "/ssri/-/ssri-6.0.2.tgz"
       },
       {
         "content": "binary",
@@ -3903,7 +3903,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/tar/-/tar-6.0.5.tgz"
+        "path": "/tar/-/tar-6.1.11.tgz"
       },
       {
         "content": "binary",
@@ -4107,7 +4107,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/url-parse/-/url-parse-1.4.7.tgz"
+        "path": "/url-parse/-/url-parse-1.5.3.tgz"
       },
       {
         "content": "binary",
@@ -4293,7 +4293,7 @@
         "content": "binary",
         "protocol": "HTTPS",
         "host": "registry.npmjs.org",
-        "path": "/y18n/-/y18n-4.0.0.tgz"
+        "path": "/y18n/-/y18n-4.0.3.tgz"
       },
       {
         "content": "binary",
