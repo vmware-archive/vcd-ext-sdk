@@ -11,8 +11,8 @@ export class DeployActions implements def.DeployActions {
 
     async deploy({clientConfig, elements}: def.DeployActionParameters) {
         const providerOrg = new ProviderOrg(clientConfig);
-        const providerOrgEntities = await providerOrg.getProviderOrgEntities();
-        const importVApp = new ImportVApp(providerOrgEntities, clientConfig);
+        const providerOrgInterface = await providerOrg.getProviderOrgInterface();
+        const importVApp = new ImportVApp(providerOrgInterface, clientConfig);
         for (const element of elements) {
             await importVApp.executeRequests(element);
         }

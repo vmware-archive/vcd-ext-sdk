@@ -8,7 +8,7 @@ import {TransferClient} from '@vcd/node-client/lib/transfer';
 import {LegacyApiClient} from '@vcd/node-client/lib/legacy.api.client';
 import path from 'path';
 import debug from 'debug';
-import {ProviderOrgEntities} from '@vcd/care-package-plugin-abstract/lib/ProviderOrg';
+import {ProviderOrgInterface} from '@vcd/care-package-plugin-abstract/lib/ProviderOrg';
 
 const log = debug('vcd:ext:import-vapp');
 
@@ -17,13 +17,13 @@ export class ImportVApp {
     basePath: string;
     transferClient: TransferClient;
     legacyApiClient: LegacyApiClient;
-    providerOrgEntities: ProviderOrgEntities;
+    providerOrgInterface: ProviderOrgInterface;
 
-    constructor(providerOrgEntities: ProviderOrgEntities, apiConfig: CloudDirectorConfig) {
-        this.providerOrgEntities = providerOrgEntities;
+    constructor(providerOrgInterface: ProviderOrgInterface, apiConfig: CloudDirectorConfig) {
+        this.providerOrgInterface = providerOrgInterface;
         this.basePath = apiConfig.basePath;
 
-        const providerOrgApiConfig = apiConfig.actAs(providerOrgEntities.org.id);
+        const providerOrgApiConfig = apiConfig.actAs(providerOrgInterface.organization.id);
         this.legacyApiClient = providerOrgApiConfig.makeLegacyApiClient();
         this.transferClient = providerOrgApiConfig.makeTransferClient();
     }
@@ -93,7 +93,8 @@ export class ImportVApp {
     }
 
     private async instantiateOvf(configuration: Configuration): Promise<VAppType> {
-        const vdcPlainId = this.providerOrgEntities.vdc.id.split(':').pop();
+        const vdc = this.providerOrgInterface.organization.vdcs[0];
+        const vdcPlainId = vdc.id.split(':').pop();
         const instantiateOvfUrl = `/api/vdc/${vdcPlainId}/action/instantiateOvf`;
         const computerNameWithAllowedCharacters = configuration.vAppName.replace(new RegExp('[ -]', 'g'), '.');
         const params: InstantiateOvfParamsType = {
@@ -125,13 +126,14 @@ export class ImportVApp {
     }
 
     private getNetworkConfigSection(): NetworkConfigSectionType {
-        const networkPlainId = this.providerOrgEntities.network.id.split(':').pop();
+        const network = this.providerOrgInterface.organization.vdcs[0].networks[0];
+        const networkPlainId = network.id.split(':').pop();
         return {
             // @ts-ignore
             _type: 'NetworkConfigSectionType',
             networkConfig: [
                 {
-                    networkName: this.providerOrgEntities.network.name,
+                    networkName: network.name,
                     configuration: {
                         parentNetwork: {
                             href: `${this.basePath}/api/admin/network/${networkPlainId}`
@@ -144,12 +146,13 @@ export class ImportVApp {
     }
 
     private getNetworkConnectionSectionType(): NetworkConnectionSectionType {
+        const network = this.providerOrgInterface.organization.vdcs[0].networks[0];
         return {
             // @ts-ignore
             _type: 'NetworkConnectionSectionType',
             primaryNetworkConnectionIndex: 0,
             networkConnection: [{
-                network: this.providerOrgEntities.network.name,
+                network: network.name,
                 needsCustomization: true,
                 networkConnectionIndex: 0,
                 ipAddress: 'any',
@@ -161,10 +164,11 @@ export class ImportVApp {
     }
 
     private getVdcStorageProfile() {
-        const storageProfilePlainId = this.providerOrgEntities.storageProfile.id.split(':').pop();
+        const storageProfile = this.providerOrgInterface.organization.vdcs[0].storagePolicies[0];
+        const storageProfilePlainId = storageProfile.id.split(':').pop();
         return  {
             href: `${this.basePath}/api/vdcStorageProfile/${storageProfilePlainId}`,
-            name: this.providerOrgEntities.storageProfile.name,
+            name: storageProfile.name,
             type: 'application/vnd.vmware.vcloud.vdcStorageProfile+xml'
         };
     }
