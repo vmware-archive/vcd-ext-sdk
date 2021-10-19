@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.0.1-alpha.8",
+  "root": "0.0.2-beta.0",
   "all-components": {
     "name": "@vcd/care-package-plugin-types",
-    "version": "0.0.1-alpha.8",
+    "version": "0.0.2-beta.0",
     "source_repositories": [
       {
         "content": "source",
