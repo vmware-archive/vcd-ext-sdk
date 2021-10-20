@@ -1,11 +1,11 @@
 {
   "name": "@vcd/care-package-plugin-import-vapp",
   "description": "CARE Package plugin for importing vApp",
-  "version": "0.0.2-beta.1",
+  "version": "0.0.2-beta.2",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {
-    "@vcd/care-package-plugin-abstract": "0.0.2-beta.1",
+    "@vcd/care-package-plugin-abstract": "0.0.2-beta.2",
     "@vcd/bindings": "9.1.1",
     "@vcd/node-client": "0.0.6-alpha.2",
     "copy-dir": "^1.3.0",
@@ -13,11 +13,13 @@
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@vcd/care-package-def": "0.0.2-beta.1",
+    "@vcd/care-package-def": "0.0.2-beta.2",
     "@types/debug": "^4.1.5",
     "@types/glob": "^5.0.36",
     "@types/node": "^10.14.20",
     "@types/yeoman-generator": "^4.11.0",
+    "@types/tar-fs": "^2.0.1",
+    "tar-fs": "^2.1.1",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
