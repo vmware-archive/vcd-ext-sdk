@@ -1,11 +1,11 @@
 ---
 layout: default
 title: Introduction
-category: none1
-catOrder: 1
+category: none2
+catOrder: 2
 hasMore: true
-order: 1
-permalink: /docs/
+order: 2
+permalink: /docs/introduction
 ---
 
 # Learn about Cloud Developer Platform

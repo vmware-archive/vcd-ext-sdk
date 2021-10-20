@@ -2,7 +2,7 @@
 layout: default
 title:  "Working with entities"
 category: Defined Entities
-catOrder: 2
+catOrder: 4
 iconShape: objects
 hasMore: true
 order: 5

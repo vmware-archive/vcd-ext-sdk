@@ -1,10 +1,10 @@
 ---
 layout: default
 title: Packaging
-category: none3
-catOrder: 5
+category: none7
+catOrder: 7
 hasMore: true
-order: 2
+order: 7
 permalink: /docs/packaging
 ---
 # Packaging a solution
@@ -16,14 +16,14 @@ The form factor of a solution is the [CARE Package]({{ site.baseurl }}/architect
 ## Creating a CARE Package
 ### Through NPM
 Run the following command in the root of the project to generate a CARE package.
-```shell
+```bash
 npm run package
 ```
 Once the command finishes new file should be present in the `dist` folder with `.care` file extension.
 
 ### Through the CLI directly
 Alternatively the `vcd-ext` CLI can be used directly to create a CARE package. As opposite to running the `npm run package` script only from within the root of the project, the `vcd-ext pack` can be run from anywhere within the project.
-```shell
+```bash
 npm run package
 ```
 

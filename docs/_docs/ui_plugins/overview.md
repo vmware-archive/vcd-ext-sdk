@@ -3,7 +3,7 @@ layout: default
 title:  "Overview"
 category: UI Plugins
 description: "Overview of UI Plugins"
-catOrder: 3
+catOrder: 4
 order: 1
 hasMore: true
 labels: [UI Plugins]

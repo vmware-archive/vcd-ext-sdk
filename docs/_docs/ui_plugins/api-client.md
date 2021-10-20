@@ -3,7 +3,7 @@ layout: default
 title:  "API Client"
 category: UI Plugins
 description: "API Client library"
-catOrder: 3
+catOrder: 4
 order: 7
 hasMore: true
 labels: [UI Plugins]

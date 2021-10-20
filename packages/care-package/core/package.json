@@ -1,7 +1,7 @@
 {
   "name": "@vcd/care-package",
   "description": "Manages CARE Packages",
-  "version": "0.0.2-beta.2",
+  "version": "0.0.2-beta.3",
   "author": "VMware",
   "license": "BSD-2",
   "dependencies": {

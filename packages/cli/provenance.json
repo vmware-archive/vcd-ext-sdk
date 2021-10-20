@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.0.13-beta.2",
+  "root": "0.0.13-beta.3",
   "all-components": {
     "name": "@vcd/ext-cli",
-    "version": "0.0.13-beta.2",
+    "version": "0.0.13-beta.3",
     "source_repositories": [
       {
         "content": "source",

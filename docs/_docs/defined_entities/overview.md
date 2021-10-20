@@ -2,11 +2,11 @@
 layout: default
 title:  "Overview"
 category: Defined Entities
-catOrder: 2
+catOrder: 4
 iconShape: objects
 hasMore: true
 order: 1
-permalink: /docs/defined_entities/intro
+permalink: /docs/defined_entities/overview
 ---
 # Defined Entities
 

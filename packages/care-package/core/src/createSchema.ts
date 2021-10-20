@@ -28,17 +28,17 @@ export const createSchema = {
             required: true,
             minLength: 1
         },
-        platformVersion: {
-            type: 'string',
-            description: 'Specify minimum required Cloud Director version',
-            pattern: '^$|^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'
-        },
         link: {
             type: 'string',
             description: 'Specify vendor link',
             default: 'http://example.com',
             required: true,
             minLength: 1
+        },
+        platformVersion: {
+            type: 'string',
+            description: 'Specify minimum required Cloud Director version',
+            pattern: '^$|^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'
         },
         license: {
             type: 'string',
