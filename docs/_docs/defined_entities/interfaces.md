@@ -2,7 +2,7 @@
 layout: default
 title:  "Interfaces and behaviours"
 category: Defined Entities
-catOrder: 2
+catOrder: 4
 iconShape: objects
 hasMore: true
 order: 4
@@ -11,7 +11,7 @@ permalink: /docs/defined_entities/interfaces
 # Add behaviours to entities
 
 ## Create a simple interface
-Inerfaces are defined as annotated Typescript interfaces. Those interfaces can be then implemented by the defined entity types. Interfaces are used for two reasons, ability to search all entities, which implement the same interface and defining a behavior on an entity.
+Interfaces are defined as annotated Typescript interfaces. Those interfaces can be then implemented by the defined entity types. Interfaces are used for two reasons, ability to search all entities, which implement the same interface and defining a behavior on an entity.
 
 ```typescript
 /**

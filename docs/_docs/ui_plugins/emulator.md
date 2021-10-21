@@ -3,7 +3,7 @@ layout: default
 title:  "Emulator"
 category: UI Plugins
 description: "Emulator"
-catOrder: 3
+catOrder: 4
 order: 6
 hasMore: true
 labels: [UI Plugins]
@@ -22,7 +22,9 @@ the rest api.
 
 To test that, please authenticated against a running Cloud Director instance with an organisation account
 
-`vcd-ext login userAliasName http://cell.url.com/cloudapi username@tenantName`
+```bash
+vcd-ext login userAliasName https://cell.url.com/cloudapi username@tenantName
+```
 
 This CLI command will log in using the provided cell url as a tenant user. A session will be created and 
 the token will be stored locally. 

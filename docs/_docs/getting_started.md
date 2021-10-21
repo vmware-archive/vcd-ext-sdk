@@ -1,10 +1,10 @@
 ---
 layout: default
 title: Get Started
-category: none2
+category: none1
 catOrder: 1
 hasMore: true
-order: 2
+order: 1
 permalink: /docs/getting_started
 ---
 # Get started with Cloud Developer Platform
@@ -16,7 +16,7 @@ Follow this guide to get started with build a Cloud Director Solution
 
 ## Install the CLI
 ### Through NPM
-```shell
+```bash
 npm i -g @vcd/ext-cli@next
 ```
 
@@ -25,5 +25,6 @@ Run the following command to generate a new project:
 ```bash
 vcd-ext new my-solution
 ```
+
 ## What's next
 Explore extensibility capabilities and start developing your solution

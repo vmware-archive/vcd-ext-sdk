@@ -2,7 +2,7 @@
 layout: default
 title:  "Getting started"
 category: Defined Entities
-catOrder: 2
+catOrder: 4
 iconShape: objects
 hasMore: true
 order: 2
@@ -14,15 +14,10 @@ This quickstart shows you how to create types project, add a type and deploy it 
 
 ## Create a types project
 Run the following command to generate a new project:
-<div class="language-custom custom-code-block"> 
-    <div>$ vcd-ext new</div>
-    <div><span class="token builtin">?</span> Your solution name <span class="token keyword">types-demo</span></div>
-    <div><span class="token builtin">?</span> Specify first version <span class="token keyword">0.0.1</span></div>
-    <div><span class="token builtin">?</span> Specify vendor name <span class="token keyword">MyCompany</span></div>
-    <div><span class="token builtin">?</span> Specify vendor link <span class="token keyword">http://example.com</span></div>
-    <div><span class="token builtin">?</span> Specify solution license <span class="token keyword">BSD-2-Clause</span></div>
-    <div><span class="token builtin">?</span> Select extensibility elements <span class="token keyword">Defined Entities</span></div>
-    <div><span class="token builtin">?</span> Defined Entities:element name <span class="token keyword">types</span></div>
+<div class="language-custom custom-code-block">
+    {% include vcd-ext-wizard.html %}
+    <span class="token keyword">You need to select which projects you want the CLI to generate in the mono repo. For this example we select `Defined Entities` and press enter</span></div>
+    <div><span class="token builtin">?</span> Defined Entities:element name (types) <span class="token keyword">Either press enter or type in a different `Defined Entities` project name, for this example we press enter</span></div>
 </div>
 
 ## Create a type

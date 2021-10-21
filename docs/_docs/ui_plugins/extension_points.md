@@ -3,7 +3,7 @@ layout: default
 title:  "Extension points"
 category: UI Plugins
 description: "Extension points in UI Plugins"
-catOrder: 3
+catOrder: 4
 order: 3
 hasMore: true
 labels: [UI Plugins]
