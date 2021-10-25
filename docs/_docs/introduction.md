@@ -5,7 +5,7 @@ category: none2
 catOrder: 2
 hasMore: true
 order: 2
-permalink: /docs/introduction
+permalink: /docs
 ---
 
 # Learn about Cloud Developer Platform
