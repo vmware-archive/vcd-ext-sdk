@@ -10,7 +10,7 @@
     "adm-zip": "^0.4.16",
     "debug": "^4.1.1",
     "tslib": "^1.10.0",
-    "yeoman-generator": "^4.12.0"
+    "yeoman-generator": "^4.13.0"
   },
   "devDependencies": {
     "@vcd/care-package-def": "0.0.2-beta.2",
