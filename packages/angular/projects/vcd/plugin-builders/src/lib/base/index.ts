@@ -13,9 +13,10 @@ import { buildBrowserWebpackConfigFromContext } from '@angular-devkit/build-angu
 import { NormalizedBrowserBuilderSchema } from '@angular-devkit/build-angular/src/utils/normalize-builder-schema';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as webpack from 'webpack';
 import * as ZipPlugin from 'zip-webpack-plugin';
 import { ConcatWebpackPlugin } from '../common/concat';
-import { BasePluginBuilderSchema, ExtensionManifest } from '../common/interfaces';
+import { BasePluginBuilderSchema, ExtensionManifest, PrecalculateRemOptions } from '../common/interfaces';
 import {
     extractExternalRegExps,
     filterRuntimeModules,
@@ -23,6 +24,7 @@ import {
     processManifestJsonFile,
     VCD_CUSTOM_LIB_SEPARATOR
 } from '../common/utilites';
+import * as postcssPreCalculateRem from '../common/postcss-precalculate-rem';
 
 export interface PluginBuilderSchema7X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema {}
 
@@ -45,6 +47,13 @@ export const defaultExternals = {
     ]
 };
 
+export const PRE_CALCULATE_REM_OPTIONS: PrecalculateRemOptions = {
+    rootValue: 16,
+    propList: ['*'],
+    replace: true,
+    minRemValue: 0,
+};
+
 export default createBuilder(commandBuilder as () => Promise<BuilderOutput>);
 
 async function commandBuilder(
@@ -60,13 +69,17 @@ async function commandBuilder(
     const pluginLibsBundles = new Map<string, string>();
 
     // Get the configuration
-    const config = configs.config[0];
+    const config = configs.config[0] || configs.config as webpack.Configuration;
 
     // Make sure we are producing a single bundle
-    delete config.entry.polyfills;
+    delete config.entry['polyfills'];
     delete config.optimization.runtimeChunk;
     delete config.optimization.splitChunks;
-    delete config.entry.styles;
+    
+    if (!options.precalculateRem) {
+        delete config.entry['styles'];
+    }
+
     delete config.entry['polyfills-es5'];
 
     // List the external libraries which will be provided by vcd
@@ -78,7 +91,7 @@ async function commandBuilder(
 
     // preserve path to entry point
     // so that we can clear use it within `run` method to clear that file
-    const entryPointPath = config.entry.main[0];
+    const entryPointPath = config.entry['main'][0];
     const entryPointOriginalContent = fs.readFileSync(entryPointPath, 'utf-8');
 
     // Patch the main.ts file to point to the plugin which will be compiled
@@ -87,8 +100,8 @@ async function commandBuilder(
 
     if (options.enableRuntimeDependecyManagement) {
             // Create unique jsonpFunction name
-            const copyPlugin = config.plugins.find((x) => x && x.patterns);
-            const manifestJsonPath = path.join(copyPlugin.patterns[0].context, 'manifest.json');
+            const copyPlugin = config.plugins.find((x) => x && x['patterns']);
+            const manifestJsonPath = path.join(copyPlugin['patterns'][0].context, 'manifest.json');
             const manifest: ExtensionManifest = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'));
             config.output.jsonpFunction = `vcdJsonp#${moduleName}#${manifest.urn}`;
 
@@ -104,7 +117,8 @@ async function commandBuilder(
             };
 
             // Transform manifest json file.
-            copyPlugin.patterns[0].transform = processManifestJsonFile(
+            // TODO: Manifest json file has to be patched when a runtime dependecy is found
+            copyPlugin['patterns'][0].transform = processManifestJsonFile(
                 options.librariesConfig || {},
                 pluginLibsBundles,
                 config.output.jsonpFunction
@@ -120,7 +134,7 @@ async function commandBuilder(
     }
 
     // Define amd lib
-    config.output.filename = 'bundle.js';
+    config.output.filename = '[name].js';
     config.output.library = moduleName;
     config.output.libraryTarget = 'amd';
     // workaround to support bundle on nodejs
@@ -130,30 +144,28 @@ async function commandBuilder(
       config.plugins = [];
     }
 
+    if (options.precalculateRem) {
+        precalculateRem(config, options.precalculateRemOptions);
+    }
+
     // Get the angular compiler
     const ngCompilerPluginInstance = config.plugins.find(
       x => x.constructor && x.constructor.name === 'AngularCompilerPlugin'
     );
     if (ngCompilerPluginInstance) {
-        ngCompilerPluginInstance._compilerOptions.enableIvy = false;
-        ngCompilerPluginInstance._entryModule = `${modulePath}#${moduleName}`;
-    }
-
-    if (options.enableRuntimeDependecyManagement) {
-            config.plugins.push(
-                new ConcatWebpackPlugin({
-                    concat: [
-                        {
-                            inputs: [
-                                'bundle.js',
-                                'vendors~main.bundle.js'
-                            ],
-                            output: 'bundle.js'
-                        }
-                    ]
-                })
-            );
+        if (options.forceDisableIvy) {
+            ngCompilerPluginInstance['_compilerOptions'].enableIvy = false;
         }
+        ngCompilerPluginInstance['_entryModule'] = `${modulePath}#${moduleName}`;
+    }
+    
+    if (options.concatGeneratedFiles) {
+        config.plugins.push(
+            new ConcatWebpackPlugin({
+                concat: options.concatGeneratedFiles
+            })
+        );
+    }
 
     // Zip the result
     config.plugins.push(
@@ -162,13 +174,13 @@ async function commandBuilder(
             exclude: [
                 /\.html$/,
                 ...Object.keys(options.librariesConfig)
-                .filter((key) => {
-                    return options.librariesConfig[key].scope === 'external';
-                })
-                .map((key) => {
-                    const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.bundle.js`;
-                    return libBundleName;
-                })
+                    .filter((key) => {
+                        return options.librariesConfig[key].scope === 'external';
+                    })
+                    .map((key) => {
+                        const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.js`;
+                        return libBundleName;
+                    })
             ]
         }),
     );
@@ -196,4 +208,35 @@ async function commandBuilder(
 
 function patchEntryPoint(entryPointPath: string, contents: string) {
   fs.writeFileSync(entryPointPath, contents);
+}
+
+function precalculateRem(config: webpack.Configuration, precalculateRemOptions: PrecalculateRemOptions) {
+    if (!precalculateRemOptions) {
+        precalculateRemOptions = {};
+    }
+    
+    const precalculateRem = postcssPreCalculateRem.postCssPlugin({
+        ...PRE_CALCULATE_REM_OPTIONS,
+        ...precalculateRemOptions
+    });
+
+    const cssPostCssConfigs = config.module.rules.filter((rule) => {
+        return rule.test.toString() === "/\\.css$/" || rule.test.toString() === "/\\.scss$|\\.sass$/";
+    });
+
+    for (let i = 0; i < cssPostCssConfigs.length; i++) {
+        const cssPostCssConfig = cssPostCssConfigs[i];
+
+        const cssPostCssLoader: webpack.RuleSetUse = (cssPostCssConfig.use as webpack.RuleSetUse[]).find((useRule: {loader: string}) => {
+            if (!(useRule).loader) {
+                return false;
+            }
+            return useRule.loader.includes("postcss-loader");
+        });
+        const postcssPluginCreator = (cssPostCssLoader as {options: any}).options.plugins;
+        const postCssPlugins = (cssPostCssLoader as {options: any}).options.plugins = [];
+    
+        postCssPlugins.push(postcssPluginCreator);
+        postCssPlugins.push(precalculateRem);
+    }
 }
