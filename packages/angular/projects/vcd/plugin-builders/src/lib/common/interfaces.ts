@@ -1,3 +1,5 @@
+import { ConcatWebpackPluginOptionsEntries } from "./concat";
+
 export interface LibrariesConfig {
     [libName: string]: {
         version: string;
@@ -183,4 +185,53 @@ export interface BasePluginBuilderSchema {
      * List of libraries determining thier version, scope and file name (location).
      */
     librariesConfig: LibrariesConfig;
+    /**
+     * Force disable angular's ivy compiler if enabled
+     */
+    forceDisableIvy: boolean;
+    /**
+     * Enable/Disable Rem precalculation
+     */
+    precalculateRem: boolean;
+    /**
+     * Traverses all css and scss files and replaces all rem usages with calc(var(--plugin-name-css-scale-constant) * originalRemSize)
+     */
+    precalculateRemOptions: PrecalculateRemOptions;
+    /**
+     * List of files to be concatenated in a given file
+     */
+    concatGeneratedFiles: ConcatWebpackPluginOptionsEntries[]
+}
+export interface PrecalculateRemOptions {
+    /**
+     * How much px 1rem equals
+     * 
+     * Defaults to: 16
+     */
+    rootValue?: number,
+    /**
+     * List of CSS properties which rems will be precalculated
+     * 
+     * Example:
+     * propList: ['font-size']
+     * 
+     * will precalculate the rem only of the font-size css.
+     * 
+     * Defaults to: ["*"]
+     */
+    propList?: string[],
+    /**
+     * Replace given css property which subject to rem precalculations,
+     * if set to true replaces all properties from the `propList` with
+     * their alternative.
+     * 
+     * Defaults to: true
+     */
+    replace?: boolean,
+    /**
+     * Skip rem precalculation if the value is less or equal to this treshold.
+     * 
+     * Defaults to: 0
+     */
+    minRemValue?: number,
 }

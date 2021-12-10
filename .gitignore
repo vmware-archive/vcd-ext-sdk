@@ -1,6 +1,5 @@
 target/
 dist/
-lib/
 node/
 node_modules/
 ui_ext_api.ini

@@ -1,10 +1,13 @@
+import * as webpack from 'webpack';
 import { RawSource } from 'webpack-sources';
 
 export interface ConcatWebpackPluginOptions {
-    concat: {
-        inputs: string[],
-        output: string,
-    }[];
+    concat?: ConcatWebpackPluginOptionsEntries[];
+}
+
+export interface ConcatWebpackPluginOptionsEntries {
+    inputs: string[];
+    output: string;
 }
 
 /**
@@ -22,44 +25,49 @@ export class ConcatWebpackPlugin {
      * @param compiler Webpack compiler
      * see https://webpack.js.org/api/compiler-hooks/ for more detials.
      */
-    apply(compiler) {
+    apply(compiler: webpack.Compiler) {
         // Hook for on emit
         compiler.hooks.emit.tapAsync('vCloud Director Concat Plugin', (
             compilation,
             callback
         ) => {
-            if (compilation.compiler.isChild()) {
+            const logger = (compiler as any).getInfrastructureLogger(ConcatWebpackPlugin.name);
+            logger.log(`${ConcatWebpackPlugin.name} started.`);
+
+            try {
+                this.concatFiles(compilation);
                 callback();
-                return;
-            }
+            } catch (e) {
+                logger.error(`${ConcatWebpackPlugin.name} failed.`);
+                callback(e);
+            } 
+        });
+    }
 
-            // Cocnat files
-            this.options.concat
-                .map((obj) => {
-                    // Take sources which has to concatenated
-                    const sourcesToConcat = obj.inputs.map((input) => {
-                        const source = compilation.assets[input].source();
-                        delete compilation.assets[input];
-                        return Buffer.isBuffer(source) ? source : new Buffer(source);
-                    });
+    private concatFiles(compilation: webpack.compilation.Compilation) {
+        // Cocnat files
+        this.options.concat
+        .map((obj) => {
+            // Take sources which has to concatenated
+            const sourcesToConcat = obj.inputs.map((input) => {
+                const source = compilation.assets[input].source();
+                return Buffer.isBuffer(source) ? source : new Buffer(source);
+            });
 
-                    return {
-                        output: obj.output,
-                        sourcesToConcat
-                    };
-                })
-                .map((asset) => {
-                    return {
-                        output: asset.output,
-                        source: Buffer.concat(asset.sourcesToConcat),
-                    };
-                })
-                .forEach((asset) => {
-                    // Output the result
-                    compilation.assets[asset.output] = new RawSource(asset.source as any);
-                });
-
-            callback();
+            return {
+                output: obj.output,
+                sourcesToConcat
+            };
+        })
+        .map((asset) => {
+            return {
+                output: asset.output,
+                source: Buffer.concat(asset.sourcesToConcat),
+            };
+        })
+        .forEach((asset) => {
+            // Output the result
+            compilation.assets[asset.output] = new RawSource(asset.source as any);
         });
     }
 }
