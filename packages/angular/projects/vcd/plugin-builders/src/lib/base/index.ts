@@ -21,12 +21,11 @@ import {
     extractExternalRegExps,
     filterRuntimeModules,
     nameVendorFile,
-    processManifestJsonFile,
     VCD_CUSTOM_LIB_SEPARATOR
 } from '../common/utilites';
 import * as postcssPreCalculateRem from '../common/postcss-precalculate-rem';
 
-export interface PluginBuilderSchema7X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema {}
+export interface PluginBuilderSchema7X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema { }
 
 export const defaultExternals = {
     common: [
@@ -57,12 +56,12 @@ export const PRE_CALCULATE_REM_OPTIONS: PrecalculateRemOptions = {
 export default createBuilder(commandBuilder as () => Promise<BuilderOutput>);
 
 async function commandBuilder(
-  options: PluginBuilderSchema7X,
-  context: BuilderContext,
-  ): Promise<BuilderOutput> {
+    options: PluginBuilderSchema7X,
+    context: BuilderContext,
+): Promise<BuilderOutput> {
     if (!options.modulePath) {
-            throw Error('Please define modulePath!');
-        }
+        throw Error('Please define modulePath!');
+    }
 
     // Build webpack configurtion
     const configs = await buildBrowserWebpackConfigFromContext(options, context);
@@ -75,7 +74,7 @@ async function commandBuilder(
     delete config.entry['polyfills'];
     delete config.optimization.runtimeChunk;
     delete config.optimization.splitChunks;
-    
+
     if (!options.precalculateRem) {
         delete config.entry['styles'];
     }
@@ -94,43 +93,38 @@ async function commandBuilder(
     const entryPointPath = config.entry['main'][0];
     const entryPointOriginalContent = fs.readFileSync(entryPointPath, 'utf-8');
 
+    // Load manifest file
+    const copyPlugin = config.plugins.find((x) => x && x['patterns']);
+    const manifestJsonPath = path.join(copyPlugin['patterns'][0].context, 'manifest.json');
+    const manifest: ExtensionManifest = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'));
+    const manifestOriginalContent: string = fs.readFileSync(manifestJsonPath, 'utf-8');
+
     // Patch the main.ts file to point to the plugin which will be compiled
     // tslint:disable-next-line:prefer-const
     let [modulePath, moduleName] = options.modulePath.split('#');
 
     if (options.enableRuntimeDependecyManagement) {
-            // Create unique jsonpFunction name
-            const copyPlugin = config.plugins.find((x) => x && x['patterns']);
-            const manifestJsonPath = path.join(copyPlugin['patterns'][0].context, 'manifest.json');
-            const manifest: ExtensionManifest = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'));
-            config.output.jsonpFunction = `vcdJsonp#${moduleName}#${manifest.urn}`;
+        // Create unique jsonpFunction name
+        config.output.jsonpFunction = `vcdJsonp#${moduleName}#${manifest.urn}`;
 
-            // Configure the vendor chunks
-            config.optimization.splitChunks = {
-                chunks: 'all',
-                cacheGroups: {
-                    vendor: {
-                        test: filterRuntimeModules(options),
-                        name: nameVendorFile(config, options, pluginLibsBundles),
-                    },
+        // Configure the vendor chunks
+        config.optimization.splitChunks = {
+            chunks: 'all',
+            cacheGroups: {
+                vendor: {
+                    test: filterRuntimeModules(options),
+                    name: nameVendorFile(config, options, pluginLibsBundles, manifest, manifestJsonPath),
                 },
-            };
-
-            // Transform manifest json file.
-            // TODO: Manifest json file has to be patched when a runtime dependecy is found
-            copyPlugin['patterns'][0].transform = processManifestJsonFile(
-                options.librariesConfig || {},
-                pluginLibsBundles,
-                config.output.jsonpFunction
-            );
-        }
+            },
+        };
+    }
 
     // Export the plugin module
     modulePath = modulePath.substr(0, modulePath.indexOf('.ts'));
     const entryPointContents = `export * from '${modulePath}';`;
 
     if (!options.preserveMainFile) {
-        patchEntryPoint(entryPointPath, entryPointContents);
+        patchFile(entryPointPath, entryPointContents);
     }
 
     // Define amd lib
@@ -141,7 +135,7 @@ async function commandBuilder(
     config.output.globalObject = `(typeof self !== 'undefined' ? self : this)`;
 
     if (!config.plugins || !config.plugins.length) {
-      config.plugins = [];
+        config.plugins = [];
     }
 
     if (options.precalculateRem) {
@@ -150,7 +144,7 @@ async function commandBuilder(
 
     // Get the angular compiler
     const ngCompilerPluginInstance = config.plugins.find(
-      x => x.constructor && x.constructor.name === 'AngularCompilerPlugin'
+        x => x.constructor && x.constructor.name === 'AngularCompilerPlugin'
     );
     if (ngCompilerPluginInstance) {
         if (options.forceDisableIvy) {
@@ -158,7 +152,7 @@ async function commandBuilder(
         }
         ngCompilerPluginInstance['_entryModule'] = `${modulePath}#${moduleName}`;
     }
-    
+
     if (options.concatGeneratedFiles) {
         config.plugins.push(
             new ConcatWebpackPlugin({
@@ -195,7 +189,8 @@ async function commandBuilder(
     })
     .toPromise()
     .then((result) => {
-        patchEntryPoint(entryPointPath, entryPointOriginalContent);
+        patchFile(entryPointPath, entryPointOriginalContent);
+        patchFile(manifestJsonPath, manifestOriginalContent);
 
         if (!result) {
             return Promise.reject({ success: false, info: `Something went wrong with ${__dirname}` });
@@ -204,22 +199,23 @@ async function commandBuilder(
         return Promise.resolve(result);
     })
     .catch((e) => {
-      console.error(e);
-      patchEntryPoint(entryPointPath, entryPointOriginalContent);
-      context.logger.error(e);
-      return Promise.reject({ success: false });
+        console.error(e);
+        patchFile(entryPointPath, entryPointOriginalContent);
+        patchFile(manifestJsonPath, manifestOriginalContent);
+        context.logger.error(e);
+        return Promise.reject({ success: false });
     });
 }
 
-function patchEntryPoint(entryPointPath: string, contents: string) {
-  fs.writeFileSync(entryPointPath, contents);
+function patchFile(entryPointPath: string, contents: string) {
+    fs.writeFileSync(entryPointPath, contents);
 }
 
 function precalculateRem(config: webpack.Configuration, precalculateRemOptions: PrecalculateRemOptions) {
     if (!precalculateRemOptions) {
         precalculateRemOptions = {};
     }
-    
+
     const precalculateRem = postcssPreCalculateRem.postCssPlugin({
         ...PRE_CALCULATE_REM_OPTIONS,
         ...precalculateRemOptions
@@ -232,15 +228,15 @@ function precalculateRem(config: webpack.Configuration, precalculateRemOptions: 
     for (let i = 0; i < cssPostCssConfigs.length; i++) {
         const cssPostCssConfig = cssPostCssConfigs[i];
 
-        const cssPostCssLoader: webpack.RuleSetUse = (cssPostCssConfig.use as webpack.RuleSetUse[]).find((useRule: {loader: string}) => {
+        const cssPostCssLoader: webpack.RuleSetUse = (cssPostCssConfig.use as webpack.RuleSetUse[]).find((useRule: { loader: string }) => {
             if (!(useRule).loader) {
                 return false;
             }
             return useRule.loader.includes("postcss-loader");
         });
-        const postcssPluginCreator = (cssPostCssLoader as {options: any}).options.plugins;
-        const postCssPlugins = (cssPostCssLoader as {options: any}).options.plugins = [];
-    
+        const postcssPluginCreator = (cssPostCssLoader as { options: any }).options.plugins;
+        const postCssPlugins = (cssPostCssLoader as { options: any }).options.plugins = [];
+
         postCssPlugins.push(postcssPluginCreator);
         postCssPlugins.push(precalculateRem);
     }
