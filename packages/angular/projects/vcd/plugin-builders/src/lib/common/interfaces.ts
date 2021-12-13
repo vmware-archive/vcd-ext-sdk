@@ -116,6 +116,10 @@ export interface ExtensionManifest {
         };
         jsonpFunction?: string;
     };
+    /**
+     * Containes the base px value of a plugin, used by the Core UI to calculate the rem scaler.
+     */
+    pluginBasePx?: number;
 }
 
 export type ExtensionLibScope = 'external' | 'bundled' | 'isolated';
@@ -234,4 +238,8 @@ export interface PrecalculateRemOptions {
      * Defaults to: 0
      */
     minRemValue?: number,
+    /**
+     * The name of the css var that will be multiplier of the original rem size.
+     */
+    remScalerName?: string;
 }
