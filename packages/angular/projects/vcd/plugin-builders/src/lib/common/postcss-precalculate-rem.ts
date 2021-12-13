@@ -31,6 +31,14 @@ export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', function(opt
     const satisfyPropList = createPropListMatcher(opts.propList);
 
     return function (css) {
+        if (options.replaceRootWithHost) {
+            css.walkRules(function (rule, i) {
+                const rootSelectorIndex = rule.selector.indexOf(":root");
+                if (rootSelectorIndex !== -1) {
+                    rule.selector = rule.selector.replace(":root", ":host");
+                }
+            });
+        }
 
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations

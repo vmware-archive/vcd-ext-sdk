@@ -51,6 +51,7 @@ export const PRE_CALCULATE_REM_OPTIONS: PrecalculateRemOptions = {
     propList: ['*'],
     replace: true,
     minRemValue: 0,
+    replaceRootWithHost: true
 };
 
 export default createBuilder(commandBuilder as () => Promise<BuilderOutput>);

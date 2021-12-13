@@ -242,4 +242,10 @@ export interface PrecalculateRemOptions {
      * The name of the css var that will be multiplier of the original rem size.
      */
     remScalerName?: string;
+    /**
+     * Replace all :root usages with :host usages, this is needed to isolate the css vars
+     * for example, so once a css var is defined by the plugin it won't be accessible from outside,
+     * or vice versa.
+     */
+    replaceRootWithHost?: boolean;
 }
