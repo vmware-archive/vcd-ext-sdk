@@ -139,7 +139,12 @@ async function commandBuilder(
     }
 
     if (options.precalculateRem) {
-        precalculateRem(config, options.precalculateRemOptions);
+        // Generate precalcuate rem post css plugin's options
+        const precalculateRemOptions = generatePrecalculateRemOptions(options.precalculateRemOptions, manifest);
+        // Save base px size in the manifest
+        manifest.pluginBasePx = precalculateRemOptions.rootValue;
+        // Register the post css plugin
+        registerPrecalculateRem(config, precalculateRemOptions);
     }
 
     // Get the angular compiler
@@ -211,15 +216,10 @@ function patchFile(entryPointPath: string, contents: string) {
     fs.writeFileSync(entryPointPath, contents);
 }
 
-function precalculateRem(config: webpack.Configuration, precalculateRemOptions: PrecalculateRemOptions) {
-    if (!precalculateRemOptions) {
-        precalculateRemOptions = {};
-    }
-
-    const precalculateRem = postcssPreCalculateRem.postCssPlugin({
-        ...PRE_CALCULATE_REM_OPTIONS,
-        ...precalculateRemOptions
-    });
+function registerPrecalculateRem(config: webpack.Configuration, precalculateRemOptions: PrecalculateRemOptions) {
+    const precalculateRem = postcssPreCalculateRem.postCssPlugin(
+        precalculateRemOptions,
+    );
 
     const cssPostCssConfigs = config.module.rules.filter((rule) => {
         return rule.test.toString() === "/\\.css$/" || rule.test.toString() === "/\\.scss$|\\.sass$/";
@@ -239,5 +239,17 @@ function precalculateRem(config: webpack.Configuration, precalculateRemOptions: 
 
         postCssPlugins.push(postcssPluginCreator);
         postCssPlugins.push(precalculateRem);
+    }
+}
+
+function generatePrecalculateRemOptions(precalculateRemOptions: PrecalculateRemOptions, manifest: ExtensionManifest) {
+    if (!precalculateRemOptions) {
+        precalculateRemOptions = {};
+    }
+
+    return {
+        ...PRE_CALCULATE_REM_OPTIONS,
+        ...precalculateRemOptions,
+        remScalerName: manifest.urn.replace(":", "-")
     }
 }

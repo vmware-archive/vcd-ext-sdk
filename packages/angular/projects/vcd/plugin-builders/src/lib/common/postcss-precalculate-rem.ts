@@ -1,7 +1,13 @@
 import * as postcss from 'postcss';
 import { PrecalculateRemOptions } from "./interfaces";
 
-const defaults: PrecalculateRemOptions & {unitPrecision: number, selectorBlackList: string[], mediaQuery: boolean} = {
+interface PrecalculateRemOptionsInternal extends PrecalculateRemOptions {
+    unitPrecision: number;
+    selectorBlackList: string[];
+    mediaQuery: boolean;
+}
+
+const defaults: PrecalculateRemOptionsInternal = {
     rootValue: 16,
     unitPrecision: 5,
     selectorBlackList: [],
@@ -11,12 +17,16 @@ const defaults: PrecalculateRemOptions & {unitPrecision: number, selectorBlackLi
     minRemValue: 0
 };
 
-export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', function(options: any) {
-    const opts = {
+export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', function(options: PrecalculateRemOptions) {
+    const opts: PrecalculateRemOptionsInternal = {
         ...defaults,
         ...options,
     };
-    const remReplace = createRemReplace(opts.rootValue, opts.unitPrecision, opts.minRemValue);
+
+    if (!opts.remScalerName) {
+        throw Error(`'remScalerName' name was not defined, please check your plugin urn. Valid urn syntax: 'company:plugin:urn'`)
+    }
+    const remReplace = createRemReplace(opts.rootValue, opts.unitPrecision, opts.minRemValue, opts.remScalerName);
 
     const satisfyPropList = createPropListMatcher(opts.propList);
 
@@ -54,12 +64,12 @@ export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', function(opt
     };
 });
 
-function createRemReplace (rootValue, unitPrecision, minRemValue) {
+function createRemReplace (rootValue, unitPrecision, minRemValue, scalerName: string) {
     return function (m, $1) {
         if (!$1) return m;
         const rems = parseFloat($1);
         if (rems < minRemValue) return m;
-        const result = `calc(var(--vcav-base-size) * ${m})`;
+        const result = `calc(var(--${scalerName}) * ${m})`;
         
         return result;
     };
