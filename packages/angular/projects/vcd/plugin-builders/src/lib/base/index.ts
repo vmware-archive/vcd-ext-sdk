@@ -112,10 +112,30 @@ async function commandBuilder(
         config.optimization.splitChunks = {
             chunks: 'all',
             cacheGroups: {
+                // Generate js file per vender for those whcih will be shared
                 vendor: {
                     test: filterRuntimeModules(options),
                     name: nameVendorFile(config, options, pluginLibsBundles, manifest, manifestJsonPath),
+                    enforce: true,
                 },
+                // All other vendors go in common.js file
+                common: {
+                    test: (mod) => {
+                        if (!mod.context) {
+                            return false;
+                        }
+                        
+                        if (!Object.keys(options.librariesConfig).some((key) => {
+                                return mod.context.includes(key);
+                            })) {
+                            return true;
+                        }
+                        return false;
+                    },
+                    name: "common",
+                    reuseExistingChunk: true,
+                    enforce: true,
+                }
             },
         };
     }
