@@ -1,7 +1,11 @@
+import * as fs from 'fs';
 import * as webpack from 'webpack';
 import { RawSource } from 'webpack-sources';
+import { ExtensionManifest } from "./interfaces";
 
 export interface ConcatWebpackPluginOptions {
+    manifest: ExtensionManifest,
+    manifestJsonPath: string,
     concat?: ConcatWebpackPluginOptionsEntries[];
 }
 
@@ -36,6 +40,7 @@ export class ConcatWebpackPlugin {
 
             try {
                 this.concatFiles(compilation);
+                this.registerStylesAndScriptsInManifest(compilation);
                 callback();
             } catch (e) {
                 logger.error(`${ConcatWebpackPlugin.name} failed.`);
@@ -69,5 +74,25 @@ export class ConcatWebpackPlugin {
             // Output the result
             compilation.assets[asset.output] = new RawSource(asset.source as any);
         });
+    }
+
+    private registerStylesAndScriptsInManifest(compilation: webpack.compilation.Compilation) {
+        if (compilation.assets["common.css"]) {
+            if (!this.options.manifest.extensionPoints[0].styles) {
+                this.options.manifest.extensionPoints[0].styles = [];
+            }
+
+            this.options.manifest.extensionPoints[0].styles.push("common.css");
+        }
+
+        if (compilation.assets["scripts.js"]) {
+            if (!this.options.manifest.extensionPoints[0].scripts) {
+                this.options.manifest.extensionPoints[0].scripts = [];
+            }
+
+            this.options.manifest.extensionPoints[0].scripts.push("scripts.js");
+        }
+
+        fs.writeFileSync(this.options.manifestJsonPath, JSON.stringify(this.options.manifest, null, 4));
     }
 }

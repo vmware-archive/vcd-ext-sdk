@@ -182,7 +182,9 @@ async function commandBuilder(
     if (options.concatGeneratedFiles) {
         config.plugins.push(
             new ConcatWebpackPlugin({
-                concat: options.concatGeneratedFiles
+                concat: options.concatGeneratedFiles,
+                manifest: manifest,
+                manifestJsonPath: manifestJsonPath,
             })
         );
     }

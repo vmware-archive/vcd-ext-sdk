@@ -158,6 +158,12 @@ export interface ExtensionPointManifest {
      * The route on which only top level extrension points will be registerd.
      */
     readonly route?: string;
+
+    /**
+     * Anuglar app custom styles and scripts list, loaded inside the shadow dom by the Core UI
+     */
+    styles?: string[];
+    scripts?: string[];
 }
 
 /**
