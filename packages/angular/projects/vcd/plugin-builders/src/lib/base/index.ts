@@ -189,6 +189,13 @@ async function commandBuilder(
         );
     }
 
+    // Exclude all already concatenated files from plugin zip
+    const excludeConcatenatedFiles: string[] = []
+    options.concatGeneratedFiles.forEach((concatPair) => {
+        concatPair.inputs.forEach((inputFileName: string) => {
+            excludeConcatenatedFiles.push(inputFileName);
+        });
+    })
     // Zip the result
     config.plugins.push(
         new ZipPlugin({
@@ -202,7 +209,8 @@ async function commandBuilder(
                     .map((key) => {
                         const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.js`;
                         return libBundleName;
-                    })
+                    }),
+                ...excludeConcatenatedFiles
             ]
         }),
     );
