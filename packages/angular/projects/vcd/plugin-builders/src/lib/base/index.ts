@@ -71,6 +71,10 @@ async function commandBuilder(
     // Get the configuration
     const config = configs.config[0] || configs.config as webpack.Configuration;
 
+    config.node = {
+        fs: "empty",
+    }
+
     // Make sure we are producing a single bundle
     delete config.entry['polyfills'];
     delete config.optimization.runtimeChunk;
@@ -189,6 +193,16 @@ async function commandBuilder(
         );
     }
 
+    // Exclude all already concatenated files from plugin zip
+    const excludeConcatenatedFiles: string[] = []
+    if (options.concatGeneratedFiles) {
+        options.concatGeneratedFiles.forEach((concatPair) => {
+            concatPair.inputs.forEach((inputFileName: string) => {
+                excludeConcatenatedFiles.push(inputFileName);
+            });
+        })
+    }
+    
     // Zip the result
     config.plugins.push(
         new ZipPlugin({
@@ -202,7 +216,8 @@ async function commandBuilder(
                     .map((key) => {
                         const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.js`;
                         return libBundleName;
-                    })
+                    }),
+                ...excludeConcatenatedFiles
             ]
         }),
     );
