@@ -11,7 +11,7 @@ const defaults: PrecalculateRemOptionsInternal = {
     rootValue: 16,
     unitPrecision: 5,
     selectorBlackList: [],
-    propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    propList: ['*'],
     replace: true,
     mediaQuery: false,
     minRemValue: 0
@@ -73,10 +73,16 @@ export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', function(opt
 });
 
 function createRemReplace (rootValue, unitPrecision, minRemValue, scalerName: string) {
+    /**
+     * Example:
+     * m = '0.1rem';
+     * $1 = '0.1';
+     */
     return function (m, $1) {
-        if (!$1) return m;
-        const rems = parseFloat($1);
-        if (rems < minRemValue) return m;
+        if (!$1) {
+            return m
+        };
+
         const result = `calc(var(--${scalerName}) * ${m})`;
         
         return result;
@@ -156,7 +162,7 @@ function createPropListMatcher(propList) {
 // Not anything inside url()
 // Any digit followed by rem
 // !singlequotes|!doublequotes|!url()|remunit
-const remRegex = /"[^"]+"|'[^']+'|url\([^\)]+\)|(\d*\.?\d+)rem/g;
+const remRegex = /"[^"]+"|'[^']+'|url\([^\)]+\)|(\d*\.?\d+)rem|-(\d*\.?\d+)rem/g;
 
 const filterPropList = {
     exact: function (list) {
