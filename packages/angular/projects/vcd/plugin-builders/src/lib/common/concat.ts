@@ -93,6 +93,9 @@ export class ConcatWebpackPlugin {
             this.options.manifest.extensionPoints[0].scripts.push("scripts.js");
         }
 
-        fs.writeFileSync(this.options.manifestJsonPath, JSON.stringify(this.options.manifest, null, 4));
+        const manifest = JSON.stringify(this.options.manifest, null, 4);
+        fs.writeFileSync(this.options.manifestJsonPath, manifest);
+        // Add to compilation assets so other plugins relying on assets can access the lates version of the manifest
+        compilation["manifest.json"] = new RawSource(Buffer.from(manifest, "utf-8") as any);
     }
 }
