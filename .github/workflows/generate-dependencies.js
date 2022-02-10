@@ -70,8 +70,9 @@ function extract(dependencies, component) {
 function generateResult(name, version, currentDir) {
     const dir = currentDir.substr(currentDir.lastIndexOf(projectName) + projectName.length);
     return {
-        id: 'http://vmware.com/schemas/software_provenance-0.2.0.json',
+        id: 'https://gitlab.eng.vmware.com/provenance/provenance_data/-/blob/master/schema/provenance_data.schema-0.2.5-proposal.b.json',
         root: version,
+        tools: "http://srp.vmware.com/tools/gobuild/src_prov_lib@1.1: null",
         'all-components': {
             name: name,
             version: version,
