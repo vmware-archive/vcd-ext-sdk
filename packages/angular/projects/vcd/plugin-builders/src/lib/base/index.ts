@@ -9,7 +9,8 @@
 // Builder bootstrap dependencies
 import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
-import { buildBrowserWebpackConfigFromContext } from '@angular-devkit/build-angular/src/browser';
+// @ts-ignore
+import * as browser from '@angular-devkit/build-angular/src/builders/browser';
 import { NormalizedBrowserBuilderSchema } from '@angular-devkit/build-angular/src/utils/normalize-builder-schema';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -23,6 +24,7 @@ import {
     nameVendorFile,
     VCD_CUSTOM_LIB_SEPARATOR
 } from '../common/utilites';
+import { RenameCustomElementsWebpackPlugin } from '../common/rename-custom-elements';
 import * as postcssPreCalculateRem from '../common/postcss-precalculate-rem';
 
 export interface PluginBuilderSchema7X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema { }
@@ -65,7 +67,7 @@ async function commandBuilder(
     }
 
     // Build webpack configurtion
-    const configs = await buildBrowserWebpackConfigFromContext(options, context);
+    const configs = await (browser as any).initialize(options, context);
     const pluginLibsBundles = new Map<string, string>();
 
     // Get the configuration
@@ -95,8 +97,7 @@ async function commandBuilder(
     const entryPointOriginalContent = fs.readFileSync(entryPointPath, 'utf-8');
 
     // Load manifest file
-    const copyPlugin = config.plugins.find((x) => x && x['patterns']);
-    const manifestJsonPath = path.join(copyPlugin['patterns'][0].context, 'manifest.json');
+    const manifestJsonPath = path.join(`${config.context}/src/public`, 'manifest.json');
     const manifest: ExtensionManifest = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'));
     const manifestOriginalContent: string = fs.readFileSync(manifestJsonPath, 'utf-8');
 
@@ -106,7 +107,7 @@ async function commandBuilder(
 
     if (options.enableRuntimeDependecyManagement) {
         // Create unique jsonpFunction name
-        config.output.jsonpFunction = `vcdJsonp#${moduleName}#${manifest.urn}`;
+        // config.output.jsonpFunction = `vcdJsonp#${moduleName}#${manifest.urn}`;
 
         // Configure the vendor chunks
         config.optimization.splitChunks = {
@@ -179,6 +180,13 @@ async function commandBuilder(
         ngCompilerPluginInstance['_entryModule'] = `${modulePath}#${moduleName}`;
     }
 
+    config.plugins.push(
+        new RenameCustomElementsWebpackPlugin({
+            prefix: 'vcav',
+            suffix: '000',
+        })
+    );
+
     if (options.concatGeneratedFiles) {
         config.plugins.push(
             new ConcatWebpackPlugin({
@@ -198,21 +206,21 @@ async function commandBuilder(
     })
     // Zip the result
     config.plugins.push(
-        new ZipPlugin({
-            filename: 'plugin.zip',
-            exclude: [
-                /\.html$/,
-                ...Object.keys(options.librariesConfig)
-                    .filter((key) => {
-                        return options.librariesConfig[key].scope === 'external';
-                    })
-                    .map((key) => {
-                        const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.js`;
-                        return libBundleName;
-                    }),
-                ...excludeConcatenatedFiles
-            ]
-        }),
+        // new ZipPlugin({
+        //     filename: 'plugin.zip',
+        //     exclude: [
+        //         /\.html$/,
+        //         ...Object.keys(options.librariesConfig)
+        //             .filter((key) => {
+        //                 return options.librariesConfig[key].scope === 'external';
+        //             })
+        //             .map((key) => {
+        //                 const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.js`;
+        //                 return libBundleName;
+        //             }),
+        //         ...excludeConcatenatedFiles
+        //     ]
+        // }),
     );
 
     options.fileReplacements = options.fileReplacements && options.fileReplacements.length ? options.fileReplacements : [];

@@ -30,22 +30,27 @@ export class ConcatWebpackPlugin {
      * see https://webpack.js.org/api/compiler-hooks/ for more detials.
      */
     apply(compiler: webpack.Compiler) {
-        // Hook for on emit
-        compiler.hooks.emit.tapAsync('vCloud Director Concat Plugin', (
-            compilation,
-            callback
-        ) => {
+        (compiler.hooks.thisCompilation as any).tap('vCloud Director Concat Plugin', (compilation, callback) => {
             const logger = (compiler as any).getInfrastructureLogger(ConcatWebpackPlugin.name);
             logger.log(`${ConcatWebpackPlugin.name} started.`);
 
-            try {
-                this.concatFiles(compilation);
-                this.registerStylesAndScriptsInManifest(compilation);
-                callback();
-            } catch (e) {
-                logger.error(`${ConcatWebpackPlugin.name} failed.`);
-                callback(e);
-            } 
+            compilation.hooks.processAssets.tapPromise(
+				{
+					name: ConcatWebpackPlugin.name,
+					stage: (webpack as any).Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_TRANSFER,
+				},
+				() => new Promise((resolve, reject) => {
+                    try {
+                        this.concatFiles(compilation);
+                        this.registerStylesAndScriptsInManifest(compilation);
+                        resolve(null);
+                    }
+                    catch (e) {
+                        logger.error(`${ConcatWebpackPlugin.name} failed.`);
+                        reject(e);
+                    }
+                })
+			);
         });
     }
 
@@ -72,7 +77,8 @@ export class ConcatWebpackPlugin {
         })
         .forEach((asset) => {
             // Output the result
-            compilation.assets[asset.output] = new RawSource(asset.source as any);
+            // compilation.assets[asset.output] = new RawSource(asset.source as any);
+            (compilation as any).emitAsset(asset.output, new RawSource(asset.source as any));
         });
     }
 

@@ -1,8 +1,9 @@
+import * as webpack from 'webpack';
 export interface RenameCustomElementsWebpackPluginOptions {
-    prefix: string;
-    suffix: string;
-    index: string;
-    tagFilter: RegExp;
+    prefix?: string;
+    suffix?: string;
+    index?: string;
+    tagFilter?: RegExp;
 }
 
 /**
@@ -41,15 +42,28 @@ export class RenameCustomElementsWebpackPlugin {
     }
 
     apply(compiler) {
-        compiler.hooks.emit.tapAsync(
-            'RenameCustomElementsWebpackPlugin',
-            (compilation, callback) => {
-                const customElements = this.getCustomElementTags(compilation);
-                this.renameCustomElements(compilation, customElements);
+        (compiler.hooks.thisCompilation as any).tap('vCloud Director Concat Plugin', (compilation, callback) => {
+            const logger = (compiler as any).getInfrastructureLogger(RenameCustomElementsWebpackPlugin.name);
+            logger.log(`${RenameCustomElementsWebpackPlugin.name} started.`);
 
-                callback();
-            }
-        );
+            compilation.hooks.processAssets.tapPromise(
+				{
+					name: RenameCustomElementsWebpackPlugin.name,
+					stage: (webpack as any).Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_TRANSFER,
+				},
+				() => new Promise((resolve, reject) => {
+                    try {
+                        const customElements = this.getCustomElementTags(compilation);
+                        this.renameCustomElements(compilation, customElements);
+                        resolve(null);
+                    }
+                    catch (e) {
+                        logger.error(`${RenameCustomElementsWebpackPlugin.name} failed.`);
+                        reject(e);
+                    }
+                })
+			);
+        });
     }
 
     getCustomElementTags(compilation) {
@@ -69,9 +83,12 @@ export class RenameCustomElementsWebpackPlugin {
 
     findCustomElementInSource(source) {
         const cePattern = /customElements\.define\(['"]([a-z0-9-]+)['"]/g;
+        const myPattern = /registerElementSafely\(['"]([a-z0-9-]+)['"]/g;
+
         const matchedCustomElements = source.match(cePattern);
+        const matchedCustomElements2 = source.match(myPattern);
         const customElementTags = [];
-        if (matchedCustomElements) {
+        if (matchedCustomElements || matchedCustomElements2) {
             matchedCustomElements.forEach((item) => {
                 customElementTags.push(item.replace(cePattern, '$1'));
             });
@@ -130,5 +147,3 @@ export class RenameCustomElementsWebpackPlugin {
         return result;
     }
 }
-
-module.exports = RenameCustomElementsWebpackPlugin;
