@@ -23,6 +23,10 @@ jobs:
           path: |
             **/node_modules
           key: ${{github.sha}}-dependencies
+      - name: Setup node 12
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.16.3
       - run: |
           npm ci
           npm run bootstrap
