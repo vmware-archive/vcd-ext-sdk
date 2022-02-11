@@ -182,9 +182,14 @@ async function commandBuilder(
       webpackConfiguration: () => (config)
     })
     .toPromise()
-    .then(() => {
-      patchEntryPoint(entryPointPath, entryPointOriginalContent);
-      return Promise.resolve({ success: true });
+    .then((result) => {
+        patchEntryPoint(entryPointPath, entryPointOriginalContent);
+
+        if (!result) {
+            return Promise.reject({ success: false, info: `Something went wrong with ${__dirname}` });
+        }
+
+        return Promise.resolve(result);
     })
     .catch((e) => {
       console.error(e);
