@@ -1,9 +1,9 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.0.json",
-  "root": "0.12.1-alpha.4",
+  "root": "0.12.1-alpha.5",
   "all-components": {
     "name": "@vcd/plugin-builders",
-    "version": "0.12.1-alpha.4",
+    "version": "0.12.1-alpha.5",
     "source_repositories": [
       {
         "content": "source",
