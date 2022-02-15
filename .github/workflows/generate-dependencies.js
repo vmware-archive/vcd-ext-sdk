@@ -70,8 +70,9 @@ function extract(dependencies, component) {
 function generateResult(name, version, currentDir) {
     const dir = currentDir.substr(currentDir.lastIndexOf(projectName) + projectName.length);
     return {
-        id: 'http://vmware.com/schemas/software_provenance-0.2.0.json',
+        id: 'http://vmware.com/schemas/software_provenance-0.2.5.json',
         root: version,
+        tools: "https://github.com/: null",
         'all-components': {
             name: name,
             version: version,
