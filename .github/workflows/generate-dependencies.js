@@ -70,9 +70,10 @@ function extract(dependencies, component) {
 function generateResult(name, version, currentDir) {
     const dir = currentDir.substr(currentDir.lastIndexOf(projectName) + projectName.length);
     return {
-        id: 'http://vmware.com/schemas/software_provenance-0.2.0.json',
+        id: 'http://vmware.com/schemas/software_provenance-0.2.5.json',
         root: version,
-        'all-components': {
+        tools: {"https://github.com/": null},
+        'all_components': {
             name: name,
             version: version,
             'source_repositories': [
@@ -98,9 +99,9 @@ function writeFile(dir, result) {
     if (fs.existsSync(path)) {
         const existingFile = readAndParseFile(path);
         // if versions are the same, no need to generate the file
-        if (existingFile.root === result.root) {
-            return;
-        }
+        // if (existingFile.root === result.root) {
+        //     return;
+        // }
 
         fs.unlinkSync(path);
     }
@@ -119,7 +120,7 @@ function writeFile(dir, result) {
     for (const [key, value] of Object.entries(components)) {
         const dir = value.directory;
         const provenanceFile = generateResult(key, value.version, dir);
-        const artifactRepos = provenanceFile['all-components']['artifact_repositories'];
+        const artifactRepos = provenanceFile['all_components']['artifact_repositories'];
         value.dependencies.forEach(dependency => {
             artifactRepos.push({
                 content: 'binary',
