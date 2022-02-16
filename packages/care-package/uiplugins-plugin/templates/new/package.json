@@ -15,7 +15,7 @@
   "devDependencies": {
     "@angular/cli": "9.1.12",
     "@vcd/ext-cli": "0.0.13-beta.0",
-    "@vcd/plugin-builders": "0.12.1-alpha.1",
+    "@vcd/plugin-builders": "0.12.1-alpha.5",
     "rxjs": "6.2.0",
     "rxjs-compat": "6.2.0"
   }
