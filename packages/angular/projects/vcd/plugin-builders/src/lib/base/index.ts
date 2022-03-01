@@ -99,8 +99,7 @@ async function commandBuilder(
     const entryPointOriginalContent = fs.readFileSync(entryPointPath, 'utf-8');
 
     // Load manifest file
-    const copyPlugin = config.plugins.find((x) => x && x['patterns']);
-    const manifestJsonPath = path.join(copyPlugin['patterns'][0].context, 'manifest.json');
+    const manifestJsonPath = path.join(`${config.context}/src/public`, 'manifest.json');
     const manifest: ExtensionManifest = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'));
     const manifestOriginalContent: string = fs.readFileSync(manifestJsonPath, 'utf-8');
 
