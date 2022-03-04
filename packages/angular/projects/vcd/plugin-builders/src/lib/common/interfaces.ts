@@ -210,7 +210,13 @@ export interface BasePluginBuilderSchema {
     /**
      * List of files to be concatenated in a given file
      */
-    concatGeneratedFiles: ConcatWebpackPluginOptionsEntries[]
+    concatGeneratedFiles: ConcatWebpackPluginOptionsEntries[];
+    /**
+     * List of global variables to be replaced.
+     */
+    replaceGlobalVarUsage: {
+        [key: string]: string;
+    };
 }
 export interface PrecalculateRemOptions {
     /**

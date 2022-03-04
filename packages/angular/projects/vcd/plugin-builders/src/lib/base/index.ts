@@ -24,6 +24,7 @@ import {
     VCD_CUSTOM_LIB_SEPARATOR
 } from '../common/utilites';
 import * as postcssPreCalculateRem from '../common/postcss-precalculate-rem';
+import { DefinePlugin } from "webpack";
 
 export interface PluginBuilderSchema7X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema { }
 
@@ -190,6 +191,12 @@ async function commandBuilder(
                 manifestJsonPath: manifestJsonPath,
             })
         );
+    }
+
+    if (options.replaceGlobalVarUsage) {
+        config.plugins.push(
+            new DefinePlugin(options.replaceGlobalVarUsage)
+        )
     }
 
     // Exclude all already concatenated files from plugin zip
