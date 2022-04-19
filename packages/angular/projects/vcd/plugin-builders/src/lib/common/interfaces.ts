@@ -1,4 +1,4 @@
-import { ConcatWebpackPluginOptionsEntries } from "./concat";
+import { ConcatWebpackPluginOptionsEntries } from './concat';
 
 export interface LibrariesConfig {
     [libName: string]: {
@@ -221,35 +221,35 @@ export interface BasePluginBuilderSchema {
 export interface PrecalculateRemOptions {
     /**
      * How much px 1rem equals
-     * 
+     *
      * Defaults to: 16
      */
-    rootValue?: number,
+    rootValue?: number;
     /**
      * List of CSS properties which rems will be precalculated
-     * 
+     *
      * Example:
      * propList: ['font-size']
-     * 
+     *
      * will precalculate the rem only of the font-size css.
-     * 
-     * Defaults to: ["*"]
+     *
+     * Defaults to: ['*']
      */
-    propList?: string[],
+    propList?: string[];
     /**
      * Replace given css property which subject to rem precalculations,
      * if set to true replaces all properties from the `propList` with
      * their alternative.
-     * 
+     *
      * Defaults to: true
      */
-    replace?: boolean,
+    replace?: boolean;
     /**
      * Skip rem precalculation if the value is less or equal to this treshold.
-     * 
+     *
      * Defaults to: 0
      */
-    minRemValue?: number,
+    minRemValue?: number;
     /**
      * The name of the css var that will be multiplier of the original rem size.
      */

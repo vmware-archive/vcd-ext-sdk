@@ -1,5 +1,5 @@
 import * as postcss from 'postcss';
-import { PrecalculateRemOptions } from "./interfaces";
+import { PrecalculateRemOptions } from './interfaces';
 
 interface PrecalculateRemOptionsInternal extends PrecalculateRemOptions {
     unitPrecision: number;
@@ -17,54 +17,64 @@ const defaults: PrecalculateRemOptionsInternal = {
     minRemValue: 0
 };
 
-export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', function(options: PrecalculateRemOptions) {
+export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', (options: PrecalculateRemOptions) => {
     const opts: PrecalculateRemOptionsInternal = {
         ...defaults,
         ...options,
     };
 
     if (!opts.remScalerName) {
-        throw Error(`'remScalerName' name was not defined, please check your plugin urn. Valid urn syntax: 'company:plugin:urn'`)
+        throw Error(`'remScalerName' name was not defined, please check your plugin urn. Valid urn syntax: 'company:plugin:urn'`);
     }
     const remReplace = createRemReplace(opts.rootValue, opts.unitPrecision, opts.minRemValue, opts.remScalerName);
 
     const satisfyPropList = createPropListMatcher(opts.propList);
 
-    return function (css) {
+    return (css) => {
         if (options.replaceRootWithHost) {
-            css.walkRules(function (rule, i) {
-                const rootSelectorIndex = rule.selector.indexOf(":root");
+            css.walkRules((rule, i) => {
+                const rootSelectorIndex = rule.selector.indexOf(':root');
                 if (rootSelectorIndex !== -1) {
-                    rule.selector = rule.selector.replace(":root", ":host");
+                    rule.selector = rule.selector.replace(':root', ':host');
                 }
             });
         }
 
-        css.walkDecls(function (decl, i) {
+        css.walkDecls((decl, i) => {
             // This should be the fastest test and will remove most declarations
-            if (decl.value.indexOf('rem') === -1) return;
+            if (decl.value.indexOf('rem') === -1) {
+                return;
+            }
 
-            if (!satisfyPropList(decl.prop)) return;
+            if (!satisfyPropList(decl.prop)) {
+                return;
+            }
 
             // TODO: `decl.parent.selector` is present in postcss version v5.2.18
-            if (blacklistedSelector(opts.selectorBlackList, (decl.parent as { selector: string }).selector)) return;
+            if (blacklistedSelector(opts.selectorBlackList, (decl.parent as { selector: string }).selector)) {
+                return;
+            }
 
             // calc(0.5 * 1rem)
             const value = decl.value.replace(remRegex, remReplace);
 
             // if px unit already exists, do not add or replace
-            if (declarationExists(decl.parent, decl.prop, value)) return;
+            if (declarationExists(decl.parent, decl.prop, value)) {
+                return;
+            }
 
             if (opts.replace) {
                 decl.value = value;
             } else {
-                decl.parent.insertAfter(i, decl.clone({ value: value }));
+                decl.parent.insertAfter(i, decl.clone({ value }));
             }
         });
 
         if (opts.mediaQuery) {
-            css.walkAtRules('media', function (rule) {
-                if (rule.params.indexOf('rem') === -1) return;
+            css.walkAtRules('media', (rule) => {
+                if (rule.params.indexOf('rem') === -1) {
+                    return;
+                }
                 rule.params = rule.params.replace(remRegex, remReplace);
             });
         }
@@ -72,39 +82,39 @@ export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', function(opt
     };
 });
 
-function createRemReplace (rootValue, unitPrecision, minRemValue, scalerName: string) {
+function createRemReplace(rootValue, unitPrecision, minRemValue, scalerName: string) {
     /**
      * Example:
      * m = '0.1rem';
      * $1 = '0.1';
      */
-    return function (m, $1) {
+    return (m, $1) => {
         if (!$1) {
-            return m
-        };
+            return m;
+        }
 
         const result = `calc(var(--${scalerName}) * ${m})`;
-        
+
         return result;
     };
 }
 
-function toFixed(number, precision) {
-    const multiplier = Math.pow(10, precision + 1),
-    wholeNumber = Math.floor(number * multiplier);
-    return Math.round(wholeNumber / 10) * 10 / multiplier;
-}
-
 function declarationExists(decls, prop, value) {
-    return decls.some(function (decl) {
+    return decls.some((decl) => {
         return (decl.prop === prop && decl.value === value);
     });
 }
 
 function blacklistedSelector(blacklist, selector) {
-    if (typeof selector !== 'string') return;
-    return blacklist.some(function (regex) {
-        if (typeof regex === 'string') return selector.indexOf(regex) !== -1;
+    if (typeof selector !== 'string') {
+        return;
+    }
+
+    return blacklist.some((regex) => {
+        if (typeof regex === 'string') {
+            return selector.indexOf(regex) !== -1;
+        }
+
         return selector.match(regex);
     });
 }
@@ -122,31 +132,33 @@ function createPropListMatcher(propList) {
         notStartWith: filterPropList.notStartWith(propList),
         notEndWith: filterPropList.notEndWith(propList)
     };
-    return function (prop) {
-        if (matchAll) return true;
+    return (prop) => {
+        if (matchAll) {
+            return true;
+        }
         return (
             (
                 hasWild ||
                 lists.exact.indexOf(prop) > -1 ||
-                lists.contain.some(function (m) {
+                lists.contain.some((m) => {
                     return prop.indexOf(m) > -1;
                 }) ||
-                lists.startWith.some(function (m) {
+                lists.startWith.some((m) => {
                     return prop.indexOf(m) === 0;
                 }) ||
-                lists.endWith.some(function (m) {
+                lists.endWith.some((m) => {
                     return prop.indexOf(m) === prop.length - m.length;
                 })
             ) &&
             !(
                 lists.notExact.indexOf(prop) > -1 ||
-                lists.notContain.some(function (m) {
+                lists.notContain.some((m) => {
                     return prop.indexOf(m) > -1;
                 }) ||
-                lists.notStartWith.some(function (m) {
+                lists.notStartWith.some((m) => {
                     return prop.indexOf(m) === 0;
                 }) ||
-                lists.notEndWith.some(function (m) {
+                lists.notEndWith.some((m) => {
                     return prop.indexOf(m) === prop.length - m.length;
                 })
             )
@@ -165,57 +177,57 @@ function createPropListMatcher(propList) {
 const remRegex = /"[^"]+"|'[^']+'|url\([^\)]+\)|(\d*\.?\d+)rem|-(\d*\.?\d+)rem/g;
 
 const filterPropList = {
-    exact: function (list) {
-        return list.filter(function (m) {
+    exact: (list) => {
+        return list.filter((m) => {
             return m.match(/^[^\*\!]+$/);
         });
     },
-    contain: function (list) {
-        return list.filter(function (m) {
+    contain: (list) => {
+        return list.filter((m) => {
             return m.match(/^\*.+\*$/);
-        }).map(function (m) {
+        }).map((m) => {
             return m.substr(1, m.length - 2);
         });
     },
-    endWith: function (list) {
-        return list.filter(function (m) {
+    endWith: (list) => {
+        return list.filter((m) => {
             return m.match(/^\*[^\*]+$/);
-        }).map(function (m) {
+        }).map((m) => {
             return m.substr(1);
         });
     },
-    startWith: function (list) {
-        return list.filter(function (m) {
+    startWith: (list) => {
+        return list.filter((m) => {
             return m.match(/^[^\*\!]+\*$/);
-        }).map(function (m) {
+        }).map((m) => {
             return m.substr(0, m.length - 1);
         });
     },
-    notExact: function (list) {
-        return list.filter(function (m) {
+    notExact: (list) => {
+        return list.filter((m) => {
             return m.match(/^\![^\*].*$/);
-        }).map(function (m) {
+        }).map((m) => {
             return m.substr(1);
         });
     },
-    notContain: function (list) {
-        return list.filter(function (m) {
+    notContain: (list) => {
+        return list.filter((m)  => {
             return m.match(/^\!\*.+\*$/);
-        }).map(function (m) {
+        }).map((m) => {
             return m.substr(2, m.length - 3);
         });
     },
-    notEndWith: function (list) {
-        return list.filter(function (m) {
+    notEndWith: (list) => {
+        return list.filter((m) => {
             return m.match(/^\!\*[^\*]+$/);
-        }).map(function (m) {
+        }).map((m) => {
             return m.substr(2);
         });
     },
-    notStartWith: function (list) {
-        return list.filter(function (m) {
+    notStartWith: (list) => {
+        return list.filter((m) => {
             return m.match(/^\![^\*]+\*$/);
-        }).map(function (m) {
+        }).map((m) => {
             return m.substr(1, m.length - 2);
         });
     }

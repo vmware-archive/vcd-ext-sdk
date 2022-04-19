@@ -94,8 +94,10 @@ export function addLibToManifest(
         manifest.externals.jsonpFunction = jsonpFunction;
     }
 
-    let [libName, version] = packageName.split("@").filter(Boolean);
-    libName = `@${libName}`;
+    const packageNameAndVersion = packageName.split('@').filter(Boolean);
+    const libName = `@${packageNameAndVersion[0]}`;
+    const version = packageNameAndVersion[1];
+
     const preDefinedLocation = librariesConfig[libName].location;
     const scope: LibraryConfigScopeTypes = librariesConfig[libName].scope;
 
@@ -148,7 +150,13 @@ export function filterRuntimeModules(options: BasePluginBuilderSchema) {
 /**
  * Name the result bundles after the filtering phase.
  */
-export function nameVendorFile(config: any, options: BasePluginBuilderSchema, pluginLibsBundles: Map<string, string>, manifest: ExtensionManifest, manifestJsonPath: string) {
+export function nameVendorFile(
+    config: any,
+    options: BasePluginBuilderSchema,
+    pluginLibsBundles: Map<string, string>,
+    manifest: ExtensionManifest,
+    manifestJsonPath: string
+) {
     return (module) => {
         return splitVendorsIntoChunks(module, config.context, options.librariesConfig, (packageName: string) => {
             packageName = packageName.replace(VCD_CUSTOM_LIB_SEPARATOR, '/');

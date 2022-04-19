@@ -13,18 +13,18 @@ import { buildBrowserWebpackConfigFromContext } from '@angular-devkit/build-angu
 import { NormalizedBrowserBuilderSchema } from '@angular-devkit/build-angular/src/utils/normalize-builder-schema';
 import * as fs from 'fs';
 import * as path from 'path';
+import { DefinePlugin } from 'webpack';
 import * as webpack from 'webpack';
 import * as ZipPlugin from 'zip-webpack-plugin';
 import { ConcatWebpackPlugin } from '../common/concat';
 import { BasePluginBuilderSchema, ExtensionManifest, PrecalculateRemOptions } from '../common/interfaces';
+import * as postcssPreCalculateRem from '../common/postcss-precalculate-rem';
 import {
     extractExternalRegExps,
     filterRuntimeModules,
     nameVendorFile,
     VCD_CUSTOM_LIB_SEPARATOR
 } from '../common/utilites';
-import * as postcssPreCalculateRem from '../common/postcss-precalculate-rem';
-import { DefinePlugin } from "webpack";
 
 export interface PluginBuilderSchema7X extends NormalizedBrowserBuilderSchema, BasePluginBuilderSchema { }
 
@@ -73,8 +73,8 @@ async function commandBuilder(
     const config = configs.config[0] || configs.config as webpack.Configuration;
 
     config.node = {
-        fs: "empty",
-    }
+        fs: 'empty',
+    };
 
     // Make sure we are producing a single bundle
     delete config.entry['polyfills'];
@@ -128,7 +128,7 @@ async function commandBuilder(
                         if (!mod.context) {
                             return false;
                         }
-                        
+
                         if (!Object.keys(options.librariesConfig).some((key) => {
                                 return mod.context.includes(key);
                             })) {
@@ -136,7 +136,7 @@ async function commandBuilder(
                         }
                         return false;
                     },
-                    name: "common",
+                    name: 'common',
                     reuseExistingChunk: true,
                     enforce: true,
                 }
@@ -187,8 +187,8 @@ async function commandBuilder(
         config.plugins.push(
             new ConcatWebpackPlugin({
                 concat: options.concatGeneratedFiles,
-                manifest: manifest,
-                manifestJsonPath: manifestJsonPath,
+                manifest,
+                manifestJsonPath,
             })
         );
     }
@@ -196,23 +196,22 @@ async function commandBuilder(
     if (options.replaceGlobalVarUsage) {
         config.plugins.push(
             new DefinePlugin(options.replaceGlobalVarUsage)
-        )
+        );
     }
 
     // Exclude all already concatenated files from plugin zip
-    const excludeConcatenatedFiles: string[] = []
+    const excludeConcatenatedFiles: string[] = [];
     if (options.concatGeneratedFiles) {
         options.concatGeneratedFiles.forEach((concatPair) => {
             concatPair.inputs.forEach((inputFileName: string) => {
                 if (concatPair.output === inputFileName) {
                     return;
                 }
-                
+
                 excludeConcatenatedFiles.push(inputFileName);
             });
-        })
+        });
     }
-    
     // Zip the result
     config.plugins.push(
         new ZipPlugin({
@@ -270,17 +269,15 @@ function registerPrecalculateRem(config: webpack.Configuration, precalculateRemO
     );
 
     const cssPostCssConfigs = config.module.rules.filter((rule) => {
-        return rule.test.toString() === "/\\.css$/" || rule.test.toString() === "/\\.scss$|\\.sass$/";
+        return rule.test.toString() === '/\\.css$/' || rule.test.toString() === '/\\.scss$|\\.sass$/';
     });
 
-    for (let i = 0; i < cssPostCssConfigs.length; i++) {
-        const cssPostCssConfig = cssPostCssConfigs[i];
-
+    for (const cssPostCssConfig of cssPostCssConfigs) {
         const cssPostCssLoader: webpack.RuleSetUse = (cssPostCssConfig.use as webpack.RuleSetUse[]).find((useRule: { loader: string }) => {
             if (!(useRule).loader) {
                 return false;
             }
-            return useRule.loader.includes("postcss-loader");
+            return useRule.loader.includes('postcss-loader');
         });
         const postcssPluginCreator = (cssPostCssLoader as { options: any }).options.plugins;
         const postCssPlugins = (cssPostCssLoader as { options: any }).options.plugins = [];
@@ -298,6 +295,6 @@ function generatePrecalculateRemOptions(precalculateRemOptions: PrecalculateRemO
     return {
         ...PRE_CALCULATE_REM_OPTIONS,
         ...precalculateRemOptions,
-        remScalerName: manifest.urn.replace(":", "-")
-    }
+        remScalerName: manifest.urn.replace(':', '-')
+    };
 }

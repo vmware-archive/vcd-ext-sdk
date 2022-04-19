@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import * as webpack from 'webpack';
 import { RawSource } from 'webpack-sources';
-import { ExtensionManifest } from "./interfaces";
+import { ExtensionManifest } from './interfaces';
 
 export interface ConcatWebpackPluginOptions {
-    manifest: ExtensionManifest,
-    manifestJsonPath: string,
+    manifest: ExtensionManifest;
+    manifestJsonPath: string;
     concat?: ConcatWebpackPluginOptionsEntries[];
 }
 
@@ -45,7 +45,7 @@ export class ConcatWebpackPlugin {
             } catch (e) {
                 logger.error(`${ConcatWebpackPlugin.name} failed.`);
                 callback(e);
-            } 
+            }
         });
     }
 
@@ -77,25 +77,25 @@ export class ConcatWebpackPlugin {
     }
 
     private registerStylesAndScriptsInManifest(compilation: webpack.compilation.Compilation) {
-        if (compilation.assets["common.css"]) {
+        if (compilation.assets['common.css']) {
             if (!this.options.manifest.extensionPoints[0].styles) {
                 this.options.manifest.extensionPoints[0].styles = [];
             }
 
-            this.options.manifest.extensionPoints[0].styles.push("common.css");
+            this.options.manifest.extensionPoints[0].styles.push('common.css');
         }
 
-        if (compilation.assets["scripts.js"]) {
+        if (compilation.assets['scripts.js']) {
             if (!this.options.manifest.extensionPoints[0].scripts) {
                 this.options.manifest.extensionPoints[0].scripts = [];
             }
 
-            this.options.manifest.extensionPoints[0].scripts.push("scripts.js");
+            this.options.manifest.extensionPoints[0].scripts.push('scripts.js');
         }
 
         const manifest = JSON.stringify(this.options.manifest, null, 4);
         fs.writeFileSync(this.options.manifestJsonPath, manifest);
         // Add to compilation assets so other plugins relying on assets can access the lates version of the manifest
-        compilation.assets["manifest.json"] = new RawSource(Buffer.from(manifest, "utf-8") as any);
+        compilation.assets['manifest.json'] = new RawSource(Buffer.from(manifest, 'utf-8') as any);
     }
 }
