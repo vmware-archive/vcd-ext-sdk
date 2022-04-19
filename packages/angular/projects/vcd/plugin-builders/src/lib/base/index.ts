@@ -153,7 +153,7 @@ async function commandBuilder(
     }
 
     // Define amd lib
-    config.output.filename = '[name].js';
+    config.output.filename = 'bundle.js';
     config.output.library = moduleName;
     config.output.libraryTarget = 'amd';
     // workaround to support bundle on nodejs
@@ -204,6 +204,10 @@ async function commandBuilder(
     if (options.concatGeneratedFiles) {
         options.concatGeneratedFiles.forEach((concatPair) => {
             concatPair.inputs.forEach((inputFileName: string) => {
+                if (concatPair.output === inputFileName) {
+                    return;
+                }
+                
                 excludeConcatenatedFiles.push(inputFileName);
             });
         })

@@ -152,7 +152,7 @@ export function nameVendorFile(config: any, options: BasePluginBuilderSchema, pl
     return (module) => {
         return splitVendorsIntoChunks(module, config.context, options.librariesConfig, (packageName: string) => {
             packageName = packageName.replace(VCD_CUSTOM_LIB_SEPARATOR, '/');
-            pluginLibsBundles.set(packageName, `${packageName}.js`);
+            pluginLibsBundles.set(packageName, `${packageName}.bundle.js`);
 
             addLibToManifest(
                 options.librariesConfig,
