@@ -237,9 +237,27 @@ export interface PrecalculateRemOptions {
      */
     propList?: string[];
     /**
-     * Replace given css property which subject to rem precalculations,
-     * if set to true replaces all properties from the `propList` with
-     * their alternative.
+     * Replace given css property that is subject to rem precalculations,
+     * if set to true replaces all properties otherwise overwrite them
+     * from the `propList` with their alternative.
+     * 
+     * Set replace to Flase if calc is not supported by the browser.
+     * 
+     * Example:
+     * .css_class {
+     *      font-size: 1rem;
+     * }
+     * 
+     * if replace is True
+     * .css_class {
+     *      font-size: calc(--css-var-plugin-rem-scaled * 1rem);
+     * }
+     * 
+     * if replace is False
+     * .css_class {
+     *      font-size: 1rem;
+     *      font-size: calc(--css-var-plugin-rem-scaled * 1rem);
+     * }
      *
      * Defaults to: true
      */

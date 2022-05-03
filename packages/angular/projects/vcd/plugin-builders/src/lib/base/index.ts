@@ -116,7 +116,7 @@ async function commandBuilder(
         config.optimization.splitChunks = {
             chunks: 'all',
             cacheGroups: {
-                // Generate js file per vender for those whcih will be shared
+                // Generate js file per vendor for those whcih will be shared
                 vendor: {
                     test: filterRuntimeModules(options),
                     name: nameVendorFile(config, options, pluginLibsBundles, manifest, manifestJsonPath),
@@ -164,7 +164,7 @@ async function commandBuilder(
     }
 
     if (options.precalculateRem) {
-        // Generate precalcuate rem post css plugin's options
+        // Generate precalculate rem post css plugin's options
         const precalculateRemOptions = generatePrecalculateRemOptions(options.precalculateRemOptions, manifest);
         // Save base px size in the manifest
         manifest.pluginBasePx = precalculateRemOptions.rootValue;

@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.803.29",
-    "@types/webpack": "^4.39.2"
+    "@types/webpack": "4.39.2"
   },
   "peerDependencies": {
     "@angular-devkit/build-angular": "0.8.0",
