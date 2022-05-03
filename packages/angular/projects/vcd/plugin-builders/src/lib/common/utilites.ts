@@ -70,49 +70,57 @@ export function splitVendorsIntoChunks(
     return packageName;
 }
 
-export function processManifestJsonFile(
+export function addLibToManifest(
     librariesConfig: LibrariesConfig,
-    libsBundles: Map<string, string>,
-    jsonpFunction: string
+    packageName: string,
+    location: string,
+    jsonpFunction: string,
+    manifest: ExtensionManifest,
+    manifestJsonPath: string
 ) {
-    return (content, absolutePath) => {
-        if (!absolutePath.includes('manifest.json')) {
-            return content;
-        }
+    if (!manifest) {
+        throw Error(`Manifest file wasn't found.`);
+    }
 
-        const manifest: ExtensionManifest = JSON.parse(content.toString('utf-8'));
+    if (!manifest.externals) {
         manifest.externals = {};
+    }
+
+    if (!manifest.externals.libs) {
         manifest.externals.libs = {};
+    }
+
+    if (!manifest.externals.jsonpFunction) {
         manifest.externals.jsonpFunction = jsonpFunction;
+    }
 
-        Object.keys(librariesConfig).forEach((libName) => {
-            const version = librariesConfig[libName].version;
-            const preDefinedLocation = librariesConfig[libName].location;
-            const location = libsBundles.get(`${libName}@${version}`);
-            const scope: LibraryConfigScopeTypes = librariesConfig[libName].scope;
+    const packageNameAndVersion = packageName.split('@').filter(Boolean);
+    const libName = `@${packageNameAndVersion[0]}`;
+    const version = packageNameAndVersion[1];
 
-            if (!version || !version.length) {
-                throw Error(`${libName} has incorrect version defined! Current version ${version}`);
-            }
+    const preDefinedLocation = librariesConfig[libName].location;
+    const scope: LibraryConfigScopeTypes = librariesConfig[libName].scope;
 
-            if (!scope || LibraryConfigScopes.indexOf(scope) === -1) {
-                throw Error(`${libName} with version ${version} has incorrect scope defined! Current scope ${scope}.`);
-            }
+    if (!version || !version.length) {
+        throw Error(`${libName} has incorrect version defined! Current version ${version}`);
+    }
 
-            if (!preDefinedLocation && (!location || !location.length)) {
-                throw Error(`${libName} with version ${version} was not found in the list of built vendor bundles.
-                Please make sure you passed the correct lib name and version in your angular.json builder config section.`);
-            }
+    if (!scope || LibraryConfigScopes.indexOf(scope) === -1) {
+        throw Error(`${libName} with version ${version} has incorrect scope defined! Current scope ${scope}.`);
+    }
 
-            manifest.externals.libs[libName] = {
-                version,
-                scope,
-                location: preDefinedLocation || location.replace('/', VCD_CUSTOM_LIB_SEPARATOR),
-            };
-        });
+    if (!preDefinedLocation && (!location || !location.length)) {
+        throw Error(`${libName} with version ${version} was not found in the list of built vendor bundles.
+        Please make sure you passed the correct lib name and version in your angular.json builder config section.`);
+    }
 
-        return Buffer.from(JSON.stringify(manifest, null, 4));
+    manifest.externals.libs[libName] = {
+        version,
+        scope,
+        location: preDefinedLocation || location.replace('/', VCD_CUSTOM_LIB_SEPARATOR),
     };
+
+    fs.writeFileSync(manifestJsonPath, JSON.stringify(manifest, null, 4));
 }
 
 /**
@@ -142,11 +150,26 @@ export function filterRuntimeModules(options: BasePluginBuilderSchema) {
 /**
  * Name the result bundles after the filtering phase.
  */
-export function nameVendorFile(config: any, options: BasePluginBuilderSchema, pluginLibsBundles: Map<string, string>) {
+export function nameVendorFile(
+    config: any,
+    options: BasePluginBuilderSchema,
+    pluginLibsBundles: Map<string, string>,
+    manifest: ExtensionManifest,
+    manifestJsonPath: string
+) {
     return (module) => {
         return splitVendorsIntoChunks(module, config.context, options.librariesConfig, (packageName: string) => {
             packageName = packageName.replace(VCD_CUSTOM_LIB_SEPARATOR, '/');
             pluginLibsBundles.set(packageName, `${packageName}.bundle.js`);
+
+            addLibToManifest(
+                options.librariesConfig,
+                packageName,
+                pluginLibsBundles.get(packageName),
+                config.output.jsonpFunction,
+                manifest,
+                manifestJsonPath
+            );
         });
     };
 }
