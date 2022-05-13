@@ -11,7 +11,7 @@ permalink: /docs/packaging
 While developing you will probably run the solution into an emulated environment to speed up the development process. But when the time comes to distribute to your users and deploy the solution an Cloud Director instance the solution needs to be packaged in an appropriate form.
 
 ## CARE Package
-The form factor of a solution is the [CARE Package]({{ site.baseurl }}/architecture/care_package/overview). Once all sub-projects are built the whole solution can be packaged into a CARE Package. The CARE package is an archive which contains all deployable elements and an manifest describing the contents.
+The form factor of a solution is the [CARE Package]({{ site.baseurl }}/architecture). Once all sub-projects are built the whole solution can be packaged into a CARE Package. The CARE package is an archive which contains all deployable elements and an manifest describing the contents.
 
 ## Creating a CARE Package
 ### Through NPM
