@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2014 Jonathan Cuthbert <jon@cuth.net>
+ * 
+ * See https://github.com/jesstech/postcss-rem-to-pixel
+ */
 import * as postcss from 'postcss';
 import { PrecalculateRemOptions } from './interfaces';
 
