@@ -38,7 +38,7 @@ export const emulatorDeps = {
         'ts-node': '7.0.0',
         tslib: '1.10.0',
         tslint: '5.11.0',
-        typescript: '3.6.4',
+        typescript: '3.8.3',
         '@schematics/angular': '9.1.4',
         '@types/node': '8.9.4',
         codelyzer: '4.3.0',
