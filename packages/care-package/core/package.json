@@ -7,7 +7,7 @@
   "dependencies": {
     "@vcd/care-package-plugin-abstract": "0.0.2-beta.2",
     "@vcd/care-package-plugin-types": "0.0.2-beta.2",
-    "@vcd/care-package-plugin-uiplugins": "0.0.2-beta.2",
+    "@vcd/care-package-plugin-uiplugins": "0.0.2-beta.3",
     "@vcd/care-package-plugin-import-vapp": "0.0.2-beta.3",
     "@vcd/node-client": "0.0.6-alpha.2",
     "adm-zip": "^0.4.16",
