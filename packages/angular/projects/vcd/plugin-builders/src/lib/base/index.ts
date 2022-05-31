@@ -216,8 +216,7 @@ async function commandBuilder(
     config.plugins.push(
         new ZipPlugin({
             filename: 'plugin.zip',
-            exclude: [
-                /\.html$/,
+            exclude: [,
                 ...Object.keys(options.librariesConfig)
                     .filter((key) => {
                         return options.librariesConfig[key].scope === 'external';

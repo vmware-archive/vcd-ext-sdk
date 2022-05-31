@@ -1,6 +1,6 @@
 {
   "id": "http://vmware.com/schemas/software_provenance-0.2.5.json",
-  "root": "0.12.1-alpha.6",
+  "root": "0.12.1-alpha.7",
   "tools": {
     "https://github.com/": null
   },
@@ -8,7 +8,7 @@
     "component": {
       "typename": "comp.build.git",
       "name": "@vcd/plugin-builders",
-      "version": "0.12.1-alpha.6",
+      "version": "0.12.1-alpha.7",
       "source_repositories": [
         {
           "content": "source",
