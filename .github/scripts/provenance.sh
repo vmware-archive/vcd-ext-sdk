@@ -21,6 +21,7 @@ $SRP_HOME/srp --version
 export BUILD_VERSION="$(cat lerna.json | jq -r .version)"
 
 export GITHUB_REPOSITORY=${GITHUB_REPOSITORY/\//%2F}
+export GITHUB_REF=${GITHUB_REF/\//%2F}
 export GITHUB_FQDN=$(echo "${GITHUB_SERVER_URL}" | sed -e "s/^https:\/\///")
 export SRP_UID="uid.obj.build.github(instance='${GITHUB_FQDN}',namespace='${GITHUB_REPOSITORY}',ref='${GITHUB_REF}',action='${GITHUB_ACTION}',build_id='${GITHUB_RUN_ID}_${GITHUB_RUN_ATTEMPT}')"
 export PROVENANCE_REVISION="$(date +%Y%m%d%H%M%S)"
