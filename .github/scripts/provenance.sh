@@ -20,7 +20,7 @@ $SRP_HOME/srp --version
 # Release Version
 export BUILD_VERSION="$(cat lerna.json | jq -r .version)"
 
-export GITHUB_REPOSITORY=${GITHUB_REPOSITORY/\//-}
+export GITHUB_REPOSITORY=${GITHUB_REPOSITORY/\//%2F}
 export GITHUB_FQDN=$(echo "${GITHUB_SERVER_URL}" | sed -e "s/^https:\/\///")
 export SRP_UID="uid.obj.build.github(instance='${GITHUB_FQDN}',namespace='${GITHUB_REPOSITORY}',ref='${GITHUB_REF}',action='${GITHUB_ACTION}',build_id='${GITHUB_RUN_ID}_${GITHUB_RUN_ATTEMPT}')"
 export PROVENANCE_REVISION="$(date +%Y%m%d%H%M%S)"
@@ -46,4 +46,4 @@ echo Set Authentication Context
 $SRP_HOME/srp config auth --client-id=${SRP_CLIENT_ID:?} --client-secret=${SRP_CLIENT_SECRET:?}
 
 echo Submit provenance report
-$SRP_HOME/srp metadata submit --uid "${PROVENANCE_FRAGMENT_UID:?}" --path $PROVENANCE_REVISION/source.json
+$SRP_HOME/srp metadata submit --url https://apigw.vmware.com/v1/s1/api/helix-beta --uid "${PROVENANCE_FRAGMENT_UID:?}" --path $PROVENANCE_REVISION/source.json
