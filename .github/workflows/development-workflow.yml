@@ -85,10 +85,10 @@ jobs:
             **/lib
           key: ${{github.sha}}-artifacts
       - run: npm run test-ci
-  generate-dependencies:
+  submit-provenance:
     runs-on: ubuntu-latest
     name: Generate provenance files
-    if: github.ref != 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: [dependencies, test]
     steps:
       - uses: actions/checkout@v2
