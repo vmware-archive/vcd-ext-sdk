@@ -3,7 +3,7 @@ layout: default
 title:  "Emulator"
 category: UI Plugins
 description: "Emulator"
-catOrder: 4
+catOrder: 6
 order: 6
 hasMore: true
 labels: [UI Plugins]

@@ -3,7 +3,7 @@ layout: default
 title:  "Common components"
 category: UI Plugins
 description: "Common components libraries"
-catOrder: 4
+catOrder: 6
 order: 7
 hasMore: true
 labels: [UI Plugins]

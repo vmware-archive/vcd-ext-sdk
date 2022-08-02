@@ -3,7 +3,7 @@ layout: default
 title:  "Getting Started"
 category: UI Plugins
 description: "Getting started on UI Plugins"
-catOrder: 4
+catOrder: 6
 order: 2
 hasMore: true
 labels: [UI Plugins]

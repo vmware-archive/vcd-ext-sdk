@@ -3,7 +3,7 @@ layout: default
 title:  "Showcase UI Plugin"
 description: "This is a UI plugin which demonstrates various extension points"
 category: Development Examples
-catOrder: 9
+catOrder: 10
 order: 2
 hasMore: true
 permalink: /docs/development_examples/showcase_ui_plugin/

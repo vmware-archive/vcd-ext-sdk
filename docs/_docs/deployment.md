@@ -2,9 +2,9 @@
 layout: default
 title: Deployment
 category: none8
-catOrder: 8
+catOrder: 9
 hasMore: true
-order: 8
+order: 9
 permalink: /docs/deployment
 ---
 # Deploying a solution

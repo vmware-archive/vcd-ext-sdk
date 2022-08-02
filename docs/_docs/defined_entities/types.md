@@ -1,11 +1,11 @@
 ---
 layout: default
 title:  "Working with types"
-category: Defined Entities
-catOrder: 4
+category: Defined Entities CLI
+catOrder: 5
 iconShape: objects
 hasMore: true
-order: 3
+order: 2
 permalink: /docs/defined_entities/types
 ---
 # Create Defined Entity Types

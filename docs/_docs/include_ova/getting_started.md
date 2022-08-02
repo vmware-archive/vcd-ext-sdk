@@ -2,7 +2,7 @@
 layout: default
 title:  "Getting Started"
 category: Include OVA
-catOrder: 5
+catOrder: 7
 order: 2
 hasMore: true
 labels: [Include OVA]

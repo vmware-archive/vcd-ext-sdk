@@ -3,7 +3,7 @@ layout: default
 title:  "Ticketing"
 description: "This is a ticketing solutions example covering UI and Defined Entities plugins"
 category: Development Examples
-catOrder: 9
+catOrder: 10
 order: 1
 hasMore: true
 img: ticket.jpg

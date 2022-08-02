@@ -3,7 +3,7 @@ layout: default
 title:  "Runtime libraries"
 category: UI Plugins
 description: "Runtime libraries"
-catOrder: 4
+catOrder: 6
 order: 4
 hasMore: true
 labels: [UI Plugins]

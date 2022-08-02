@@ -2,9 +2,9 @@
 layout: default
 title: Packaging
 category: none7
-catOrder: 7
+catOrder: 8
 hasMore: true
-order: 7
+order: 8
 permalink: /docs/packaging
 ---
 # Packaging a solution
