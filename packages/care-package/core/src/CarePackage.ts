@@ -176,7 +176,6 @@ export class CarePackage {
         if (!this.fromSource) {
             throw new Error('Serve operation can only be triggered from CARE package source project');
         }
-        await this.validatePlatformVersion(clientConfig);
         // TODO extract 'serve' as a const variable
         return this.runOperationOnElements('serve', only, clientConfig, options);
     }
