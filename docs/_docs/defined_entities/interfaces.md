@@ -1,13 +1,14 @@
 ---
 layout: default
-title:  "Interfaces and behaviours"
-category: Defined Entities
-catOrder: 4
+title:  "Interfaces"
+category: Defined Entities CLI
+catOrder: 5
 iconShape: objects
 hasMore: true
-order: 4
+order: 3
 permalink: /docs/defined_entities/interfaces
 ---
+
 # Add behaviours to entities
 
 ## Create a simple interface

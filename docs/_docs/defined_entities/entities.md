@@ -1,8 +1,8 @@
 ---
 layout: default
 title:  "Working with entities"
-category: Defined Entities
-catOrder: 4
+category: Defined Entities CLI
+catOrder: 5
 iconShape: objects
 hasMore: true
 order: 5

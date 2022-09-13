@@ -1,11 +1,11 @@
 ---
 layout: default
 title:  "Getting started"
-category: Defined Entities
-catOrder: 4
+category: Defined Entities CLI
+catOrder: 5
 iconShape: objects
 hasMore: true
-order: 2
+order: 1
 permalink: /docs/defined_entities/getting_started
 ---
 # Get started with Defined Entities

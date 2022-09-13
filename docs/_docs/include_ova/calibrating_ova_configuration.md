@@ -2,7 +2,7 @@
 layout: default
 title:  "Calibrating OVA configuration"
 category: Include OVA
-catOrder: 5
+catOrder: 7
 order: 3
 hasMore: true
 labels: [Include OVA]
