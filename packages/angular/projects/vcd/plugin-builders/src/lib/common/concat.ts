@@ -30,26 +30,35 @@ export class ConcatWebpackPlugin {
      * see https://webpack.js.org/api/compiler-hooks/ for more detials.
      */
     apply(compiler: webpack.Compiler) {
-        // Hook for on emit
-        compiler.hooks.emit.tapAsync('vCloud Director Concat Plugin', (
-            compilation,
-            callback
-        ) => {
-            const logger = (compiler as any).getInfrastructureLogger(ConcatWebpackPlugin.name);
+        compiler.hooks.thisCompilation.tap('vCloud Director Concat Plugin', (compilation, callback) => {
+            const logger = compiler.getInfrastructureLogger(ConcatWebpackPlugin.name);
             logger.log(`${ConcatWebpackPlugin.name} started.`);
 
-            try {
-                this.concatFiles(compilation);
-                this.registerStylesAndScriptsInManifest(compilation);
-                callback();
-            } catch (e) {
-                logger.error(`${ConcatWebpackPlugin.name} failed.`);
-                callback(e);
-            }
+            compilation.hooks.processAssets.tapPromise(
+				{
+					name: ConcatWebpackPlugin.name,
+					stage: webpack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_TRANSFER,
+				},
+				() => new Promise((resolve, reject) => {
+                    try {
+                        this.concatFiles(compilation);
+                        this.registerStylesAndScriptsInManifest(compilation);
+                        resolve(null);
+                    }
+                    catch (e) {
+                        logger.error(`${ConcatWebpackPlugin.name} failed.`);
+                        reject(e);
+                    }
+                })
+			);
         });
     }
 
-    private concatFiles(compilation: webpack.compilation.Compilation) {
+    private concatFiles(compilation: webpack.Compilation) {
+        if (!this.options.concat) {
+            return;
+        }
+
         // Cocnat files
         this.options.concat
         .map((obj) => {
@@ -72,30 +81,34 @@ export class ConcatWebpackPlugin {
         })
         .forEach((asset) => {
             // Output the result
-            compilation.assets[asset.output] = new RawSource(asset.source as any);
+            (compilation as any).emitAsset(asset.output, new RawSource(asset.source as any));
         });
     }
 
-    private registerStylesAndScriptsInManifest(compilation: webpack.compilation.Compilation) {
-        if (compilation.assets['common.css']) {
+    private registerStylesAndScriptsInManifest(compilation: webpack.Compilation) {
+        if (compilation.assets["common.css"]) {
             if (!this.options.manifest.extensionPoints[0].styles) {
                 this.options.manifest.extensionPoints[0].styles = [];
             }
 
-            this.options.manifest.extensionPoints[0].styles.push('common.css');
+            if (this.options.manifest.extensionPoints[0].styles.indexOf("common.css") === -1) {
+                this.options.manifest.extensionPoints[0].styles.push("common.css");
+            }
         }
 
-        if (compilation.assets['scripts.js']) {
+        if (compilation.assets["scripts.js"]) {
             if (!this.options.manifest.extensionPoints[0].scripts) {
                 this.options.manifest.extensionPoints[0].scripts = [];
             }
 
-            this.options.manifest.extensionPoints[0].scripts.push('scripts.js');
+            if (this.options.manifest.extensionPoints[0].scripts.indexOf("scripts.js") === -1) {
+                this.options.manifest.extensionPoints[0].scripts.push("scripts.js");
+            }
         }
 
         const manifest = JSON.stringify(this.options.manifest, null, 4);
         fs.writeFileSync(this.options.manifestJsonPath, manifest);
         // Add to compilation assets so other plugins relying on assets can access the lates version of the manifest
-        compilation.assets['manifest.json'] = new RawSource(Buffer.from(manifest, 'utf-8') as any);
+        compilation["manifest.json"] = new RawSource(Buffer.from(manifest, "utf-8") as any);
     }
 }

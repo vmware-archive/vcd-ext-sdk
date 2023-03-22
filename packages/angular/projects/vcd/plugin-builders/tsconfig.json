@@ -1,14 +1,12 @@
 {
-    "extends": "../../../tsconfig.json",
-    "compilerOptions": {
-      "module": "commonjs",
-      "outDir": "../../../dist/vcd/plugin-builders",
-      "importHelpers": false,
-      "sourceMap": false,
-      "target": "es6",
-      "skipLibCheck": true
-    },
-    "include": [
-      "./src/lib/base/**/*.ts"
-    ]
+  "compilerOptions": {
+    "baseUrl": "./src/lib",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "importHelpers": false,
+    "sourceMap": false,
+    "target": "ES2022",
+    "skipLibCheck": true,
+  },
 }
