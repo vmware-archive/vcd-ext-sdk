@@ -196,10 +196,6 @@ export interface BasePluginBuilderSchema {
      */
     librariesConfig: LibrariesConfig;
     /**
-     * Force disable angular's ivy compiler if enabled
-     */
-    forceDisableIvy: boolean;
-    /**
      * Enable/Disable Rem precalculation
      */
     precalculateRem: boolean;

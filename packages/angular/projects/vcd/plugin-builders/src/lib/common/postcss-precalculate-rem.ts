@@ -17,6 +17,8 @@ const defaults: PrecalculateRemOptionsInternal = {
     minRemValue: 0
 };
 
+// TODO: Fix
+// @ts-ignore
 export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', (options: PrecalculateRemOptions) => {
     const opts: PrecalculateRemOptionsInternal = {
         ...defaults,
