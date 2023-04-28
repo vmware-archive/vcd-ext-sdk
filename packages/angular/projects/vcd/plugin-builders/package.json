@@ -10,14 +10,17 @@
     "@angular-devkit/build-angular": "^15.0.0",
     "@angular-devkit/core": "^15.0.0",
     "@angular/compiler-cli": "^15.0.0",
+    "copy-webpack-plugin": "11.0.0",
+    "postcss": "8.4.23",
     "tslib": "^2.3.0",
-    "zip-webpack-plugin": "3.0.0"
+    "zip-webpack-plugin": "4.0.1"
   },
   "devDependencies": {
     "typescript": "4.8.2"
   },
   "sideEffects": false,
   "scripts": {
-    "build": "tsc --build ./tsconfig.json"
+    "build": "tsc --build ./tsconfig.json && npm run copy-files && npm pack ./dist",
+    "copy-files": "cp ./package.json ./dist/package.json && cp ./builders.json ./dist/builders.json && cp ./schema.json ./dist/schema.json"
   }
 }

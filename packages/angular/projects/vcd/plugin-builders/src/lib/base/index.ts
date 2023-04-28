@@ -1,15 +1,19 @@
 import { BuilderContext, createBuilder } from '@angular-devkit/architect';
 import { BrowserBuilderOptions, executeBrowserBuilder, ExecutionTransformer } from '@angular-devkit/build-angular';
 import { json } from '@angular-devkit/core';
-import { Configuration, RuleSetUse } from "webpack";
+import { Configuration } from "webpack";
 import * as webpack from "webpack";
 import { BasePluginBuilderSchema, ExtensionManifest, PrecalculateRemOptions } from "../common/interfaces";
 import { normalize, logging, Path } from '@angular-devkit/core';
-import { extractExternalRegExps, filterRuntimeModules, nameVendorFile } from "../common/utilites";
+import { VCD_CUSTOM_LIB_SEPARATOR, extractExternalRegExps, filterRuntimeModules, nameVendorFile } from "../common/utilites";
 import * as path from "path";
 import * as fs from "fs";
 import * as postcssPreCalculateRem from '../common/postcss-precalculate-rem';
 import { ConcatWebpackPlugin } from "../common/concat";
+import * as ZipPlugin from 'zip-webpack-plugin';
+import * as CopyPlugin from "copy-webpack-plugin";
+import { AssetPatternClass } from "@angular-devkit/build-angular/src/builders/browser/schema";
+import { finalize } from "rxjs/operators";
 
 export const defaultExternals = {
     common: [
@@ -54,7 +58,19 @@ export const buildCustomWebpackBrowser = (
     options: PluginBuilderSchema7X,
     context: BuilderContext
 ): ReturnType<typeof executeBrowserBuilder> => {
-    return executeBrowserBuilder(options, context, getTransforms(options, context));
+    const entryPointPath = path.join(context.workspaceRoot, options.main);
+    const entryPointOriginalContent = fs.readFileSync(entryPointPath, 'utf-8');
+
+    const manifestJsonPath = path.join(context.workspaceRoot, "/src/public/", 'manifest.json');
+    const manifestOriginalContent = fs.readFileSync(manifestJsonPath, 'utf-8');
+
+    return executeBrowserBuilder(options, context, getTransforms(options, context)).pipe(
+        finalize(() => {
+            // Reset files to original state
+            patchFile(entryPointPath, entryPointOriginalContent);
+            patchFile(manifestJsonPath, manifestOriginalContent);
+        }),
+    );
 };
 
 export default createBuilder<json.JsonObject & PluginBuilderSchema7X>(
@@ -105,12 +121,10 @@ export class CustomWebpackBuilder {
         // preserve path to entry point
         // so that we can clear use it within `run` method to clear that file
         const entryPointPath = config.entry['main'][0];
-        const entryPointOriginalContent = fs.readFileSync(entryPointPath, 'utf-8');
 
         // Load manifest file
         const manifestJsonPath = path.join(`${config.context}/src/public`, 'manifest.json');
         const manifest: ExtensionManifest = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'));
-        const manifestOriginalContent: string = fs.readFileSync(manifestJsonPath, 'utf-8');
         
         // Patch the main.ts file to point to the plugin which will be compiled
         let [modulePath, moduleName] = options.modulePath.split('#');
@@ -196,6 +210,25 @@ export class CustomWebpackBuilder {
             );
         }
 
+        /**
+         * Angular doesn't use webpack plugin to emit assets and therefore the ZipPlugin
+         * has no access to these resources so it can add them to the final Zip.
+         * 
+         * Here we add the Webpack's CopyPlugin so it emits the assets using
+         * Webpack's mechanics and ZipPlugin has access to these files.
+         */
+        config.plugins.push(
+            new CopyPlugin({
+                patterns: [
+                    {
+                        from: `${(options.assets[0] as AssetPatternClass).glob}`,
+                        to: `.${(options.assets[0] as AssetPatternClass).output}`,
+                        context: `${(options.assets[0] as AssetPatternClass).input}`
+                    }
+                ]
+            })
+        );
+
         // Exclude all already concatenated files from plugin zip
         const excludeConcatenatedFiles: string[] = [];
         if (options.concatGeneratedFiles) {
@@ -211,22 +244,22 @@ export class CustomWebpackBuilder {
         }
 
         // Zip the result
-        // config.plugins.push(
-        //     new ZipPlugin({
-        //         filename: 'plugin.zip',
-        //         exclude: [,
-        //             ...Object.keys(options.librariesConfig)
-        //                 .filter((key) => {
-        //                     return options.librariesConfig[key].scope === 'external';
-        //                 })
-        //                 .map((key) => {
-        //                     const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.js`;
-        //                     return libBundleName;
-        //                 }),
-        //             ...excludeConcatenatedFiles
-        //         ]
-        //     }),
-        // );
+        config.plugins.push(
+            new ZipPlugin({
+                filename: 'plugin.zip',
+                exclude: [,
+                    ...Object.keys(options.librariesConfig)
+                        .filter((key) => {
+                            return options.librariesConfig[key].scope === 'external';
+                        })
+                        .map((key) => {
+                            const libBundleName = `${key.replace('/', VCD_CUSTOM_LIB_SEPARATOR)}@${options.librariesConfig[key].version}.js`;
+                            return libBundleName;
+                        }),
+                    ...excludeConcatenatedFiles
+                ]
+            }),
+        );
         
         return config;
     }
@@ -245,31 +278,42 @@ export const PRE_CALCULATE_REM_OPTIONS: PrecalculateRemOptions = {
 };
 
 function registerPrecalculateRem(config: Configuration, precalculateRemOptions: PrecalculateRemOptions) {
-    const precalculateRem = postcssPreCalculateRem.postCssPlugin(
-        precalculateRemOptions,
-    );
+    /**
+     * Adding precalculateRemOptions PostCSS plugin only to the css rule for the
+     * Global Style CSS files seem to be applied automatically to the SCSS and SASS rules
+     * for global files.
+     * 
+     * Global Style file is like style.scss on the other side there is ngResource type
+     * of files that are actually the CSS files of each individual component.
+     */ 
+    const cssRule: webpack.RuleSetRule = (config.module.rules as any[]).find((rule: webpack.RuleSetRule) => {
+        if (!rule) {
+            return;
+        }
 
-    const cssPostCssConfigs = config.module.rules.filter((rule) => {
-        // TODO: Fix
-        // @ts-ignore
-        return rule.test.toString() === '/\\.css$/' || rule.test.toString() === '/\\.scss$|\\.sass$/';
+        if (!rule.test) {
+            return;
+        }
+
+        return rule.test.toString() === "/\\.(?:css)$/i";
     });
-
-    for (const cssPostCssConfig of cssPostCssConfigs) {
-        // TODO: Fix
-        // @ts-ignore
-        const cssPostCssLoader: RuleSetUse = (cssPostCssConfig.use as RuleSetUse[]).find((useRule: { loader: string }) => {
-            if (!(useRule).loader) {
-                return false;
-            }
-            return useRule.loader.includes('postcss-loader');
-        });
-        const postcssPluginCreator: any = (cssPostCssLoader as { options: any }).options.plugins;
-        const postCssPlugins: any = (cssPostCssLoader as { options: any }).options.plugins = [];
-
-        postCssPlugins.push(postcssPluginCreator);
-        postCssPlugins.push(precalculateRem);
-    }
+    
+    const globalStylesPreProcessor = cssRule.rules[0].oneOf.find((rule) => {
+        return rule.resourceQuery.toString() === "/\\?ngGlobalStyle/";
+    });
+    const ruleSet: webpack.RuleSetUseItem[] = globalStylesPreProcessor.use as webpack.RuleSetUseItem[];
+    ruleSet.push({
+        loader: require.resolve('postcss-loader'),
+        options: {
+            implementation: require('postcss'),
+            sourceMap: false,
+            postcssOptions: {
+                plugins: [
+                    postcssPreCalculateRem.postCssPlugin(precalculateRemOptions),
+                ]
+            },
+        },
+    });
 }
 
 function generatePrecalculateRemOptions(precalculateRemOptions: PrecalculateRemOptions, manifest: ExtensionManifest) {
@@ -277,9 +321,15 @@ function generatePrecalculateRemOptions(precalculateRemOptions: PrecalculateRemO
         precalculateRemOptions = {};
     }
 
+    let remScalerName: string = manifest.urn;
+    // Remove all ":" symbols because they are invalid for CSS var name.
+    while (remScalerName.includes(":")) {
+        remScalerName = remScalerName.replace(":", '-');
+    }
+
     return {
         ...PRE_CALCULATE_REM_OPTIONS,
         ...precalculateRemOptions,
-        remScalerName: manifest.urn.replace(':', '-')
+        remScalerName: remScalerName
     };
 }
