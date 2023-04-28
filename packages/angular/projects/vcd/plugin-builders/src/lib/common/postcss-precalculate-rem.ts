@@ -1,4 +1,3 @@
-import * as postcss from 'postcss';
 import { PrecalculateRemOptions } from './interfaces';
 
 interface PrecalculateRemOptionsInternal extends PrecalculateRemOptions {
@@ -17,9 +16,7 @@ const defaults: PrecalculateRemOptionsInternal = {
     minRemValue: 0
 };
 
-// TODO: Fix
-// @ts-ignore
-export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', (options: PrecalculateRemOptions) => {
+export const postCssPlugin = (options: PrecalculateRemOptions) => {
     const opts: PrecalculateRemOptionsInternal = {
         ...defaults,
         ...options,
@@ -32,17 +29,33 @@ export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', (options: Pr
 
     const satisfyPropList = createPropListMatcher(opts.propList);
 
-    return (css) => {
-        if (options.replaceRootWithHost) {
-            css.walkRules((rule, i) => {
+    return {
+        postcssPlugin: 'postcss-rem-to-pixel',
+        Once (root, { result }) {
+            if (!options.replaceRootWithHost) {
+                return;
+            }
+
+            root.walkRules((rule, i) => {
                 const rootSelectorIndex = rule.selector.indexOf(':root');
                 if (rootSelectorIndex !== -1) {
                     rule.selector = rule.selector.replace(':root', ':host');
                 }
             });
-        }
+        },
+        Declaration(decl) {
+            /**
+             * Note that plugins will re-visit all changed or added nodes.
+             * You should check if your transformations were already applied,
+             * and if that is the case, ignore those nodes.
+             * Only the Once and OnceExit listeners will be called, exactly once.
+             * 
+             * https://evilmartians.com/chronicles/postcss-8-plugin-migration
+             */
+            if (decl.value.indexOf(opts.remScalerName) !== -1) {
+                return;
+            }
 
-        css.walkDecls((decl, i) => {
             // This should be the fastest test and will remove most declarations
             if (decl.value.indexOf('rem') === -1) {
                 return;
@@ -68,21 +81,12 @@ export const postCssPlugin = postcss.plugin('postcss-rem-to-pixel', (options: Pr
             if (opts.replace) {
                 decl.value = value;
             } else {
-                decl.parent.insertAfter(i, decl.clone({ value }));
+                decl.parent.after(decl.clone({ value }));
             }
-        });
-
-        if (opts.mediaQuery) {
-            css.walkAtRules('media', (rule) => {
-                if (rule.params.indexOf('rem') === -1) {
-                    return;
-                }
-                rule.params = rule.params.replace(remRegex, remReplace);
-            });
         }
-
-    };
-});
+    }
+};
+postCssPlugin.postcss = true
 
 function createRemReplace(rootValue, unitPrecision, minRemValue, scalerName: string) {
     /**

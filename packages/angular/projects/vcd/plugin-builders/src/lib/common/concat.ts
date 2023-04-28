@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as webpack from 'webpack';
-import { RawSource } from 'webpack-sources';
 import { ExtensionManifest } from './interfaces';
 
 export interface ConcatWebpackPluginOptions {
@@ -81,7 +80,7 @@ export class ConcatWebpackPlugin {
         })
         .forEach((asset) => {
             // Output the result
-            (compilation as any).emitAsset(asset.output, new RawSource(asset.source as any));
+            (compilation as any).emitAsset(asset.output, new webpack.sources.RawSource(asset.source as any));
         });
     }
 
@@ -109,6 +108,6 @@ export class ConcatWebpackPlugin {
         const manifest = JSON.stringify(this.options.manifest, null, 4);
         fs.writeFileSync(this.options.manifestJsonPath, manifest);
         // Add to compilation assets so other plugins relying on assets can access the lates version of the manifest
-        compilation["manifest.json"] = new RawSource(Buffer.from(manifest, "utf-8") as any);
+        compilation.assets["manifest.json"] = new webpack.sources.RawSource(Buffer.from(manifest, "utf-8") as any);
     }
 }
