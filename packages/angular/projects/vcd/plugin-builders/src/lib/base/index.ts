@@ -28,9 +28,6 @@ export const defaultExternals = {
     ['9.7-10.0']: [
         /^rxjs(\/.+)?$/,
         /^@clr\/.+$/,
-        {
-            'clarity-angular': 'clarity-angular',
-        }
     ]
 };
 
