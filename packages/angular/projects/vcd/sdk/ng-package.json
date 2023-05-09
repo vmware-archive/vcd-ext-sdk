@@ -3,8 +3,5 @@
   "dest": "../../../dist/vcd/sdk",
   "lib": {
     "entryFile": "src/public-api.ts"
-  },
-  "whitelistedNonPeerDependencies": [
-    "@vcd/angular-client"
-  ]
+  }
 }

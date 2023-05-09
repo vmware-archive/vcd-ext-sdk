@@ -2,13 +2,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as client from '@vcd/angular-client';
-import * as common from './common';
-import * as core from './core';
-
-export {
-  common,
-  core,
-};
 
 /**
  * Extensions should import this module.
