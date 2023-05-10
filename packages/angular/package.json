@@ -17,7 +17,6 @@
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
     "@ngrx/store": "15.4.0",
-    "@vcd/angular-client": "0.0.2-alpha.9",
     "@vcd/bindings": "9.1.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

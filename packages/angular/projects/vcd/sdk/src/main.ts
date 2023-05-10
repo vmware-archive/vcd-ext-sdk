@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import * as client from '@vcd/angular-client';
+import * as client from './client';
 
 /**
  * Extensions should import this module.
