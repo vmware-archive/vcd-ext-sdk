@@ -172,7 +172,7 @@ export interface ExtensionPointManifest {
 export type ExtensionScope = 'tenant' | 'service-provder';
 
 export interface BasePluginBuilderSchema {
-    enableRuntimeDependecyManagement: boolean;
+    enableRuntimeDependencyManagement: boolean;
     /**
      * Preserve main plugin file contents.
      */

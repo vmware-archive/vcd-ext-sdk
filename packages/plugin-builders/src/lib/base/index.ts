@@ -111,7 +111,7 @@ export class CustomWebpackBuilder {
         // List the external libraries which will be provided by vcd
         config.externals = [
             ...(options.ignoreDefaultExternals ? [] : defaultExternals.common),
-            ...(!options.enableRuntimeDependecyManagement && !options.ignoreDefaultExternals ? defaultExternals['9.7-10.0'] : []),
+            ...(!options.enableRuntimeDependencyManagement && !options.ignoreDefaultExternals ? defaultExternals['9.7-10.0'] : []),
             ...extractExternalRegExps(options.externalLibs),
         ];
 
@@ -126,7 +126,7 @@ export class CustomWebpackBuilder {
         // Patch the main.ts file to point to the plugin which will be compiled
         let [modulePath, moduleName] = options.modulePath.split('#');
 
-        if (options.enableRuntimeDependecyManagement) {
+        if (options.enableRuntimeDependencyManagement) {
             // Create unique jsonpFunction name
             config.output.uniqueName = `vcdJsonp#${moduleName}#${manifest.urn}`;
 
@@ -171,7 +171,7 @@ export class CustomWebpackBuilder {
         }
 
         // Define amd lib
-        const outputUnprefixedFileNames = options.enableRuntimeDependecyManagement;
+        const outputUnprefixedFileNames = options.enableRuntimeDependencyManagement;
         config.output.filename = outputUnprefixedFileNames ? '[name].js' : 'bundle.js';
         config.output.library = moduleName;
         config.output.libraryTarget = 'amd';
