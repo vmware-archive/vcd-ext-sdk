@@ -49,7 +49,10 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
             headers = headers.set(this._authenticationHeader, this._authentication);
         }
 
-        if (this._actAs) {
+        /**
+         * Covers the case where the User set the ActAs token himself
+         */
+        if (!headers.has('X-VMWARE-VCLOUD-TENANT-CONTEXT') && this._actAs) {
             headers = headers.set('X-VMWARE-VCLOUD-TENANT-CONTEXT', this._actAs);
         }
 

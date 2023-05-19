@@ -257,7 +257,11 @@ export class VcdApiClient {
     }
 
     /**
-     * Allows a provider user to execute API requests in the scope of a specific tenant.
+     * Global configuration for the service, that allows a provider user to execute API requests
+     * in the scope of a specific tenant.
+     * 
+     * If you want to execute single API request in scope of specific tenant you can do it
+     * by passing "X-VMWARE-VCLOUD-TENANT-CONTEXT" header to the specific API Request.
      *
      * This scoping is available to query-based API calls and to bulk GET calls in the
      * /cloudapi space.
@@ -477,16 +481,24 @@ export class VcdApiClient {
         );
     }
 
-    public list<T>(endpoint: string, queryBuilder?: Query.Builder, multisite?: boolean | AuthorizedLocationType[]) {
+    public list<T>(endpoint: string, queryBuilder?: Query.Builder, multisite?: boolean | AuthorizedLocationType[], options?: { headers?: HttpHeaders }) {
         let url = this.buildEndpointUrl(endpoint);
 
         if (queryBuilder) {
             url = `${url}${queryBuilder.getCloudAPI()}`;
         }
 
+        if (multisite) {
+            if (!options) {
+                return this.http.get<T>(url, { headers: new HttpHeaders({ _multisite: this.parseMultisiteValue(multisite) }) });
+            } else if (options?.headers) {
+                options.headers.append("_multisite", this.parseMultisiteValue(multisite));
+                return this.http.get<T>(url, { ...options });
+            }
+        }
+
         return this.validateRequestContext().pipe(
-            concatMap(() => !multisite ? this.http.get<T>(url)
-            : this.http.get<T>(url, { headers: new HttpHeaders({ _multisite: this.parseMultisiteValue(multisite) }) }))
+            concatMap(() => this.http.get<T>(url, { ...options }))
         );
     }
 
@@ -597,9 +609,9 @@ export class VcdApiClient {
         );
     }
 
-    public updateTask(task: TaskType): Observable<TaskType> {
+    public updateTask(task: TaskType, options?: { headers?: HttpHeaders }): Observable<TaskType> {
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.get<TaskType>(task.href))
+            concatMap(() => this.http.get<TaskType>(task.href, { ...options }))
         );
     }
 
@@ -607,14 +619,14 @@ export class VcdApiClient {
         return ['success', 'error', 'canceled', 'aborted'].indexOf(task.status) > -1;
     }
 
-    public removeItem(item: Navigable): Observable<TaskType> {
+    public removeItem(item: Navigable, options?: { headers?: HttpHeaders }): Observable<TaskType> {
         const link: LinkType = this.findLink(item, 'remove', null);
         if (!link) {
             return throwError(() => new Error(`No 'remove' link for specified resource.`));
         }
 
         return this.validateRequestContext().pipe(
-            concatMap(() => this.http.delete<TaskType>(link.href))
+            concatMap(() => this.http.delete<TaskType>(link.href, { ...options }))
         );
     }
 
@@ -625,7 +637,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns a query result for the specified query
      */
-    public query<T>(builder: Query.Builder, multisite?: boolean): Observable<T>;
+    public query<T>(builder: Query.Builder, multisite?: boolean, options?: { headers?: HttpHeaders }): Observable<T>;
     /**
      * Queries the VMware Cloud Director API based on the specified Query.Builder instance.
      *
@@ -634,9 +646,9 @@ export class VcdApiClient {
      * @returns a query result for the specified query
      */
     // tslint:disable-next-line:unified-signatures
-    public query<T>(builder: Query.Builder, multisite?: AuthorizedLocationType[]): Observable<T>;
-    public query<T>(builder: Query.Builder, multisite?: any): Observable<T> {
-        return this.getQueryPage(`${this._baseUrl}/api/query${builder.get()}`, multisite);
+    public query<T>(builder: Query.Builder, multisite?: AuthorizedLocationType[], options?: { headers?: HttpHeaders }): Observable<T>;
+    public query<T>(builder: Query.Builder, multisite?: any, options?: { headers?: HttpHeaders }): Observable<T> {
+        return this.getQueryPage(`${this._baseUrl}/api/query${builder.get()}`, multisite, options);
     }
 
     /**
@@ -646,7 +658,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the first page of the query
      */
-    public firstPage<T>(result: T, multisite?: boolean): Observable<T>;
+    public firstPage<T>(result: T, multisite?: boolean, options?: { headers?: HttpHeaders }): Observable<T>;
     /**
      * Queries the VMware Cloud Director API for the first page of the provided result set.
      *
@@ -655,14 +667,14 @@ export class VcdApiClient {
      * @returns the records for the first page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public firstPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
-    public firstPage<T>(result: T, multisite?: any): Observable<T> {
+    public firstPage<T>(result: T, multisite?: AuthorizedLocationType[], options?: { headers?: HttpHeaders }): Observable<T>;
+    public firstPage<T>(result: T, multisite?: any, options?: { headers?: HttpHeaders }): Observable<T> {
         const link: LinkType = this.findLink(result, 'firstPage', (result as ResourceType).type);
         if (!link) {
             return throwError(() => new Error(`No 'firstPage' link for specified query.`));
         }
 
-        return this.getQueryPage(link.href, multisite);
+        return this.getQueryPage(link.href, multisite, options);
     }
 
     public hasFirstPage<T>(result: T): boolean {
@@ -676,7 +688,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the previous page of the query
      */
-    public previousPage<T>(result: T, multisite?: boolean): Observable<T>;
+    public previousPage<T>(result: T, multisite?: boolean, options?: { headers?: HttpHeaders }): Observable<T>;
     /**
      * Queries the VMware Cloud Director API for the previous page of the provided result set.
      *
@@ -685,14 +697,14 @@ export class VcdApiClient {
      * @returns the records for the previous page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public previousPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
-    public previousPage<T>(result: T, multisite?: any): Observable<T> {
+    public previousPage<T>(result: T, multisite?: AuthorizedLocationType[], options?: { headers?: HttpHeaders }): Observable<T>;
+    public previousPage<T>(result: T, multisite?: any, options?: { headers?: HttpHeaders }): Observable<T> {
         const link: LinkType = this.findLink(result, 'previousPage', (result as ResourceType).type);
         if (!link) {
             return throwError(() => new Error(`No 'previousPage' link for specified query.`));
         }
 
-        return this.getQueryPage(link.href, multisite);
+        return this.getQueryPage(link.href, multisite, options);
     }
 
     public hasPreviousPage<T>(result: T): boolean {
@@ -706,7 +718,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the next page of the query
      */
-    public nextPage<T>(result: T, multisite?: boolean): Observable<T>;
+    public nextPage<T>(result: T, multisite?: boolean, options?: { headers?: HttpHeaders }): Observable<T>;
     /**
      * Queries the VMware Cloud Director API for the next page of the provided result set.
      *
@@ -715,14 +727,14 @@ export class VcdApiClient {
      * @returns the records for the next page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public nextPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
-    public nextPage<T>(result: T, multisite?: any): Observable<T> {
+    public nextPage<T>(result: T, multisite?: AuthorizedLocationType[], options?: { headers?: HttpHeaders }): Observable<T>;
+    public nextPage<T>(result: T, multisite?: any, options?: { headers?: HttpHeaders }): Observable<T> {
         const link: LinkType = this.findLink(result, 'nextPage', (result as ResourceType).type);
         if (!link) {
             return throwError(() => new Error(`No 'nextPage' link for specified query.`));
         }
 
-        return this.getQueryPage<T>(link.href, multisite);
+        return this.getQueryPage<T>(link.href, multisite, options);
     }
 
     public hasNextPage<T>(result: T): boolean {
@@ -736,7 +748,7 @@ export class VcdApiClient {
      * @param multisite a flag indicating whether or not to fan the query out to all available sites
      * @returns the records for the last page of the query
      */
-    public lastPage<T>(result: T, multisite?: boolean): Observable<T>;
+    public lastPage<T>(result: T, multisite?: boolean, options?: { headers?: HttpHeaders }): Observable<T>;
     /**
      * Queries the VMware Cloud Director API for the last page of the provided result set.
      *
@@ -745,24 +757,32 @@ export class VcdApiClient {
      * @returns the records for the last page of the query
      */
     // tslint:disable-next-line:unified-signatures
-    public lastPage<T>(result: T, multisite?: AuthorizedLocationType[]): Observable<T>;
-    public lastPage<T>(result: T, multisite?: any): Observable<T> {
+    public lastPage<T>(result: T, multisite?: AuthorizedLocationType[], options?: { headers?: HttpHeaders }): Observable<T>;
+    public lastPage<T>(result: T, multisite?: any, options?: { headers?: HttpHeaders }): Observable<T> {
         const link: LinkType = this.findLink(result, 'lastPage', (result as ResourceType).type);
         if (!link) {
             return throwError(() => new Error(`No 'lastPage' link for specified query.`));
         }
 
-        return this.getQueryPage(link.href, multisite);
+        return this.getQueryPage(link.href, multisite, options);
     }
 
     public hasLastPage<T>(result: T): boolean {
         return !!this.findLink(result, 'lastPage', (result as ResourceType).type);
     }
 
-    private getQueryPage<T>(href: string, multisite?: any): Observable<T> {
+    private getQueryPage<T>(href: string, multisite?: any, options?: { headers?: HttpHeaders }): Observable<T> {
+        if (multisite) {
+            if (!options) {
+                return this.http.get<T>(href, { headers: new HttpHeaders({ _multisite: this.parseMultisiteValue(multisite) }) })
+            } else if (options?.headers) {
+                options.headers.append("_multisite", this.parseMultisiteValue(multisite));
+                return this.http.get<T>(href, { ...options })
+            }
+        }
+
         return this.validateRequestContext().pipe(
-            concatMap(() => !multisite ? this.http.get<T>(href) :
-                    this.http.get<T>(href, { headers: new HttpHeaders({ _multisite: this.parseMultisiteValue(multisite) }) }))
+            concatMap(() => this.http.get<T>(href, { ...options }))
         );
     }
 
