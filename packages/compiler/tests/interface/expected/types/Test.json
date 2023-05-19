@@ -1,1 +1,0 @@
-{"name":"Test","nss":"test","version":"0.0.1","vendor":"VMware","schema":{"$schema":"http://json-schema.org/draft-07/schema#","$ref":"#/definitions/Test","definitions":{"Test":{"type":"object","properties":{"txt":{"type":"string"}},"required":["txt"],"additionalProperties":false}}},"interfaces":["urn:vcloud:interface:VMware:testint:0.0.1"],"accessControls":[]}
