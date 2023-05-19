@@ -10,12 +10,8 @@
     "lerna": "^3.22.1"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "lint": "lerna run lint",
-    "build": "lerna run build",
-    "test": "lerna run test",
-    "test-ci": "lerna run test-ci",
-    "publish": "lerna publish from-package --no-git-reset --no-private --yes --no-verify-access",
+    "bootstrap": "cd ./packages/angular && npm i && cd ../plugin-builders && npm i",
+    "build": "cd ./packages/angular && npm run build && cd ../plugin-builders && npm run build",
     "gen-dependencies": "node .github/workflows/generate-dependencies.js"
   },
   "name": "vcd-ext-sdk"
