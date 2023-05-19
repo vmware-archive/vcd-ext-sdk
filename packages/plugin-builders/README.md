@@ -23,18 +23,15 @@ The @vcd/plugin-builders package contains an Angular Builder which you can use t
 
 ## Documentation
 ### How it works
-Our Plugin Builder is combination of the following things:
+The Plugin Builder is combination of the following things:
 - Angular Builder
 - Webpack
 - PostCSS Plugins
 
-We are goin to cover each piece.
 ### Angular Builder
 #### Description
-We implement our custom Angular Builder to build VMware Cloud Director UI Plugins, hence the name - Plugin Builder.
-
-We implement it in the standard Angular documented way,
-you can search for information how Custom Angular Builders are developed in the Angular documentation.
+This is Custom Angular Builder to build VMware Cloud Director UI Plugins, hence the name - Plugin Builder.
+For information how Custom Angular Builders are developed search in the Angular documentation.
 
 #### Useful References:
 - [Angular CLI builders](https://angular.io/guide/cli-builder)
@@ -45,9 +42,9 @@ you can search for information how Custom Angular Builders are developed in the 
 #### Description
 We use webpack's feature `splitChunks` and `externals` to isolate the npm dependencies from your UI Plugin code, and therefore we inject in the final bundle only the source code of the UI Plugin plus custom libraries.
 
-All npm dependencis in the `externals` list will be provided to your UI Plugin by VMware Cloud Director at runtime, this boosts the loading time of your UI Plugin a lot.
+All npm dependencis in the `externals` list will be provided to your UI Plugin by VMware Cloud Director at runtime, this boosts the loading time of your UI Plugin significantly.
 
-We leverage Webpack's `DefinePlugin`, to replace keywords in the final JS bundle. Most often we use to perform JS isolation in special type of UI Plguins called Hyper. Regular UI Plugins doesn't leverage the `DefinePlugin`.
+We leverage Webpack's `DefinePlugin`, to replace keywords in the final JS bundle. Most often we use to perform JS isolation in special type of UI Plguins called Hyper. Regular UI Plugins do not leverage the `DefinePlugin`.
 
 
 #### Useful References:
@@ -60,7 +57,7 @@ We have 2 types of UI Plugins:
 - Regular, implemented by 3rd parties
 - Hyper, this type of UI Plugins support the regular with: JS isolation, CSS isolation and more.
 
-Now, the PostCSS Plugins are not used by the Regular UI Plugins in build time, it's used only by the Hyper ones.
+The PostCSS Plugins are not used by the Regular UI Plugins at build time, it's used only by the Hyper ones.
 
 We have only one PostCSS Plugin which ensures that when you load the Regular UI Plugin in the browser it doesn't look expanded or collapsed. This could happen if you based your CSS rem is based on different base than VMware Cloud Director UI.
 For example you wrote your `UI Plugin with 1rem = 16px` but `Cloud Director 1rem = 24px`, in that case your UI Plugin will be `expanded`.
