@@ -1,7 +1,7 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, Optional } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, BehaviorSubject, of, throwError, merge } from 'rxjs';
-import { catchError, tap, map, concatMap, publishReplay, refCount, skipWhile, switchMap, withLatestFrom } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of, throwError, merge, ReplaySubject } from 'rxjs';
+import { catchError, tap, map, concatMap, skipWhile, switchMap, withLatestFrom, share } from 'rxjs/operators';
 import { SessionType,
     AuthorizedLocationType,
     ResourceType, LinkType,
@@ -17,7 +17,7 @@ import { VcdHttpClient } from './vcd.http.client';
 import { VcdTransferClient } from './vcd.transfer.client';
 import { HTTP_HEADERS } from './constants';
 import { filter } from 'rxjs/operators';
-import { mapTo } from 'rxjs/operators';
+import { VcdSdkConfig } from "../../core/plugin.module";
 
 export const TRANSFER_LINK_REL = 'upload:default';
 export type Navigable = ResourceType | { link?: LinkType[] };
@@ -119,9 +119,6 @@ export enum LinkRelType {
  */
 @Injectable()
 export class VcdApiClient {
-    /** The default list of API versions (from most preferred to least) that the SDK supports. */
-    static readonly CANDIDATE_VERSIONS: string[] = ['37.0', '36.3', '36.2', '36.1', '36.0', '35.2', '35.0', '34.0', '33.0'];
-
     set baseUrl(_baseUrl: string) {
         this._baseUrl = _baseUrl;
     }
@@ -174,30 +171,41 @@ export class VcdApiClient {
      */
     private _isCloudApiLogin = false;
 
-    constructor(private http: VcdHttpClient,
-                private injector: Injector) {
+    constructor(
+            private http: VcdHttpClient,
+            private injector: Injector,
+            @Optional() private config?: VcdSdkConfig,
+    ) {
         this._baseUrl = this.injector.get(API_ROOT_URL);
-        this._negotiateVersion = this.http.get<SupportedVersionsType>(`${this._baseUrl}/api/versions`).pipe(
-            map(versions => this.negotiateVersion(versions)),
-            tap(version => this.setVersion(version))
-        )
-        .pipe(
-            publishReplay(1),
-            refCount()
+        
+        let negotiatedVersion: Observable<string>;
+        if (this.config?.apiVersion) {
+            negotiatedVersion = of(this.config.apiVersion).pipe(
+                map((version) => {
+                    this.setVersion(version);
+                    return version;
+                })
+            );
+        } else {
+            negotiatedVersion = this.http.get<SupportedVersionsType>(`${this._baseUrl}/api/versions`).pipe(
+                map(versions => this.negotiateVersion(versions)),
+                tap(version => this.setVersion(version))
+            );
+        }
+        this._negotiateVersion = negotiatedVersion.pipe(
+            share({ connector: () => new ReplaySubject(1) })
         );
 
         const tokenHolder: AuthTokenHolderService = this.injector.get(AuthTokenHolderService, { token: '' });
         const token = tokenHolder.jwt ? `Bearer ${tokenHolder.jwt}` : tokenHolder.token;
         this._getSession = this.setAuthentication(token)
             .pipe(
-                publishReplay(1),
-                refCount()
+                share({ connector: () => new ReplaySubject(1) })
             );
 
         this._getCloudApiSession = this.setCloudApiAuthentication(token)
             .pipe(
-                publishReplay(1),
-                refCount()
+                share({ connector: () => new ReplaySubject(1) })
             );
         // This is not an explicit cloud api login
         this._isCloudApiLogin = false;
@@ -205,15 +213,9 @@ export class VcdApiClient {
 
     private negotiateVersion(serverVersions: SupportedVersionsType): string {
         const supportedVersions: string[] = serverVersions.versionInfo.map(versionInfo => versionInfo.version);
-        const negotiatedVersions: string[] = VcdApiClient.CANDIDATE_VERSIONS.filter(cv => supportedVersions.some(sv => cv === sv));
 
-        if (negotiatedVersions.length === 0) {
-            throw new Error(`The VMware Cloud Director server does not support any API versions
-                used by this API client. Client candidate versions: ${VcdApiClient.CANDIDATE_VERSIONS};
-                VMware Cloud Director supported versions: ${supportedVersions}`);
-        }
-
-        return negotiatedVersions[0];
+        // Default API Version used is the Latest API Version in VMware Cloud Director
+        return supportedVersions[supportedVersions.length - 1];
     }
 
     /**
@@ -234,7 +236,7 @@ export class VcdApiClient {
                     // when cloud api is not supported at all for the specified version
                     .pipe(catchError((e) => of(true)))
                 ),
-                mapTo(true)
+                map(() => true)
             );
         }
 
@@ -863,8 +865,7 @@ export class VcdApiClient {
                             map((accessibleLocations: AccessibleLocations) => accessibleLocations && accessibleLocations.values)
                         )
                         .pipe(
-                            publishReplay(1),
-                            refCount()
+                            share({ connector: () => new ReplaySubject(1) })
                         );
                 }
                 return this._cloudApiAccessibleLocations;
