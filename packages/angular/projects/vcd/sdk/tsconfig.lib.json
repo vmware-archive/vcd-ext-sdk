@@ -1,29 +1,14 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../../dist/vcd/sdk",
-    "target": "ES5",
-    "module": "ES2015",
+    "outDir": "../../../out-tsc/lib",
     "declaration": true,
-    "sourceMap": false,
-    "types": [],
-    "lib": [
-      "dom",
-      "es5"
-    ],
-  },
-  "angularCompilerOptions": {
-    "annotateForClosureCompiler": true,
-    "skipTemplateCodegen": true,
-    "strictMetadataEmit": true,
-    "emitDecoratorMetadata": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
-    "enableResourceInlining": true
+    "declarationMap": true,
+    "inlineSources": true,
+    "types": []
   },
   "exclude": [
-    "src/schematics",
-    "src/test.ts",
     "**/*.spec.ts"
   ]
 }

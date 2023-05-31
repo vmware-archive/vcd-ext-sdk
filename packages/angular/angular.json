@@ -10,92 +10,21 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/vcd/sdk/tsconfig.lib.json",
             "project": "projects/vcd/sdk/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/vcd/sdk/src/test.ts",
-            "tsConfig": "projects/vcd/sdk/tsconfig.spec.json",
-            "karmaConfig": "projects/vcd/sdk/karma.conf.js"
           },
           "configurations": {
-            "test-ci": {
-              "karmaConfig": "projects/vcd/sdk/karma.conf.ci.js"
+            "production": {
+              "tsConfig": "projects/vcd/sdk/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/vcd/sdk/tsconfig.lib.json"
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/vcd/sdk/tsconfig.lib.json",
-              "projects/vcd/sdk/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
+          },
+          "defaultConfiguration": "production"
         }
       }
-    },
-    "@vcd/plugin-builders": {
-      "projectType": "library",
-      "root": "projects/vcd/plugin-builders",
-      "sourceRoot": "projects/vcd/plugin-builders/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/vcd/plugin-builders/tsconfig.lib.json",
-            "project": "projects/vcd/plugin-builders/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/vcd/plugin-builders/tsconfig.lib.json",
-              "projects/vcd/plugin-builders/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "@vcd/schematics": {
-      "projectType": "library",
-      "root": "projects/vcd/schematics",
-      "sourceRoot": "projects/vcd/schematics/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/vcd/schematics/tsconfig.lib.json",
-            "project": "projects/vcd/schematics/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/vcd/schematics/tsconfig.lib.json",
-              "projects/vcd/schematics/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    }},
-  "defaultProject": "@vcd/sdk"
+    }
+  }
 }

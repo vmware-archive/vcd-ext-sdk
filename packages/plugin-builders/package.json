@@ -1,0 +1,26 @@
+{
+  "name": "@vcd/plugin-builders",
+  "version": "15.0.0",
+  "description": "Angular CLI-compatible tools for building Cloud Director plugins.",
+  "author": "VMware",
+  "license": "BSD-2-Clause",
+  "builders": "builders.json",
+  "dependencies": {
+    "@angular-devkit/architect": ">=0.1500.0 < 0.1600.0",
+    "@angular-devkit/build-angular": "15.2.8",
+    "@angular-devkit/core": "15.2.8",
+    "@angular/compiler-cli": "15.2.8",
+    "copy-webpack-plugin": "11.0.0",
+    "postcss": "8.4.23",
+    "tslib": "2.3.0",
+    "zip-webpack-plugin": "4.0.1"
+  },
+  "devDependencies": {
+    "typescript": "4.8.2"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --build ./tsconfig.json && npm run copy-files",
+    "copy-files": "cp ./package.json ./dist/package.json && cp ./builders.json ./dist/builders.json && cp ./schema.json ./dist/schema.json"
+  }
+}

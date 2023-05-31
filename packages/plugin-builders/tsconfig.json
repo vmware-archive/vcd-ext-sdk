@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src/lib",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "importHelpers": false,
+    "sourceMap": false,
+    "target": "ES2022",
+    "skipLibCheck": true,
+  },
+}
