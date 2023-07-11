@@ -1,7 +1,7 @@
 [![Build Status](https://github.com/vmware/vcd-ext-sdk/workflows/Development%20Workflow/badge.svg)](https://github.com/mslavov/vcd-ext-sdk/actions?query=workflow%3A%22Development+Workflow%22)
 
 # vcd-ext-sdk
-
+> **ATTENTION:** This repository soon will be Archived, please refer to our new central point repository for Cloud Director Extensibility [Cloud Director Extension Standard Library](https://github.com/vmware/cloud-director-extension-standard-library)
 ## Overview
 
 The **vcd-ext-sdk** is a set of templates for creating extensions to VMware vCloud Director. Service Providers looking to add custom service offerings to vCloud Director, can use these templates as a starting point to build new services. The templates captures best practices for API, Object and, UI extension development and are offered in Java, Javascript/Typescript/nodejs and, Python.
